@@ -1,6 +1,6 @@
 ﻿namespace LogicClient
 {
-    public class Class1
+    public class LogicManager
     {
 
     }
