@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiUIClient", "POC_Client\MauiUIClient.csproj", "{D5845125-D277-47C5-86A3-B5AED8D4FE18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiUIClient-POC", "POC_Client\MauiUIClient-POC.csproj", "{D5845125-D277-47C5-86A3-B5AED8D4FE18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LogicClient", "LogicClient\LogicClient.csproj", "{E0C109F2-B03C-49BF-B23D-0529C662182A}"
 EndProject
