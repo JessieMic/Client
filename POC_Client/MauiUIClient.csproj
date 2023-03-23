@@ -55,6 +55,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\LogicClient\LogicClient.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiXaml Update="Pages\ScreenPlacementSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>

@@ -14,7 +14,7 @@ public partial class SelectPhonePlacementPage : ContentPage
 {
     private readonly HubConnection r_ConnectionToServer;
    
-    public String Name { get; set; }
+    public string Name { get; set; }
 
     public SelectPhonePlacementPage()
     {
@@ -153,14 +153,6 @@ public partial class SelectPhonePlacementPage : ContentPage
         //m_Buttons.Add(Button4);
         
     }
-
-    //protected override async void OnSizeAl
-    //cated(double width, double height)
-    //{
-    //    base.OnSizeAllocated(width, height);
-    //    screenWidth = width;
-    //    screenHeight = height;
-    //}
 
     private async void OnButtonClicked(object sender, EventArgs e)
     {

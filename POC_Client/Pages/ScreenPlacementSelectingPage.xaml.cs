@@ -19,91 +19,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         InitializeComponent();
         initializePage();
 
-        //try
-        //{
-        //    r_ConnectionToServer = new HubConnectionBuilder()
-        //        .WithUrl(Utils.m_GameHubAddress).Build();
-        //    //m_ClientInfo.DidClientPickAPlacement = false;
-
-        //    //****add to server
-        //    r_ConnectionToServer.On<int>("ReceiveAmountOfPlayers", (i_AmountOfPlayers) =>
-        //        {
-        //            MainThread.BeginInvokeOnMainThread(() =>
-        //            {
-        //                m_pageLogic.AmountOfPlayers = i_AmountOfPlayers;
-        //            });
-        //        });
-
-        //    r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (buttonsThatAreOccupied) =>
-        //        {
-        //            MainThread.BeginInvokeOnMainThread(() =>
-        //            {
-        //                int buttonNumber = 0;
-        //                foreach (string element in buttonsThatAreOccupied)
-        //                {
-        //                    if (buttonsThatAreOccupied[buttonNumber] != String.Empty
-        //                        && buttonsThatAreOccupied[buttonNumber] != null)
-        //                    {
-        //                        m_PlacementButton[buttonNumber].Text = buttonsThatAreOccupied[buttonNumber];
-        //                        m_PlacementButton[buttonNumber].Background = Colors.IndianRed;
-        //                    }
-        //                    buttonNumber++;
-        //                }
-        //            });
-        //        });
-
-        //    r_ConnectionToServer.On<string, int, double, double>
-        //    ("PlacementUpdateRecevied", (i_NameOfClientThatGotASpot, i_Spot, width, height) =>
-        //        {
-        //            MainThread.BeginInvokeOnMainThread(() =>
-        //                {
-        //                    visualButtonUpdate(i_Spot, i_NameOfClientThatGotASpot, true);
-        //                    m_pageLogic.m_AmountOfPlayerThatAreConnected++;
-
-        //                    if (m_ClientInfo.Name == i_NameOfClientThatGotASpot)
-        //                    {
-        //                        m_ClientInfo.ButtonThatClientPicked = 1 + i_Spot;
-        //                        m_ClientInfo.DidClientPickAPlacement = true;
-        //                    }
-
-        //                    if (m_pageLogic.AreAllTheUsersReady())
-        //                    {
-        //                        r_ConnectionToServer.InvokeAsync("GameIsAboutToStart");
-        //                    }
-        //                });
-        //        });
-
-        //    r_ConnectionToServer.On("StartGame", async () =>
-        //    {
-        //        await Shell.Current.GoToAsync($"GameRoomPage?");
-        //    });
-
-        //    r_ConnectionToServer.On<string, int>("DeSelectPlacementUpdatReceived", (i_NameOfClientThatDeselected, i_Spot) =>
-        //        {
-        //            MainThread.BeginInvokeOnMainThread(() =>
-        //                {
-        //                    m_pageLogic.m_AmountOfPlayerThatAreConnected--;
-
-        //                    if (m_ClientInfo.Name == i_NameOfClientThatDeselected)
-        //                    {
-        //                        m_ClientInfo.ButtonThatClientPicked = 0;
-        //                        m_ClientInfo.DidClientPickAPlacement = false;
-        //                    }
-        //                });
-        //        });
-
-        //    Task.Run(() =>
-        //        {
-        //            Application.Current.Dispatcher.Dispatch(async () =>
-        //                {
-        //                    await r_ConnectionToServer.StartAsync();
-        //                    await getAmountOfPlayersFromServer();
-        //                    initializePage();
-        //                });
-        //        });
-        //}
-        //catch
-        //{ }
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;
     }
 
@@ -126,20 +41,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
             m_PlacementButton[i_VisualUpdate.spot].Background = default;
         }
     }
-
-    //private void visualButtonUpdate(VisualUpdateSelectButtons(int i_ButtonsSpot, string i_NewTextOnButton,bool i_didClientSelect)
-    //{
-    //    m_PlacementButton[i_ButtonsSpot].Text = i_NewTextOnButton;
-
-    //    if(i_didClientSelect)
-    //    {
-    //        m_PlacementButton[i_ButtonsSpot].Background = Colors.IndianRed;
-    //    }
-    //    else
-    //    {
-    //        m_PlacementButton[i_ButtonsSpot].Background = default;
-    //    }
-    //}
 
     async Task initializePage()
     {
@@ -170,11 +71,8 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     {
         int amountOfButtons;
 
-        //while(m_pageLogic.AmountOfPlayers == 0){}
 
         amountOfButtons = 5;//m_pageLogic.AmountOfPlayers;
-
-        //m_PlacementButton = new Button[amountOfButtons];
 
         for(int i = 0; i < amountOfButtons; i++)
         {
