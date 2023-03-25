@@ -8,19 +8,20 @@ namespace LogicUnit
 {
     internal class Connection
     {
-        public string Name { get; set; }
+        //public string Name { get; set; }
 
         public event Action<string> PlayerNamePicked;
         public event Action<string> GameCodeInserted;
 
 
-        private void insertRoomCode()
+        private void insertRoomCode(string i_Code)
         {
+            
         }
 
         private void generateRoomCodeFromServer()
         {
-
+            // request the generated code from server
         }
     }
 }
