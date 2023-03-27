@@ -2,13 +2,16 @@
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualBasic;
+using POC_Client.Objects;
 
 namespace POC_Client;
 
 public partial class MainPage : ContentPage
 {
     private readonly HubConnection r_Connection;
-	public MainPage()
+    ClientInfo m_ClientInfo = ClientInfo.Instance;
+
+    public MainPage()
 	{
         InitializeComponent();
  
@@ -18,6 +21,7 @@ public partial class MainPage : ContentPage
     {   
         if (!entry.Text.Equals(string.Empty))
         {
+            m_ClientInfo.Name = DateAndTime.TimeString;
             await Shell.Current.GoToAsync("ScreenPlacementSelectingPage");//$"SelectPhonePlacementPage?name={DateAndTime.TimeString}");
         }
     }

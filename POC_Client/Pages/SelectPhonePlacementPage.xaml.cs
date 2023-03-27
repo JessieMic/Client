@@ -34,58 +34,8 @@ public partial class SelectPhonePlacementPage : ContentPage
             });
         });
 
-        r_ConnectionToServer.On<string, int, double, double>
-            ("PlacementUpdateRecevied", (nameOfClientThatGotASpot, spot, width, height) =>
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    int i = 0;
-                    i++;
-                    //m_Buttons[spot].Text = "s";
-                    //m_Buttons[spot].Background = Colors.IndianRed;
-                    //m_Dimentions[spot].Width = width;
-                    //m_Dimentions[spot].Height = height;
-                    //m_AmountOfPlayerThatAreConnected++;
-
-                    //if (Name.Equals(nameOfClientThatGotASpot))
-                    //{
-                    //    m_TheButtonUserPicked = (1 + spot).ToString();
-                    //    m_DidUserPick = true;
-                    //}
-
-                    //if (m_TheButtonUserPicked.Equals("1"))
-                    //{
-                    //    if (m_AmountOfPlayerThatAreConnected == 4)
-                    //    {
-
-                    //        r_ConnectionToServer.InvokeAsync("GameIsAboutToStart");
-                    //    }
-                    //}
-                });
-
-            int io = 0;
-            io++;
-        });
-
-        r_ConnectionToServer.On<string, int>("DeSelectPlacementUpdatReceived", (nameOfClientThatDeselected, spot) =>
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                int i = 0;
-                i++;
-                //m_Buttons[spot].Text = (1 + spot).ToString();
-                //m_Buttons[spot].Background = default;
-                //m_Dimentions[spot].Width = 0;
-                //m_Dimentions[spot].Height = 0;
-                //m_AmountOfPlayerThatAreConnected--;
-
-                //if (Name.Equals(nameOfClientThatDeselected))
-                //{
-                //    m_TheButtonUserPicked = string.Empty;
-                //    m_DidUserPick = false;
-                //}
-            });
-        });
+      
+       
 
         r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (buttonsThatAreOccupied) =>
         {
