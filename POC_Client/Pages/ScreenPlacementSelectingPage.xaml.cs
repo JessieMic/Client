@@ -8,16 +8,17 @@ using System.Xml.Linq;
 public partial class ScreenPlacementSelectingPage : ContentPage
 {
     private ScreenPlacementSelectingLogic m_pageLogic = new ScreenPlacementSelectingLogic();
-    //static Button[] m_PlacementButton;
-    static List<Button> m_PlacementButton = new List<Button>();
-    //public readonly HubConnection r_ConnectionToServer;
+    private static List<Button> m_PlacementButton = new List<Button>();
     ClientInfo m_ClientInfo = ClientInfo.Instance;
+
+    //public readonly HubConnection r_ConnectionToServer;
+    //static Button[] m_PlacementButton;
 
     public ScreenPlacementSelectingPage()
 	{
 
         InitializeComponent();
-        initializePage();
+        //initializePage();
 
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;
     }

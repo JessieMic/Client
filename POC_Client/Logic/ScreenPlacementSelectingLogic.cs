@@ -24,7 +24,7 @@ namespace POC_Client.Logic
     {
         public event EventHandler<VisualUpdateSelectButtons> UpdateSelectButton;
         private readonly HubConnection r_ConnectionToServer;
-        private int m_AmountOfPlayers =5;
+        private int m_AmountOfPlayers;
         private int[] m_ButtonsThatPlayersPicked;
         ClientInfo m_ClientInfo = ClientInfo.Instance;
         private int m_AmountOfPlayerThatAreConnected;
@@ -40,6 +40,9 @@ namespace POC_Client.Logic
             ("GetAmountOfPlayers", (i_AmountOfPlayers) =>
                 {
                     m_AmountOfPlayers = i_AmountOfPlayers;
+                    VisualUpdateSelectButtons a = new();
+                    a.spot = m_AmountOfPlayers;
+                    UpdateSelectButton?.Invoke(this, a);
                 });
 
             r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (i_ButtonsThatAreOccupied) =>
