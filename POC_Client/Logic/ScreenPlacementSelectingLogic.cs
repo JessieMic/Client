@@ -20,9 +20,12 @@ using POC_Client.Objects;
 
 namespace POC_Client.Logic
 {
+    public delegate void Notify();
     public class ScreenPlacementSelectingLogic
     {
         public event EventHandler<VisualUpdateSelectButtons> UpdateSelectButton;
+        public event Notify ReceivedPlayerAmount;
+        public event Notify GameIsStarting;
         private readonly HubConnection r_ConnectionToServer;
         private int m_AmountOfPlayers;
         private int[] m_ButtonsThatPlayersPicked;
@@ -40,9 +43,7 @@ namespace POC_Client.Logic
             ("GetAmountOfPlayers", (i_AmountOfPlayers) =>
                 {
                     m_AmountOfPlayers = i_AmountOfPlayers;
-                    VisualUpdateSelectButtons a = new();
-                    a.spot = m_AmountOfPlayers;
-                    UpdateSelectButton?.Invoke(this, a);
+                    OnReceivedAmountOfPlayers();
                 });
 
             r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (i_ButtonsThatAreOccupied) =>
@@ -51,14 +52,13 @@ namespace POC_Client.Logic
                         {
                             int buttonNumber = 0;
                             VisualUpdateSelectButtons visualUpdate = new();
+
                             foreach (string element in i_ButtonsThatAreOccupied)
                             {
                                 if (i_ButtonsThatAreOccupied[buttonNumber] != String.Empty
                                     && i_ButtonsThatAreOccupied[buttonNumber] != null)
                                 {
-                                    visualUpdate.didClientSelect = true;
-                                    visualUpdate.spot = buttonNumber;
-                                    visualUpdate.textOnButton = i_ButtonsThatAreOccupied[buttonNumber];
+                                    visualUpdate.Set(buttonNumber, i_ButtonsThatAreOccupied[buttonNumber],true);
                                     OnUpdateButton(visualUpdate);
                                 }
                                 buttonNumber++;
@@ -66,17 +66,39 @@ namespace POC_Client.Logic
                         });
                 });
 
+            r_ConnectionToServer.On<string, int>("DeSelectPlacementUpdateReceived", (i_NameOfClientThatDeselected, i_Spot) =>
+            {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        VisualUpdateSelectButtons visualUpdate = new(i_Spot, (1 + i_Spot).ToString(), false);
+
+                        if (m_ClientInfo.Name == i_NameOfClientThatDeselected) //(Name.Equals(nameOfClientThatDeselected))
+                        {
+                            m_ClientInfo.ButtonThatClientPicked = 0;
+                            m_ClientInfo.DidClientPickAPlacement = false;
+                        }
+
+                        OnUpdateButton(visualUpdate);
+                        m_AmountOfPlayerThatAreConnected--;
+                    });
+            });
+
+            r_ConnectionToServer.On("StartGame", () =>
+            {
+                    MainThread.BeginInvokeOnMainThread(() =>
+                    {
+                        OnEnterGameRoom();
+                    });
+            });
+
             r_ConnectionToServer.On<string, int>
                 ("PlacementUpdateRecevied", (i_NameOfClientThatGotASpot, i_Spot) =>
                     {
                         MainThread.BeginInvokeOnMainThread(() =>
                             {
-                                VisualUpdateSelectButtons visualUpdate = new();
-                                visualUpdate.spot = i_Spot;
-                                visualUpdate.didClientSelect = true;
-                                visualUpdate.textOnButton = i_NameOfClientThatGotASpot;
+                                VisualUpdateSelectButtons visualUpdate = new(i_Spot,i_NameOfClientThatGotASpot,true);
+
                                 OnUpdateButton(visualUpdate);
-                                //visualButtonUpdate(i_Spot, i_NameOfClientThatGotASpot, true);
                                 m_AmountOfPlayerThatAreConnected++;
 
                                 if (m_ClientInfo.Name == i_NameOfClientThatGotASpot)
@@ -97,24 +119,32 @@ namespace POC_Client.Logic
                 Application.Current.Dispatcher.Dispatch(async () =>
                     {
                         await r_ConnectionToServer.StartAsync();
-                        //await getScreenUpdate();
-
                         await r_ConnectionToServer.InvokeAsync("GetAmountOfPlayers");
                     });
             });
 
         }
 
-        protected virtual void OnUpdateButton(VisualUpdateSelectButtons i_VisualUpdate)
+        public void OnUpdateButton(VisualUpdateSelectButtons i_VisualUpdate)
         {
             UpdateSelectButton?.Invoke(this,i_VisualUpdate);
         }
 
+        public void OnReceivedAmountOfPlayers()
+        {
+            ReceivedPlayerAmount?.Invoke();
+        }
+
+        protected virtual void OnEnterGameRoom()
+        {
+            GameIsStarting?.Invoke();
+        }
         public int AmountOfPlayers
         {
             get { return m_AmountOfPlayers; }
             set { m_AmountOfPlayers = value; }
         }
+
 
         public int AmountOfPlayerThatAreConnected
         {
@@ -208,6 +238,12 @@ namespace POC_Client.Logic
         {
             await r_ConnectionToServer.InvokeCoreAsync("TryPickAScreenSpot", args: new[]
                 {m_ClientInfo.Name,i_TextOnButton});
+        }
+
+        public async Task TryToDeselectScreenSpot(string i_TextOnButton)
+        {
+            await r_ConnectionToServer.InvokeCoreAsync("TryToDeselectScreenSpot", args: new[]
+                {m_ClientInfo.Name,m_ClientInfo.ButtonThatClientPicked.ToString(),i_TextOnButton});
         }
     }
 }

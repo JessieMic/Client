@@ -9,10 +9,11 @@ namespace POC_Client.Objects
 {
     public class ClientInfo
     {
+        public bool isInitialized = false;
         private static ClientInfo m_Instance = null;
-        public bool m_DidClientPickAPlacement;
-        public string m_Name = "Jess";
-        public int m_ButtonThatClientPicked;
+        private bool m_DidClientPickAPlacement;
+        private string m_Name;
+        private int m_ButtonThatClientPicked;
 
         private static readonly object s_InstanceLock = new object();
         private ClientInfo()
