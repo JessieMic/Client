@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace POC_Client.Objects
 {
-    public struct Dimentions
+    public struct ScreenInfo
     {
-        public double m_Width;
-        public double m_Height;
+        private double m_Width;
+        private double m_Height;
+        public eRowPosition m_RowPosition;
+        public eColumnPosition m_ColumnPosition;
 
         public double Width
         {
