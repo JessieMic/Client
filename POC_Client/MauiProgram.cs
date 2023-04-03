@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using POC_Client.Pages;
 
 namespace POC_Client
 {
@@ -17,8 +18,8 @@ namespace POC_Client
 
             builder.Services.AddSingleton<MainPage>();
 
-            builder.Services.AddTransient<ScreenPlacementSelectingPage>();
-            // builder.Services.AddTransient<GameRoomPage>();
+            //builder.Services.AddTransient<ScreenPlacementSelectingPage>();
+            //builder.Services.AddTransient<GamePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

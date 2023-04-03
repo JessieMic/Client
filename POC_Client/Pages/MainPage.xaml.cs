@@ -9,7 +9,7 @@ namespace POC_Client;
 public partial class MainPage : ContentPage
 {
     private readonly HubConnection r_Connection;
-    ClientInfo m_ClientInfo = ClientInfo.Instance;
+    Player m_PlayerInfo = Player.Instance;
 
     public MainPage()
 	{
@@ -21,8 +21,8 @@ public partial class MainPage : ContentPage
     {   
         if (!entry.Text.Equals(string.Empty))
         {
-            m_ClientInfo.Name = DateAndTime.TimeString;
-            await Shell.Current.GoToAsync("ScreenPlacementSelectingPage");//$"SelectPhonePlacementPage?name={DateAndTime.TimeString}");
+            m_PlayerInfo.Name = DateAndTime.TimeString;
+            await Shell.Current.GoToAsync("ScreenPlacementSelectingPage");
         }
     }
 

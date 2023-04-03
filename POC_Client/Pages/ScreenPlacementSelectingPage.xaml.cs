@@ -9,7 +9,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 {
     private ScreenPlacementSelectingLogic m_pageLogic = new ScreenPlacementSelectingLogic();
     private static List<Button> m_PlacementButton = new List<Button>();
-    ClientInfo m_ClientInfo = ClientInfo.Instance;
+    Player m_Player = Player.Instance;
 
     public ScreenPlacementSelectingPage()
 	{
@@ -21,7 +21,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     {
         m_PlacementButton[i_VisualUpdate.spot].Text = i_VisualUpdate.textOnButton;
 
-        if (i_VisualUpdate.didClientSelect)
+        if (i_VisualUpdate.didPlayerSelect)
         {
             m_PlacementButton[i_VisualUpdate.spot].Background = Colors.IndianRed;
         }
@@ -45,14 +45,14 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         m_pageLogic.GetScreenUpdate();
     }
 
-    private void startGame()
+    private async void startGame()
     {
-
+        await Shell.Current.GoToAsync("GamePage");
     }
 
     private void initializeButtons()
     {
-        if(!m_ClientInfo.isInitialized)
+        if(!m_Player.isInitialized)
         {
             Application.Current.Dispatcher.Dispatch(async () =>
                 {
@@ -69,7 +69,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                         gridLayout.Add(m_PlacementButton[i], (int)position.Column ,(int)position.Row);
                         m_PlacementButton[i].Clicked += OnButtonClicked;
                     }
-                    m_ClientInfo.isInitialized = true;
+                    m_Player.isInitialized = true;
                 });
             getScreenUpdate();
         }
@@ -78,7 +78,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     private async void OnButtonClicked(object sender, EventArgs e)
     {
         Button button = sender as Button;
-        if (m_ClientInfo.DidClientPickAPlacement)
+        if (m_Player.DidPlayerPickAPlacement)
         {
             m_pageLogic.TryToDeselectScreenSpot(button.Text);
         }

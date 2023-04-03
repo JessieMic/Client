@@ -3,31 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using POC_Client.Objects;
 
-namespace POC_Client.Objects
+namespace POC_Client.Logic
 {
-    public class GameInfo
+    public class ScreenMapping
     {
-        private List<ScreenInfo> m_ScreenInfoOfAllPlayers;
-        private List<string> m_NamesOfAllPlayers;
+        private GameInformation m_GameInformation = GameInformation.Instance;
+        private Player m_Player = Player.Instance;
+        private List<ScreenDimension> m_ScreenInfoOfAllPlayers;
         private double m_TotalScreenWidth;
         private double m_TotalScreenHeight;
-        private double m_ValueToAddToWidth; // Values that each client adds to game objects so the would be in the right place 
+        private double m_ValueToAddToWidth; // Values that each Player adds to game objects so the would be in the right place 
         private double m_ValueToAddToHeight;
         private double m_WidthBoundaries; //Boundaries in case of an uneven amount of players
         private double m_HeightBoundaries;
         private int m_AmountOfPlayers;
-        private int m_ClientSpot;
+        private int m_PlayerSpot;
 
         private double m_MinimumLeftColumn;
         private double m_MinimumUpperRow;
 
-        public GameInfo(List<ScreenInfo> i_ScreenInfoOfAllPlayers, List<string> i_NamesOfAllPlayers, int i_AmountOfPlayers,int i_ClientSpot)
+        public ScreenMapping()
         {
-            m_ScreenInfoOfAllPlayers = i_ScreenInfoOfAllPlayers;
-            m_NamesOfAllPlayers = i_NamesOfAllPlayers;
-            m_AmountOfPlayers = i_AmountOfPlayers;
-            m_ClientSpot = i_ClientSpot;
+            m_ScreenInfoOfAllPlayers = m_GameInformation.ScreenInfoOfAllPlayers;
+            m_AmountOfPlayers = m_GameInformation.AmountOfPlayers;
+            m_PlayerSpot = m_Player.ButtonThatPlayerPicked;
 
             calculateTotalScreenSize();
             calculateScreenValuesToAdd();
@@ -41,7 +42,7 @@ namespace POC_Client.Objects
 
         private void calculateWidthScreenValuesToAdd()
         {
-            if (m_ScreenInfoOfAllPlayers[m_ClientSpot - 1].m_ColumnPosition == eColumnPosition.RightColumn)
+            if (m_ScreenInfoOfAllPlayers[m_PlayerSpot - 1].Position.Column == eColumnPosition.RightColumn)
             {
                 m_ValueToAddToWidth = -m_MinimumLeftColumn;
             }
@@ -49,7 +50,7 @@ namespace POC_Client.Objects
 
         private void calculateHeightScreenValuesToAdd()
         {
-            if(m_ScreenInfoOfAllPlayers[m_ClientSpot - 1].m_RowPosition == eRowPosition.LowerRow)
+            if (m_ScreenInfoOfAllPlayers[m_PlayerSpot - 1].Position.Row == eRowPosition.LowerRow)
             {
                 m_ValueToAddToHeight = -m_MinimumUpperRow;
             }
@@ -81,14 +82,14 @@ namespace POC_Client.Objects
 
         private void getMinWidthByColumnPosition(eColumnPosition i_ColumnPosition)
         {
-            double minScreenValue1 = 0; 
+            double minScreenValue1 = 0;
             double minScreenValue2 = 0;
 
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-                if(m_ScreenInfoOfAllPlayers[i].m_ColumnPosition == i_ColumnPosition)
+                if (m_ScreenInfoOfAllPlayers[i].Position.Column == i_ColumnPosition)
                 {
-                    if(minScreenValue1 == 0)
+                    if (minScreenValue1 == 0)
                     {
                         minScreenValue1 = m_ScreenInfoOfAllPlayers[i].Width;
                     }
@@ -99,7 +100,7 @@ namespace POC_Client.Objects
                 }
             }
 
-            if(minScreenValue2 == 0)
+            if (minScreenValue2 == 0)
             {
                 m_WidthBoundaries = m_TotalScreenWidth;
                 m_TotalScreenWidth += minScreenValue1;
@@ -117,22 +118,22 @@ namespace POC_Client.Objects
 
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-                if (m_ScreenInfoOfAllPlayers[i].m_RowPosition == i_RowPosition)
+                if (m_ScreenInfoOfAllPlayers[i].Position.Row == i_RowPosition)
                 {
                     if (minScreenValue1 == 0)
                     {
                         minScreenValue1 = m_ScreenInfoOfAllPlayers[i].Height;
                     }
-                    else if(minScreenValue2 == 0)
+                    else if (minScreenValue2 == 0)
                     {
                         minScreenValue2 = m_ScreenInfoOfAllPlayers[i].Height;
                     }
                 }
             }
 
-            if(minScreenValue2 == 0)
+            if (minScreenValue2 == 0)
             {
-                if(m_AmountOfPlayers == 3 && m_TotalScreenHeight != 0)
+                if (m_AmountOfPlayers == 3 && m_TotalScreenHeight != 0)
                 {
                     m_HeightBoundaries = m_TotalScreenHeight;
                 }

@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace POC_Client.Objects
 {
-    public class ClientInfo
+    public class Player
     {
         public bool isInitialized = false;
-        private static ClientInfo m_Instance = null;
-        private bool m_DidClientPickAPlacement;
+        private static Player m_Instance = null;
+        private bool m_DidPlayerPickAPlacement;
         private string m_Name;
-        private int m_ButtonThatClientPicked;
+        private int m_ButtonThatPlayerPicked;
 
         private static readonly object s_InstanceLock = new object();
-        private ClientInfo()
+        private Player()
         {
-            m_DidClientPickAPlacement = false;
+            m_DidPlayerPickAPlacement = false;
         }
 
-        public static ClientInfo Instance
+        public static Player Instance
         {
             get
             {
@@ -29,22 +29,22 @@ namespace POC_Client.Objects
                 {
                     if (m_Instance == null)
                     {
-                        m_Instance = new ClientInfo();
+                        m_Instance = new Player();
                     }
                 }
                 return m_Instance;
             }
         }
 
-        public bool DidClientPickAPlacement
+        public bool DidPlayerPickAPlacement
         {
             get
             {
-                return m_DidClientPickAPlacement;
+                return m_DidPlayerPickAPlacement;
             }
             set
             {
-                m_DidClientPickAPlacement = value;
+                m_DidPlayerPickAPlacement = value;
             }
         }
 
@@ -60,15 +60,15 @@ namespace POC_Client.Objects
             }
         }
 
-        public int ButtonThatClientPicked
+        public int ButtonThatPlayerPicked
         {
             get
             {
-                return m_ButtonThatClientPicked;
+                return m_ButtonThatPlayerPicked;
             }
             set
             {
-                m_ButtonThatClientPicked = value;
+                m_ButtonThatPlayerPicked = value;
             }
         }
     }
