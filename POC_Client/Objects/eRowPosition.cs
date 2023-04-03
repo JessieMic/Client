@@ -8,7 +8,7 @@ namespace POC_Client.Objects
 {
     public enum eRowPosition
     {
-        UpperRow,
+        UpperRow = 1,
         LowerRow
     }
 }

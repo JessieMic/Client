@@ -60,12 +60,13 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                     {
 
                         Button button = new Button();
+                        Position position = new Position(m_pageLogic.AmountOfPlayers,i+1);
 
                         button.Text = (i + 1).ToString();
                         button.HeightRequest = 70;
                         button.WidthRequest = 150;
                         m_PlacementButton.Add(button);
-                        gridLayout.Add(m_PlacementButton[i], m_pageLogic.GetButtonColumnValue(i + 1), m_pageLogic.GetButtonRowValue(i + 1));
+                        gridLayout.Add(m_PlacementButton[i], (int)position.Column ,(int)position.Row);
                         m_PlacementButton[i].Clicked += OnButtonClicked;
                     }
                     m_ClientInfo.isInitialized = true;
@@ -94,7 +95,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         gridLayout.RowDefinitions.Add(new RowDefinition(GridLength.Auto));
         gridLayout.RowDefinitions.Add(new RowDefinition(GridLength.Star));
         gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-        gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));

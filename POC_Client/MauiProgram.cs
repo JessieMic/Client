@@ -17,7 +17,7 @@ namespace POC_Client
 
             builder.Services.AddSingleton<MainPage>();
 
-            builder.Services.AddTransient<SelectPhonePlacementPage>();
+            builder.Services.AddTransient<ScreenPlacementSelectingPage>();
             // builder.Services.AddTransient<GameRoomPage>();
 
 #if DEBUG
