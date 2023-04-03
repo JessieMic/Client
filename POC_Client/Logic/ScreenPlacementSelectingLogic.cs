@@ -84,6 +84,8 @@ namespace POC_Client.Logic
 
             r_ConnectionToServer.On("StartGame", () =>
             {
+                    //send ScreenSize
+                    //Get Screen Sizes Of everyone
                     MainThread.BeginInvokeOnMainThread(() =>
                     {
                         OnEnterGameRoom();
