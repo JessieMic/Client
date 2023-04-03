@@ -1,4 +1,6 @@
-﻿namespace POC_Client;
+﻿using POC_Client.Pages;
+
+namespace POC_Client;
 
 public partial class AppShell : Shell
 {
@@ -7,6 +9,6 @@ public partial class AppShell : Shell
 		InitializeComponent();
 
 		Routing.RegisterRoute(nameof(ScreenPlacementSelectingPage), typeof(ScreenPlacementSelectingPage));
-        //Routing.RegisterRoute(nameof(GameRoomPage), typeof(GameRoomPage));
+        Routing.RegisterRoute(nameof(GamePage), typeof(GamePage));
     }
 }
