@@ -8,8 +8,7 @@ namespace POC_Client.Objects
 {
     public enum eColumnPosition
     {
-        LeftColumn,
-        MiddleColumn,
+        LeftColumn = 1,
         RightColumn
     }
 }

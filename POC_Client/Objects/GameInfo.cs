@@ -20,7 +20,6 @@ namespace POC_Client.Objects
         private int m_ClientSpot;
 
         private double m_MinimumLeftColumn;
-        private double m_MinimumMiddleAndLeft;
         private double m_MinimumUpperRow;
 
         public GameInfo(List<ScreenInfo> i_ScreenInfoOfAllPlayers, List<string> i_NamesOfAllPlayers, int i_AmountOfPlayers,int i_ClientSpot)
@@ -42,13 +41,9 @@ namespace POC_Client.Objects
 
         private void calculateWidthScreenValuesToAdd()
         {
-            if(m_ScreenInfoOfAllPlayers[m_ClientSpot - 1].m_ColumnPosition == eColumnPosition.MiddleColumn)
+            if (m_ScreenInfoOfAllPlayers[m_ClientSpot - 1].m_ColumnPosition == eColumnPosition.RightColumn)
             {
                 m_ValueToAddToWidth = -m_MinimumLeftColumn;
-            }
-            else if(m_ScreenInfoOfAllPlayers[m_ClientSpot - 1].m_ColumnPosition == eColumnPosition.RightColumn)
-            {
-                m_ValueToAddToWidth = -m_MinimumMiddleAndLeft;
             }
         }
 
@@ -79,12 +74,6 @@ namespace POC_Client.Objects
             m_MinimumLeftColumn = m_TotalScreenWidth;
 
             if (m_AmountOfPlayers > 2)
-            {
-                getMinWidthByColumnPosition(eColumnPosition.MiddleColumn);
-                m_MinimumMiddleAndLeft = m_TotalScreenWidth;
-            }
-
-            if (m_AmountOfPlayers > 4)
             {
                 getMinWidthByColumnPosition(eColumnPosition.RightColumn);
             }
@@ -125,8 +114,6 @@ namespace POC_Client.Objects
         {
             double minScreenValue1 = 0;
             double minScreenValue2 = 0;
-            double minScreenValue3 = 0;
-            double minTotalRow;
 
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
@@ -139,10 +126,6 @@ namespace POC_Client.Objects
                     else if(minScreenValue2 == 0)
                     {
                         minScreenValue2 = m_ScreenInfoOfAllPlayers[i].Height;
-                    }
-                    else
-                    {
-                        minScreenValue3 = m_ScreenInfoOfAllPlayers[i].Height;
                     }
                 }
             }
@@ -157,16 +140,8 @@ namespace POC_Client.Objects
             }
             else
             {
-                if(m_AmountOfPlayers == 5 && m_TotalScreenHeight != 0)
-                {
-                    m_HeightBoundaries = m_TotalScreenHeight;
-                }
-                    minTotalRow = double.Min(minScreenValue1, minScreenValue2);
-                if(minScreenValue3 != 0)
-                {
-                    minTotalRow = double.Min(minScreenValue3, minTotalRow);
-                }
-
+                double minTotalRow;
+                minTotalRow = double.Min(minScreenValue1, minScreenValue2);
                 m_TotalScreenWidth += minTotalRow;
             }
         }

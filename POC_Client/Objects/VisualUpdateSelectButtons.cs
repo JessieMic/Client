@@ -31,7 +31,5 @@ namespace POC_Client.Objects
             spot = i_Spot;
             textOnButton = i_textOnButton;
         }
-
-
     }
 }
