@@ -34,95 +34,95 @@ namespace POC_Client.Logic
         public ScreenPlacementSelectingLogic()
         {
 
-            r_ConnectionToServer = new HubConnectionBuilder()
-                .WithUrl(Utils.m_GameHubAddress)
-                .Build();
+            //r_ConnectionToServer = new HubConnectionBuilder()
+            //    .WithUrl(Utils.m_GameHubAddress)
+            //    .Build();
 
-            r_ConnectionToServer.On<int>
-            ("GetAmountOfPlayers", (i_AmountOfPlayers) =>
-                {
-                    m_GameInformation.AmountOfPlayers = i_AmountOfPlayers;
-                    OnReceivedAmountOfPlayers();
-                });
+            //r_ConnectionToServer.On<int>
+            //("GetAmountOfPlayers", (i_AmountOfPlayers) =>
+            //    {
+            //        m_GameInformation.AmountOfPlayers = i_AmountOfPlayers;
+            //        OnReceivedAmountOfPlayers();
+            //    });
 
-            r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (i_ButtonsThatAreOccupied) =>
-                {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                        {
-                            int buttonNumber = 0;
-                            VisualUpdateSelectButtons visualUpdate = new();
+            //r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (i_ButtonsThatAreOccupied) =>
+            //    {
+            //        MainThread.BeginInvokeOnMainThread(() =>
+            //            {
+            //                int buttonNumber = 0;
+            //                VisualUpdateSelectButtons visualUpdate = new();
 
-                            foreach (string element in i_ButtonsThatAreOccupied)
-                            {
-                                if (i_ButtonsThatAreOccupied[buttonNumber] != String.Empty
-                                    && i_ButtonsThatAreOccupied[buttonNumber] != null)
-                                {
-                                    visualUpdate.Set(buttonNumber, i_ButtonsThatAreOccupied[buttonNumber],true);
-                                    OnUpdateButton(visualUpdate);
-                                }
-                                buttonNumber++;
-                            }
-                        });
-                });
+            //                foreach (string element in i_ButtonsThatAreOccupied)
+            //                {
+            //                    if (i_ButtonsThatAreOccupied[buttonNumber] != String.Empty
+            //                        && i_ButtonsThatAreOccupied[buttonNumber] != null)
+            //                    {
+            //                        visualUpdate.Set(buttonNumber, i_ButtonsThatAreOccupied[buttonNumber],true);
+            //                        OnUpdateButton(visualUpdate);
+            //                    }
+            //                    buttonNumber++;
+            //                }
+            //            });
+            //    });
 
-            r_ConnectionToServer.On<string, int>("DeSelectPlacementUpdateReceived", (i_NameOfPlayerThatDeselected, i_Spot) =>
-            {
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        VisualUpdateSelectButtons visualUpdate = new(i_Spot, (1 + i_Spot).ToString(), false);
+            //r_ConnectionToServer.On<string, int>("DeSelectPlacementUpdateReceived", (i_NameOfPlayerThatDeselected, i_Spot) =>
+            //{
+            //        MainThread.BeginInvokeOnMainThread(() =>
+            //        {
+            //            VisualUpdateSelectButtons visualUpdate = new(i_Spot, (1 + i_Spot).ToString(), false);
 
-                        if (m_Player.Name == i_NameOfPlayerThatDeselected) //(Name.Equals(nameOfPlayerThatDeselected))
-                        {
-                            m_Player.ButtonThatPlayerPicked = 0;
-                            m_Player.DidPlayerPickAPlacement = false;
-                        }
+            //            if (m_Player.Name == i_NameOfPlayerThatDeselected) //(Name.Equals(nameOfPlayerThatDeselected))
+            //            {
+            //                m_Player.ButtonThatPlayerPicked = 0;
+            //                m_Player.DidPlayerPickAPlacement = false;
+            //            }
 
-                        OnUpdateButton(visualUpdate);
-                        m_AmountOfPlayerThatAreConnected--;
-                    });
-            });
+            //            OnUpdateButton(visualUpdate);
+            //            m_AmountOfPlayerThatAreConnected--;
+            //        });
+            //});
 
-            r_ConnectionToServer.On("StartGame", () =>
-            {
-                    //send ScreenSize
-                    //Get Screen Sizes Of everyone
-                    MainThread.BeginInvokeOnMainThread(() =>
-                    {
-                        OnEnterGameRoom();
-                    });
-            });
+            //r_ConnectionToServer.On("StartGame", () =>
+            //{
+            //        //send ScreenSize
+            //        //Get Screen Sizes Of everyone
+            //        MainThread.BeginInvokeOnMainThread(() =>
+            //        {
+            //            OnEnterGameRoom();
+            //        });
+            //});
 
-            r_ConnectionToServer.On<string, int>
-                ("PlacementUpdateRecevied", (i_NameOfPlayerThatGotASpot, i_Spot) =>
-                    {
-                        MainThread.BeginInvokeOnMainThread(() =>
-                            {
-                                VisualUpdateSelectButtons visualUpdate = new(i_Spot,i_NameOfPlayerThatGotASpot,true);
+            //r_ConnectionToServer.On<string, int>
+            //    ("PlacementUpdateRecevied", (i_NameOfPlayerThatGotASpot, i_Spot) =>
+            //        {
+            //            MainThread.BeginInvokeOnMainThread(() =>
+            //                {
+            //                    VisualUpdateSelectButtons visualUpdate = new(i_Spot,i_NameOfPlayerThatGotASpot,true);
 
-                                OnUpdateButton(visualUpdate);
-                                m_AmountOfPlayerThatAreConnected++;
+            //                    OnUpdateButton(visualUpdate);
+            //                    m_AmountOfPlayerThatAreConnected++;
 
-                                if (m_Player.Name == i_NameOfPlayerThatGotASpot)
-                                {
-                                    m_Player.ButtonThatPlayerPicked = 1 + i_Spot;
-                                    m_Player.DidPlayerPickAPlacement = true;
-                                }
+            //                    if (m_Player.Name == i_NameOfPlayerThatGotASpot)
+            //                    {
+            //                        m_Player.ButtonThatPlayerPicked = 1 + i_Spot;
+            //                        m_Player.DidPlayerPickAPlacement = true;
+            //                    }
 
-                                if ( m_AmountOfPlayerThatAreConnected== m_GameInformation.AmountOfPlayers)
-                                {
-                                    r_ConnectionToServer.InvokeAsync("GameIsAboutToStart");
-                                }
-                            });
-                    });
+            //                    if ( m_AmountOfPlayerThatAreConnected== m_GameInformation.AmountOfPlayers)
+            //                    {
+            //                        r_ConnectionToServer.InvokeAsync("GameIsAboutToStart");
+            //                    }
+            //                });
+            //        });
 
-            Task.Run(() =>
-            {
-                Application.Current.Dispatcher.Dispatch(async () =>
-                    {
-                        await r_ConnectionToServer.StartAsync();
-                        await r_ConnectionToServer.InvokeAsync("GetAmountOfPlayers");
-                    });
-            });
+            //Task.Run(() =>
+            //{
+            //    Application.Current.Dispatcher.Dispatch(async () =>
+            //        {
+            //            await r_ConnectionToServer.StartAsync();
+            //            await r_ConnectionToServer.InvokeAsync("GetAmountOfPlayers");
+            //        });
+            //});
 
         }
 
