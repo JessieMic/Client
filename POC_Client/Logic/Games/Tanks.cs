@@ -8,5 +8,9 @@ namespace POC_Client.Logic.Games
 {
     public class Tanks : Game
     {
+        public override void RunGame()
+        {
+
+        }
     }
 }
