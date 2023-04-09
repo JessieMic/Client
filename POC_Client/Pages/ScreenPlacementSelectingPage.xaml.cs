@@ -127,11 +127,15 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         gridLayout.Add(button3, 2, 3);
         
         Button button13 = new Button();
-        //Image image = new Image();
-        //image.Source = "q.png";
+        Image image = new Image();
+        image.Source = "aa.png";
+        //image.BackgroundColor = Colors.Blue;
+        //image.Scale=1000;
         button13.HeightRequest = 2200;
         button13.WidthRequest = 2000;
-        gridLayout.Add(button13, 4, 4);
+        button13.ImageSource = "dotnet_bot.png";
+        //gridLayout.Add(button13, 4, 4);
+        //gridLayout.Add(image,4,3);
         //gridLayout.Add(new BoxView { Color = Colors.Blue }, 4,4);
     }
     private async void OnButtonClicked(object sender, EventArgs e)
@@ -168,7 +172,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
         gridLayout.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-
 
     }
 }

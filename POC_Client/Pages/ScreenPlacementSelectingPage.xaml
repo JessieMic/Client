@@ -4,5 +4,13 @@
              x:Class="POC_Client.ScreenPlacementSelectingPage"
              Shell.NavBarIsVisible="false"
              Title="ScreenPlacementSelectingPage">
-    <Grid x:Name="gridLayout"></Grid>
+    <Grid x:Name="gridLayout">
+        <Image
+            Source="aa.png"
+            Aspect="Fill"
+            Grid.Column="4"
+            Grid.Row="4"
+            ></Image>
+    </Grid>
+    
 </ContentPage>
