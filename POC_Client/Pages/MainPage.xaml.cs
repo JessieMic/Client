@@ -14,7 +14,7 @@ public partial class MainPage : ContentPage
     public MainPage()
 	{
         InitializeComponent();
- 
+        Shell.Current.GoToAsync("ScreenPlacementSelectingPage");
     }
 
     async void OnReadyClicked(object sender, EventArgs e)

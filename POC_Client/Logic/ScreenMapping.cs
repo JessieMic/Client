@@ -26,12 +26,12 @@ namespace POC_Client.Logic
 
         public ScreenMapping()
         {
-            m_ScreenInfoOfAllPlayers = m_GameInformation.ScreenInfoOfAllPlayers;
-            m_AmountOfPlayers = m_GameInformation.AmountOfPlayers;
-            m_PlayerSpot = m_Player.ButtonThatPlayerPicked;
+            //m_ScreenInfoOfAllPlayers = m_GameInformation.ScreenInfoOfAllPlayers;
+            //m_AmountOfPlayers = m_GameInformation.AmountOfPlayers;
+            //m_PlayerSpot = m_Player.ButtonThatPlayerPicked;
 
-            calculateTotalScreenSize();
-            calculateScreenValuesToAdd();
+            //calculateTotalScreenSize();
+            //calculateScreenValuesToAdd();
         }
 
         private void calculateScreenValuesToAdd()
