@@ -4,5 +4,11 @@
              x:Class="POC_Client.Pages.GamePage"
              Shell.NavBarIsVisible="false"
              Title="GamePage">
-    <Grid x:Name="gridLayout"></Grid>
+    <Grid x:Name="gridLayout"
+          RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+          BackgroundColor="LightGray"
+          ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
+        
+    </Grid>
+
 </ContentPage>
