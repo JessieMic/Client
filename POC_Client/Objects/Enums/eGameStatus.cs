@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POC_Client.Objects
+namespace POC_Client.Objects.Enums
 {
     public enum eGameStatus
     {

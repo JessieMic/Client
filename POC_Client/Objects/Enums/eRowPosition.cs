@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POC_Client.Objects
+namespace POC_Client.Objects.Enums
 {
-    public enum eScreenObjectType
+    public enum eRowPosition
     {
-        Button,
-        Image
+        UpperRow = 1,
+        LowerRow
     }
 }

@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using POC_Client.Objects;
+using POC_Client.Objects.Enums;
 
 namespace POC_Client.Logic
 {
-    public abstract class Game
+    public abstract partial class Game
     {
         private GameInformation m_GameInformation = GameInformation.Instance;
         private Player m_Player = Player.Instance;
@@ -18,16 +19,16 @@ namespace POC_Client.Logic
 
         public abstract void RunGame();
 
-        void a ()
+        public void a ()
         {
             ScreenObject button;
-            new ScreenObject(eScreenObjectType.Button,eButton.Up,2,1,35,35,string.Empty,null);
-            new ScreenObject(eScreenObjectType.Button, eButton.Right, 3, 2, 35, 35, string.Empty, null);
-            new ScreenObject(eScreenObjectType.Button, eButton.Left, 1, 2, 35, 35, string.Empty, null);
-            new ScreenObject(eScreenObjectType.Button, eButton.Down, 2, 3, 35, 35, string.Empty, null);
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button,eButton.Up,2,1,35,35,string.Empty,null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Right, 3, 2, 35, 35, string.Empty, null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Left, 1, 2, 35, 35, string.Empty, null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Down, 2, 3, 35, 35, string.Empty, null));
 
             //1
-            new ScreenObject(eScreenObjectType.Image, null, 4, 4, 585, 0, "aa.png", null);
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, 4, 4, 585, 0, "aa.png", null));
             //2
             new ScreenObject(eScreenObjectType.Image, null, 0, 4, 585, 0, "aa.png", null);
             //3
@@ -89,7 +90,10 @@ namespace POC_Client.Logic
             return returnStatus;
         }
 
+        public void OnButtonClicked(object sender, EventArgs e)
+        {
 
+        }
 
     }
 }
