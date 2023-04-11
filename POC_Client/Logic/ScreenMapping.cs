@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using POC_Client.Objects;
+using POC_Client.Objects.Enums;
 
 namespace POC_Client.Logic
 {

@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POC_Client.Objects
+namespace POC_Client.Objects.Enums
 {
-    public enum eRowPosition
+    public enum eGames
     {
-        UpperRow = 1,
-        LowerRow
+        Snake,
+        Pong,
+        Pacman,
+        Tanks
     }
 }

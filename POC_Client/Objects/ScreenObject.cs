@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using POC_Client.Objects.Enums;
 
 namespace POC_Client.Objects
 {
@@ -14,8 +15,8 @@ namespace POC_Client.Objects
         public string m_Text;
         public eButton m_KindOfButton;
         public string m_ImageSource;
-        int m_Width;
-        int m_Height;
+        public int m_Width;
+        public int m_Height;
 
        public ScreenObject(
            eScreenObjectType i_Type,

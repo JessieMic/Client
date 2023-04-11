@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using POC_Client.Logic;
 using POC_Client.Logic.Games;
+using POC_Client.Objects.Enums;
 
 namespace POC_Client.Objects
 {
