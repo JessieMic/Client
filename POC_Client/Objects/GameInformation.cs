@@ -14,7 +14,7 @@ namespace POC_Client.Objects
         public eGames m_NameOfGame;
         private int m_AmountOfPlayers;
         private Player m_Player = Player.Instance;
-        public ScreenDimension ClientScreenDimension;
+        public ScreenDimension ClientScreenDimension = new ScreenDimension();
         private List<ScreenDimension> m_ScreenInfoOfAllPlayers;
         public List<string> m_NamesOfAllPlayers;
 

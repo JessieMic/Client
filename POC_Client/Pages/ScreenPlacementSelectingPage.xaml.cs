@@ -68,24 +68,11 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                         button.WidthRequest = 150;
                         m_PlacementButton.Add(button);
                         gridLayout.Add(m_PlacementButton[i], (int)position.Column, (int)position.Row);
-                        m_PlacementButton[i].Clicked += OnButtonClicked;
+                        m_PlacementButton[i].Clicked += m_pageLogic.OnButtonClicked;
                     }
                     m_Player.isInitialized = true;
                 });
             getScreenUpdate();
-        }
-    }
-
-    private async void OnButtonClicked(object sender, EventArgs e)
-    {
-        Button button = sender as Button;
-        if (m_Player.DidPlayerPickAPlacement)
-        {
-            m_pageLogic.TryToDeselectScreenSpot(button.Text);
-        }
-        else
-        {
-            m_pageLogic.TryPickAScreenSpot(button.Text);
         }
     }
 }

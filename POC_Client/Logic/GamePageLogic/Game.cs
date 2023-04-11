@@ -19,24 +19,6 @@ namespace POC_Client.Logic
 
         public abstract void RunGame();
 
-        public void a ()
-        {
-            ScreenObject button;
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button,eButton.Up,2,1,35,35,string.Empty,null));
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Right, 3, 2, 35, 35, string.Empty, null));
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Left, 1, 2, 35, 35, string.Empty, null));
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Down, 2, 3, 35, 35, string.Empty, null));
-
-            //1
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, 4, 4, 585, 0, "aa.png", null));
-            //2
-            new ScreenObject(eScreenObjectType.Image, null, 0, 4, 585, 0, "aa.png", null);
-            //3
-            new ScreenObject(eScreenObjectType.Image, null, 4, 0, 585, 0, "aa.png", null);
-            //4
-            new ScreenObject(eScreenObjectType.Image, null, 0, 0, 585, 0, "aa.png", null);
-        }
-
 
         public bool SetAmountOfPlayers(int i_amountOfPlayers)
         {
@@ -92,7 +74,7 @@ namespace POC_Client.Logic
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
-
+            int a = 2;
         }
 
     }

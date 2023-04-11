@@ -12,6 +12,10 @@ namespace POC_Client.Objects
         private double m_Height;
         public Position Position;
 
+        public ScreenDimension()
+        {
+            Position = new Position();
+        }
         public double Width
         {
             get { return m_Width; }
