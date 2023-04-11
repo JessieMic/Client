@@ -165,6 +165,19 @@ namespace POC_Client.Logic
             return result;
         }
 
+        public async void OnButtonClicked(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+            if (m_Player.DidPlayerPickAPlacement)
+            {
+                TryToDeselectScreenSpot(button.Text);
+            }
+            else
+            {
+                TryPickAScreenSpot(button.Text);
+            }
+        }
+
         public async Task GetScreenUpdate()
         {
             await r_ConnectionToServer.InvokeCoreAsync("RequestScreenUpdate", args: new[]

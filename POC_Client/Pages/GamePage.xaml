@@ -5,9 +5,9 @@
              Shell.NavBarIsVisible="false"
              Title="GamePage">
     <Grid x:Name="gridLayout"
-          RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+          RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
           BackgroundColor="LightGray"
-          ColumnDefinitions="Auto,Auto,Auto,Auto,Auto">
+          ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
         
     </Grid>
 
