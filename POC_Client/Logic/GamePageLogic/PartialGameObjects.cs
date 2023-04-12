@@ -25,23 +25,24 @@ namespace POC_Client.Logic
         {
             //m_GameInformation.m_ClientScreenDimension.Position.Row = eRowPosition.LowerRow;
             //m_GameInformation.m_ClientScreenDimension.Position.Column = eColumnPosition.LeftColumn;
-
-            setGameButtons();
+            //setGameButtons();
+             setGameButtons();
             setGameBackGround();
-            setGameSpacing();
+            //setGameButtons();
+            //setGameSpacing();
         }
 
         protected void setGameButtons()
         {
             Point point = new Point(2, 1);
             Size size = new Size(35, 35);
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, getTypeOfButton(point), point, size, string.Empty, null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), size, string.Empty, null));
             point.SetAndGetPoint(3, 2);
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, getTypeOfButton(point), point, size, string.Empty, null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), size, string.Empty, null));
             point.SetAndGetPoint(1, 2);
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, getTypeOfButton(point), point, size, string.Empty, null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Down, getButtonPoint(eButton.Down), size, string.Empty, null));
             point.SetAndGetPoint(2, 3);
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, getTypeOfButton(point), point, size, string.Empty, null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Up, getButtonPoint(eButton.Up), size, string.Empty, null));
         }
 
         protected void setGameSpacing()
@@ -52,7 +53,59 @@ namespace POC_Client.Logic
 
         protected void setGameBackGround()
         {
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, getBackgroundPoint(), new Size(m_GameInformation.m_ClientScreenDimension.m_Size.m_Width-115,0), "aa.png", null));
+            // OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, getBackgroundPoint(), new Size(m_GameInformation.m_ClientScreenDimension.m_Size.m_Width-115,0), "aa.png", null));
+            //OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_p1, m_ScreenMapping.m_TotalScreenSize, "aa.png", null));
+
+            if(m_Player.ButtonThatPlayerPicked == 1)
+            {
+                OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, m_ScreenMapping.m_TotalScreenSize, "aa.png", null));
+            }
+            else { OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, m_ScreenMapping.m_TotalScreenSize, "aa.png", null)); }
+        }
+
+        private Point getButtonPoint(eButton i_Type)
+        {
+            Point returnPoint = new Point();
+           
+            if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            {
+                if(i_Type == eButton.Up)
+                {
+                    returnPoint.SetAndGetPoint(45, 80);
+                }
+                else if(i_Type == eButton.Down)
+                {
+                    returnPoint.SetAndGetPoint(45, 10);
+                }
+                else if (i_Type == eButton.Right)
+                {
+                    returnPoint.SetAndGetPoint(10, 45);
+                }
+                else
+                {
+                    returnPoint.SetAndGetPoint(80, 45);
+                }
+            }
+            else
+            {
+                if(i_Type == eButton.Up)
+                {
+                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 80, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height-115);
+                }
+                else if(i_Type == eButton.Down)
+                {
+                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 80, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height - 45);
+                }
+                else if (i_Type == eButton.Right)
+                {
+                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 45, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height - 80);
+                }
+                else
+                {
+                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 115, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height - 80);
+                }
+            }
+            return returnPoint;
         }
 
         private Point getSpacingPoint()

@@ -54,6 +54,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     {
         base.OnSizeAllocated(i_Width,i_Height);
         m_pageLogic.SetPlayerScreenSize(i_Width, i_Height);
+        
     }
 
     private void initializeButtons()
@@ -62,7 +63,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         {
             Application.Current.Dispatcher.Dispatch(async () =>
                 {
-                    //startGame();
+                    //startGame();   
                     for (int i = 0; i < m_pageLogic.AmountOfPlayers; i++)
                     {
                         Button button = new Button();

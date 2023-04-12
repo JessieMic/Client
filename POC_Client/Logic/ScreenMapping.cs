@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using POC_Client.Objects;
 using POC_Client.Objects.Enums;
+using Point = POC_Client.Objects.Point;
 using Size = POC_Client.Objects.Size;
 
 namespace POC_Client.Logic
@@ -12,17 +13,19 @@ namespace POC_Client.Logic
     public class ScreenMapping
     {
         private GameInformation m_GameInformation = GameInformation.Instance;
-        private Player m_Player = Player.Instance;
-        private Size m_TotalScreenSize;
-        private Size m_ValueToAdd; //Values that each Player adds to game objects so the would be in the right place
-        private Size m_Boundaries;//Boundaries in case of an uneven amount of players
+        public Player m_Player = Player.Instance;
+        public Size m_TotalScreenSize = new Size();
+        public Point m_p1 = new Point(0, 115);
+        public Point m_p2 = new Point(0, -276);
+        public Point m_ValueToAdd; //Values that each Player adds to game objects so the would be in the right place
+        public Size m_Boundaries;//Boundaries in case of an uneven amount of players
         private double m_MinimumLeftColumn;
         private double m_MinimumUpperRow;
 
         public ScreenMapping()
         {
-            //calculateTotalScreenSize();
-            //calculateScreenValuesToAdd();
+            calculateTotalScreenSize();
+           calculateScreenValuesToAdd();
         }
 
         private void calculateScreenValuesToAdd()
@@ -35,7 +38,7 @@ namespace POC_Client.Logic
         {
             if (m_GameInformation.ScreenInfoOfAllPlayers[m_Player.ButtonThatPlayerPicked - 1].m_Position.Column == eColumnPosition.RightColumn)
             {
-                m_ValueToAdd.m_Width = -m_MinimumLeftColumn;
+                m_ValueToAdd.m_Column = (int)-m_MinimumLeftColumn;
             }
         }
 
@@ -43,7 +46,7 @@ namespace POC_Client.Logic
         {
             if (m_GameInformation.ScreenInfoOfAllPlayers[m_Player.ButtonThatPlayerPicked - 1].m_Position.Row == eRowPosition.LowerRow)
             {
-                m_ValueToAdd.m_Height = -m_MinimumUpperRow;
+                m_ValueToAdd.m_Row = (int)-m_MinimumUpperRow;
             }
         }
 
@@ -82,11 +85,11 @@ namespace POC_Client.Logic
                 {
                     if (minScreenValue1 == 0)
                     {
-                        minScreenValue1 = m_GameInformation.ScreenInfoOfAllPlayers[i].m_Size.m_Width;
+                        minScreenValue1 = m_GameInformation.ScreenInfoOfAllPlayers[i].Size.m_Width;
                     }
                     else
                     {
-                        minScreenValue2 = m_GameInformation.ScreenInfoOfAllPlayers[i].m_Size.m_Width;
+                        minScreenValue2 = m_GameInformation.ScreenInfoOfAllPlayers[i].Size.m_Width;
                     }
                 }
             }
@@ -113,11 +116,11 @@ namespace POC_Client.Logic
                 {
                     if (minScreenValue1 == 0)
                     {
-                        minScreenValue1 = m_GameInformation.ScreenInfoOfAllPlayers[i].m_Size.m_Height;
+                        minScreenValue1 = m_GameInformation.ScreenInfoOfAllPlayers[i].Size.m_Height;
                     }
                     else if (minScreenValue2 == 0)
                     {
-                        minScreenValue2 = m_GameInformation.ScreenInfoOfAllPlayers[i].m_Size.m_Height;
+                        minScreenValue2 = m_GameInformation.ScreenInfoOfAllPlayers[i].Size.m_Height;
                     }
                 }
             }
@@ -134,7 +137,7 @@ namespace POC_Client.Logic
             {
                 double minTotalRow;
                 minTotalRow = double.Min(minScreenValue1, minScreenValue2);
-                m_TotalScreenSize.m_Width += minTotalRow;
+                m_TotalScreenSize.m_Height += minTotalRow;
             }
         }
     }

@@ -41,7 +41,7 @@ namespace POC_Client.Objects
         
             for(int i = 0; i < m_AmountOfPlayers; i++)
             {
-                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.m_Size, new Position(m_AmountOfPlayers,i)));
+                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.Size, new Position(m_AmountOfPlayers,i+1)));
 
                 if (m_Player.ButtonThatPlayerPicked == i + 1)
                 {

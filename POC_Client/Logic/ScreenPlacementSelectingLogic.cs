@@ -139,8 +139,8 @@ namespace POC_Client.Logic
 
         protected virtual void OnEnterGameRoom()
         {
-            m_GameInformation.m_ClientScreenDimension.m_Position.SetPosition
-                (m_GameInformation.AmountOfPlayers,m_Player.ButtonThatPlayerPicked);
+            //m_GameInformation.m_ClientScreenDimension.m_Position.SetPosition
+            //    (m_GameInformation.AmountOfPlayers,m_Player.ButtonThatPlayerPicked);
             GameIsStarting?.Invoke();
         }
 
@@ -170,7 +170,7 @@ namespace POC_Client.Logic
 
         public void SetPlayerScreenSize(double i_Width, double i_Height)
         {
-            m_GameInformation.m_ClientScreenDimension.m_Size.SetSize(i_Width, i_Height);
+            m_GameInformation.m_ClientScreenDimension.Size = new Size(i_Width, i_Height);
 
         }
 
@@ -199,7 +199,7 @@ namespace POC_Client.Logic
                 "TryPickAScreenSpot",
                 m_Player.Name,
                 i_TextOnButton,
-                m_GameInformation.m_ClientScreenDimension.m_Size);
+                m_GameInformation.m_ClientScreenDimension.Size);
 
         }
 

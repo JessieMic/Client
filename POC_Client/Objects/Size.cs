@@ -9,8 +9,8 @@ namespace POC_Client.Objects
 
     public struct Size
     {
-        public double m_Width;
-        public double m_Height;
+        public double m_Width=0;
+        public double m_Height=0;
 
         public Size() { }
 
