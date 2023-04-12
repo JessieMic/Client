@@ -51,7 +51,7 @@ public partial class GamePage : ContentPage
     {
         Image image = new Image();
                 image.Source = i_ScreenObject.m_ImageSource;
-
+                image.TranslateTo(20, 100);
             if(i_ScreenObject.m_Size.m_Width != 0)
             {
                 image.WidthRequest= i_ScreenObject.m_Size.m_Width;
@@ -62,7 +62,8 @@ public partial class GamePage : ContentPage
                 image.HeightRequest = i_ScreenObject.m_Size.m_Height;
             }
 
-            gridLayout.Add(image,i_ScreenObject.m_Point.m_Column,i_ScreenObject.m_Point.m_Row);
+            gridLayout.Add(image);//,i_ScreenObject(.m_Point.m_Column,i_ScreenObject.m_Point.m_Row);
+            image.TranslateTo(20, 100);
     }
 
     private void addButton(ScreenObject i_ScreenObject)

@@ -9,23 +9,29 @@ namespace POC_Client.Objects
 
     public struct Size
     {
-        public int m_Width;
-        public int m_Height;
+        public double m_Width;
+        public double m_Height;
 
         public Size() { }
 
-        public Size(int i_Width, int i_Height)
+        public Size(double i_Width, double i_Height)
         {
             m_Width = i_Width;
             m_Height = i_Height;
         }
 
-        public Size SetAndGetSize(int i_Width, int i_Height)
+        public Size SetAndGetSize(double i_Width, double i_Height)
         {
             m_Width = i_Width;
             m_Height = i_Height;
 
             return this;
+        }
+
+        public void SetSize(double i_Width, double i_Height)
+        {
+            m_Width = i_Width;
+            m_Height = i_Height;
         }
 
         public static bool operator ==(Size i_P1, Size i_P2)
@@ -36,6 +42,15 @@ namespace POC_Client.Objects
         public static bool operator !=(Size i_P1, Size i_P2)
         {
             return (i_P1.m_Width != i_P2.m_Width) || (i_P1.m_Height != i_P2.m_Height);
+        }
+
+        public double[] GetDouble()
+        { 
+            double[] result = new double[2];
+            result[0] = m_Width;
+            result[1] = m_Height;
+
+            return result;
         }
     }
 }

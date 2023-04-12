@@ -17,6 +17,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using POC_Client.Objects;
+using Point = POC_Client.Objects.Point;
+using Size = POC_Client.Objects.Size;
 
 namespace POC_Client.Logic
 {
@@ -82,12 +84,11 @@ namespace POC_Client.Logic
                 });
             });
 
-            r_ConnectionToServer.On("StartGame", () =>
+            r_ConnectionToServer.On("StartGame", (string[] i_NamesOfPlayers, Size[] i_ScreenSizes) =>
             {
-                //send ScreenSize
-                //Get Screen Sizes Of everyone
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
+                    m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizes);
                     OnEnterGameRoom();
                 });
             });
@@ -138,6 +139,8 @@ namespace POC_Client.Logic
 
         protected virtual void OnEnterGameRoom()
         {
+            m_GameInformation.m_ClientScreenDimension.m_Position.SetPosition
+                (m_GameInformation.AmountOfPlayers,m_Player.ButtonThatPlayerPicked);
             GameIsStarting?.Invoke();
         }
 
@@ -165,6 +168,12 @@ namespace POC_Client.Logic
             return result;
         }
 
+        public void SetPlayerScreenSize(double i_Width, double i_Height)
+        {
+            m_GameInformation.m_ClientScreenDimension.m_Size.SetSize(i_Width, i_Height);
+
+        }
+
         public async void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
@@ -186,8 +195,12 @@ namespace POC_Client.Logic
 
         public async Task TryPickAScreenSpot(string i_TextOnButton)
         {
-            await r_ConnectionToServer.InvokeCoreAsync("TryPickAScreenSpot", args: new[]
-                {m_Player.Name,i_TextOnButton});
+            await r_ConnectionToServer.SendAsync(
+                "TryPickAScreenSpot",
+                m_Player.Name,
+                i_TextOnButton,
+                m_GameInformation.m_ClientScreenDimension.m_Size);
+
         }
 
         public async Task TryToDeselectScreenSpot(string i_TextOnButton)

@@ -14,6 +14,8 @@ public partial class MainPage : ContentPage
     public MainPage()
 	{
         InitializeComponent();
+
+        m_PlayerInfo.Name = DateAndTime.TimeString;
         Shell.Current.GoToAsync("ScreenPlacementSelectingPage");
     }
 

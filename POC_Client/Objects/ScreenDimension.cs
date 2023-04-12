@@ -8,24 +8,21 @@ namespace POC_Client.Objects
 {
     public struct ScreenDimension
     {
-        private double m_Width;
-        private double m_Height;
-        public Position Position;
+        public Size m_Size = new Size();
+        public Position m_Position = new Position();
 
-        public ScreenDimension()
+        public ScreenDimension(Size i_Size,Position i_Position)
         {
-            Position = new Position();
-        }
-        public double Width
-        {
-            get { return m_Width; }
-            set { m_Width = value; }
+            m_Size = i_Size;
+            m_Position = i_Position;
         }
 
-        public double Height
+        public Position Position
         {
-            get { return m_Height; }
-            set { m_Height = value; }
+            get
+            {
+                return m_Position;
+            }
         }
     }
 }
