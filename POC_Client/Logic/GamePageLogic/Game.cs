@@ -12,7 +12,7 @@ namespace POC_Client.Logic
     {
         private GameInformation m_GameInformation = GameInformation.Instance;
         private Player m_Player = Player.Instance;
-        //protected ScreenMapping m_ScreenMapping = new ScreenMapping();
+        protected ScreenMapping m_ScreenMapping = new ScreenMapping();
         protected eTypeOfGameButtons m_TypeOfGameButtons;
         protected int m_AmountOfLivesTheClientHas;
         protected int m_AmountOfActivePlayers;
