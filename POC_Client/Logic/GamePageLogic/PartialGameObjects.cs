@@ -23,8 +23,8 @@ namespace POC_Client.Logic
 
         public void SetGameScreen()
         {
-            m_GameInformation.ClientScreenDimension.Position.Row = eRowPosition.LowerRow;
-            m_GameInformation.ClientScreenDimension.Position.Column = eColumnPosition.LeftColumn;
+            //m_GameInformation.m_ClientScreenDimension.Position.Row = eRowPosition.LowerRow;
+            //m_GameInformation.m_ClientScreenDimension.Position.Column = eColumnPosition.LeftColumn;
 
             setGameButtons();
             setGameBackGround();
@@ -46,21 +46,22 @@ namespace POC_Client.Logic
 
         protected void setGameSpacing()
         {
+
             OnAddScreenObject(new ScreenObject(eScreenObjectType.Space, null, getSpacingPoint(), new Size(10, 10), string.Empty, null));
         }
 
         protected void setGameBackGround()
         {
-            OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, getBackgroundPoint(), new Size(585,0), "aa.png", null));
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, getBackgroundPoint(), new Size(m_GameInformation.m_ClientScreenDimension.m_Size.m_Width-115,0), "aa.png", null));
         }
 
         private Point getSpacingPoint()
         {
             Point returnPoint = new Point();
 
-            if (m_GameInformation.ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                if (m_GameInformation.ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
+                if (m_GameInformation.m_ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
                 {
                     returnPoint.SetAndGetPoint(5, 0);
                 }
@@ -71,7 +72,7 @@ namespace POC_Client.Logic
             }
             else
             {
-                if (m_GameInformation.ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
+                if (m_GameInformation.m_ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
                 {
                     returnPoint.SetAndGetPoint(5, 5);
                 }
@@ -88,9 +89,9 @@ namespace POC_Client.Logic
         {
             Point returnPoint = new Point();
 
-            if(m_GameInformation.ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            if(m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                if(m_GameInformation.ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
+                if(m_GameInformation.m_ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
                 {
                     returnPoint.SetAndGetPoint(0,4);
                 }
@@ -101,7 +102,7 @@ namespace POC_Client.Logic
             }
             else
             {
-                if (m_GameInformation.ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
+                if (m_GameInformation.m_ClientScreenDimension.Position.Column == eColumnPosition.RightColumn)
                 {
                     returnPoint.SetAndGetPoint(0,0);
                 }
@@ -118,7 +119,7 @@ namespace POC_Client.Logic
         {
             eButton result;
 
-            if(m_GameInformation.ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            if(m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 if(new Point(2, 1) == i_Point)
                 {

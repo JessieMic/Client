@@ -11,13 +11,18 @@ namespace POC_Client.Objects
     {
         private eRowPosition m_Row;
         private eColumnPosition m_Column;
-
+        public Position(){}
         public Position(int i_AmountOfPlayers, int i_PlacementNumber)
         {
             m_Column = getColumnPosition(i_PlacementNumber,i_AmountOfPlayers);
             m_Row = getRowPosition(i_PlacementNumber, i_AmountOfPlayers);
         }
-        public Position(){}
+
+        public void SetPosition(int i_AmountOfPlayers, int i_PlacementNumber)
+        {
+            m_Column = getColumnPosition(i_PlacementNumber, i_AmountOfPlayers);
+            m_Row = getRowPosition(i_PlacementNumber, i_AmountOfPlayers);
+        }
 
         public eRowPosition Row
         {

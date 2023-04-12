@@ -74,7 +74,7 @@ namespace POC_Client.Logic
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
-            int a = 2;
+            
         }
 
     }

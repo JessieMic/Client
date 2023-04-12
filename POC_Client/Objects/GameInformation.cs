@@ -14,9 +14,9 @@ namespace POC_Client.Objects
         public eGames m_NameOfGame;
         private int m_AmountOfPlayers;
         private Player m_Player = Player.Instance;
-        public ScreenDimension ClientScreenDimension = new ScreenDimension();
-        private List<ScreenDimension> m_ScreenInfoOfAllPlayers;
-        public List<string> m_NamesOfAllPlayers;
+        public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
+        private List<ScreenDimension> m_ScreenInfoOfAllPlayers =  new List<ScreenDimension>();
+        public string[] m_NamesOfAllPlayers;
 
         private static readonly object s_InstanceLock = new object();
 
@@ -35,14 +35,24 @@ namespace POC_Client.Objects
             }
         }
 
+        public void SetScreenInfo(string[] i_NamesOfPlayers, Size[] i_ScreenSizes)
+        {
+            m_NamesOfAllPlayers = i_NamesOfPlayers;
+        
+            for(int i = 0; i < m_AmountOfPlayers; i++)
+            {
+                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.m_Size, new Position(m_AmountOfPlayers,i)));
+
+                if (m_Player.ButtonThatPlayerPicked == i + 1)
+                {
+                    m_ClientScreenDimension = m_ScreenInfoOfAllPlayers[i];
+                }
+            }
+        }
+
         public List<ScreenDimension> ScreenInfoOfAllPlayers
         {
             get {return m_ScreenInfoOfAllPlayers;}
-            set
-            {
-                m_ScreenInfoOfAllPlayers = value;
-                ClientScreenDimension = m_ScreenInfoOfAllPlayers[m_Player.ButtonThatPlayerPicked - 1];
-            }
         }
 
 
