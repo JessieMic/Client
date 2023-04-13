@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{4921
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicUnit", "LogicUnit\LogicUnit.csproj", "{EDA7FBDC-64D5-405C-83FB-8B21DC61DE38}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameRoomServer", "GameRoomServer\GameRoomServer.csproj", "{E20DD270-4813-4954-99AE-02D097FACFFB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRoomServer", "GameRoomServer\GameRoomServer.csproj", "{E20DD270-4813-4954-99AE-02D097FACFFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Objects", "Objects\Objects.csproj", "{A99E098A-5D48-46C4-9C72-291DA8787B9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{E20DD270-4813-4954-99AE-02D097FACFFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20DD270-4813-4954-99AE-02D097FACFFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E20DD270-4813-4954-99AE-02D097FACFFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A99E098A-5D48-46C4-9C72-291DA8787B9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A99E098A-5D48-46C4-9C72-291DA8787B9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A99E098A-5D48-46C4-9C72-291DA8787B9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A99E098A-5D48-46C4-9C72-291DA8787B9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
