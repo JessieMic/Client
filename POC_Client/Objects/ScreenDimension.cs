@@ -14,7 +14,6 @@ namespace POC_Client.Objects
         public ScreenDimension(Size i_Size,Position i_Position)
         {
             m_Size = i_Size;
-            //m_Size.m_Height -= 115;
             m_Position = i_Position;
         }
 
@@ -32,7 +31,7 @@ namespace POC_Client.Objects
             set
             {
                 m_Size = value;
-                m_Size.m_Height -= 115;
+                //m_Size.m_Height-= 115;
             }
         }
 

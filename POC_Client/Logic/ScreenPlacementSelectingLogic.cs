@@ -168,7 +168,7 @@ namespace POC_Client.Logic
             return result;
         }
 
-        public void SetPlayerScreenSize(double i_Width, double i_Height)
+        public void SetPlayerScreenSize(int i_Width, int i_Height)
         {
             m_GameInformation.m_ClientScreenDimension.Size = new Size(i_Width, i_Height);
 
