@@ -1,4 +1,6 @@
 ﻿using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 
 namespace LogicUnit
 {
@@ -6,22 +8,29 @@ namespace LogicUnit
     public class LogicManager
     {
         private readonly Connection r_Connection;
+        private Uri m_Uri;
         private HttpClient m_HttpClient = new HttpClient();
-        //private Uri m_Uri = new Uri("");
+        private RoomData m_RoomData;
 
         public LogicManager()
         {
             r_Connection = new Connection();
         }
 
-        public eLoginErrors CreateNewRoom(string i_HostName)
+        public string GetRoomCode()
+        {
+            return m_RoomData.roomCode;
+        }
+
+        public async Task<eLoginErrors> CreateNewRoom(string i_HostName)
         {
             if (checkIfValidUsername(i_HostName))
             {
-                StringContent stringContent = new StringContent(i_HostName);
-
-                // create a new room with host name in server
-                //m_HttpClient.PostAsync(m_Uri, stringContent);
+                m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CreateNewRoom}");
+                HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,  m_Uri);
+                HttpResponseMessage response = await m_HttpClient.SendAsync(request);
+                string s = await response.Content.ReadAsStringAsync();
+                m_RoomData = (RoomData)JsonSerializer.Deserialize(s,typeof(RoomData));
 
                 return eLoginErrors.Ok;
             }
@@ -31,14 +40,14 @@ namespace LogicUnit
             }
         }
 
-        public eLoginErrors CheckIfValidCode(string i_Code)
+        public async Task<eLoginErrors> CheckIfValidCode(string i_Code)
         {
             if (i_Code.Length > 0)
             {
-                StringContent stringContent = new StringContent(i_Code);
+                StringContent stringContent = new StringContent($"\"{i_Code}\"", Encoding.UTF8, "application/json");
 
-                //check if valid code in server
-                //m_HttpClient.PutAsync(m_Uri, stringContent);
+                m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_JoinRoom}");
+                HttpResponseMessage response = await m_HttpClient.PutAsync(m_Uri, stringContent);
 
                 return eLoginErrors.Ok;
             }
@@ -54,7 +63,7 @@ namespace LogicUnit
             {
                 //check in server if username is taken.
                 //if not - create a new player.
-                //need to sent 2 parameters : username, code
+                //need to send 2 parameters : username, code
 
                 return eLoginErrors.Ok;
             }
