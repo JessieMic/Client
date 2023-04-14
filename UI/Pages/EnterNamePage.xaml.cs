@@ -1,14 +1,16 @@
 using LogicUnit;
-using System.Xml.Linq;
+//using System.Xml.Linq;
+//using static ObjCRuntime.Dlfcn;
+
 namespace UI.Pages;
 
-[QueryProperty(nameof(PlayerType), "playerType")]
-[QueryProperty(nameof(RoomCode), "code")]
+[QueryProperty(nameof(PlayerType), QueryIDs.k_PlayerType)]
+[QueryProperty(nameof(RoomCode), QueryIDs.k_Code)]
 public partial class EnterNamePage : ContentPage
 {
     private readonly LogicManager r_LogicManager;
-    private ePlayerType PlayerType { get; set; }
-    private string RoomCode { get; set; }
+    public string PlayerType { get; set; }
+    public string RoomCode { get; set; }
 
     public EnterNamePage()
     {
@@ -16,29 +18,32 @@ public partial class EnterNamePage : ContentPage
         r_LogicManager = new LogicManager();
     }
 
-    private void OnContinueClicked(object sender, EventArgs e)
+    private async void OnContinueClicked(object sender, EventArgs e)
     {
         string username = Entry.Text;
+        eLoginErrors logicResponse;
 
-        if (PlayerType == ePlayerType.Host)
+        if (PlayerType == LogicUnit.PlayerType.k_Host)
         {
-            r_LogicManager.CreateNewRoom(username);
+            logicResponse = await r_LogicManager.CreateNewRoom(username);
+
+            if (logicResponse == eLoginErrors.Ok)
+            {
+                RoomCode = r_LogicManager.GetRoomCode();
+            }
         }
         else
         {
-            r_LogicManager.AddPlayerToRoom(username, RoomCode);
+            logicResponse = r_LogicManager.AddPlayerToRoom(username, RoomCode);
+        }
+
+        if (logicResponse == eLoginErrors.Ok)
+        {
+            // go to next page with the code
+        }
+        else
+        {
+            ErrorLabel.Text = EnumHelper.GetDescription(logicResponse);
         }
     }
-
-    //void OnEntryTextChanged(object sender, TextChangedEventArgs e)
-    //{
-    //    string oldText = e.OldTextValue;
-    //    string newText = e.NewTextValue;
-    //    string myText = Entry.Text;
-    //}
-
-    //void OnEntryCompleted(object sender, EventArgs e)
-    //{
-    //    string text = ((Entry)sender).Text;
-    //}
 }

@@ -15,24 +15,14 @@ namespace UI
 
         private async void OnCreateRoomClicked(object sender, EventArgs e)
         {
-            //Player player = new Player();
-            //player.SetPlayerType(ePlayerType.Host);
-            ePlayerType playerType = ePlayerType.Host;
-
-            await Shell.Current.GoToAsync(nameof(EnterNamePage) + $"?playerType={playerType}");
+            await Shell.Current.GoToAsync(nameof(EnterNamePage) +
+                                          $"?{QueryIDs.k_PlayerType}={PlayerType.k_Host}");
         }
 
         private async void OnJoinRoomClicked(object sender, EventArgs e)
         {
-            //Player player = new Player();
-            //player.SetPlayerType(ePlayerType.Guest);
-            ePlayerType playerType = ePlayerType.Guest;
-
-            var navigationParameters =
-                new Dictionary<string, object> { { "playerType", playerType } };
-
-            //await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) + $"?playerType={playerType}");
-            await Shell.Current.GoToAsync(nameof(EnterRoomCodePage), navigationParameters );
+            await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
+                                          $"?{QueryIDs.k_PlayerType}={PlayerType.k_Guest}");
         }
     }
 }
