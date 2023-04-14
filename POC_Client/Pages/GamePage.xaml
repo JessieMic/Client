@@ -6,7 +6,16 @@
              Title="GamePage"
              x:Name="pp">
     <AbsoluteLayout x:Name="gridLayout"
-                    BackgroundColor="LightGray">
+                    BackgroundColor="LightGray"
+                    >
+        <Label 
+            Text =""
+            HeightRequest="35"
+            WidthRequest="35"
+            TranslationY="347"
+            BackgroundColor="Red"
+            FontSize="25">
+        </Label>
     </AbsoluteLayout>
 
 </ContentPage>

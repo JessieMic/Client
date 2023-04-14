@@ -63,26 +63,27 @@ public partial class GamePage : ContentPage
         }
 
         image.Aspect = Aspect.AspectFill;
-        Image image1 = new Image();
-        image1.Source = i_ScreenObject.m_ImageSource;
+        image.Opacity = 0.50;
+        //Image image1 = new Image();
+        //image1.Source = i_ScreenObject.m_ImageSource;
         image.BackgroundColor = Colors.Blue;
-        if (i_ScreenObject.m_Size.m_Width != 0)
-        {
-            image1.WidthRequest = i_ScreenObject.m_Size.m_Width;
-        }   
+        //if (i_ScreenObject.m_Size.m_Width != 0)
+        //{
+        //    image1.WidthRequest = i_ScreenObject.m_Size.m_Width;
+        //}   
 
-        if (i_ScreenObject.m_Size.m_Height != 0)
-        {
-            image1.HeightRequest = i_ScreenObject.m_Size.m_Height;
-        }
-
+        //if (i_ScreenObject.m_Size.m_Height != 0)
+        //{
+        //    image1.HeightRequest = i_ScreenObject.m_Size.m_Height;
+        //}
+        //image1.Aspect = Aspect.AspectFill;
         gridLayout.Add(image);//,i_ScreenObject(.m_Point.m_Column,i_ScreenObject.m_Point.m_Row);
         //gridLayout.Add(image1);
-            image.TranslateTo(0,125);
-            if(m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
-            {
-            image.TranslateTo(0, i_ScreenObject.m_Point.m_Row);
-        }
+            image.TranslateTo(i_ScreenObject.m_Point.m_Column,i_ScreenObject.m_Point.m_Row);
+        //    if(m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
+        //    {
+        //    image.TranslateTo(0, i_ScreenObject.m_Point.m_Row);
+        //}
             //image1.TranslateTo(i_ScreenObject.m_Point.m_Column, 0, 0);
         //gridLayout.Add(new Imageima, new Rect((double)i_ScreenObject.m_Point.m_Column, (double)i_ScreenObject.m_Point.m_Row, i_ScreenObject.m_Size.m_Width, i_ScreenObject.m_Size.m_Height));
     }

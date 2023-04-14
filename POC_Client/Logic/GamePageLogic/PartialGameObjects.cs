@@ -14,7 +14,9 @@ namespace POC_Client.Logic
     {
         public event EventHandler<ScreenObject> AddScreenObject;
 
-
+        //private int m_MovementButtonSize = 35;
+        //private int m_SpacingAroundButtons = 10;
+        //private int m_ControllBoardTotalHeight = m_MovementButtonSize*3 + m_SpacingAroundButtons*2;
 
         protected virtual void OnAddScreenObject(ScreenObject i_ScreenObject)
         {
@@ -35,7 +37,8 @@ namespace POC_Client.Logic
         protected void setGameButtons()
         {
             Point point = new Point(2, 1);
-            Size size = new Size(35, 35);
+            Size size = m_ScreenMapping.m_MovementButtonSize;
+
             OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), size, string.Empty, null));
             point.SetAndGetPoint(3, 2);
             OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), size, string.Empty, null));
@@ -58,9 +61,14 @@ namespace POC_Client.Logic
 
             if(m_Player.ButtonThatPlayerPicked == 1)
             {
+                Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize.m_Height,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize.m_Height);
+                OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null));
+            }
+            else
+            {
+                Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width * m_ScreenMapping.m_GameBoardGridSize.m_Height, m_ScreenMapping.m_TotalScreenSize.m_Height * m_ScreenMapping.m_GameBoardGridSize.m_Height);
                 OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, m_ScreenMapping.m_TotalScreenSize, "aa.png", null));
             }
-            else { OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, m_ScreenMapping.m_TotalScreenSize, "aa.png", null)); }
         }
 
         private Point getButtonPoint(eButton i_Type)
