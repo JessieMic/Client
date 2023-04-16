@@ -56,19 +56,8 @@ namespace POC_Client.Logic
 
         protected void setGameBackGround()
         {
-            // OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, getBackgroundPoint(), new Size(m_GameInformation.m_ClientScreenDimension.m_Size.m_Width-115,0), "aa.png", null));
-            //OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_p1, m_ScreenMapping.m_TotalScreenSize, "aa.png", null));
-
-            if(m_Player.ButtonThatPlayerPicked == 1)
-            {
-                Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize.m_Height,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize.m_Height);
-                OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null));
-            }
-            else
-            {
-                Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width * m_ScreenMapping.m_GameBoardGridSize.m_Height, m_ScreenMapping.m_TotalScreenSize.m_Height * m_ScreenMapping.m_GameBoardGridSize.m_Height);
-                OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, m_ScreenMapping.m_TotalScreenSize, "aa.png", null));
-            }
+            Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize.m_Height,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize.m_Height);
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null));
         }
 
         private Point getButtonPoint(eButton i_Type)

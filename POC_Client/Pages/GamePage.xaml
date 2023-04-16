@@ -12,7 +12,8 @@
             Text =""
             HeightRequest="35"
             WidthRequest="35"
-            TranslationY="347"
+            TranslationY="361"
+            TranslationX="649"
             BackgroundColor="Red"
             FontSize="25">
         </Label>
