@@ -19,7 +19,6 @@ namespace POC_Client.Logic
 
         public abstract void RunGame();
 
-
         public bool SetAmountOfPlayers(int i_amountOfPlayers)
         {
             if(i_amountOfPlayers >= 2 && i_amountOfPlayers <= 4)

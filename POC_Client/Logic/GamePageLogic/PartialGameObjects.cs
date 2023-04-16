@@ -36,15 +36,11 @@ namespace POC_Client.Logic
 
         protected void setGameButtons()
         {
-            Point point = new Point(2, 1);
             Size size = m_ScreenMapping.m_MovementButtonSize;
 
             OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), size, string.Empty, null));
-            point.SetAndGetPoint(3, 2);
             OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), size, string.Empty, null));
-            point.SetAndGetPoint(1, 2);
             OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Down, getButtonPoint(eButton.Down), size, string.Empty, null));
-            point.SetAndGetPoint(2, 3);
             OnAddScreenObject(new ScreenObject(eScreenObjectType.Button, eButton.Up, getButtonPoint(eButton.Up), size, string.Empty, null));
         }
 
@@ -56,61 +52,54 @@ namespace POC_Client.Logic
 
         protected void setGameBackGround()
         {
-            // OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, getBackgroundPoint(), new Size(m_GameInformation.m_ClientScreenDimension.m_Size.m_Width-115,0), "aa.png", null));
-            //OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_p1, m_ScreenMapping.m_TotalScreenSize, "aa.png", null));
-
-            if(m_Player.ButtonThatPlayerPicked == 1)
-            {
-                Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize.m_Height,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize.m_Height);
-                OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null));
-            }
-            else
-            {
-                Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width * m_ScreenMapping.m_GameBoardGridSize.m_Height, m_ScreenMapping.m_TotalScreenSize.m_Height * m_ScreenMapping.m_GameBoardGridSize.m_Height);
-                OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, m_ScreenMapping.m_TotalScreenSize, "aa.png", null));
-            }
+            Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize.m_Height,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize.m_Height);
+            OnAddScreenObject(new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null));
         }
 
         private Point getButtonPoint(eButton i_Type)
         {
             Point returnPoint = new Point();
-           
+            int space = m_ScreenMapping.m_SpacingAroundButtons;
+            Size buttonSize = m_ScreenMapping.m_MovementButtonSize;
+
             if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 if(i_Type == eButton.Up)
                 {
-                    returnPoint.SetAndGetPoint(45, 80);
+                    returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space + 2 * buttonSize.m_Height);
                 }
                 else if(i_Type == eButton.Down)
                 {
-                    returnPoint.SetAndGetPoint(45, 10);
+                    returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space);
                 }
                 else if (i_Type == eButton.Right)
                 {
-                    returnPoint.SetAndGetPoint(10, 45);
+                    returnPoint.SetAndGetPoint(space, space + buttonSize.m_Height);
                 }
                 else
                 {
-                    returnPoint.SetAndGetPoint(80, 45);
+                    returnPoint.SetAndGetPoint(space + 2* buttonSize.m_Width, space + buttonSize.m_Height);
                 }
             }
             else
             {
-                if(i_Type == eButton.Up)
+                int screenWidth = m_GameInformation.m_ClientScreenDimension.Size.m_Width;
+                int screenHeight = m_GameInformation.m_ClientScreenDimension.Size.m_Height;
+                if (i_Type == eButton.Up)
                 {
-                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 80, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height-115);
-                }
+                    returnPoint.SetAndGetPoint(screenWidth - (space+2 * buttonSize.m_Width), screenHeight-(space + 3 * buttonSize.m_Height));
+                }   
                 else if(i_Type == eButton.Down)
                 {
-                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 80, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height - 45);
+                    returnPoint.SetAndGetPoint(screenWidth - (space + 2 * buttonSize.m_Width), screenHeight - (space + buttonSize.m_Height));
                 }
                 else if (i_Type == eButton.Right)
                 {
-                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 45, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height - 80);
+                    returnPoint.SetAndGetPoint(screenWidth - (space + buttonSize.m_Width), screenHeight - (space + 2* buttonSize.m_Height));
                 }
                 else
                 {
-                    returnPoint.SetAndGetPoint((int)m_GameInformation.m_ClientScreenDimension.Size.m_Width - 115, (int)m_GameInformation.m_ClientScreenDimension.Size.m_Height - 80);
+                    returnPoint.SetAndGetPoint(screenWidth - (space + 3 * buttonSize.m_Width), screenHeight - (space + 2 * buttonSize.m_Height));
                 }
             }
             return returnPoint;
