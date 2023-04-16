@@ -9,6 +9,7 @@ namespace POC_Client.Pages;
 
 public partial class GamePage : ContentPage
 {
+
     private GameInformation m_GameInformation = GameInformation.Instance;
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
@@ -72,19 +73,13 @@ public partial class GamePage : ContentPage
 
     private void addButton(ScreenObject i_ScreenObject)
     {
-        Button button = new Button();
-                button.ClassId = i_ScreenObject.m_KindOfButton.ToString();
-                button.HeightRequest = i_ScreenObject.m_Size.m_Height;
-                button.WidthRequest = i_ScreenObject.m_Size.m_Width;
-                button.CornerRadius = 70;
-                gridLayout.Add(button);
-
-                button.TranslateTo(i_ScreenObject.m_Point.m_Column, i_ScreenObject.m_Point.m_Row);
-                if(m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
-                {
-                    button.TranslateTo(i_ScreenObject.m_Point.m_Column, i_ScreenObject.m_Point.m_Row+115);
-                }
-
+            Button button = new Button();
+            button.ClassId = i_ScreenObject.m_KindOfButton.ToString();
+            button.HeightRequest = i_ScreenObject.m_Size.m_Height;
+            button.WidthRequest = i_ScreenObject.m_Size.m_Width;
+            button.CornerRadius = 70;
+            gridLayout.Add(button);
+            button.TranslateTo(i_ScreenObject.m_Point.m_Column, i_ScreenObject.m_Point.m_Row);
             button.Clicked += m_Game.OnButtonClicked;
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Security.Cryptography.X509Certificates;
+using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualBasic;
 using POC_Client.Objects;
@@ -14,7 +15,7 @@ public partial class MainPage : ContentPage
     public MainPage()
 	{
         InitializeComponent();
-        
+        //StatusBar.SetColor(Colors.Transparent);
         m_PlayerInfo.Name = DateAndTime.TimeString;
         Shell.Current.GoToAsync("ScreenPlacementSelectingPage");
     }

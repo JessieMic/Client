@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviors="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="POC_Client.Pages.GamePage"
              Shell.NavBarIsVisible="false"
-             Title="GamePage"
-             x:Name="pp">
+             Shell.TabBarIsVisible="False"
+             Shell.FlyoutItemIsVisible="False"
+             Title="">
+    
     <AbsoluteLayout x:Name="gridLayout"
                     BackgroundColor="LightGray"
                     >
@@ -12,11 +15,12 @@
             Text =""
             HeightRequest="35"
             WidthRequest="35"
-            TranslationY="361"
-            TranslationX="649"
+            TranslationY="0"
+            TranslationX="64"
             BackgroundColor="Red"
             FontSize="25">
         </Label>
     </AbsoluteLayout>
+
 
 </ContentPage>
