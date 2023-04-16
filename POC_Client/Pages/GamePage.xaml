@@ -11,15 +11,7 @@
     <AbsoluteLayout x:Name="gridLayout"
                     BackgroundColor="LightGray"
                     >
-        <Label 
-            Text =""
-            HeightRequest="35"
-            WidthRequest="35"
-            TranslationY="0"
-            TranslationX="64"
-            BackgroundColor="Red"
-            FontSize="25">
-        </Label>
+        
     </AbsoluteLayout>
 
 
