@@ -3,6 +3,7 @@ using POC_Client.Logic;
 using POC_Client.Logic.Games;
 using POC_Client.Objects;
 using POC_Client.Objects.Enums;
+using Point = POC_Client.Objects.Point;
 
 
 namespace POC_Client.Pages;
@@ -13,6 +14,7 @@ public partial class GamePage : ContentPage
     private GameInformation m_GameInformation = GameInformation.Instance;
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
+    Image pLabel = new Image();
 
     public GamePage()
 	{
@@ -24,29 +26,26 @@ public partial class GamePage : ContentPage
         m_Game.RunGame();
     }
 
-    public void addScreenObject(object sender,ScreenObject i_ScreenObject)
+    public void addScreenObject(object sender, List<ScreenObject> i_ScreenObject)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
         {
-            if (i_ScreenObject.m_ScreenObjectType == eScreenObjectType.Button)
+            foreach(var screenObject in i_ScreenObject)
             {
-                addButton(i_ScreenObject);
+                if (screenObject.m_ScreenObjectType == eScreenObjectType.Button)
+                {
+                    addButton(screenObject);
+                }
+                else if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                {
+                    addImage(screenObject);
+                }
             }
-            else if(i_ScreenObject.m_ScreenObjectType == eScreenObjectType.Image)
-            {
-                addImage(i_ScreenObject);
-            }
-            else if(i_ScreenObject.m_ScreenObjectType == eScreenObjectType.Space)
-            {
-                addSpace(i_ScreenObject);
-            }
+            pLabel.HeightRequest = 35;
+            pLabel.WidthRequest = 35;
+            pLabel.Source = "player.png";
+            gridLayout.Add(pLabel);
         });
-    }
-
-    private void addSpace(ScreenObject i_ScreenObject)
-    {
-        //gridLayout.ColumnDefinitions[i_ScreenObject.m_Point.m_Column].Width = i_ScreenObject.m_Size.m_Width;
-        //gridLayout.RowDefinitions[i_ScreenObject.m_Point.m_Row].Height = i_ScreenObject.m_Size.m_Height;
     }
 
     private void addImage(ScreenObject i_ScreenObject)
@@ -65,7 +64,7 @@ public partial class GamePage : ContentPage
         }
 
         image.Aspect = Aspect.AspectFill;
-        image.Opacity = 0.50;
+        //image.Opacity = 0.50;
         image.BackgroundColor = Colors.Blue;
         gridLayout.Add(image);//,i_ScreenObject(.m_Point.m_Column,i_ScreenObject.m_Point.m_Row);
         image.TranslateTo(i_ScreenObject.m_Point.m_Column, i_ScreenObject.m_Point.m_Row);
@@ -83,8 +82,15 @@ public partial class GamePage : ContentPage
             button.Clicked += m_Game.OnButtonClicked;
     }
 
+    private void gameObjectUpdate(object sender, Point p)
+    {
+        pLabel.TranslationX = p.m_Column;
+        pLabel.TranslationY = p.m_Row;
+    }
+
     async Task initializeEvents()
     {
         m_Game.AddScreenObject += addScreenObject;
+        m_Game.GameObjectUpdate += gameObjectUpdate;
     }
 }

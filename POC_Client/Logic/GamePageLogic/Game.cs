@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using POC_Client.Objects;
 using POC_Client.Objects.Enums;
+using Point = POC_Client.Objects.Point;
+using Size = POC_Client.Objects.Size;
 
 namespace POC_Client.Logic
 {
@@ -15,9 +17,17 @@ namespace POC_Client.Logic
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
         protected eTypeOfGameButtons m_TypeOfGameButtons;
         protected int m_AmountOfLivesTheClientHas;
+        private Size m_BoardSize = new Size();
         protected int m_AmountOfActivePlayers;
+        protected Buttons m_Buttons = new Buttons();
+        Point PlayerObject = new Point();
 
         public abstract void RunGame();
+
+        protected void InitializeGame()
+        {
+            m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
+        }
 
         public bool SetAmountOfPlayers(int i_amountOfPlayers)
         {
@@ -52,6 +62,32 @@ namespace POC_Client.Logic
             return returnStatus;
         }
 
+        private bool checkThatPointIsOnBoardGrided(Point i_Point)
+        {
+            bool isPointOnTheBoard = true;
+
+            if(i_Point.m_Row < 0 || i_Point.m_Column < 0 || i_Point.m_Column > m_BoardSize.m_Width
+               || i_Point.m_Row > m_BoardSize.m_Height)
+            {
+                isPointOnTheBoard = false;
+            }
+            else if(m_GameInformation.AmountOfPlayers == 3)
+            {
+                //check special boards
+            }
+
+
+            return isPointOnTheBoard;
+        }
+
+        private bool checkThatPointIsOnBoard(Point i_Point)
+        {
+            bool isPointOnTheBoard = true;
+
+
+            return isPointOnTheBoard;
+        }
+
         protected eGameStatus ClientLostGame(string i_NameOfClientThatLost)
         {
             eGameStatus returnStatus = eGameStatus.Running;
@@ -73,8 +109,55 @@ namespace POC_Client.Logic
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
-            
-        }
+            Button button = sender as Button;
+            int movementDistance = m_ScreenMapping.m_GameBoardGridSize;
 
+            if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
+            {
+                if (button.ClassId == eButton.Up.ToString())
+                {
+                    PlayerObject.m_Row -= movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+                else if (button.ClassId == eButton.Down.ToString())
+                {
+                    PlayerObject.m_Row += movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+                else if (button.ClassId == eButton.Right.ToString())
+                {
+                    PlayerObject.m_Column += movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+                else
+                {
+                    PlayerObject.m_Column -= movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+            }
+            else
+            {
+                if (button.ClassId == eButton.Up.ToString())
+                {
+                    PlayerObject.m_Row += movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+                else if (button.ClassId == eButton.Down.ToString())
+                {
+                    PlayerObject.m_Row -= movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+                else if (button.ClassId == eButton.Right.ToString())
+                {
+                    PlayerObject.m_Column -= movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+                else
+                {
+                    PlayerObject.m_Column += movementDistance;
+                    GameObjectUpdate.Invoke(this, PlayerObject);
+                }
+            }
+        }
     }
 }
