@@ -12,8 +12,8 @@ namespace Objects
         public string textOnButton;
         public bool didPlayerSelect;
 
-        public VisualUpdateSelectButtons() {}
-        public VisualUpdateSelectButtons(int i_Spot,string i_textOnButton,bool i_DidPlayerSelect)
+        public VisualUpdateSelectButtons() { }
+        public VisualUpdateSelectButtons(int i_Spot, string i_textOnButton, bool i_DidPlayerSelect)
         {
             didPlayerSelect = i_DidPlayerSelect;
             spot = i_Spot;

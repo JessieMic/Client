@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POC_Client.Logic.Games
+namespace LogicUnit
 {
-    public class Pacman : Game
+    public class Pong : Game
     {
         public override void RunGame()
         {

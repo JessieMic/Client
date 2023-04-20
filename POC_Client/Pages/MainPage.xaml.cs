@@ -3,7 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using CommunityToolkit.Maui.Core.Platform;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.VisualBasic;
-using POC_Client.Objects;
+using Objects;
 
 namespace POC_Client;
 

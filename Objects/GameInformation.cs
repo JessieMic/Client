@@ -15,8 +15,10 @@ namespace Objects
         private int m_AmountOfPlayers;
         private Player m_Player = Player.Instance;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
-        private List<ScreenDimension> m_ScreenInfoOfAllPlayers =  new List<ScreenDimension>();
+        private List<ScreenDimension> m_ScreenInfoOfAllPlayers = new List<ScreenDimension>();
         public string[] m_NamesOfAllPlayers;
+
+
 
         private static readonly object s_InstanceLock = new object();
 
@@ -38,10 +40,19 @@ namespace Objects
         public void SetScreenInfo(string[] i_NamesOfPlayers, Size[] i_ScreenSizes)
         {
             m_NamesOfAllPlayers = i_NamesOfPlayers;
-        
-            for(int i = 0; i < m_AmountOfPlayers; i++)
+
+            ////Size s = new Size(m_ClientScreenDimension.Size.m_Width+120, m_ClientScreenDimension.Size.m_Height);
+
+            for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.Size, new Position(m_AmountOfPlayers,i+1)));
+                //if(true)//(i == 1)
+                //{
+                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.Size, new Position(m_AmountOfPlayers, i + 1)));
+                //}
+                //else
+                //{
+                //    m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(s, new Position(m_AmountOfPlayers, i + 1)));
+                //}
 
                 if (m_Player.ButtonThatPlayerPicked == i + 1)
                 {
@@ -52,7 +63,7 @@ namespace Objects
 
         public List<ScreenDimension> ScreenInfoOfAllPlayers
         {
-            get {return m_ScreenInfoOfAllPlayers;}
+            get { return m_ScreenInfoOfAllPlayers; }
         }
 
 

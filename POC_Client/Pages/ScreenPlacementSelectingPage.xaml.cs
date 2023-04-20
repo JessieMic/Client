@@ -1,11 +1,13 @@
 //using Keyboard = Android.InputMethodServices.Keyboard;
 
+using Objects;
+
 namespace POC_Client;
 
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Maui.Controls;
-using POC_Client.Logic;
-using POC_Client.Objects;
+using LogicUnit;
+
 using System.Xml.Linq;
 public partial class ScreenPlacementSelectingPage : ContentPage
 {

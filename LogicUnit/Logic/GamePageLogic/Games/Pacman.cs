@@ -4,11 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POC_Client.Objects.Enums
+namespace LogicUnit
 {
-    public enum eColumnPosition
+    public class Pacman : Game
     {
-        LeftColumn = 1,
-        RightColumn
+        public override void RunGame()
+        {
+
+        }
     }
 }

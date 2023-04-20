@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using POC_Client.Objects;
-using POC_Client.Objects.Enums;
-using Point = POC_Client.Objects.Point;
-using Size = POC_Client.Objects.Size;
+using Objects;
+using Objects.Enums;
+using Point = Objects.Point;
+using Size = Objects.Size;
 
-namespace POC_Client.Logic
+
+namespace LogicUnit
 {
     public abstract partial class Game
     {
@@ -36,8 +37,7 @@ namespace POC_Client.Logic
             
             m_Buttons.m_MovementButtonSize = m_ScreenMapping.m_MovementButtonSize;
             m_Buttons.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
-            m_Buttons.m_ScreenMapping = m_ScreenMapping;
-
+           
             return m_Buttons.GetGameButtons();
         }
 
