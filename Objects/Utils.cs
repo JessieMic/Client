@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.WebRequestMethods;
 
-namespace POC_Client
+namespace Objects
 {
     public class Utils
     {     //// "http://localhost:5163";// "https://pocserver20230311140030.azurewebsites.net";

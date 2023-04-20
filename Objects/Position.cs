@@ -11,10 +11,10 @@ namespace Objects
     {
         private eRowPosition m_Row;
         private eColumnPosition m_Column;
-        public Position(){}
+        public Position() { }
         public Position(int i_AmountOfPlayers, int i_PlacementNumber)
         {
-            m_Column = getColumnPosition(i_PlacementNumber,i_AmountOfPlayers);
+            m_Column = getColumnPosition(i_PlacementNumber, i_AmountOfPlayers);
             m_Row = getRowPosition(i_PlacementNumber, i_AmountOfPlayers);
         }
 
@@ -52,7 +52,7 @@ namespace Objects
         {
             eColumnPosition returnValue;
 
-            if (i_PlacementNumber == 1 || i_PlacementNumber == 3 || (i_PlacementNumber == 2 && i_AmountOfPlayers == 2))
+            if (i_PlacementNumber == 1 || i_PlacementNumber == 3 || i_PlacementNumber == 2 && i_AmountOfPlayers == 2)
             {
                 returnValue = eColumnPosition.LeftColumn;
             }
@@ -68,7 +68,7 @@ namespace Objects
         {
             eRowPosition returnValue;
 
-            if (i_PlacementNumber == 1 || (i_PlacementNumber == 2 && i_AmountOfPlayers > 2))
+            if (i_PlacementNumber == 1 || i_PlacementNumber == 2 && i_AmountOfPlayers > 2)
             {
                 returnValue = eRowPosition.UpperRow;
             }

@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using POC_Client.Logic;
-using POC_Client.Objects.Enums;
+using Objects.Enums;
 
-namespace POC_Client.Objects
+namespace Objects
 {
     public class Buttons
     {
         public Size m_MovementButtonSize = new Size();
-        public ScreenDimension m_ClientScreenDimension= new ScreenDimension();
-        public ScreenMapping m_ScreenMapping;
-
+        public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
+        public GameSettings m_GameSettings= new GameSettings();
+        
         public List<ScreenObject> GetGameButtons()
         {
             return addBasicGameButtons();//up down left right
@@ -27,7 +26,7 @@ namespace POC_Client.Objects
         protected List<ScreenObject> addBasicGameButtons()
         {
             List<ScreenObject> returnButtons = new List<ScreenObject>(); ;
-           
+
             returnButtons.Add(new ScreenObject(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), m_MovementButtonSize, string.Empty, null));
             returnButtons.Add(new ScreenObject(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), m_MovementButtonSize, string.Empty, null));
             returnButtons.Add(new ScreenObject(eScreenObjectType.Button, eButton.Down, getButtonPoint(eButton.Down), m_MovementButtonSize, string.Empty, null));
@@ -39,8 +38,8 @@ namespace POC_Client.Objects
         private Point getButtonPoint(eButton i_Type)
         {
             Point returnPoint = new Point();
-            int space = m_ScreenMapping.m_SpacingAroundButtons;
-            Size buttonSize = m_ScreenMapping.m_MovementButtonSize;
+            int space = m_GameSettings.m_SpacingAroundButtons;
+            Size buttonSize = m_GameSettings.m_MovementButtonSize;
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {

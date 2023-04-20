@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using POC_Client.Logic;
-using POC_Client.Logic.Games;
-using POC_Client.Objects.Enums;
+using Objects.Enums;
 
-namespace POC_Client.Objects
+namespace LogicUnit
 {
     public class GameLibrary
     {
@@ -15,7 +13,7 @@ namespace POC_Client.Objects
         {
             Game newGame = null;
 
-            switch(i_GameThatWasPicked)
+            switch (i_GameThatWasPicked)
             {
                 case eGames.Pacman:
                     newGame = new Pacman();

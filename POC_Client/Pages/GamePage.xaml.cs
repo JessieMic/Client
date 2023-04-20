@@ -1,11 +1,9 @@
 //using Android.Widget;
-using POC_Client.Logic;
-using POC_Client.Logic.Games;
-using POC_Client.Objects;
-using POC_Client.Objects.Enums;
-using Point = POC_Client.Objects.Point;
 
-
+using LogicUnit;
+using Objects;
+using Objects.Enums;
+using Point = Objects.Point;
 namespace POC_Client.Pages;
 
 public partial class GamePage : ContentPage

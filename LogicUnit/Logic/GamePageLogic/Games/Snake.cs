@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using POC_Client.Objects;
+using Objects;
+using Objects.Enums;
 
-namespace POC_Client.Logic.Games
+namespace LogicUnit
 {
     public class Snake : Game
     {

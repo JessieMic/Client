@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POC_Client.Objects.Enums
+namespace LogicUnit
 {
-    public enum eGames
+    public class Tanks : Game
     {
-        Snake,
-        Pong,
-        Pacman,
-        Tanks
+        public override void RunGame()
+        {
+
+        }
     }
 }

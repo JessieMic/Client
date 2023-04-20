@@ -16,11 +16,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using POC_Client.Objects;
-using Point = POC_Client.Objects.Point;
-using Size = POC_Client.Objects.Size;
+using Objects;
+using Point = Objects.Point;
+using Size = Objects.Size;
 
-namespace POC_Client.Logic
+namespace LogicUnit
 {
     public delegate void Notify();
     public class ScreenPlacementSelectingLogic
