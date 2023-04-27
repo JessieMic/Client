@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
@@ -21,6 +22,8 @@ namespace LogicUnit
         protected int m_AmountOfActivePlayers;
         protected Buttons m_Buttons = new Buttons();
         Point PlayerObject = new Point();
+        protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
+        protected List<GameObject> m_gameObjects = new List<GameObject>();
 
         public abstract void RunGame();
 
@@ -28,6 +31,7 @@ namespace LogicUnit
         {
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
         }
+
 
         public bool SetAmountOfPlayers(int i_amountOfPlayers)
         {
@@ -110,54 +114,56 @@ namespace LogicUnit
         public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
+            List<ScreenObjectUpdate> l = new List<ScreenObjectUpdate>();
+            l.Add(m_PlayerGameObjects[0].GetObjectUpdate());
             int movementDistance = m_ScreenMapping.m_GameBoardGridSize;
-
-            if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
-            {
-                if (button.ClassId == eButton.Up.ToString())
-                {
-                    PlayerObject.m_Row -= movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-                else if (button.ClassId == eButton.Down.ToString())
-                {
-                    PlayerObject.m_Row += movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-                else if (button.ClassId == eButton.Right.ToString())
-                {
-                    PlayerObject.m_Column += movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-                else
-                {
-                    PlayerObject.m_Column -= movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-            }
-            else
-            {
-                if (button.ClassId == eButton.Up.ToString())
-                {
-                    PlayerObject.m_Row += movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-                else if (button.ClassId == eButton.Down.ToString())
-                {
-                    PlayerObject.m_Row -= movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-                else if (button.ClassId == eButton.Right.ToString())
-                {
-                    PlayerObject.m_Column -= movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-                else
-                {
-                    PlayerObject.m_Column += movementDistance;
-                    GameObjectUpdate.Invoke(this, PlayerObject);
-                }
-            }
+            GameObjectUpdate.Invoke(this, l);
+            //if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
+            //{
+            //    if (button.ClassId == eButton.Up.ToString())
+            //    {
+            //        PlayerObject.m_Row -= movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //    else if (button.ClassId == eButton.Down.ToString())
+            //    {
+            //        PlayerObject.m_Row += movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //    else if (button.ClassId == eButton.Right.ToString())
+            //    {
+            //        PlayerObject.m_Column += movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //    else
+            //    {
+            //        PlayerObject.m_Column -= movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //}
+            //else
+            //{
+            //    if (button.ClassId == eButton.Up.ToString())
+            //    {
+            //        PlayerObject.m_Row += movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //    else if (button.ClassId == eButton.Down.ToString())
+            //    {
+            //        PlayerObject.m_Row -= movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //    else if (button.ClassId == eButton.Right.ToString())
+            //    {
+            //        PlayerObject.m_Column -= movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //    else
+            //    {
+            //        PlayerObject.m_Column += movementDistance;
+            //        GameObjectUpdate.Invoke(this, PlayerObject);
+            //    }
+            //}
         }
     }
 }

@@ -13,39 +13,38 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
-        public event EventHandler<List<ScreenObject>> AddScreenObject;
-        public event EventHandler<Point> GameObjectUpdate;
-
-        protected virtual void OnAddScreenObjects(List<ScreenObject> i_ScreenObject)
+        public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
+        public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
+        protected List<ScreenObjectAdd> m_ScreenObjectList;
+        protected virtual void OnAddScreenObjects(List<ScreenObjectAdd> i_ScreenObject)
         {
             AddScreenObject.Invoke(this, i_ScreenObject);
         }
 
         public void SetGameScreen()
         {
-            List<ScreenObject> screenObjectList;
-
-            screenObjectList = setGameButtons();
-            screenObjectList.Add(setGameBackGround());
-            GameObjectUpdate.Invoke(this,m_ScreenMapping.m_ValueToAdd);
+            m_ScreenObjectList = setGameButtons();
+            m_ScreenObjectList.Add(setGameBackGround());
             PlayerObject = m_ScreenMapping.m_ValueToAdd;
-            OnAddScreenObjects(screenObjectList);
+            AddGameObjects();
+            OnAddScreenObjects(m_ScreenObjectList);
         }
 
-        protected List<ScreenObject> setGameButtons()
+        protected abstract void AddGameObjects();
+
+        protected List<ScreenObjectAdd> setGameButtons()
         {
-            
             m_Buttons.m_MovementButtonSize = m_ScreenMapping.m_MovementButtonSize;
             m_Buttons.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
            
             return m_Buttons.GetGameButtons();
         }
 
-        protected ScreenObject setGameBackGround()
+        protected ScreenObjectAdd setGameBackGround()
         {
-            ScreenObject returnObject = new ScreenObject();
+            ScreenObjectAdd returnObject = new ScreenObjectAdd();
             Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize);
-            returnObject = new ScreenObject(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null);
+            returnObject = new ScreenObjectAdd(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null,0);
 
             return returnObject;
         }

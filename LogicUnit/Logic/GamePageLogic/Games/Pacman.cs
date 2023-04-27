@@ -12,5 +12,9 @@ namespace LogicUnit
         {
 
         }
+        protected override void AddGameObjects()
+        {
+
+        }
     }
 }

@@ -7,7 +7,7 @@ using Objects.Enums;
 
 namespace Objects
 {
-    public struct ScreenObject
+    public struct ScreenObjectAdd
     {
         public Point m_Point;
         public eScreenObjectType m_ScreenObjectType;
@@ -15,14 +15,16 @@ namespace Objects
         public eButton m_KindOfButton;
         public string m_ImageSource;
         public Size m_Size;
+        public int m_ObjectNumber;
 
-        public ScreenObject(
+        public ScreenObjectAdd(
             eScreenObjectType i_Type,
             eButton? i_Button,
             Point i_Point,
             Size i_Size,
             string i_ImageSource,
-            string i_Text)
+            string i_Text,
+            int i_ObjectNumber)
         {
 
             m_Text = i_Text;
@@ -30,6 +32,7 @@ namespace Objects
             m_Point = i_Point;
             m_Size = i_Size;
             m_ScreenObjectType = i_Type;
+            m_ObjectNumber = i_ObjectNumber;
 
             if (i_Button != null)
             {
