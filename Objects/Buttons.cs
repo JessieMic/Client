@@ -13,7 +13,7 @@ namespace Objects
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         public GameSettings m_GameSettings= new GameSettings();
         
-        public List<ScreenObject> GetGameButtons()
+        public List<ScreenObjectAdd> GetGameButtons()
         {
             return addBasicGameButtons();//up down left right
         }
@@ -23,14 +23,14 @@ namespace Objects
 
         }
 
-        protected List<ScreenObject> addBasicGameButtons()
+        protected List<ScreenObjectAdd> addBasicGameButtons()
         {
-            List<ScreenObject> returnButtons = new List<ScreenObject>(); ;
+            List<ScreenObjectAdd> returnButtons = new List<ScreenObjectAdd>(); ;
 
-            returnButtons.Add(new ScreenObject(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), m_MovementButtonSize, string.Empty, null));
-            returnButtons.Add(new ScreenObject(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), m_MovementButtonSize, string.Empty, null));
-            returnButtons.Add(new ScreenObject(eScreenObjectType.Button, eButton.Down, getButtonPoint(eButton.Down), m_MovementButtonSize, string.Empty, null));
-            returnButtons.Add(new ScreenObject(eScreenObjectType.Button, eButton.Up, getButtonPoint(eButton.Up), m_MovementButtonSize, string.Empty, null));
+            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), m_MovementButtonSize, string.Empty, null,0));
+            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), m_MovementButtonSize, string.Empty, null,0));
+            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Down, getButtonPoint(eButton.Down), m_MovementButtonSize, string.Empty, null, 0));
+            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Up, getButtonPoint(eButton.Up), m_MovementButtonSize, string.Empty, null, 0));
 
             return returnButtons;
         }
