@@ -8,7 +8,9 @@ namespace Objects.Enums.Snake
 {
      public enum eBoardObject
     {
-        Food =1,
+        Empty,
+        OutOfBounds,
+        Food,
         Snake1,
         Snake2,
         Snake3,
