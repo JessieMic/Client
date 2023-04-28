@@ -27,6 +27,11 @@ namespace Objects
             return this;
         }
 
+        public Point Move(Direction i_Direction)
+        {
+            return new Point(m_Column + i_Direction.m_ColumnOffset, m_Row+i_Direction.m_RowOffset);
+        }
+
         public static bool operator ==(Point i_P1, Point i_P2)
         {
             return i_P1.m_Column == i_P2.m_Column && i_P1.m_Row == i_P2.m_Row;
@@ -36,5 +41,6 @@ namespace Objects
         {
             return i_P1.m_Column != i_P2.m_Column || i_P1.m_Row != i_P2.m_Row;
         }
+
     }
 }

@@ -21,7 +21,7 @@ public partial class GamePage : ContentPage
 
         m_Game = m_GameLibrary.CreateAGame(eGames.Snake);//m_GameInformation.m_NameOfGame);
         initializeEvents();
-        m_Game.SetGameScreen();
+        m_Game.InitializeGame();
         for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
         {
             m_PlayerObjects.Add(new List<Image>());
