@@ -18,20 +18,28 @@ namespace LogicUnit
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
         protected eTypeOfGameButtons m_TypeOfGameButtons;
         protected int m_AmountOfLivesTheClientHas;
-        private Size m_BoardSize = new Size();
+        protected Size m_BoardSize = new Size();
+        protected int[,] m_Board;
         protected int m_AmountOfActivePlayers;
         protected Buttons m_Buttons = new Buttons();
         Point PlayerObject = new Point();
         protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
         protected List<GameObject> m_gameObjects = new List<GameObject>();
+        public eGameStatus m_GameStatus;
+        protected Random m_randomPosition = new Random();
 
         public abstract void RunGame();
 
-        protected void InitializeGame()
+
+
+        public void InitializeGame()
         {
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
+            m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
+            SetGameScreen();
         }
 
+        protected abstract void setGameBoardAndGameObjects();
 
         public bool SetAmountOfPlayers(int i_amountOfPlayers)
         {

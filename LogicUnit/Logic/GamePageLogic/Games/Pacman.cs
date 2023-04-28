@@ -16,5 +16,9 @@ namespace LogicUnit
         {
 
         }
+        protected override void setGameBoardAndGameObjects()
+        {
+
+        }
     }
 }
