@@ -92,13 +92,34 @@ namespace LogicUnit
             return isPointOnTheBoard;
         }
 
-        private bool checkThatPointIsOnBoard(Point i_Point)
+        protected bool isPointOnBoard(Point i_Point)
         {
             bool isPointOnTheBoard = true;
 
+            if(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardSize.m_Height || i_Point.m_Column < 0
+               || i_Point.m_Column >= m_BoardSize.m_Width)
+            {
+                isPointOnTheBoard = false;
+            }
 
             return isPointOnTheBoard;
         }
+
+        //protected virtual int whatObjectWillHit(Point i_Point)
+        //{
+        //    int res;
+
+        //    if(isPointOnBoard(i_Point))
+        //    {
+        //        res= m_Board[i_Point.m_Column, i_Point.m_Row];
+        //    }
+        //    else
+        //    {
+        //        res = -1;
+        //    }
+
+        //    return res;
+        //}
 
         protected eGameStatus ClientLostGame(string i_NameOfClientThatLost)
         {
@@ -117,6 +138,11 @@ namespace LogicUnit
             }
 
             return returnStatus;
+        }
+
+        protected void OnUpdateScreenObject(List<ScreenObjectUpdate> i_Update)
+        {
+            GameObjectUpdate.Invoke(this,i_Update);
         }
 
         public void OnButtonClicked(object sender, EventArgs e)

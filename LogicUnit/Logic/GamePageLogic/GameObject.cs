@@ -32,86 +32,41 @@ namespace LogicUnit.Logic.GamePageLogic
         public void SetObject(ref ScreenObjectAdd i_ScreenObject)
         {
             m_PointsOnGrid.Add(i_ScreenObject.m_Point);
-            Point p = new Point();
-            p = i_ScreenObject.m_Point;
-            p.m_Column = p.m_Column * m_GameBoardGridSize + m_ValuesToAdd.m_Column;
-            p.m_Row = p.m_Row * m_GameBoardGridSize + m_ValuesToAdd.m_Row;
-            m_PointsOnScreen.Add(p);
+            Point point = getScreenPoint(i_ScreenObject.m_Point);
+            m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_ScreenObject.m_ImageSource);
-            i_ScreenObject.m_Point = p;
+            i_ScreenObject.m_Point = point;
+        }
+
+        private Point getScreenPoint(Point i_Point)
+        {
+            Point point = new Point();
+            point = i_Point;
+
+            point.m_Column = point.m_Column * m_GameBoardGridSize + m_ValuesToAdd.m_Column;
+            point.m_Row = point.m_Row * m_GameBoardGridSize + m_ValuesToAdd.m_Row;
+            return point;
+        }
+
+        public void AddPointTop(Point i_Point)
+        {
+            m_PointsOnGrid.Insert(0,i_Point);
+            m_PointsOnScreen.Insert(0,getScreenPoint(i_Point));
+        }
+
+        public void PopPoint()
+        {
+            m_PointsOnGrid.RemoveAt(m_PointsOnGrid.Count);
+            m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count);
         }
 
         public ScreenObjectUpdate GetObjectUpdate()
         {
             ScreenObjectUpdate ret = new ScreenObjectUpdate();
 
-            //if(m_CurrentDirection == eButton.Up)
-            //{
-
-            //}
-            //el
-
-
-        //if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
-        //{
-        //    if (button.ClassId == eButton.Up.ToString())
-        //    {
-        //        PlayerObject.m_Row -= movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //    else if (button.ClassId == eButton.Down.ToString())
-        //    {
-        //        PlayerObject.m_Row += movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //    else if (button.ClassId == eButton.Right.ToString())
-        //    {
-        //        PlayerObject.m_Column += movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //    else
-        //    {
-        //        PlayerObject.m_Column -= movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //}
-        //else
-        //{
-        //    if (button.ClassId == eButton.Up.ToString())
-        //    {
-        //        PlayerObject.m_Row += movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //    else if (button.ClassId == eButton.Down.ToString())
-        //    {
-        //        PlayerObject.m_Row -= movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //    else if (button.ClassId == eButton.Right.ToString())
-        //    {
-        //        PlayerObject.m_Column -= movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //    else
-        //    {
-        //        PlayerObject.m_Column += movementDistance;
-        //        GameObjectUpdate.Invoke(this, PlayerObject);
-        //    }
-        //}
-
-
-
-
             ret.m_ObjectNumber = m_ObjectNumber;
             ret.m_ImageSources = m_ImageSources;
-
-            for(int i = 0; i < m_PointsOnGrid.Count; i++)
-            {
-                Point a = m_PointsOnGrid[i];
-                a.m_Column += 35;
-                m_PointsOnGrid[i]= a;
-            }
-            ret.m_NewPositions = m_PointsOnGrid;
+            ret.m_NewPositions = m_PointsOnScreen;
             ret
                 .m_ScreenObjectType = m_ScreenObjectType;
 
