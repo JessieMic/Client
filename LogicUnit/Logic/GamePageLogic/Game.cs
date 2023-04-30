@@ -14,11 +14,11 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
-        private GameInformation m_GameInformation = GameInformation.Instance;
-        private Player m_Player = Player.Instance;
+        protected GameInformation m_GameInformation = GameInformation.Instance;
+        protected Player m_Player = Player.Instance;
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
         protected eTypeOfGameButtons m_TypeOfGameButtons;
-        protected int m_AmountOfLivesTheClientHas;
+        protected int[] m_AmountOfLivesPlayerHas = new int[4];
         protected Size m_BoardSize = new Size();
         protected int[,] m_Board;
         protected int m_AmountOfActivePlayers;
@@ -41,10 +41,11 @@ namespace LogicUnit
             for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 m_DirectionsBuffer.Add(new List<Direction>());
+                m_AmountOfLivesPlayerHas[i] = 3;
+                m_PlayerGameObjects.Add(null);
             }
             await SetGameScreen();
             await gameLoop();
-
         }
 
         protected abstract void setGameBoardAndGameObjects();
@@ -63,24 +64,24 @@ namespace LogicUnit
             }
         }
 
-        protected eGameStatus PlayerLostALife(string i_NameOfClientThatLostALife)
-        {
-            eGameStatus returnStatus = eGameStatus.Running;
+        //protected eGameStatus PlayerLostALife(string i_NameOfClientThatLostALife)
+        //{
+        //    eGameStatus returnStatus = eGameStatus.Running;
 
-            m_AmountOfLivesTheClientHas--;
+        //    m_AmountOfLivesTheClientHas--;
 
-            if (i_NameOfClientThatLostALife == m_Player.Name)
-            {
-                // Add a function here that tells the UI to take a heart away 
-            }
+        //    if (i_NameOfClientThatLostALife == m_Player.Name)
+        //    {
+        //        Add a function here that tells the UI to take a heart away
+        //    }
 
-            if (m_AmountOfLivesTheClientHas == 0)
-            {
-                returnStatus = eGameStatus.Lost;
-            }
+        //    if (m_AmountOfLivesTheClientHas == 0)
+        //    {
+        //        returnStatus = eGameStatus.Lost;
+        //    }
 
-            return returnStatus;
-        }
+        //    return returnStatus;
+        //}
 
         private bool checkThatPointIsOnBoardGrided(Point i_Point)
         {
@@ -153,23 +154,25 @@ namespace LogicUnit
 
             if (m_GameStatus == eGameStatus.Running)
             {
-                if (button.ClassId == eButton.Up.ToString())
-                {
-                     ChangeDirection(Direction.Up, m_Player.ButtonThatPlayerPicked);
-                }
-                else if (button.ClassId == eButton.Down.ToString())
-                {
-                    ChangeDirection(Direction.Down, m_Player.ButtonThatPlayerPicked);
-                }
-                else if (button.ClassId == eButton.Right.ToString())
-                {
-                    ChangeDirection(Direction.Right, m_Player.ButtonThatPlayerPicked);
-                }
-                else
-                {
-                    ChangeDirection(Direction.Left, m_Player.ButtonThatPlayerPicked);
-                }
+                notifyGameObjectUpdate(eScreenObjectType.PlayerObject, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
             }
+        }
+
+        protected void notifyGameObjectUpdate(eScreenObjectType i_ObjectType,int i_ObjectNumber,Direction i_Direction, Point i_Point)
+        {
+            if(i_ObjectType == eScreenObjectType.PlayerObject)
+            {
+                ChangeDirection(i_Direction,i_ObjectNumber);
+            }
+            else
+            {
+                ChangeGameObject(i_ObjectNumber,i_Direction,i_Point);
+            }
+        }
+
+        protected virtual void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
+        {
+
         }
     }
 }
