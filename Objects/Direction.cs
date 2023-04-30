@@ -13,8 +13,8 @@ namespace Objects
 
         public readonly static Direction Left = new Direction(-1, 0);
         public readonly static Direction Right = new Direction(1, 0);
-        public readonly static Direction Down = new Direction(0, -1);
-        public readonly static Direction Up = new Direction(0, 1); 
+        public readonly static Direction Up = new Direction(0, -1);
+        public readonly static Direction Down = new Direction(0, 1); 
         private Direction(int i_Column, int i_Row)
         {
            m_ColumnOffset = i_Column;

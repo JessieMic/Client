@@ -36,7 +36,7 @@ namespace LogicUnit
         private void addPlayerObjects()
         {
             m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject,1,m_ScreenMapping.m_GameBoardGridSize,m_ScreenMapping.m_ValueToAdd));
-            for (int col = 3; col < 7; col++)
+            for (int col = 5; col > 2; col--)
             {
                 ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col,1), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
                 m_PlayerGameObjects[0].SetObject(ref obj);
@@ -58,17 +58,23 @@ namespace LogicUnit
         }
 
         private void updateFoodToNewPoint()
-        {///////////////////////////////////////delete from boardddd////////////////////////////////////////
+        {
             List<Point> emptyPositions = getEmptyPositions();
-            if(emptyPositions.Count != 0)
+            Point point;
+
+            if (emptyPositions.Count != 0)
             {
-                Point randomPoint = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
-                List<ScreenObjectUpdate> update = new List<ScreenObjectUpdate>();
-                m_gameObjects[0].PopPoint();
-                m_gameObjects[0].AddPointTop(randomPoint);
-                update.Add(m_gameObjects[0].GetObjectUpdate());
-                OnUpdateScreenObject(update);
+                point = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
             }
+            else
+            {
+                point = new Point(-1, -1);
+            }
+
+            m_gameObjects[0].PopPoint();
+            m_gameObjects[0].AddPointTop(point);
+            m_ScreenObjectUpdate.Add(m_gameObjects[0].GetObjectUpdate());
+            m_Board[point.m_Column, point.m_Row] = (int)eBoardObject.Food;
         }
 
         private void initializeGame()
@@ -77,7 +83,7 @@ namespace LogicUnit
             m_AmountOfLivesTheClientHas = 3;
         }
 
-        private List<Point> getEmptyPositions()
+        public List<Point> getEmptyPositions()
         {
             List<Point> res = new List<Point>();
 
@@ -118,9 +124,57 @@ namespace LogicUnit
             m_PlayerGameObjects[i_Player - 1].PopPoint();
         }
 
-        private void ChangeDirection(Direction i_Direction, int i_Player)
+        protected override void ChangeDirection(Direction i_Direction, int i_Player)
         {
-            ///
+            if(canChangeDirection(i_Direction, i_Player))
+            {
+                m_DirectionsBuffer[i_Player - 1].Add(i_Direction);
+            }
+        }
+
+        private Direction getLastDirection(int i_Player)
+        {
+            Direction result;
+            if(m_DirectionsBuffer[i_Player - 1].Count == 0)
+            {
+                result = m_PlayerGameObjects[i_Player - 1].m_Direction;
+            }
+            else
+            {
+                result = m_DirectionsBuffer[i_Player].Last();
+            }
+
+            return result;
+        }
+
+        private bool canChangeDirection(Direction i_NewDirection,int i_Player)
+        {
+            bool result = true;
+
+            if (m_DirectionsBuffer[i_Player - 1].Count == 2)
+            {
+                result = false;
+            }
+
+            Direction lastDirection = getLastDirection(i_Player);
+
+            return i_NewDirection != lastDirection && i_NewDirection != lastDirection.OppositeDirection();
+        }
+
+        protected override async Task gameLoop()
+        {
+            while(m_GameStatus == eGameStatus.Running)
+            {
+                await Task.Delay(200);
+                m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
+                m_ScreenObjectList = new List<ScreenObjectAdd>();
+                moveSnake(1);
+                OnUpdateScreenObject(m_ScreenObjectUpdate);
+                if(m_ScreenObjectList.Count != 0)
+                {
+                    OnAddScreenObjects(m_ScreenObjectList);
+                }
+            }
         }
 
         private int whatSnakeWillHit(Point i_Point,int i_Player)//new snake head
@@ -145,6 +199,12 @@ namespace LogicUnit
 
         private void moveSnake(int i_Player)
         {
+            if(m_DirectionsBuffer[i_Player - 1].Count > 0)
+            {
+                m_PlayerGameObjects[i_Player - 1].m_Direction = m_DirectionsBuffer[i_Player - 1].First();
+                m_DirectionsBuffer[i_Player - 1].RemoveAt(0);
+            }
+
             Point newHeadPoint = getSnakeHead(i_Player).Move(m_PlayerGameObjects[i_Player - 1].m_Direction);
             int hit = whatSnakeWillHit(newHeadPoint,i_Player);
 
@@ -160,10 +220,15 @@ namespace LogicUnit
             else if(hit == (int)eBoardObject.Food)
             {
                 addHead(newHeadPoint,i_Player);
-                //score ++
-                //update food pos/////////////////////////////
-            }
-        }
 
+                ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, newHeadPoint, m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
+                m_PlayerGameObjects[0].SetObject(ref obj);
+                m_ScreenObjectList.Add(obj);
+
+                //score ++
+                updateFoodToNewPoint();
+            }
+            m_ScreenObjectUpdate.Add(m_PlayerGameObjects[i_Player - 1].GetObjectUpdate());
+        }
     }
 }

@@ -43,15 +43,15 @@ namespace Objects
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                if (i_Type == eButton.Up)
+                if (i_Type == eButton.Down)
                 {
                     returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space + 2 * buttonSize.m_Height);
                 }
-                else if (i_Type == eButton.Down)
+                else if (i_Type == eButton.Up)
                 {
                     returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space);
                 }
-                else if (i_Type == eButton.Right)
+                else if (i_Type == eButton.Left)
                 {
                     returnPoint.SetAndGetPoint(space, space + buttonSize.m_Height);
                 }

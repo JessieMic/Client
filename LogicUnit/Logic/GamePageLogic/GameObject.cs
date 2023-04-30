@@ -18,8 +18,8 @@ namespace LogicUnit.Logic.GamePageLogic
         public eScreenObjectType m_ScreenObjectType;
         private int m_GameBoardGridSize;
         private Point m_ValuesToAdd = new Point();
-        private int m_Velocity;
-        public Direction m_Direction;
+        private int m_Velocity = 1;
+        public Direction m_Direction = Direction.Right;
 
         public GameObject(eScreenObjectType i_ScreenObjectType,int i_ObjectNumber, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
@@ -56,8 +56,8 @@ namespace LogicUnit.Logic.GamePageLogic
 
         public void PopPoint()
         {
-            m_PointsOnGrid.RemoveAt(m_PointsOnGrid.Count);
-            m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count);
+            m_PointsOnGrid.RemoveAt(m_PointsOnGrid.Count - 1);
+            m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count - 1);
         }
 
         public ScreenObjectUpdate GetObjectUpdate()
