@@ -21,7 +21,7 @@ namespace LogicUnit
             AddScreenObject.Invoke(this, i_ScreenObject);
         }
 
-        public void SetGameScreen()
+        public async Task SetGameScreen()
         {
             m_ScreenObjectList = setGameButtons();
             m_ScreenObjectList.Add(setGameBackGround());

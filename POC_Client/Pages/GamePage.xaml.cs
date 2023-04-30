@@ -47,6 +47,8 @@ public partial class GamePage : ContentPage
             }
         });
     }
+
+
     private void gameObjectUpdate(object sender , List<ScreenObjectUpdate> i_ObjectUpdates)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
@@ -59,17 +61,19 @@ public partial class GamePage : ContentPage
                     foreach (var playerObject in m_PlayerObjects[screenObject.m_ObjectNumber-1])
                     {
                         //playerObject.Source = screenObject.m_ImageSources[i];
-                        playerObject.TranslateTo(
-                            screenObject.m_NewPositions[i].m_Column,
-                            screenObject.m_NewPositions[i].m_Row);
+                            //playerObject.TranslateTo(
+                            //    screenObject.m_NewPositions[i].m_Column,
+                            //    screenObject.m_NewPositions[i].m_Row);
+                            playerObject.TranslationX = screenObject.m_NewPositions[i].m_Column;
+                            playerObject.TranslationY = screenObject.m_NewPositions[i].m_Row;
                         i++;
                     }
                 }
                 else
                 {
                     m_GameObjects[screenObject.m_ObjectNumber - 1].Source = screenObject.m_ImageSources[i];
-                    m_GameObjects[screenObject.m_ObjectNumber - 1].TranslateTo(screenObject.m_NewPositions[i].m_Column,
-                    screenObject.m_NewPositions[i].m_Row);
+                    m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationX = screenObject.m_NewPositions[i].m_Column;
+                    m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationY = screenObject.m_NewPositions[i].m_Row;
                 }
             }
         });
@@ -78,9 +82,9 @@ public partial class GamePage : ContentPage
     private void addImage(ScreenObjectAdd i_ScreenObject)
     {
         Image image = new Image();
-                image.Source = i_ScreenObject.m_ImageSource;
-   
-        if(i_ScreenObject.m_Size.m_Width != 0)
+        image.TranslationX = i_ScreenObject.m_Point.m_Column;
+        image.TranslationY = i_ScreenObject.m_Point.m_Row;
+        if (i_ScreenObject.m_Size.m_Width != 0)
         {
             image.WidthRequest= i_ScreenObject.m_Size.m_Width;
         }
@@ -91,13 +95,13 @@ public partial class GamePage : ContentPage
         }
 
         image.Aspect = Aspect.AspectFill;
-        gridLayout.Add(image);
-        image.TranslateTo(i_ScreenObject.m_Point.m_Column, i_ScreenObject.m_Point.m_Row);
 
+        gridLayout.Add(image);
         if(i_ScreenObject.m_ScreenObjectType != eScreenObjectType.Image)
         {
             addGameObjectToList(image, i_ScreenObject);
         }
+        image.Source = i_ScreenObject.m_ImageSource;
     }
 
     private void addGameObjectToList(Image i_image, ScreenObjectAdd i_ScreenObject)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using ABI.Windows.Security.EnterpriseData;
 using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
@@ -25,18 +26,25 @@ namespace LogicUnit
         Point PlayerObject = new Point();
         protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
         protected List<GameObject> m_gameObjects = new List<GameObject>();
-        public eGameStatus m_GameStatus;
+        public eGameStatus m_GameStatus = eGameStatus.Running;
         protected Random m_randomPosition = new Random();
-
+        protected List<ScreenObjectUpdate> m_ScreenObjectUpdate;// = new List<ScreenObjectUpdate>();
         public abstract void RunGame();
 
+        protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
 
-        public void InitializeGame()
+        public async void InitializeGame()
         {
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
             m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
-            SetGameScreen();
+            for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+            {
+                m_DirectionsBuffer.Add(new List<Direction>());
+            }
+            await SetGameScreen();
+            await gameLoop();
+
         }
 
         protected abstract void setGameBoardAndGameObjects();
@@ -105,22 +113,6 @@ namespace LogicUnit
             return isPointOnTheBoard;
         }
 
-        //protected virtual int whatObjectWillHit(Point i_Point)
-        //{
-        //    int res;
-
-        //    if(isPointOnBoard(i_Point))
-        //    {
-        //        res= m_Board[i_Point.m_Column, i_Point.m_Row];
-        //    }
-        //    else
-        //    {
-        //        res = -1;
-        //    }
-
-        //    return res;
-        //}
-
         protected eGameStatus ClientLostGame(string i_NameOfClientThatLost)
         {
             eGameStatus returnStatus = eGameStatus.Running;
@@ -140,64 +132,44 @@ namespace LogicUnit
             return returnStatus;
         }
 
+        protected virtual async Task gameLoop()
+        {
+
+        }
+
         protected void OnUpdateScreenObject(List<ScreenObjectUpdate> i_Update)
         {
             GameObjectUpdate.Invoke(this,i_Update);
         }
 
+        protected virtual void ChangeDirection(Direction i_Direction, int i_Player)
+        {
+            m_PlayerGameObjects[i_Player - 1].m_Direction = i_Direction;
+        }
+
         public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            List<ScreenObjectUpdate> l = new List<ScreenObjectUpdate>();
-            l.Add(m_PlayerGameObjects[0].GetObjectUpdate());
-            int movementDistance = m_ScreenMapping.m_GameBoardGridSize;
-            GameObjectUpdate.Invoke(this, l);
-            //if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
-            //{
-            //    if (button.ClassId == eButton.Up.ToString())
-            //    {
-            //        PlayerObject.m_Row -= movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //    else if (button.ClassId == eButton.Down.ToString())
-            //    {
-            //        PlayerObject.m_Row += movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //    else if (button.ClassId == eButton.Right.ToString())
-            //    {
-            //        PlayerObject.m_Column += movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //    else
-            //    {
-            //        PlayerObject.m_Column -= movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //}
-            //else
-            //{
-            //    if (button.ClassId == eButton.Up.ToString())
-            //    {
-            //        PlayerObject.m_Row += movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //    else if (button.ClassId == eButton.Down.ToString())
-            //    {
-            //        PlayerObject.m_Row -= movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //    else if (button.ClassId == eButton.Right.ToString())
-            //    {
-            //        PlayerObject.m_Column -= movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //    else
-            //    {
-            //        PlayerObject.m_Column += movementDistance;
-            //        GameObjectUpdate.Invoke(this, PlayerObject);
-            //    }
-            //}
+
+            if (m_GameStatus == eGameStatus.Running)
+            {
+                if (button.ClassId == eButton.Up.ToString())
+                {
+                     ChangeDirection(Direction.Up, m_Player.ButtonThatPlayerPicked);
+                }
+                else if (button.ClassId == eButton.Down.ToString())
+                {
+                    ChangeDirection(Direction.Down, m_Player.ButtonThatPlayerPicked);
+                }
+                else if (button.ClassId == eButton.Right.ToString())
+                {
+                    ChangeDirection(Direction.Right, m_Player.ButtonThatPlayerPicked);
+                }
+                else
+                {
+                    ChangeDirection(Direction.Left, m_Player.ButtonThatPlayerPicked);
+                }
+            }
         }
     }
 }
