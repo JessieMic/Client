@@ -19,9 +19,9 @@ namespace LogicUnit.Logic.GamePageLogic
         private int m_GameBoardGridSize;
         private Point m_ValuesToAdd = new Point();
         private int m_Velocity = 1;
-        public Direction m_Direction = Direction.Right;
+        public Direction m_Direction = Direction.Stop;
 
-        public GameObject(eScreenObjectType i_ScreenObjectType,int i_ObjectNumber, int i_GameBoardGridSize, Point i_ValuesToAdd)
+        public void Initialize(eScreenObjectType i_ScreenObjectType,int i_ObjectNumber, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
             m_ObjectNumber = i_ObjectNumber;
             m_ScreenObjectType = i_ScreenObjectType;
