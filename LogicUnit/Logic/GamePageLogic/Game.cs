@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 //using ABI.Windows.Security.EnterpriseData;
@@ -14,6 +15,9 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
+        public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
+        public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
+        public event EventHandler<ScreenObjectUpdate> GameObjectToDelete;
         protected GameInformation m_GameInformation = GameInformation.Instance;
         protected Player m_Player = Player.Instance;
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
@@ -28,24 +32,28 @@ namespace LogicUnit
         protected List<GameObject> m_gameObjects = new List<GameObject>();
         public eGameStatus m_GameStatus = eGameStatus.Running;
         protected Random m_randomPosition = new Random();
+        protected int m_AmountOfLivesPlayersGetAtStart = 3;
         protected List<ScreenObjectUpdate> m_ScreenObjectUpdate;// = new List<ScreenObjectUpdate>();
-        public abstract void RunGame();
+
+        public virtual async void RunGame()
+        {
+
+        }
 
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
-
-        public async void InitializeGame()
+        public void InitializeGame()
         {
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
             m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
+
             for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 m_DirectionsBuffer.Add(new List<Direction>());
-                m_AmountOfLivesPlayerHas[i] = 3;
+                m_AmountOfLivesPlayerHas[i] = m_AmountOfLivesPlayersGetAtStart;
                 m_PlayerGameObjects.Add(null);
             }
-            await SetGameScreen();
-            await gameLoop();
+            SetGameScreen();
         }
 
         protected abstract void setGameBoardAndGameObjects();
@@ -64,24 +72,52 @@ namespace LogicUnit
             }
         }
 
-        //protected eGameStatus PlayerLostALife(string i_NameOfClientThatLostALife)
-        //{
-        //    eGameStatus returnStatus = eGameStatus.Running;
+        protected eGameStatus PlayerLostALife(int i_Player)
+        {
+            eGameStatus returnStatus = eGameStatus.Running;
+            bool isGameRunning = false;
 
-        //    m_AmountOfLivesTheClientHas--;
+            m_AmountOfLivesPlayerHas[i_Player - 1]--;
 
-        //    if (i_NameOfClientThatLostALife == m_Player.Name)
-        //    {
-        //        Add a function here that tells the UI to take a heart away
-        //    }
+            if (i_Player == m_Player.ButtonThatPlayerPicked)
+            {
+                //Add a function here that tells the UI to take a heart away
+            }
 
-        //    if (m_AmountOfLivesTheClientHas == 0)
-        //    {
-        //        returnStatus = eGameStatus.Lost;
-        //    }
+            if (m_AmountOfLivesPlayerHas[i_Player - 1] == 0)
+            {
+                for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+                {
+                    if(m_AmountOfLivesPlayerHas[i] > 0)
+                    {
+                        isGameRunning = true;
+                    }
+                }
 
-        //    return returnStatus;
-        //}
+                if(isGameRunning)
+                {
+                    returnStatus = eGameStatus.Lost;
+                    gameStatusUpdate(returnStatus);
+                }
+                else
+                {
+                    returnStatus = eGameStatus.Ended;
+                    showScoreBoard();
+                }
+            }
+
+            return returnStatus;
+        }
+
+        protected void showScoreBoard()
+        {
+
+        }
+
+        protected void gameStatusUpdate(eGameStatus i_Status)
+        {
+            //send ui to show defeated
+        }
 
         private bool checkThatPointIsOnBoardGrided(Point i_Point)
         {
@@ -136,6 +172,11 @@ namespace LogicUnit
         protected virtual async Task gameLoop()
         {
 
+        }
+
+        protected void OnDeleteGameObject(int i_Player)
+        {
+            GameObjectToDelete.Invoke(this, m_PlayerGameObjects[i_Player - 1].GetObjectUpdate());
         }
 
         protected void OnUpdateScreenObject(List<ScreenObjectUpdate> i_Update)

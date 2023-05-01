@@ -18,15 +18,24 @@ public partial class GamePage : ContentPage
     public GamePage()
 	{
 		InitializeComponent();
+        initializePage();
+        m_Game.RunGame();
+    }
 
+    private void initializePage()
+    {
         m_Game = m_GameLibrary.CreateAGame(eGames.Snake);//m_GameInformation.m_NameOfGame);
         initializeEvents();
+        initializeGame();
+    }
+
+    private void initializeGame()
+    {
         m_Game.InitializeGame();
-        for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+        for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
         {
             m_PlayerObjects.Add(new List<Image>());
         }
-        m_Game.RunGame();
     }
 
     public void addScreenObject(object sender, List<ScreenObjectAdd> i_ScreenObject)
@@ -128,9 +137,27 @@ public partial class GamePage : ContentPage
             button.Clicked += m_Game.OnButtonClicked;
     }
 
+    public void deleteObject(object sender, ScreenObjectUpdate i_ObjectToDelete)
+    {
+        if(i_ObjectToDelete.m_ScreenObjectType == eScreenObjectType.PlayerObject)
+        {
+            foreach(var image in m_PlayerObjects[i_ObjectToDelete.m_ObjectNumber - 1])
+            {
+                gridLayout.Remove(image);
+            }
+
+            m_PlayerObjects[i_ObjectToDelete.m_ObjectNumber - 1].Clear();
+        }
+        else
+        {
+            gridLayout.Remove(m_GameObjects[i_ObjectToDelete.m_ObjectNumber - 1]);
+        }
+    }
+
     async Task initializeEvents()
     {
         m_Game.AddScreenObject += addScreenObject;
         m_Game.GameObjectUpdate += gameObjectUpdate;
+        m_Game.GameObjectToDelete += deleteObject;
     }
 }

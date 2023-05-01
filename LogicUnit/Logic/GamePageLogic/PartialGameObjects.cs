@@ -13,8 +13,6 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
-        public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
-        public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
         protected List<ScreenObjectAdd> m_ScreenObjectList;
         protected virtual void OnAddScreenObjects(List<ScreenObjectAdd> i_ScreenObject)
         {
