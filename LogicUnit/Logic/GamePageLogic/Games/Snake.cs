@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using LogicUnit.Logic.GamePageLogic;
@@ -16,12 +17,12 @@ namespace LogicUnit
     {
         public Snake()
         {
-            
+            m_AmountOfLivesPlayersGetAtStart = 1;
         }
 
-        public override void RunGame()
+        public override async void RunGame()
         {
-
+            await gameLoop();
         }
 
         protected override void setGameBoardAndGameObjects()
@@ -187,6 +188,7 @@ namespace LogicUnit
         private void initializeGame()
         {
             m_TypeOfGameButtons = eTypeOfGameButtons.MovementButtonsForAllDirections;
+
         }
 
         public List<Point> getEmptyPositions()
@@ -304,6 +306,9 @@ namespace LogicUnit
 
                     if (hit == (int)eBoardObject.OutOfBounds || hit >= 3)
                     {
+                        //OnDeleteGameObject(player);
+                        
+                        PlayerGotHit(player);
                         //m_GameStatus = eGameStatus.Ended;
                         m_GameStatus = eGameStatus.Running;
                     }
@@ -333,6 +338,13 @@ namespace LogicUnit
             }
         }
 
-
+        private void PlayerGotHit(int i_Player)
+        {
+            foreach(var point in m_PlayerGameObjects[i_Player-1].m_PointsOnGrid)
+            {
+                m_Board[point.m_Column, point.m_Row] = (int)eBoardObject.Empty;
+            }
+            PlayerLostALife(i_Player);//general ui update
+        }
     }
 }
