@@ -20,14 +20,8 @@ namespace LogicUnit
                 case eGames.Pacman:
                     newGame = new Pacman();
                     break;
-                case eGames.Pong:
-                    newGame = new Pong();
-                    break;
                 case eGames.Snake:
                     newGame = new Snake();
-                    break;
-                case eGames.Tanks:
-                    newGame = new Tanks();
                     break;
             }
 

@@ -65,7 +65,7 @@ public partial class GamePage : ContentPage
             foreach (var screenObject in i_ObjectUpdates)
             {
                 int i = 0;
-                if (screenObject.m_ScreenObjectType == eScreenObjectType.PlayerObject)
+                if (screenObject.m_ScreenObjectType == eScreenObjectType.Player)
                 {
                     foreach (var playerObject in m_PlayerObjects[screenObject.m_ObjectNumber-1])
                     {
@@ -115,7 +115,7 @@ public partial class GamePage : ContentPage
 
     private void addGameObjectToList(Image i_image, ScreenObjectAdd i_ScreenObject)
     {
-        if(i_ScreenObject.m_ScreenObjectType == eScreenObjectType.PlayerObject)
+        if(i_ScreenObject.m_ScreenObjectType == eScreenObjectType.Player)
         {
             m_PlayerObjects[i_ScreenObject.m_ObjectNumber - 1].Add(i_image);
         }
@@ -139,11 +139,12 @@ public partial class GamePage : ContentPage
 
     public void deleteObject(object sender, ScreenObjectUpdate i_ObjectToDelete)
     {
-        if(i_ObjectToDelete.m_ScreenObjectType == eScreenObjectType.PlayerObject)
+        if(i_ObjectToDelete.m_ScreenObjectType == eScreenObjectType.Player)
         {
             foreach(var image in m_PlayerObjects[i_ObjectToDelete.m_ObjectNumber - 1])
             {
-                gridLayout.Remove(image);
+                image.FadeTo(0, 700, null);
+                //gridLayout.Remove(image);
             }
 
             m_PlayerObjects[i_ObjectToDelete.m_ObjectNumber - 1].Clear();

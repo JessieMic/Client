@@ -4,14 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Objects.Enums
+namespace Objects.Enums.BoardEnum
 {
-    public enum eScreenObjectType
+    public enum eBoardObject
     {
-        Button,
-        Space,
-        Image,
-        Player,
-        Object
+        Empty,
+        OutOfBounds
     }
 }

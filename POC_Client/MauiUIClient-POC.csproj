@@ -49,7 +49,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\Player.png" />
+	  <None Remove="Resources\Images\snakeobject1food.png" />
+	  <None Remove="Resources\Images\snakeplayer1body.png" />
+	  <None Remove="Resources\Images\snakeplayer2body.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -71,6 +73,12 @@
 	  <MauiXaml Update="Pages\ScreenPlacementSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\snake\snakeobject1food.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer1body.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer2body.png" />
 	</ItemGroup>
 
 </Project>
