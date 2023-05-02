@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Objects.Enums.Snake
+namespace Objects.Enums.BoardEnum
 {
-     public enum eBoardObject
+    public enum eBoardObjectSnake
     {
         Empty,
         OutOfBounds,

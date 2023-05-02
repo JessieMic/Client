@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
-using Objects.Enums.Snake;
+using Objects.Enums.BoardEnum;
 using Point = Objects.Point;
 using Size = Objects.Size;
 
@@ -17,7 +17,9 @@ namespace LogicUnit
     {
         public Snake()
         {
+            m_GameName = "Snake";
             m_AmountOfLivesPlayersGetAtStart = 1;
+            m_TypeOfGameButtons = eTypeOfGameButtons.MovementButtonsForAllDirections;
         }
 
         public override async void RunGame()
@@ -25,16 +27,12 @@ namespace LogicUnit
             await gameLoop();
         }
 
-        protected override void setGameBoardAndGameObjects()
-        {
-
-        }
-
         protected override async Task gameLoop()
         {
             while (m_GameStatus == eGameStatus.Running)
             {
                 await Task.Delay(200);
+
                 m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
                 m_ScreenObjectList = new List<ScreenObjectAdd>();
                 moveSnakes();
@@ -57,115 +55,57 @@ namespace LogicUnit
             {
                 addPlayerObjects(player);
             }
-               // addPlayerObjects();
             addFood();
         }
 
         private void addPlayerObjects(int i_Player)
         {
-            GameObject gameObject = new GameObject();
-            int column = 0;
-            int row = 1;
+            Point point = new Point(0,1);
             int until = 0;
             int inc;
+            bool toInitialize = true;
 
-            gameObject.Initialize(eScreenObjectType.PlayerObject, i_Player, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-            m_PlayerGameObjects[i_Player - 1] = gameObject;
-
-            if (i_Player <= 2)
+            if(m_GameInformation.ScreenInfoOfAllPlayers[i_Player-1].m_Position.Column == eColumnPosition.LeftColumn)// (i_Player <= 2)
             {
-                column = 3;
+                point.m_Column = 3;//column = 3;
                 until = 0;
                 inc = -1;
             }
             else
             {
-                column = m_BoardSize.m_Width - 4;
+                point.m_Column = m_BoardSize.m_Width - 4;
                 until = m_BoardSize.m_Width - 1;
                 inc = 1;
             }
 
-            if (i_Player == 2 || i_Player == 4)
+            if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Row == eRowPosition.LowerRow)
             {
-                row = m_BoardSize.m_Height - 2;
+                point.m_Row = m_BoardSize.m_Height - 2;
             }
 
-            while (column != until)
+            while (point.m_Column != until)
             {
-                ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(column, row), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, i_Player);
-                m_PlayerGameObjects[i_Player - 1].SetObject(ref obj);
-                m_ScreenObjectList.Add(obj);
-                m_Board[column, row] = i_Player + 2;
-
-                column += inc;
+                addGameBoardObject(eScreenObjectType.Player,point,i_Player,i_Player+2,"body", toInitialize);
+                toInitialize = false;
+                point.m_Column += inc;
             }
-
-
-            //    for (int col = 3; col > 0; col--)
-            //{
-            //    ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col,1), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
-            //    m_PlayerGameObjects[0].SetObject(ref obj);
-            //    m_ScreenObjectList.Add(obj);
-            //    m_Board[col, 1] = (int)eBoardObject.Snake1;
-            //}
-
-            //m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 2, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
-            //for (int col = 3; col > 0; col--)
-            //{
-            //    ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, m_BoardSize.m_Height-2), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 2);
-            //    m_PlayerGameObjects[1].SetObject(ref obj);
-            //    m_ScreenObjectList.Add(obj);
-            //    m_Board[col, m_BoardSize.m_Height - 2] = (int)eBoardObject.Snake2;
-            //}
-
-            //if (m_GameInformation.AmountOfPlayers >= 3)
-            //{
-            //    m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 3, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
-            //    for (int col = m_BoardSize.m_Width - 4; col < m_BoardSize.m_Width - 1; col++)
-            //    {
-            //        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, 1), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 3);
-            //        m_PlayerGameObjects[2].SetObject(ref obj);
-            //        m_ScreenObjectList.Add(obj);
-            //        m_Board[col, 1] = (int)eBoardObject.Snake3;
-            //    }
-            //}
-
-            //if (m_GameInformation.AmountOfPlayers == 4)
-            //{
-            //    m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 4, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
-            //    for (int col = m_BoardSize.m_Width - 4; col < m_BoardSize.m_Width - 1; col++)
-            //    {
-            //        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, m_BoardSize.m_Height - 2), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 4);
-            //        m_PlayerGameObjects[3].SetObject(ref obj);
-            //        m_ScreenObjectList.Add(obj);
-            //        m_Board[col, m_BoardSize.m_Height - 2] = (int)eBoardObject.Snake4;
-            //    }
-            //}
         }
 
         private void addFood()
         {
             List<Point> emptyPositions = getEmptyPositions();
             Point randomPoint = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
-            GameObject a = new GameObject();
-            a.Initialize(
-                eScreenObjectType.GameObject,
-                1,
-                m_ScreenMapping.m_GameBoardGridSize,
-                m_ScreenMapping.m_ValueToAdd);
-            m_gameObjects.Add(a);
-            ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.GameObject, null, randomPoint, m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
-            m_gameObjects[0].SetObject(ref obj);
-            m_ScreenObjectList.Add(obj);
-            m_Board[randomPoint.m_Column, randomPoint.m_Row] = (int)eBoardObject.Food;
-        }
 
+            addGameBoardObject(
+                eScreenObjectType.Object, randomPoint, 1, (int)eBoardObjectSnake.Food,
+                eBoardObjectSnake.Food.ToString(), true);
+        }
         private void updateFoodToNewPoint(Point i_Point)
         {
             m_gameObjects[0].PopPoint();
             m_gameObjects[0].AddPointTop(i_Point);
             m_ScreenObjectUpdate.Add(m_gameObjects[0].GetObjectUpdate());
-            m_Board[i_Point.m_Column, i_Point.m_Row] = (int)eBoardObject.Food;
+            m_Board[i_Point.m_Column, i_Point.m_Row] = (int)eBoardObjectSnake.Food;
         }
 
         private void getNewPointForFood()
@@ -182,13 +122,7 @@ namespace LogicUnit
                 point = new Point(-1, -1);
             }
 
-            notifyGameObjectUpdate(eScreenObjectType.GameObject,1,null,point);
-        }
-
-        private void initializeGame()
-        {
-            m_TypeOfGameButtons = eTypeOfGameButtons.MovementButtonsForAllDirections;
-
+            notifyGameObjectUpdate(eScreenObjectType.Object,1,null,point);
         }
 
         public List<Point> getEmptyPositions()
@@ -275,11 +209,11 @@ namespace LogicUnit
 
             if (!isPointOnBoard(i_Point))
             {
-                res = (int)eBoardObject.OutOfBounds;
+                res = (int)eBoardObjectSnake.OutOfBounds;
             }
             else if(i_Point == getSnakeTail(i_Player))
             {
-                res = (int)eBoardObject.Empty;
+                res = (int)eBoardObjectSnake.Empty;
             }
             else
             {
@@ -304,25 +238,21 @@ namespace LogicUnit
                     Point newHeadPoint = getSnakeHead(player).Move(m_PlayerGameObjects[player - 1].m_Direction);
                     int hit = whatSnakeWillHit(newHeadPoint, player);
 
-                    if (hit == (int)eBoardObject.OutOfBounds || hit >= 3)
+                    if (hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
                     {
-                        //OnDeleteGameObject(player);
-                        
                         PlayerGotHit(player);
-                        //m_GameStatus = eGameStatus.Ended;
-                        m_GameStatus = eGameStatus.Running;
                     }
 
-                    else if (hit == (int)eBoardObject.Empty)//Normal move
+                    else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
                     {   
                         removeTail(player);
                         addHead(newHeadPoint, player);
                     }
-                    else if (hit == (int)eBoardObject.Food)//Eats food
+                    else if (hit == (int)eBoardObjectSnake.Food)//Eats food
                     {   
                         addHead(newHeadPoint, player);
 
-                        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, newHeadPoint, m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
+                        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.Player, null, newHeadPoint, m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
                         m_PlayerGameObjects[0].SetObject(ref obj);
                         m_ScreenObjectList.Add(obj);
 
@@ -340,11 +270,56 @@ namespace LogicUnit
 
         private void PlayerGotHit(int i_Player)
         {
-            foreach(var point in m_PlayerGameObjects[i_Player-1].m_PointsOnGrid)
+            OnDeleteGameObject(i_Player);
+            foreach (var point in m_PlayerGameObjects[i_Player-1].m_PointsOnGrid)
             {
-                m_Board[point.m_Column, point.m_Row] = (int)eBoardObject.Empty;
+                m_Board[point.m_Column, point.m_Row] = (int)eBoardObjectSnake.Empty;
             }
             PlayerLostALife(i_Player);//general ui update
         }
     }
 }
+
+
+
+
+//    for (int col = 3; col > 0; col--)
+//{
+//    ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col,1), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
+//    m_PlayerGameObjects[0].SetObject(ref obj);
+//    m_ScreenObjectList.Add(obj);
+//    m_Board[col, 1] = (int)eBoardObjectSnake.Snake1;
+//}
+
+//m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 2, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
+//for (int col = 3; col > 0; col--)
+//{
+//    ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, m_BoardSize.m_Height-2), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 2);
+//    m_PlayerGameObjects[1].SetObject(ref obj);
+//    m_ScreenObjectList.Add(obj);
+//    m_Board[col, m_BoardSize.m_Height - 2] = (int)eBoardObjectSnake.Snake2;
+//}
+
+//if (m_GameInformation.AmountOfPlayers >= 3)
+//{
+//    m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 3, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
+//    for (int col = m_BoardSize.m_Width - 4; col < m_BoardSize.m_Width - 1; col++)
+//    {
+//        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, 1), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 3);
+//        m_PlayerGameObjects[2].SetObject(ref obj);
+//        m_ScreenObjectList.Add(obj);
+//        m_Board[col, 1] = (int)eBoardObjectSnake.Snake3;
+//    }
+//}
+
+//if (m_GameInformation.AmountOfPlayers == 4)
+//{
+//    m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 4, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
+//    for (int col = m_BoardSize.m_Width - 4; col < m_BoardSize.m_Width - 1; col++)
+//    {
+//        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, m_BoardSize.m_Height - 2), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 4);
+//        m_PlayerGameObjects[3].SetObject(ref obj);
+//        m_ScreenObjectList.Add(obj);
+//        m_Board[col, m_BoardSize.m_Height - 2] = (int)eBoardObjectSnake.Snake4;
+//    }
+//}

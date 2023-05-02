@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
+using Objects.Enums.BoardEnum;
 using Point = Objects.Point;
 using Size = Objects.Size;
 
@@ -18,6 +20,7 @@ namespace LogicUnit
         public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
         public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
         public event EventHandler<ScreenObjectUpdate> GameObjectToDelete;
+
         protected GameInformation m_GameInformation = GameInformation.Instance;
         protected Player m_Player = Player.Instance;
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
@@ -27,38 +30,33 @@ namespace LogicUnit
         protected int[,] m_Board;
         protected int m_AmountOfActivePlayers;
         protected Buttons m_Buttons = new Buttons();
-        Point PlayerObject = new Point();
         protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
         protected List<GameObject> m_gameObjects = new List<GameObject>();
         public eGameStatus m_GameStatus = eGameStatus.Running;
         protected Random m_randomPosition = new Random();
         protected int m_AmountOfLivesPlayersGetAtStart = 3;
-        protected List<ScreenObjectUpdate> m_ScreenObjectUpdate;// = new List<ScreenObjectUpdate>();
-
-        public virtual async void RunGame()
-        {
-
-        }
-
+        protected int m_AmountOfPlayersThatAreAlive;
+        protected List<ScreenObjectUpdate> m_ScreenObjectUpdate;
+        protected List<string> m_LoseOrder = new List<string>();
+        protected string m_GameName;
+        
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
         public void InitializeGame()
         {
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
             m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
+            m_AmountOfPlayersThatAreAlive = m_GameInformation.AmountOfPlayers;
 
-            for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+            for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 m_DirectionsBuffer.Add(new List<Direction>());
                 m_AmountOfLivesPlayerHas[i] = m_AmountOfLivesPlayersGetAtStart;
-                m_PlayerGameObjects.Add(null);
             }
             SetGameScreen();
         }
 
-        protected abstract void setGameBoardAndGameObjects();
-
-        public bool SetAmountOfPlayers(int i_amountOfPlayers)
+        public bool SetAmountOfPlayers(int i_amountOfPlayers)//for when you want to get ready in lobby 
         {
             if(i_amountOfPlayers >= 2 && i_amountOfPlayers <= 4)
             {
@@ -86,22 +84,18 @@ namespace LogicUnit
 
             if (m_AmountOfLivesPlayerHas[i_Player - 1] == 0)
             {
-                for(int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
-                {
-                    if(m_AmountOfLivesPlayerHas[i] > 0)
-                    {
-                        isGameRunning = true;
-                    }
-                }
+                m_AmountOfPlayersThatAreAlive--;
 
-                if(isGameRunning)
+                if(m_AmountOfPlayersThatAreAlive > 1)//Only player lost but game is still running
                 {
                     returnStatus = eGameStatus.Lost;
+                    m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player]);
                     gameStatusUpdate(returnStatus);
                 }
-                else
+                else//only one player is alive so the game has ended 
                 {
                     returnStatus = eGameStatus.Ended;
+                    m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player]);
                     showScoreBoard();
                 }
             }
@@ -119,7 +113,7 @@ namespace LogicUnit
             //send ui to show defeated
         }
 
-        private bool checkThatPointIsOnBoardGrided(Point i_Point)
+        private bool checkThatPointIsOnBoardGrid(Point i_Point)
         {
             bool isPointOnTheBoard = true;
 
@@ -132,7 +126,6 @@ namespace LogicUnit
             {
                 //check special boards
             }
-
 
             return isPointOnTheBoard;
         }
@@ -195,13 +188,56 @@ namespace LogicUnit
 
             if (m_GameStatus == eGameStatus.Running)
             {
-                notifyGameObjectUpdate(eScreenObjectType.PlayerObject, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
+                notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
             }
+        }
+
+        protected void addGameBoardObject(eScreenObjectType i_Type,Point i_Point,int i_ObjectNumber,int i_BoardNumber,string i_Version, bool i_ToInitialize)
+        {
+            string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
+            GameObject gameObject = new GameObject(); 
+
+            if(i_ToInitialize)
+            {
+                gameObject.Initialize(i_Type,i_ObjectNumber, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
+
+                if (i_Type == eScreenObjectType.Player)
+                {
+                    m_PlayerGameObjects.Add(gameObject);
+                }
+                else
+                {
+                    m_gameObjects.Add(gameObject);
+                }
+            }
+
+            ScreenObjectAdd objectAdd = new ScreenObjectAdd(i_Type, null, i_Point, m_ScreenMapping.m_MovementButtonSize, png, string.Empty, i_ObjectNumber);
+
+            if(i_Type == eScreenObjectType.Player)
+            {
+                m_PlayerGameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
+            }
+            else
+            {
+                m_gameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
+            }
+
+            m_ScreenObjectList.Add(objectAdd);
+            m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
+        }
+
+        protected string generatePngString(eScreenObjectType i_Type, int i_ObjectNumber, string i_Version)
+        {
+            string png;
+
+            png = m_GameName + i_Type.ToString() + i_ObjectNumber + i_Version + ".png";
+            
+            return png.ToLower();
         }
 
         protected void notifyGameObjectUpdate(eScreenObjectType i_ObjectType,int i_ObjectNumber,Direction i_Direction, Point i_Point)
         {
-            if(i_ObjectType == eScreenObjectType.PlayerObject)
+            if(i_ObjectType == eScreenObjectType.Player)
             {
                 ChangeDirection(i_Direction,i_ObjectNumber);
             }
@@ -212,6 +248,10 @@ namespace LogicUnit
         }
 
         protected virtual void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
+        {
+
+        }
+        public virtual async void RunGame()
         {
 
         }
