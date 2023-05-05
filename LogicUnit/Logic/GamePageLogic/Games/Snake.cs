@@ -29,9 +29,9 @@ namespace LogicUnit
 
         protected override async Task gameLoop()
         {
-            while (m_GameStatus == eGameStatus.Running)
-            {
-                await Task.Delay(200);
+            //while (m_GameStatus == eGameStatus.Running)
+            //{
+                //await Task.Delay(200);
 
                 m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
                 m_ScreenObjectList = new List<ScreenObjectAdd>();
@@ -41,7 +41,7 @@ namespace LogicUnit
                 {
                     OnAddScreenObjects(m_ScreenObjectList);
                 }
-            }
+            //}
         }
 
         protected override void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)

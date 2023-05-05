@@ -41,6 +41,25 @@ namespace Objects
                 return Direction.Left;
             }
         }
+        public static Direction getDirection(int i_Button)
+        {
+            if (i_Button == (int)eButton.Up)
+            {
+                return Direction.Up;
+            }
+            else if (i_Button == (int)eButton.Down)
+            {
+                return Direction.Down;
+            }
+            else if (i_Button == (int)eButton.Right)
+            {
+                return Direction.Right;
+            }
+            else
+            {
+                return Direction.Left;
+            }
+        }
 
         public Direction OppositeDirection()
         {
