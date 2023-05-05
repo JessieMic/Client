@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 //using ABI.Windows.Security.EnterpriseData;
 using LogicUnit.Logic.GamePageLogic;
+using Microsoft.AspNetCore.SignalR.Client;
 using Objects;
 using Objects.Enums;
 using Objects.Enums.BoardEnum;
@@ -17,6 +18,8 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
+        private readonly HubConnection r_ConnectionToServer;
+
         public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
         public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
         public event EventHandler<ScreenObjectUpdate> GameObjectToDelete;
@@ -41,6 +44,34 @@ namespace LogicUnit
         protected string m_GameName;
         
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
+
+        public Game()
+        {
+            r_ConnectionToServer = new HubConnectionBuilder()
+                .WithUrl(Utils.m_GameHubAddress)
+                .Build();
+
+            r_ConnectionToServer.On("Update", (int[] i_Update) =>
+            {
+                MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    for(int i = 0; i < 2; i++)
+                    {
+                        ChangeDirection(Direction.getDirection(i_Update[i]), i+1);
+                    }
+
+                    gameLoop();
+                });
+            });
+
+            Task.Run(() =>
+                {
+                    Application.Current.Dispatcher.Dispatch(async () =>
+                    {
+                            await r_ConnectionToServer.StartAsync();
+                    });
+                });
+        }
 
         public void InitializeGame()
         {
@@ -188,8 +219,17 @@ namespace LogicUnit
 
             if (m_GameStatus == eGameStatus.Running)
             {
-                notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
+
+                SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
+                //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
             }
+        }
+
+        public async Task SendServerMoveUpdate(eButton i_Button)
+        {
+            await r_ConnectionToServer.SendAsync(
+                "MoveUpdate",
+                m_Player.ButtonThatPlayerPicked-1,(int)i_Button);
         }
 
         protected void addGameBoardObject(eScreenObjectType i_Type,Point i_Point,int i_ObjectNumber,int i_BoardNumber,string i_Version, bool i_ToInitialize)
@@ -235,6 +275,7 @@ namespace LogicUnit
             return png.ToLower();
         }
 
+
         protected void notifyGameObjectUpdate(eScreenObjectType i_ObjectType,int i_ObjectNumber,Direction i_Direction, Point i_Point)
         {
             if(i_ObjectType == eScreenObjectType.Player)
@@ -246,6 +287,8 @@ namespace LogicUnit
                 ChangeGameObject(i_ObjectNumber,i_Direction,i_Point);
             }
         }
+
+        // notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
 
         protected virtual void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
         {
