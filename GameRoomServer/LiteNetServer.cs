@@ -14,6 +14,7 @@ namespace GameRoomServer
         private readonly Timer r_Timer = new System.Timers.Timer(15);
 
         private int m_TimerCounts = 0;
+
         public LiteNetServer(int i_Port)
         {
             r_NetManager.Start(i_Port);

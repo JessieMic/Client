@@ -1,3 +1,5 @@
+using GameRoomServer;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -15,6 +17,7 @@ var app = builder.Build();
 //    app.UseSwagger();
 //    app.UseSwaggerUI();
 //}
+LiteNetServer liteNetServer = new LiteNetServer(5555);
 
 app.UseHttpsRedirection();
 
