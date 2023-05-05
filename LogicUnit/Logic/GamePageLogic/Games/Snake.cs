@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using LogicUnit.Logic.GamePageLogic;
+//using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
 using Objects.Enums.BoardEnum;
@@ -31,7 +31,7 @@ namespace LogicUnit
         {
             while (m_GameStatus == eGameStatus.Running)
             {
-                await Task.Delay(200);
+                await Task.Delay(700);
 
                 m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
                 m_ScreenObjectList = new List<ScreenObjectAdd>();
@@ -252,10 +252,8 @@ namespace LogicUnit
                     {   
                         addHead(newHeadPoint, player);
 
-                        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.Player, null, newHeadPoint, m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
-                        m_PlayerGameObjects[0].SetObject(ref obj);
-                        m_ScreenObjectList.Add(obj);
 
+                        addGameBoardObject(eScreenObjectType.Player,newHeadPoint,player,player,"body",false);
                         //score ++
 
                         if(m_Player.ButtonThatPlayerPicked == 1)

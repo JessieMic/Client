@@ -6,7 +6,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 //using ABI.Windows.Security.EnterpriseData;
-using LogicUnit.Logic.GamePageLogic;
+//using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
 using Objects.Enums.BoardEnum;
@@ -18,6 +18,7 @@ namespace LogicUnit
     public abstract partial class Game
     {
         public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
+        public event EventHandler<List<GameObject>> AddScreenObject_;
         public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
         public event EventHandler<ScreenObjectUpdate> GameObjectToDelete;
 
@@ -30,8 +31,13 @@ namespace LogicUnit
         protected int[,] m_Board;
         protected int m_AmountOfActivePlayers;
         protected Buttons m_Buttons = new Buttons();
+
+        protected List<GameObject> m_Buttons_ = new List<GameObject>();
         protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
         protected List<GameObject> m_gameObjects = new List<GameObject>();
+
+        protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
+
         public eGameStatus m_GameStatus = eGameStatus.Running;
         protected Random m_randomPosition = new Random();
         protected int m_AmountOfLivesPlayersGetAtStart = 3;
@@ -217,6 +223,10 @@ namespace LogicUnit
             {
                 m_PlayerGameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
             }
+            else if(i_Type == eScreenObjectType.Button)
+            {
+                m_Buttons_[i_ObjectNumber].SetObject(ref objectAdd);
+            }
             else
             {
                 m_gameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
@@ -226,12 +236,32 @@ namespace LogicUnit
             m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
         }
 
+        protected void addGameButtonObject(eScreenObjectType i_Type,eButton i_ButtonType, Point i_Point, int i_BoardNumber)
+        {
+            string png = generatePngString(i_Type, 0, i_ButtonType.ToString());
+            GameObject gameObject = new GameObject();
+
+            //gameObject.Initialize(i_Type, i_ButtonType, m_ScreenMapping.m_GameBoardGridSize,m_ScreenMapping. m_ScreenMapping.m_ValueToAdd);
+
+            //if (i_Type == eScreenObjectType.Player)
+            //{
+            //    m_PlayerGameObjects.Add(gameObject);
+            //}
+        }
+
         protected string generatePngString(eScreenObjectType i_Type, int i_ObjectNumber, string i_Version)
         {
             string png;
 
-            png = m_GameName + i_Type.ToString() + i_ObjectNumber + i_Version + ".png";
-            
+            if(i_Type == eScreenObjectType.Button)
+            {
+                png = i_Version + i_Type.ToString() + ".png";
+            }
+            else
+            {
+                png = m_GameName + i_Type.ToString() + i_ObjectNumber + i_Version + ".png";
+            }
+
             return png.ToLower();
         }
 

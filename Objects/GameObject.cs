@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
+using Size = Objects.Size;
 
-namespace LogicUnit.Logic.GamePageLogic
+namespace Objects
 {
     public class GameObject
     {
@@ -20,10 +21,21 @@ namespace LogicUnit.Logic.GamePageLogic
         private Point m_ValuesToAdd = new Point();
         private int m_Velocity = 1;
         public Direction m_Direction = Direction.Stop;
+        private eButton m_ButtonType;
+        private string m_text;
+        private Size m_Size;
 
-        public void Initialize(eScreenObjectType i_ScreenObjectType,int i_ObjectNumber, int i_GameBoardGridSize, Point i_ValuesToAdd)
+        public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
             m_ObjectNumber = i_ObjectNumber;
+            m_ScreenObjectType = i_ScreenObjectType;
+            m_GameBoardGridSize = i_GameBoardGridSize;
+            m_ValuesToAdd = i_ValuesToAdd;
+        }
+
+        public void Initialize(eScreenObjectType i_ScreenObjectType, eButton i_ButtonType, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
+        {
+            m_ButtonType = i_ButtonType;
             m_ScreenObjectType = i_ScreenObjectType;
             m_GameBoardGridSize = i_GameBoardGridSize;
             m_ValuesToAdd = i_ValuesToAdd;
@@ -50,8 +62,8 @@ namespace LogicUnit.Logic.GamePageLogic
 
         public void AddPointTop(Point i_Point)
         {
-            m_PointsOnGrid.Insert(0,i_Point);
-            m_PointsOnScreen.Insert(0,getScreenPoint(i_Point));
+            m_PointsOnGrid.Insert(0, i_Point);
+            m_PointsOnScreen.Insert(0, getScreenPoint(i_Point));
         }
 
         public void PopPoint()
