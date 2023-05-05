@@ -33,12 +33,41 @@ namespace Objects
             m_ValuesToAdd = i_ValuesToAdd;
         }
 
-        public void Initialize(eScreenObjectType i_ScreenObjectType, eButton i_ButtonType, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
+        public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
+        {
+            m_ObjectNumber = i_ObjectNumber;
+            m_ScreenObjectType = i_ScreenObjectType;
+            m_GameBoardGridSize = i_GameBoardGridSize;
+            m_ValuesToAdd = i_ValuesToAdd;
+            m_PointsOnGrid.Add(i_Point);
+            Point point = getScreenPoint(i_Point);
+            m_PointsOnScreen.Add(point);
+            m_ImageSources.Add(i_Png);
+        }
+
+        public void Initialize(eScreenObjectType i_ScreenObjectType, eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
         {
             m_ButtonType = i_ButtonType;
             m_ScreenObjectType = i_ScreenObjectType;
             m_GameBoardGridSize = i_GameBoardGridSize;
             m_ValuesToAdd = i_ValuesToAdd;
+
+        }
+
+        public void SetObject(string i_Image, Point i_Point)
+        {
+            m_PointsOnGrid.Add(i_Point);
+            Point point = getScreenPoint(i_Point);
+            m_PointsOnScreen.Add(point);
+            m_ImageSources.Add(i_Image);
+            //i_ScreenObject.m_Point = point;
+        }
+
+        public void CombineGameObjects(GameObject i_GameObject)
+        {
+            m_PointsOnGrid.Add(i_GameObject.m_PointsOnGrid[0]);
+            m_PointsOnScreen.Add(i_GameObject.m_PointsOnScreen[0]);
+            m_ImageSources.Add(i_GameObject.m_ImageSources[0]);
         }
 
         public void SetObject(ref ScreenObjectAdd i_ScreenObject)
