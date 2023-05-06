@@ -33,13 +33,13 @@ namespace LogicUnit
             {
                 await Task.Delay(700);
 
-                m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
-                m_ScreenObjectList = new List<ScreenObjectAdd>();
+                m_gameObjectsToUpdate = new List<GameObject>();
+                m_GameObjectsToAdd = new List<GameObject>();
                 moveSnakes();
-                OnUpdateScreenObject(m_ScreenObjectUpdate);
-                if (m_ScreenObjectList.Count != 0)
+                OnUpdateScreenObject();
+                if (m_GameObjectsToAdd.Count != 0)
                 {
-                    OnAddScreenObjects(m_ScreenObjectList);
+                    OnAddScreenObjects();
                 }
             }
         }
@@ -63,7 +63,7 @@ namespace LogicUnit
             Point point = new Point(0,1);
             int until = 0;
             int inc;
-            bool toInitialize = true;
+            bool toInitialize = false;
 
             if(m_GameInformation.ScreenInfoOfAllPlayers[i_Player-1].m_Position.Column == eColumnPosition.LeftColumn)// (i_Player <= 2)
             {
@@ -86,7 +86,7 @@ namespace LogicUnit
             while (point.m_Column != until)
             {
                 addGameBoardObject(eScreenObjectType.Player,point,i_Player,i_Player+2,"body", toInitialize);
-                toInitialize = false;
+                toInitialize = true;
                 point.m_Column += inc;
             }
         }
@@ -98,13 +98,13 @@ namespace LogicUnit
 
             addGameBoardObject(
                 eScreenObjectType.Object, randomPoint, 1, (int)eBoardObjectSnake.Food,
-                eBoardObjectSnake.Food.ToString(), true);
+                eBoardObjectSnake.Food.ToString(), false);
         }
         private void updateFoodToNewPoint(Point i_Point)
         {
             m_gameObjects[0].PopPoint();
             m_gameObjects[0].AddPointTop(i_Point);
-            m_ScreenObjectUpdate.Add(m_gameObjects[0].GetObjectUpdate());
+            m_gameObjectsToUpdate.Add(m_gameObjects[0]);
             m_Board[i_Point.m_Column, i_Point.m_Row] = (int)eBoardObjectSnake.Food;
         }
 
@@ -261,7 +261,7 @@ namespace LogicUnit
                             getNewPointForFood();
                         }
                     }
-                    m_ScreenObjectUpdate.Add(m_PlayerGameObjects[player - 1].GetObjectUpdate());
+                    m_gameObjectsToUpdate.Add(m_PlayerGameObjects[player - 1]);
                 }
             }
         }

@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Objects
 {
-    public class GameSettings
+    public static class GameSettings
     {
-        public Size m_MovementButtonSize = new Size(35, 35);
-        public int m_GameBoardGridSize = 35;
-        public int m_SpacingAroundButtons = 10;
+        public static Size m_MovementButtonSize = new Size(35, 35);
+        public static int m_GameBoardGridSize = 35;
+        public static int m_SpacingAroundButtons = 10;
     }
 }

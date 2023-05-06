@@ -13,37 +13,31 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
-        protected List<ScreenObjectAdd> m_ScreenObjectList;
-        protected virtual void OnAddScreenObjects(List<ScreenObjectAdd> i_ScreenObject)
-        {
-            AddScreenObject.Invoke(this, i_ScreenObject);
-        }
-
         public void SetGameScreen()
         {
-            m_ScreenObjectList = setGameButtons();
-            m_ScreenObjectList.Add(setGameBackGround());
+            setGameButtons();
+            setGameBackGround();
             AddGameObjects();
-            OnAddScreenObjects(m_ScreenObjectList);
+            OnAddScreenObjects();
         }
 
         protected abstract void AddGameObjects();
 
-        protected List<ScreenObjectAdd> setGameButtons()
+        protected void setGameButtons()
         {
             m_Buttons.m_MovementButtonSize = m_ScreenMapping.m_MovementButtonSize;
             m_Buttons.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
            
-            return m_Buttons.GetGameButtons();
+            m_Buttons.GetGameButtons(ref m_GameObjectsToAdd);
         }
 
-        protected ScreenObjectAdd setGameBackGround()
+        protected void setGameBackGround()
         {
-            ScreenObjectAdd returnObject = new ScreenObjectAdd();
             Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize);
-            returnObject = new ScreenObjectAdd(eScreenObjectType.Image, null, m_ScreenMapping.m_ValueToAdd, actualSize, "aa.png", null,0);
-
-            return returnObject;
+            GameObject background = new GameObject();
+            background.Initialize(eScreenObjectType.Image,0,"aa.png",new Point(0,0),actualSize.m_Height,m_ScreenMapping.m_ValueToAdd);
+            background.m_Size = actualSize;
+            m_GameObjectsToAdd.Add(background);
         }
     }
 }

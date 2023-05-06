@@ -21,17 +21,17 @@ namespace Objects
         private Point m_ValuesToAdd = new Point();
         private int m_Velocity = 1;
         public Direction m_Direction = Direction.Stop;
-        private eButton m_ButtonType;
-        private string m_text;
-        private Size m_Size;
+        public eButton m_ButtonType;
+        public string m_text;
+        public Size m_Size = new Size(35,35);
 
-        public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, int i_GameBoardGridSize, Point i_ValuesToAdd)
-        {
-            m_ObjectNumber = i_ObjectNumber;
-            m_ScreenObjectType = i_ScreenObjectType;
-            m_GameBoardGridSize = i_GameBoardGridSize;
-            m_ValuesToAdd = i_ValuesToAdd;
-        }
+        //public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, int i_GameBoardGridSize, Point i_ValuesToAdd)
+        //{
+        //    m_ObjectNumber = i_ObjectNumber;
+        //    m_ScreenObjectType = i_ScreenObjectType;
+        //    m_GameBoardGridSize = i_GameBoardGridSize;
+        //    m_ValuesToAdd = i_ValuesToAdd;
+        //}
 
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
@@ -45,13 +45,17 @@ namespace Objects
             m_ImageSources.Add(i_Png);
         }
 
-        public void Initialize(eScreenObjectType i_ScreenObjectType, eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
+        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
         {
             m_ButtonType = i_ButtonType;
-            m_ScreenObjectType = i_ScreenObjectType;
+            m_ScreenObjectType = eScreenObjectType.Button;
             m_GameBoardGridSize = i_GameBoardGridSize;
             m_ValuesToAdd = i_ValuesToAdd;
-
+            m_PointsOnGrid.Add(i_Point);
+            Point point = getScreenPoint(i_Point);
+            m_PointsOnScreen.Add(point);
+            m_ImageSources.Add(i_Png);
+            m_Size = i_Size;
         }
 
         public void SetObject(string i_Image, Point i_Point)
