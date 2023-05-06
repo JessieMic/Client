@@ -31,7 +31,7 @@ namespace LogicUnit
         {
             while (m_GameStatus == eGameStatus.Running)
             {
-                await Task.Delay(700);
+                await Task.Delay(500);
 
                 m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameObjectsToAdd = new List<GameObject>();
@@ -277,47 +277,3 @@ namespace LogicUnit
         }
     }
 }
-
-
-
-
-//    for (int col = 3; col > 0; col--)
-//{
-//    ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col,1), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
-//    m_PlayerGameObjects[0].SetObject(ref obj);
-//    m_ScreenObjectList.Add(obj);
-//    m_Board[col, 1] = (int)eBoardObjectSnake.Snake1;
-//}
-
-//m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 2, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
-//for (int col = 3; col > 0; col--)
-//{
-//    ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, m_BoardSize.m_Height-2), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 2);
-//    m_PlayerGameObjects[1].SetObject(ref obj);
-//    m_ScreenObjectList.Add(obj);
-//    m_Board[col, m_BoardSize.m_Height - 2] = (int)eBoardObjectSnake.Snake2;
-//}
-
-//if (m_GameInformation.AmountOfPlayers >= 3)
-//{
-//    m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 3, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
-//    for (int col = m_BoardSize.m_Width - 4; col < m_BoardSize.m_Width - 1; col++)
-//    {
-//        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, 1), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 3);
-//        m_PlayerGameObjects[2].SetObject(ref obj);
-//        m_ScreenObjectList.Add(obj);
-//        m_Board[col, 1] = (int)eBoardObjectSnake.Snake3;
-//    }
-//}
-
-//if (m_GameInformation.AmountOfPlayers == 4)
-//{
-//    m_PlayerGameObjects.Add(new GameObject(eScreenObjectType.PlayerObject, 4, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd));
-//    for (int col = m_BoardSize.m_Width - 4; col < m_BoardSize.m_Width - 1; col++)
-//    {
-//        ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.PlayerObject, null, new Point(col, m_BoardSize.m_Height - 2), m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 4);
-//        m_PlayerGameObjects[3].SetObject(ref obj);
-//        m_ScreenObjectList.Add(obj);
-//        m_Board[col, m_BoardSize.m_Height - 2] = (int)eBoardObjectSnake.Snake4;
-//    }
-//}

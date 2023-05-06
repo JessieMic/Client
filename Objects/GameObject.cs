@@ -74,14 +74,6 @@ namespace Objects
             m_ImageSources.Add(i_GameObject.m_ImageSources[0]);
         }
 
-        public void SetObject(ref ScreenObjectAdd i_ScreenObject)
-        {
-            m_PointsOnGrid.Add(i_ScreenObject.m_Point);
-            Point point = getScreenPoint(i_ScreenObject.m_Point);
-            m_PointsOnScreen.Add(point);
-            m_ImageSources.Add(i_ScreenObject.m_ImageSource);
-            i_ScreenObject.m_Point = point;
-        }
 
         private Point getScreenPoint(Point i_Point)
         {
@@ -103,19 +95,6 @@ namespace Objects
         {
             m_PointsOnGrid.RemoveAt(m_PointsOnGrid.Count - 1);
             m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count - 1);
-        }
-
-        public ScreenObjectUpdate GetObjectUpdate()
-        {
-            ScreenObjectUpdate ret = new ScreenObjectUpdate();
-
-            ret.m_ObjectNumber = m_ObjectNumber;
-            ret.m_ImageSources = m_ImageSources;
-            ret.m_NewPositions = m_PointsOnScreen;
-            ret
-                .m_ScreenObjectType = m_ScreenObjectType;
-
-            return ret;
         }
     }
 }

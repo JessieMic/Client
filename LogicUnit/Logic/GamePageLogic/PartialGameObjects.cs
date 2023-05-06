@@ -16,7 +16,7 @@ namespace LogicUnit
         public void SetGameScreen()
         {
             setGameButtons();
-            setGameBackGround();
+            setGameBackground();
             AddGameObjects();
             OnAddScreenObjects();
         }
@@ -31,7 +31,7 @@ namespace LogicUnit
             m_Buttons.GetGameButtons(ref m_GameObjectsToAdd);
         }
 
-        protected void setGameBackGround()
+        protected void setGameBackground()
         {
             Size actualSize = new Size(m_ScreenMapping.m_TotalScreenSize.m_Width*m_ScreenMapping.m_GameBoardGridSize,m_ScreenMapping.m_TotalScreenSize.m_Height*m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();

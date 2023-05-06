@@ -5,8 +5,6 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-//using ABI.Windows.Security.EnterpriseData;
-//using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
 using Objects.Enums.BoardEnum;
@@ -17,42 +15,44 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
-        //public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
-
+        //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
         public event EventHandler<List<GameObject>> GameObjectsUpdate;
         public event EventHandler<GameObject> GameObjectToDelete;
 
-        //public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
-        //public event EventHandler<ScreenObjectUpdate> GameObjectToDelete;
-
+        //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
         protected Player m_Player = Player.Instance;
+
+        //Screen info 
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
+        protected Size m_BoardSize = new Size();
+
+        //Need to initialize each different game
         protected eTypeOfGameButtons m_TypeOfGameButtons;
         protected int[] m_AmountOfLivesPlayerHas = new int[4];
-        protected Size m_BoardSize = new Size();
+        protected int m_AmountOfLivesPlayersGetAtStart = 3;
+        protected string m_GameName;
+
+        //Things that might change while playing 
         protected int[,] m_Board;
         protected int m_AmountOfActivePlayers;
-        protected Buttons m_Buttons = new Buttons();
+        protected int m_AmountOfPlayersThatAreAlive;
+        public eGameStatus m_GameStatus = eGameStatus.Running;
+        protected List<string> m_LoseOrder = new List<string>();
 
-        protected List<GameObject> m_Buttons_ = new List<GameObject>();
+        //Don't mind this
+        protected Buttons m_Buttons = new Buttons();
+        protected Random m_randomPosition = new Random();
+        protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
+
+        //Game object list
         protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
         protected List<GameObject> m_gameObjects = new List<GameObject>();//General game objects
 
+        //List for Ui changes
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate =new List<GameObject>();
-
-
-        public eGameStatus m_GameStatus = eGameStatus.Running;
-        protected Random m_randomPosition = new Random();
-        protected int m_AmountOfLivesPlayersGetAtStart = 3;
-        protected int m_AmountOfPlayersThatAreAlive;
-        //protected List<ScreenObjectUpdate> m_ScreenObjectUpdate;
-        protected List<string> m_LoseOrder = new List<string>();
-        protected string m_GameName;
-        
-        protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
         public void InitializeGame()
         {
@@ -209,47 +209,6 @@ namespace LogicUnit
             }
         }
 
-        //protected void addGameBoardObject(eScreenObjectType i_Type,Point i_Point,int i_ObjectNumber,int i_BoardNumber,string i_Version, bool i_ToInitialize)
-        //{
-        //    string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-        //    GameObject gameObject = new GameObject(); 
-
-        //    gameObject.Initialize();
-
-        //    if(i_ToInitialize)
-        //    {
-        //        gameObject.Initialize(i_Type,i_ObjectNumber, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-                
-        //        if (i_Type == eScreenObjectType.Player)
-        //        {
-        //            m_PlayerGameObjects.Add(gameObject);
-        //        }
-        //        else
-        //        {
-        //            m_gameObjects.Add(gameObject);
-        //        }
-        //    }
-
-        //    ScreenObjectAdd objectAdd = new ScreenObjectAdd(i_Type, null, i_Point, m_ScreenMapping.m_MovementButtonSize, png, string.Empty, i_ObjectNumber);
-
-        //    if(i_Type == eScreenObjectType.Player)
-        //    {
-        //        m_PlayerGameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-        //    }
-        //    else if(i_Type == eScreenObjectType.Button)
-        //    {
-        //        m_Buttons_[i_ObjectNumber].SetObject(ref objectAdd);
-        //    }
-        //    else
-        //    {
-        //        m_gameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-        //    }
-        //    m_GameObjectsToAdd.Add();
-
-        //    m_ScreenObjectList.Add(objectAdd);
-        //    m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
-        //}
-
         protected void addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version, bool i_ToCombine)
         {
             string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
@@ -257,63 +216,40 @@ namespace LogicUnit
 
             gameObject.Initialize(i_Type,i_ObjectNumber,png,i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
 
-               //gameObject.Initialize(i_Type, i_ObjectNumber, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-
-                if (i_Type == eScreenObjectType.Player)
+            if (i_Type == eScreenObjectType.Player)
+            {
+                if(i_ToCombine == false)
                 {
-                    if(i_ToCombine == false)
-                    {
-                        m_PlayerGameObjects.Add(gameObject);
-                    }
-                    else
-                    {
-                        m_PlayerGameObjects[i_ObjectNumber - 1].CombineGameObjects(gameObject);
-                    }
+                    m_PlayerGameObjects.Add(gameObject);
                 }
                 else
                 {
-                    if (i_ToCombine == false)
-                    {
-                        m_gameObjects.Add(gameObject);
-                    }
-                    else
-                    {
-                        m_gameObjects[i_ObjectNumber -1].CombineGameObjects(gameObject);
-                    }
-                    
+                    m_PlayerGameObjects[i_ObjectNumber - 1].CombineGameObjects(gameObject);
                 }
+            }
+            else
+            {
+                if (i_ToCombine == false)
+                {
+                    m_gameObjects.Add(gameObject);
+                }
+                else
+                {
+                    m_gameObjects[i_ObjectNumber -1].CombineGameObjects(gameObject);
+                }
+                
+            }
             
-
             m_GameObjectsToAdd.Add(gameObject);
             m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
-        }
-
-        protected void addGameButtonObject(eScreenObjectType i_Type,eButton i_ButtonType, Point i_Point, int i_BoardNumber)
-        {
-            string png = generatePngString(i_Type, 0, i_ButtonType.ToString());
-            GameObject gameObject = new GameObject();
-
-            //gameObject.Initialize(i_Type, i_ButtonType, m_ScreenMapping.m_GameBoardGridSize,m_ScreenMapping. m_ScreenMapping.m_ValueToAdd);
-
-            //if (i_Type == eScreenObjectType.Player)
-            //{
-            //    m_PlayerGameObjects.Add(gameObject);
-            //}
         }
 
         protected string generatePngString(eScreenObjectType i_Type, int i_ObjectNumber, string i_Version)
         {
             string png;
 
-            if(i_Type == eScreenObjectType.Button)
-            {
-                png = i_Version + i_Type.ToString() + ".png";
-            }
-            else
-            {
-                png = m_GameName + i_Type.ToString() + i_ObjectNumber + i_Version + ".png";
-            }
-
+            png = m_GameName + i_Type.ToString() + i_ObjectNumber + i_Version + ".png";
+            
             return png.ToLower();
         }
 
