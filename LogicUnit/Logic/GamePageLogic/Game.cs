@@ -78,7 +78,7 @@ namespace LogicUnit
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
             m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
             m_AmountOfPlayersThatAreAlive = m_GameInformation.AmountOfPlayers;
-
+            LiteNetClient.Instance.
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 m_DirectionsBuffer.Add(new List<Direction>());

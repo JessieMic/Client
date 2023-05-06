@@ -9,21 +9,38 @@ using Microsoft.Extensions.Logging;
 namespace LogicUnit.Logic.GamePageLogic
 
 {
-    //make it singleton
     public class LiteNetClient
     {
         private static EventBasedNetListener m_Listener = new EventBasedNetListener();
         private readonly NetManager r_NetManager = new NetManager(m_Listener);
+        private static object s_Lock = new object();
+        private static LiteNetClient s_Instance = null;
+        public static LiteNetClient Instance
+        {
+            get
+            {
+                if(s_Instance == null)
+                {
+                    lock(s_Lock)
+                    {
+                        s_Instance ??= new LiteNetClient();
+                    }
+                }
+
+                return s_Instance;
+            }
+        }
         //private readonly ILogger<LiteNetClient> r_Logger;
 
-        public LiteNetClient(/*ILogger<LiteNetClient> i_Logger*/)
+        private LiteNetClient(/*ILogger<LiteNetClient> i_Logger*/)
         {
             //r_Logger = i_Logger;
             r_NetManager.Start();
             r_NetManager.Connect("127.0.0.1", 5555, "myKey");
             m_Listener.NetworkReceiveEvent += OnReceive;
+            
         }
-
+            
         public void Send(string i_Message)
         {
             NetDataWriter writer = new NetDataWriter();

@@ -9,9 +9,8 @@ namespace GameRoomServer
     {
         private static readonly EventBasedNetListener sr_NetListener = new EventBasedNetListener();
         private readonly NetManager r_NetManager = new NetManager(sr_NetListener);
-        private readonly List<NetPeer> r_Clients = new List<NetPeer>();
-        private readonly Dictionary<NetPeer, Tuple<int, int>> r_ClientsData = new Dictionary<NetPeer, Tuple<int, int>>();
-        private readonly Timer r_Timer = new System.Timers.Timer(15);
+        private readonly List<ClientData> r_Clients = new List<ClientData>();
+        //private readonly Timer r_Timer = new System.Timers.Timer(15);
 
         private int m_TimerCounts = 0;
 
@@ -23,23 +22,36 @@ namespace GameRoomServer
             sr_NetListener.PeerDisconnectedEvent += onPeerDisconnected;
             sr_NetListener.NetworkReceiveEvent += onNetworkReceive;
 
-            r_Timer.Elapsed += onTimerElapsed;
+            //r_Timer.Elapsed += onTimerElapsed;
         }
 
-        private void onTimerElapsed(object? i_Sender, ElapsedEventArgs i_E)
+        public void Run()
         {
-            r_NetManager.SendToAll(NetDataWriter.FromString($"heyyyaa we have {r_Clients.Count} timer is {m_TimerCounts}"), DeliveryMethod.ReliableOrdered);
+            while(true)
+            {
+                r_NetManager.PollEvents();
+                updateClients();
+                Thread.Sleep(15);
+            }
         }
 
-        private byte[] clientsDataInBytes()
+        private void updateClients()
         {
-            //convert dictionary to byte array
-            throw new NotImplementedException();
+            foreach(ClientData client in r_Clients)
+            {
+                NetDataWriter writer = new();
+                writer.Put(client.Button);
+                client.Peer.Send(writer, DeliveryMethod.Unreliable);
+            }
         }
+
 
         private void onNetworkReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
         {
-            throw new NotImplementedException();
+            ClientData clientData = r_Clients.Find(client => client.Peer == i_Peer);
+            clientData.Button = i_Reader.GetInt();
+
+            i_Reader.Recycle();
         }
 
         private void onPeerDisconnected(NetPeer i_Peer, DisconnectInfo i_Disconnectinfo)
@@ -49,16 +61,12 @@ namespace GameRoomServer
 
         private void onPeerConnected(NetPeer i_Peer)
         {
-
+            r_Clients.Add(new ClientData(i_Peer));
         }
 
         private void onConnectionRequest(ConnectionRequest i_Request)
         {
-            if (r_Clients.Count == 0)
-            {
-                r_Timer.Start();
-            }
-            r_Clients.Add(i_Request.Accept());
+            i_Request.AcceptIfKey("myKey");
         }
     }
 }
