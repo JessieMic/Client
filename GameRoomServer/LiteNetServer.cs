@@ -10,6 +10,7 @@ namespace GameRoomServer
         private static readonly EventBasedNetListener sr_NetListener = new EventBasedNetListener();
         private readonly NetManager r_NetManager = new NetManager(sr_NetListener);
         private readonly List<ClientData> r_Clients = new List<ClientData>();
+        private readonly ILogger<LiteNetServer> r_Logger;
         //private readonly Timer r_Timer = new System.Timers.Timer(15);
 
         private int m_TimerCounts = 0;
@@ -27,36 +28,61 @@ namespace GameRoomServer
 
         public void Run()
         {
-            while(true)
+            while (true)
             {
                 r_NetManager.PollEvents();
-                updateClients();
-                Thread.Sleep(15);
+                if (r_Clients.Count > 0)
+                {
+                    updateClients();
+                }
+                Thread.Sleep(700);
+                //Console.WriteLine($"sent: {r_Clients.ToString()}");
             }
         }
 
         private void updateClients()
         {
-            foreach(ClientData client in r_Clients)
+            NetDataWriter writer = new();
+            foreach (ClientData data in r_Clients)
             {
-                NetDataWriter writer = new();
-                writer.Put(client.Button);
-                client.Peer.Send(writer, DeliveryMethod.Unreliable);
+                writer.Put(data.PlayerNumber);
+                writer.Put(data.Button);
+            }
+
+            foreach(ClientData data in r_Clients)
+            {
+                Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
+            }
+            foreach (ClientData client in r_Clients)
+            {
+                client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
             }
         }
 
 
         private void onNetworkReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
         {
-            ClientData clientData = r_Clients.Find(client => client.Peer == i_Peer);
-            clientData.Button = i_Reader.GetInt();
+            if(r_Clients.Exists(client => client.Peer == i_Peer))
+            {
+                ClientData clientData = r_Clients.Find(client => client.Peer == i_Peer);
+                if(clientData != null)
+                {
+                    clientData.PlayerNumber = i_Reader.GetInt();
+                    clientData.Button = i_Reader.GetInt();
+                }
+            }
+            //int playerIndex = i_Reader.GetInt();
+            //int button = i_Reader.GetInt();
+            //ClientData clientData = r_Clients.Find(client => client.PlayerNumber == i_Reader.GetInt());
+            //clientData.Button = i_Reader.GetInt();
+            //r_Clients.Find(client => client.PlayerNumber == playerIndex).Button = button;
 
             i_Reader.Recycle();
         }
 
         private void onPeerDisconnected(NetPeer i_Peer, DisconnectInfo i_Disconnectinfo)
         {
-            throw new NotImplementedException();
+
         }
 
         private void onPeerConnected(NetPeer i_Peer)
