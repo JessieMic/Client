@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using LogicUnit.Logic.GamePageLogic.Games;
 //using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
@@ -78,6 +79,7 @@ namespace LogicUnit
                 inc = 1;
             }
 
+            (SnakeObject)m_PlayerGameObjects[1].ge
             if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Row == eRowPosition.LowerRow)
             {
                 point.m_Row = m_BoardSize.m_Height - 2;
