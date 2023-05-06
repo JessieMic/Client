@@ -19,7 +19,7 @@ namespace LogicUnit
         public Size m_Boundaries;//Boundaries in case of an uneven amount of players
         private int m_MinimumLeftColumn;
         private int m_MinimumUpperRow;
-        List<Size> m_PlayerGameBoardScreenSize = new List<Size>();
+        public List<Size> m_PlayerGameBoardScreenSize = new List<Size>();
         
         public Size m_MovementButtonSize = new Size(35, 35);
         public int m_GameBoardGridSize = 35;

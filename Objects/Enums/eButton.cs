@@ -11,7 +11,8 @@ namespace Objects.Enums
         Up,
         Down,
         Left,
-        Right
+        Right,
+        Menu
         //Add more buttons in the future for shooting etc
     }
 }

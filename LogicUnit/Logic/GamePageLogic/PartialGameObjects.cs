@@ -27,7 +27,8 @@ namespace LogicUnit
         {
             m_Buttons.m_MovementButtonSize = m_ScreenMapping.m_MovementButtonSize;
             m_Buttons.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
-           
+            m_Buttons.m_ClientScreenSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked-1];
+                                              
             m_Buttons.GetGameButtons(ref m_GameObjectsToAdd);
         }
 

@@ -12,12 +12,14 @@ namespace Objects
         public Size m_MovementButtonSize = new Size(35,35);
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<eButton> m_Buttons = new List<eButton>();
+        public Size m_ClientScreenSize = new Size();
         public void GetGameButtons(ref List<GameObject> i_GameObjectsToAdd)
         {
             m_Buttons.Add(eButton.Right);
             m_Buttons.Add(eButton.Down);
             m_Buttons.Add(eButton.Left);
             m_Buttons.Add(eButton.Up);
+            m_Buttons.Add(eButton.Menu);
 
 
             foreach (var button in m_Buttons)
@@ -39,41 +41,20 @@ namespace Objects
 
         }
 
-        //protected void addBasicGameButtons(ref List<GameObject> i_GameObjectsToAdd)
-        //{
-        //    m_Buttons.Add(eButton.Right);
-        //    m_Buttons.Add(eButton.Down);
-        //    m_Buttons.Add(eButton.Left);
-        //    m_Buttons.Add(eButton.Up);
-
-                           
-
-        //    //returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), m_MovementButtonSize, string.Empty, null,0));
-        //    //returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), m_MovementButtonSize, string.Empty, null,0));
-        //    //returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Down, getButtonPoint(eButton.Down), m_MovementButtonSize, string.Empty, null, 0));
-        //    //returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Up, getButtonPoint(eButton.Up), m_MovementButtonSize, string.Empty, null, 0));
-
-           
-
-        //    foreach(var button in m_Buttons)
-        //    {
-        //        GameObject newButton = new GameObject();
-
-        //        i_GameObjectsToAdd.Add(newButton.Initialize(eScreenObjectType.Button,));
-
-        //        i_GameObjectsToAdd.Add(newButton.Initialize(eScreenObjectType.Button, eButton.Right, generatePngString(eButton.Right)
-        //            , getButtonPoint(eButton.Right), GameSettings.m_GameBoardGridSize, GameSettings.m_MovementButtonSize, getValuesToAdd(eButton.Right));
-        //    }
-        //    List<GameObject> gameObjects = new List<GameObject>();
-            
-            
-        //}
-
         private Point getValuesToAdd(eButton i_Button)
         { 
-            Point values = new Point(10,10);
+            Point values = new Point();
 
-            return values;
+            if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            {
+                values = new Point(10, 10);
+            }
+            else
+            {
+                values.m_Column = 10;
+                values.m_Row = m_ClientScreenSize.m_Height*35+10;
+            }
+                return values;
         }
 
         protected string generatePngString(eButton i_Button)
@@ -87,54 +68,53 @@ namespace Objects
 
         private Point getButtonPoint(eButton i_Type)
         {
-            Point returnPoint = new Point();
-            //int space = GameSettings.m_SpacingAroundButtons;///m_GameSettings.m_SpacingAroundButtons;
-            //Size buttonSize = GameSettings.m_GameBoardGridSize;//gam_GameSettings.m_MovementButtonSize;
+            Point returnPoint = new Point(1,1);
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 if (i_Type == eButton.Down)
                 {
                     returnPoint.SetAndGetPoint(1, 2);
-                    //returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space + 2 * buttonSize.m_Height);
                 }
                 else if (i_Type == eButton.Up)
                 {
                     returnPoint.SetAndGetPoint(1, 0);
-                    //returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space);
                 }
                 else if (i_Type == eButton.Left)
                 {
-                    returnPoint.SetAndGetPoint(0,1);
-                    //returnPoint.SetAndGetPoint(space, space + buttonSize.m_Height);
+                    returnPoint.SetAndGetPoint(0, 1);
+                }
+                else if(i_Type == eButton.Right) 
+                {
+                    returnPoint.SetAndGetPoint(2, 1);
                 }
                 else
                 {
-                    returnPoint.SetAndGetPoint(2, 1);
-                    //returnPoint.SetAndGetPoint(space + 2 * buttonSize.m_Width, space + buttonSize.m_Height);
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 1, 0);
                 }
             }
             else
             {
-                returnPoint.SetAndGetPoint(1, 2);
-                //int screenWidth = m_ClientScreenDimension.Size.m_Width;
-                //int screenHeight = m_ClientScreenDimension.Size.m_Height;
-                //if (i_Type == eButton.Up)
-                //{
-                //    returnPoint.SetAndGetPoint(screenWidth - (space + 2 * buttonSize.m_Width), screenHeight - (space + 3 * buttonSize.m_Height));
-                //}
-                //else if (i_Type == eButton.Down)
-                //{
-                //    returnPoint.SetAndGetPoint(screenWidth - (space + 2 * buttonSize.m_Width), screenHeight - (space + buttonSize.m_Height));
-                //}
-                //else if (i_Type == eButton.Right)
-                //{
-                //    returnPoint.SetAndGetPoint(screenWidth - (space + buttonSize.m_Width), screenHeight - (space + 2 * buttonSize.m_Height));
-                //}
-                //else
-                //{
-                //    returnPoint.SetAndGetPoint(screenWidth - (space + 3 * buttonSize.m_Width), screenHeight - (space + 2 * buttonSize.m_Height));
-                //}
+                if (i_Type == eButton.Up)
+                {
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 0);
+                }
+                else if (i_Type == eButton.Down)
+                {
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 2);
+                }
+                else if (i_Type == eButton.Right)
+                {
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 1, 1);
+                }
+                else if(i_Type == eButton.Left)
+                {
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 3, 1);
+                }
+                else
+                {
+                    returnPoint.SetAndGetPoint(0, 2);
+                }
             }
             return returnPoint;
         }

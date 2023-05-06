@@ -50,6 +50,18 @@ namespace Objects
             m_Size = i_Size;
         }
 
+        public void set(GameObject i_GameObject)
+        {
+            m_PointsOnGrid = i_GameObject.m_PointsOnGrid;
+            m_PointsOnScreen = i_GameObject.m_PointsOnScreen;
+            m_ImageSources = i_GameObject.m_ImageSources;
+            m_ObjectNumber = i_GameObject.m_ObjectNumber;
+            m_ScreenObjectType = i_GameObject.m_ScreenObjectType;
+            m_GameBoardGridSize = i_GameObject.m_GameBoardGridSize;
+            m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
+            m_Size = i_GameObject.m_Size;
+        }
+
         public void SetObject(string i_Image, Point i_Point)
         {
             m_PointsOnGrid.Add(i_Point);
