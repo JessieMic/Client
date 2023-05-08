@@ -27,22 +27,29 @@ public partial class GamePage : ContentPage
         m_Game = m_GameLibrary.CreateAGame(eGames.Snake);//m_GameInformation.m_NameOfGame);
         initializeEvents();
         initializeGame();
+        
     }
 
     private void initializeGame()
     {
+        //Application.Current.Dispatcher.Dispatch(async () =>
+        //    {
+
+        //        gridLayout.Add(m_Game.a);
+        //    });
         m_Game.InitializeGame();
         for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
         {
             m_PlayerObjects.Add(new List<Image>());
         }
+        
     }
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
             {
-
+                //gridLayout.Add(m_Game.a);
                 foreach (var gameObject in i_GameObjectsToAdd)
                 {
                     if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)

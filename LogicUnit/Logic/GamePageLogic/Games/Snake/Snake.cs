@@ -23,6 +23,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             m_GameName = "Snake";
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_TypeOfGameButtons = eTypeOfGameButtons.MovementButtonsForAllDirections;
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
         }
 
         public override async void RunGame()
@@ -213,6 +214,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
                     if (hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
                     {
+                        //a.Opacity = 64;
                         PlayerGotHit(player);
                     }
 

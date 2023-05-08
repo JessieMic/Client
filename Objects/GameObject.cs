@@ -23,6 +23,7 @@ namespace Objects
         public Direction m_Direction = Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;
+        public List<Image> m_Images = new List<Image>();
         public Size m_Size = new Size(35,35);
 
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
@@ -48,7 +49,17 @@ namespace Objects
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
             m_Size = i_Size;
+            Image image = new Image();
+            image.TranslationX = m_PointsOnScreen[0].m_Column;
+            image.TranslationY = m_PointsOnScreen[0].m_Row;
+            image.WidthRequest = m_Size.m_Width;
+            image.HeightRequest =m_Size.m_Height;
         }
+
+        //public List<Image> GetImages()
+        //{
+
+        //}
 
         public void set(GameObject i_GameObject)
         {

@@ -21,7 +21,7 @@ namespace LogicUnit.Logic.GamePageLogic
         {
             m_GameStatus = i_Status;
             m_LoseOrder = i_LoseList;
-            m_AmountOfPlayersThatAreAlive = i_AmountOfPlayers;
+            m_AmountOfPlayers = m_AmountOfPlayersThatAreAlive = i_AmountOfPlayers;
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
                 m_AmountOfLivesPlayerHas[i] = m_AmountOfLivesPlayersGetAtStart;

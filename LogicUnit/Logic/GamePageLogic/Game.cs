@@ -53,11 +53,17 @@ namespace LogicUnit
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate =new List<GameObject>();
 
+
+        public Game()
+        {
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
+            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder);
+        }
         public void InitializeGame()
         {
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
             m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
-            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers,ref m_GameStatus, ref m_LoseOrder);
+            
 
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
