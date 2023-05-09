@@ -19,8 +19,8 @@ namespace LogicUnit
     {
         //Events
         public event EventHandler<List<Image>> AddGameObjectList;
-        public event EventHandler<List<GameObject>> GameObjectsUpdate;
-        public event EventHandler<GameObject> GameObjectToDelete;
+        //public event EventHandler<List<GameObject>> GameObjectsUpdate;
+        //public event EventHandler<GameObject> GameObjectToDelete;
 
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
@@ -50,9 +50,7 @@ namespace LogicUnit
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
         //List for Ui changes
-        public List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         public List<Image> m_GameImagesToAdd = new List<Image>();
-        public List<GameObject> m_gameObjectsToUpdate =new List<GameObject>();
 
         public Game()
         {
@@ -187,15 +185,10 @@ namespace LogicUnit
 
         }
 
-        protected void OnDeleteGameObject(GameObject i_ObjectToDelete)
-        {
-            GameObjectToDelete.Invoke(this, i_ObjectToDelete);
-        }
-
-        protected void OnUpdateScreenObject()
-        {
-            GameObjectsUpdate.Invoke(this,m_gameObjectsToUpdate);
-        }
+        //protected void OnDeleteGameObject(GameObject i_ObjectToDelete)
+        //{
+        //    GameObjectToDelete.Invoke(this, i_ObjectToDelete);
+        //}
 
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player)
         {
@@ -212,18 +205,7 @@ namespace LogicUnit
             }
         }
 
-        protected void addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version, bool i_ToCombine)
-        {
-            string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-            GameObject gameObject = new GameObject();
-
-            gameObject.Initialize(i_Type,i_ObjectNumber,png,i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-
-            m_GameImagesToAdd.Add(gameObject.m_Images[0]);
-            m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
-        }
-
-        protected GameObject addGameBoardObject_(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
+        protected GameObject addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
         {
             string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
             GameObject gameObject = new GameObject();

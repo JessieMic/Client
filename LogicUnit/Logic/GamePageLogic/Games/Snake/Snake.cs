@@ -37,10 +37,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             {
                 await Task.Delay(400);
 
-                m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameImagesToAdd = new List<Image>();
                 moveSnakes();
-                //OnUpdateScreenObject();
                 updateSnake();
                 if (m_GameImagesToAdd.Count != 0)
                 {
@@ -101,7 +99,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             while (point.m_Column != until)
             {
                 i++;
-                GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2, "body");
+                GameObject gameObject = addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player + 2, "body");
                 if (!toCombine)
                 {
                     snake.set(gameObject);
@@ -121,7 +119,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             List<Point> emptyPositions = getEmptyPositions();
             Point randomPoint = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
 
-            m_food.set(addGameBoardObject_(
+            m_food.set(addGameBoardObject(
                 eScreenObjectType.Object, randomPoint, 1, (int)eBoardObjectSnake.Food,
                 eBoardObjectSnake.Food.ToString()));
         }
@@ -129,7 +127,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             m_food.PopPoint();
             m_food.AddPointTop(i_Point);
-            m_gameObjectsToUpdate.Add(m_food);
+            m_food.update();
+            //m_gameObjectsToUpdate.Add(m_food);
             m_Board[i_Point.m_Column, i_Point.m_Row] = (int)eBoardObjectSnake.Food;
         }
 
@@ -232,7 +231,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         snake.addHead(newHeadPoint);
 
 
-                        snake.CombineGameObjects(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player, "body"));
+                        snake.CombineGameObjects(addGameBoardObject(eScreenObjectType.Player, newHeadPoint, player, player, "body"));
                         //score ++
 
                         if (m_Player.ButtonThatPlayerPicked == 1)
@@ -240,7 +239,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                             getNewPointForFood();
                         }
                     }
-                    m_gameObjectsToUpdate.Add(snake);
                 }
                 player++;
             }
@@ -248,7 +246,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         private void PlayerGotHit(int i_Player)
         {
-            OnDeleteGameObject(m_PlayersSnakes[i_Player-1]);
+            //OnDeleteGameObject(m_PlayersSnakes[i_Player-1]);
             PlayerLostALife(i_Player);//general ui update
         }
     }

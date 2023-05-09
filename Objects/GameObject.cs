@@ -88,7 +88,6 @@ namespace Objects
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Image);
-          
         }
 
         public void CombineGameObjects(GameObject i_GameObject)
@@ -123,6 +122,24 @@ namespace Objects
         {
             m_PointsOnGrid.Insert(0, i_Point);
             m_PointsOnScreen.Insert(0, getScreenPoint(i_Point));
+        }
+
+        public Point GetOneMoveAhead()
+        {
+            return m_PointsOnGrid.First().Move(m_Direction);
+        }
+
+        public void MoveToPoint(Point i_Point)
+        {
+            m_PointsOnGrid[0]=i_Point;
+            Point point = getScreenPoint(i_Point);
+            m_PointsOnScreen[0] = point;
+            update();
+        }
+
+        public void MoveSameDirection()
+        {
+            MoveToPoint(GetOneMoveAhead());
         }
 
         public void PopPoint()
