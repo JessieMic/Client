@@ -13,7 +13,7 @@ namespace Objects
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<eButton> m_Buttons = new List<eButton>();
         public Size m_ClientScreenSize = new Size();
-        public void GetGameButtons(ref List<GameObject> i_GameObjectsToAdd)
+        public void GetGameButtons(ref List<Image> i_GameObjectsToAdd)
         {
             m_Buttons.Add(eButton.Right);
             m_Buttons.Add(eButton.Down);
@@ -32,7 +32,7 @@ namespace Objects
                     35,
                     m_MovementButtonSize,
                     getValuesToAdd(button));
-                i_GameObjectsToAdd.Add(newButton);
+                i_GameObjectsToAdd.Add(newButton.m_Images[0]);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Objects
         {
             string png;
 
-            png = i_Button.ToString() + "button" + ".png";
+            png = "upbutton.png";// i_Button.ToString() + "button" + ".png";
 
             return png.ToLower();
         }

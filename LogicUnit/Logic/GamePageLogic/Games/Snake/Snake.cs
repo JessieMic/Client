@@ -35,16 +35,25 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             while (m_GameStatus == eGameStatus.Running)
             {
-                await Task.Delay(500);
+                await Task.Delay(400);
 
                 m_gameObjectsToUpdate = new List<GameObject>();
-                m_GameObjectsToAdd = new List<GameObject>();
+                m_GameImagesToAdd = new List<Image>();
                 moveSnakes();
-                OnUpdateScreenObject();
-                if (m_GameObjectsToAdd.Count != 0)
+                //OnUpdateScreenObject();
+                updateSnake();
+                if (m_GameImagesToAdd.Count != 0)
                 {
                     OnAddScreenObjects();
                 }
+            }
+        }
+
+        private void updateSnake()
+        {
+            foreach(var snake in m_PlayersSnakes)
+            {
+                snake.update();
             }
         }
 
@@ -88,8 +97,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 point.m_Row = m_BoardSize.m_Height - 2;
             }
 
+            int i = 0;
             while (point.m_Column != until)
             {
+                i++;
                 GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2, "body");
                 if (!toCombine)
                 {
@@ -203,19 +214,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             {
                 if (m_Hearts.m_AmountOfLivesPlayerHas[player - 1] > 0 && snake.m_Direction != Direction.Stop)
                 {
-                    if (m_DirectionsBuffer[player - 1].Count > 0)
-                    {
-                        m_PlayersSnakes[player - 1].m_Direction = m_DirectionsBuffer[player - 1].First();
-                        m_DirectionsBuffer[player - 1].RemoveAt(0);
-                    }
-
                     Point newHeadPoint = snake.GetOneMoveAhead();
                     int hit = snake.whatSnakeWillHit(newHeadPoint, isPointOnBoard(newHeadPoint));
 
                     if (hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
                     {
-                        //a.Opacity = 64;
-                        PlayerGotHit(player);
+                        //PlayerGotHit(player);
                     }
 
                     else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
@@ -249,3 +253,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         }
     }
 }
+
+//if (m_DirectionsBuffer[player - 1].Count > 0)
+//{
+//    m_PlayersSnakes[player - 1].m_Direction = m_DirectionsBuffer[player - 1].First();
+//    m_DirectionsBuffer[player - 1].RemoveAt(0);
+//}

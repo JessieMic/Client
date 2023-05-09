@@ -45,23 +45,47 @@ public partial class GamePage : ContentPage
         
     }
 
-    public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
+    public void addGameObjects(object sender, List<Image> i_GameObjectsToAdd)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
             {
                 //gridLayout.Add(m_Game.a);
-                foreach (var gameObject in i_GameObjectsToAdd)
+                foreach (var image in i_GameObjectsToAdd)
                 {
-                    if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+                    if(image.ClassId != String.Empty)
                     {
-                        addButton(gameObject);
+                        addButton(image);
                     }
-                    else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                    else
                     {
-                        addImage(gameObject);
+                        gridLayout.Add(image);
                     }
+                    
+                    //if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+                    //{
+                    //    addButton(gameObject);
+                    //}
+                    //else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                    //{
+                    //    gridLayout.Add(gameObject.m_Images[0]);
+                    //    //addImage(gameObject);
+                    //}
                 }
             });
+    }
+
+    private void addButton(Image i_button)
+    {
+        Button button = new Button();
+        button.ClassId = i_button.ClassId;//.m_ButtonType.ToString();//.m_KindOfButton.ToString();
+        button.HeightRequest = i_button.HeightRequest;//i_ButtonToAdd.m_Size.m_Height;
+        button.WidthRequest = i_button.WidthRequest;//i_ButtonToAdd.m_Size.m_Width;
+        button.TranslationX = i_button.TranslationX;
+        button.TranslationY = i_button.TranslationY;
+        button.CornerRadius = 70;
+        gridLayout.Add(button);
+        //button.TranslateTo(i_ButtonToAdd.m_PointsOnScreen[0].m_Column, i_ButtonToAdd.m_PointsOnScreen[0].m_Row);
+        button.Clicked += m_Game.OnButtonClicked;
     }
 
     private void addImage(GameObject i_GameObjectToAdd)
@@ -103,46 +127,36 @@ public partial class GamePage : ContentPage
         }
     }
 
-    private void addButton(GameObject i_ButtonToAdd)
-    {
-        Button button = new Button();
-        button.ClassId = i_ButtonToAdd.m_ButtonType.ToString();//.m_KindOfButton.ToString();
-        button.HeightRequest = i_ButtonToAdd.m_Size.m_Height;
-        button.WidthRequest = i_ButtonToAdd.m_Size.m_Width;
-        button.CornerRadius = 70;
-        gridLayout.Add(button);
-        button.TranslateTo(i_ButtonToAdd.m_PointsOnScreen[0].m_Column, i_ButtonToAdd.m_PointsOnScreen[0].m_Row);
-        button.Clicked += m_Game.OnButtonClicked;
-    }
+    
 
     private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
             {
-                foreach (var screenObject in i_ObjectUpdates)
-                {
-                    int i = 0;
-                    if (screenObject.m_ScreenObjectType == eScreenObjectType.Player)
-                    {
-                        foreach (var playerObject in m_PlayerObjects[screenObject.m_ObjectNumber - 1])
-                        {
-                            //playerObject.Source = screenObject.m_ImageSources[i];
-                            //playerObject.TranslateTo(
-                            //    screenObject.m_NewPositions[i].m_Column,
-                            //    screenObject.m_NewPositions[i].m_Row);
-                            playerObject.TranslationX = screenObject.m_PointsOnScreen[i].m_Column;//m_NewPositions[i].m_Column;
-                            playerObject.TranslationY = screenObject.m_PointsOnScreen[i].m_Row;//.m_NewPositions[i].m_Row;
-                            i++;
-                        }
-                    }
-                    else
-                    {
-                        m_GameObjects[screenObject.m_ObjectNumber - 1].Source = screenObject.m_ImageSources[i];
-                        m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;//.m_NewPositions[i].m_Column;
-                        m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
-                        ;//.m_NewPositions[i].m_Row;
-                    }
-                }
+                //foreach (var screenObject in i_ObjectUpdates)
+                //{
+                //    int i = 0;
+                //    if (screenObject.m_ScreenObjectType == eScreenObjectType.Player)
+                //    {
+                //        foreach (var playerObject in m_PlayerObjects[screenObject.m_ObjectNumber - 1])
+                //        {
+                //            //playerObject.Source = screenObject.m_ImageSources[i];
+                //            //playerObject.TranslateTo(
+                //            //    screenObject.m_NewPositions[i].m_Column,
+                //            //    screenObject.m_NewPositions[i].m_Row);
+                //            playerObject.TranslationX = screenObject.m_PointsOnScreen[i].m_Column;//m_NewPositions[i].m_Column;
+                //            playerObject.TranslationY = screenObject.m_PointsOnScreen[i].m_Row;//.m_NewPositions[i].m_Row;
+                //            i++;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        m_GameObjects[screenObject.m_ObjectNumber - 1].Source = screenObject.m_ImageSources[i];
+                //        m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;//.m_NewPositions[i].m_Column;
+                //        m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                //        ;//.m_NewPositions[i].m_Row;
+                //    }
+                //}
             });
     }
 

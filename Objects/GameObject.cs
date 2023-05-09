@@ -36,6 +36,15 @@ namespace Objects
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
+            Image image = new Image();
+            image.TranslationX = m_PointsOnScreen[0].m_Column;
+            image.TranslationY = m_PointsOnScreen[0].m_Row;
+            image.WidthRequest = m_Size.m_Width;
+            image.HeightRequest = m_Size.m_Height;
+            image.Source = m_ImageSources[0];
+            image.Aspect = Aspect.AspectFill;
+            image.ClassId = String.Empty;
+            m_Images.Add(image);
         }
 
         public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
@@ -54,12 +63,11 @@ namespace Objects
             image.TranslationY = m_PointsOnScreen[0].m_Row;
             image.WidthRequest = m_Size.m_Width;
             image.HeightRequest =m_Size.m_Height;
+            image.Source = m_ImageSources[0];
+            image.Aspect = Aspect.AspectFill;
+            image.ClassId = m_ButtonType.ToString();
+            m_Images.Add(image);
         }
-
-        //public List<Image> GetImages()
-        //{
-
-        //}
 
         public void set(GameObject i_GameObject)
         {
@@ -71,6 +79,7 @@ namespace Objects
             m_GameBoardGridSize = i_GameObject.m_GameBoardGridSize;
             m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
             m_Size = i_GameObject.m_Size;
+            m_Images = i_GameObject.m_Images;
         }
 
         public void SetObject(string i_Image, Point i_Point)
@@ -79,7 +88,7 @@ namespace Objects
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Image);
-            //i_ScreenObject.m_Point = point;
+          
         }
 
         public void CombineGameObjects(GameObject i_GameObject)
@@ -87,6 +96,7 @@ namespace Objects
             m_PointsOnGrid.Add(i_GameObject.m_PointsOnGrid[0]);
             m_PointsOnScreen.Add(i_GameObject.m_PointsOnScreen[0]);
             m_ImageSources.Add(i_GameObject.m_ImageSources[0]);
+            m_Images.Add(i_GameObject.m_Images[0]);
         }
 
 
@@ -98,6 +108,15 @@ namespace Objects
             point.m_Column = point.m_Column * m_GameBoardGridSize + m_ValuesToAdd.m_Column;
             point.m_Row = point.m_Row * m_GameBoardGridSize + m_ValuesToAdd.m_Row;
             return point;
+        }
+
+        public void update()
+        {
+            for(int i=0; i< m_Images.Count; i++)
+            {
+                m_Images[i].TranslationX = m_PointsOnScreen[i].m_Column;
+                m_Images[i].TranslationY = m_PointsOnScreen[i].m_Row;
+            }
         }
 
         public void AddPointTop(Point i_Point)

@@ -18,7 +18,7 @@ namespace LogicUnit
     public abstract partial class Game
     {
         //Events
-        public event EventHandler<List<GameObject>> AddGameObjectList;
+        public event EventHandler<List<Image>> AddGameObjectList;
         public event EventHandler<List<GameObject>> GameObjectsUpdate;
         public event EventHandler<GameObject> GameObjectToDelete;
 
@@ -50,9 +50,9 @@ namespace LogicUnit
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
         //List for Ui changes
-        protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
-        protected List<GameObject> m_gameObjectsToUpdate =new List<GameObject>();
-
+        public List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
+        public List<Image> m_GameImagesToAdd = new List<Image>();
+        public List<GameObject> m_gameObjectsToUpdate =new List<GameObject>();
 
         public Game()
         {
@@ -64,7 +64,6 @@ namespace LogicUnit
             m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
             m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
             
-
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 m_DirectionsBuffer.Add(new List<Direction>());
@@ -74,7 +73,7 @@ namespace LogicUnit
 
         protected virtual void OnAddScreenObjects()
         {
-            AddGameObjectList.Invoke(this,m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
+            AddGameObjectList.Invoke(this,m_GameImagesToAdd); //..Invoke(this, i_ScreenObject));
         }
 
         public bool SetAmountOfPlayers(int i_amountOfPlayers)//for when you want to get ready in lobby 
@@ -220,31 +219,7 @@ namespace LogicUnit
 
             gameObject.Initialize(i_Type,i_ObjectNumber,png,i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
 
-            if (i_Type == eScreenObjectType.Player)
-            {
-                if(i_ToCombine == false)
-                {
-                    //m_PlayerGameObjects.Add(gameObject);
-                }
-                else
-                {
-                   // m_PlayerGameObjects[i_ObjectNumber - 1].CombineGameObjects(gameObject);
-                }
-            }
-            else
-            {
-                if (i_ToCombine == false)
-                {
-                   // m_gameObjects.Add(gameObject);
-                }
-                else
-                {
-                    //m_gameObjects[i_ObjectNumber -1].CombineGameObjects(gameObject);
-                }
-                
-            }
-            
-            m_GameObjectsToAdd.Add(gameObject);
+            m_GameImagesToAdd.Add(gameObject.m_Images[0]);
             m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
         }
 
@@ -255,31 +230,7 @@ namespace LogicUnit
 
             gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
 
-            //if (i_Type == eScreenObjectType.Player)
-            //{
-            //    if (i_ToCombine == false)
-            //    {
-            //        //m_PlayerGameObjects.Add(gameObject);
-            //    }
-            //    else
-            //    {
-            //        //m_PlayerGameObjects[i_ObjectNumber - 1].CombineGameObjects(gameObject);
-            //    }
-            //}
-            //else
-            //{
-            //    if (i_ToCombine == false)
-            //    {
-            //      //  m_gameObjects.Add(gameObject);
-            //    }
-            //    else
-            //    {
-            //       // m_gameObjects[i_ObjectNumber - 1].CombineGameObjects(gameObject);
-            //    }
-
-           // }
-
-            m_GameObjectsToAdd.Add(gameObject);
+            m_GameImagesToAdd.Add(gameObject.m_Images[0]);
             m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
 
             return gameObject;
@@ -310,6 +261,7 @@ namespace LogicUnit
         {
 
         }
+
         public virtual async void RunGame()
         {
 
