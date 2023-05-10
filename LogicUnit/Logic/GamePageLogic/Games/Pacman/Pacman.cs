@@ -19,7 +19,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             m_GameName = "Snake";
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 3;
-            m_TypeOfGameButtons = eTypeOfGameButtons.MovementButtonsForAllDirections;
+            m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
         }
 

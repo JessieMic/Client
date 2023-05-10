@@ -13,6 +13,7 @@ namespace LogicUnit.Logic.GamePageLogic
         public int m_AmountOfLivesPlayersGetAtStart = 3;
         public int m_AmountOfPlayersThatAreAlive;
         public int m_AmountOfPlayers;
+        public int m_ClientNumber; 
 
         public eGameStatus m_GameStatus;
         public List<string> m_LoseOrder;
@@ -26,6 +27,40 @@ namespace LogicUnit.Logic.GamePageLogic
             {
                 m_AmountOfLivesPlayerHas[i] = m_AmountOfLivesPlayersGetAtStart;
             }
+        }
+
+        public eGameStatus setPlayerLifeAndGetGameStatus(int i_Player)
+        {
+            eGameStatus returnStatus = eGameStatus.Running;
+            bool isGameRunning = false;
+
+            m_AmountOfLivesPlayerHas[i_Player - 1]--;
+
+            if (i_Player == m_ClientNumber)
+            {
+                removeAHeart();
+            }
+
+            if (m_AmountOfLivesPlayerHas[i_Player - 1] == 0)
+            {
+                m_AmountOfPlayersThatAreAlive--;
+
+                if (m_AmountOfPlayersThatAreAlive > 1)//Player lost but game is still running
+                {
+                    returnStatus = eGameStatus.Lost;
+                }
+                else//only one player is alive so the game has ended 
+                {
+                    returnStatus = eGameStatus.Ended;
+                }
+            }
+
+            return returnStatus;
+        }
+
+        private void removeAHeart()
+        {
+
         }
     }
 }

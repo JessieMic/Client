@@ -31,14 +31,14 @@ namespace LogicUnit
         protected Size m_BoardSize = new Size();
 
         //Need to initialize each different game
-        protected eTypeOfGameButtons m_TypeOfGameButtons;
         //protected int[] m_AmountOfLivesPlayerHas = new int[4];
         //protected int m_AmountOfLivesPlayersGetAtStart = 3;
         protected string m_GameName;
+        protected ScoreBoard m_scoreBoard = new ScoreBoard();
+        protected Hearts m_Hearts = new Hearts();
 
         //Things that might change while playing 
         protected int[,] m_Board;
-        protected Hearts m_Hearts = new Hearts();
         protected int m_AmountOfActivePlayers;
         //protected int m_AmountOfPlayersThatAreAlive;
         public eGameStatus m_GameStatus = eGameStatus.Running;
@@ -80,6 +80,7 @@ namespace LogicUnit
             {
                 m_GameInformation.AmountOfPlayers = i_amountOfPlayers;
                 m_AmountOfActivePlayers = i_amountOfPlayers;
+                m_Hearts.m_ClientNumber = m_Player.ButtonThatPlayerPicked;
                 return true;
             }
             else
@@ -88,37 +89,22 @@ namespace LogicUnit
             }
         }
 
-        protected eGameStatus PlayerLostALife(int i_Player)
+        protected void PlayerLostALife(int i_Player)
         {
-            eGameStatus returnStatus = eGameStatus.Running;
-            bool isGameRunning = false;
+            m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
 
-            m_Hearts.m_AmountOfLivesPlayerHas[i_Player - 1]--;
-
-            if (i_Player == m_Player.ButtonThatPlayerPicked)
+            if(m_GameStatus != eGameStatus.Running)
             {
-                //Add a function here that tells the UI to take a heart away
-            }
-
-            if (m_Hearts.m_AmountOfLivesPlayerHas[i_Player - 1] == 0)
-            {
-                m_Hearts.m_AmountOfPlayersThatAreAlive--;
-
-                if (m_Hearts.m_AmountOfPlayersThatAreAlive > 1)//Only player lost but game is still running
+                m_scoreBoard.m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player-1]);
+                if(m_GameStatus == eGameStatus.Lost)
                 {
-                    returnStatus = eGameStatus.Lost;
-                    m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player]);
-                    gameStatusUpdate(returnStatus);
+                    gameStatusUpdate();//Will show client that he lost 
                 }
-                else//only one player is alive so the game has ended 
+                else //Game has ended 
                 {
-                    returnStatus = eGameStatus.Ended;
-                    m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player]);
-                    showScoreBoard();
+                    m_scoreBoard.ShowScoreBoard();
                 }
             }
-
-            return returnStatus;
         }
 
         protected void showScoreBoard()
@@ -126,7 +112,7 @@ namespace LogicUnit
 
         }
 
-        protected void gameStatusUpdate(eGameStatus i_Status)
+        protected void gameStatusUpdate()
         {
             //send ui to show defeated
         }

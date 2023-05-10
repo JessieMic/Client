@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Objects.Enums
+namespace LogicUnit.Logic.GamePageLogic
 {
-    public enum eTypeOfGameMovementButtons
+    internal class Menu
     {
-        AllDirections,
-        RightAndLeft
     }
 }

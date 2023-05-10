@@ -22,8 +22,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             m_GameName = "Snake";
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
-            m_TypeOfGameButtons = eTypeOfGameButtons.MovementButtonsForAllDirections;
+            m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
+            m_Buttons.m_AmountOfExtraButtons = 2;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
+            m_scoreBoard.m_ShowScoreBoardByOrder = true;
         }
 
         public override async void RunGame()
