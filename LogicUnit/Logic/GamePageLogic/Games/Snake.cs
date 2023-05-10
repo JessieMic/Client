@@ -94,7 +94,7 @@ namespace LogicUnit
         private void addFood()
         {
             List<Point> emptyPositions = getEmptyPositions();
-            Point randomPoint = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
+            Point randomPoint = emptyPositions[m_RandomPosition.Next(emptyPositions.Count)];
 
             addGameBoardObject(
                 eScreenObjectType.Object, randomPoint, 1, (int)eBoardObjectSnake.Food,
@@ -102,9 +102,9 @@ namespace LogicUnit
         }
         private void updateFoodToNewPoint(Point i_Point)
         {
-            m_gameObjects[0].PopPoint();
-            m_gameObjects[0].AddPointTop(i_Point);
-            m_ScreenObjectUpdate.Add(m_gameObjects[0].GetObjectUpdate());
+            m_GameObjects[0].PopPoint();
+            m_GameObjects[0].AddPointTop(i_Point);
+            m_ScreenObjectUpdate.Add(m_GameObjects[0].GetObjectUpdate());
             m_Board[i_Point.m_Column, i_Point.m_Row] = (int)eBoardObjectSnake.Food;
         }
 
@@ -115,7 +115,7 @@ namespace LogicUnit
 
             if (emptyPositions.Count != 0)
             {
-                point = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
+                point = emptyPositions[m_RandomPosition.Next(emptyPositions.Count)];
             }
             else
             {

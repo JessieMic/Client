@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Logging.AddConsole();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -18,8 +19,9 @@ var app = builder.Build();
 //    app.UseSwaggerUI();
 //}
 LiteNetServer liteNetServer = new LiteNetServer(5555);
-
+new Thread(liteNetServer.Run).Start();
 app.UseHttpsRedirection();
+
 
 app.UseAuthorization();
 

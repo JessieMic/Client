@@ -19,6 +19,7 @@ namespace LogicUnit
     public abstract partial class Game
     {
         private readonly HubConnection r_ConnectionToServer;
+        private readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
         public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
         public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
@@ -34,9 +35,9 @@ namespace LogicUnit
         protected int m_AmountOfActivePlayers;
         protected Buttons m_Buttons = new Buttons();
         protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
-        protected List<GameObject> m_gameObjects = new List<GameObject>();
+        protected List<GameObject> m_GameObjects = new List<GameObject>();
         public eGameStatus m_GameStatus = eGameStatus.Running;
-        protected Random m_randomPosition = new Random();
+        protected Random m_RandomPosition = new Random();
         protected int m_AmountOfLivesPlayersGetAtStart = 3;
         protected int m_AmountOfPlayersThatAreAlive;
         protected List<ScreenObjectUpdate> m_ScreenObjectUpdate;
@@ -47,6 +48,10 @@ namespace LogicUnit
 
         public Game()
         {
+            r_LiteNetClient.Init(2);
+            r_LiteNetClient.ReceivedData += OnUpdatesReceived;
+            r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
+            
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_GameHubAddress)
                 .Build();
@@ -55,22 +60,25 @@ namespace LogicUnit
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    for(int i = 0; i < 2; i++)
+                    for (int i = 0; i < 2; i++)
                     {
-                        ChangeDirection(Direction.getDirection(i_Update[i]), i+1);
+                        ChangeDirection(Direction.getDirection(i_Update[i]), i + 1);
                     }
 
                     gameLoop();
                 });
             });
 
+
             Task.Run(() =>
                 {
                     Application.Current.Dispatcher.Dispatch(async () =>
                     {
-                            await r_ConnectionToServer.StartAsync();
+                        await r_ConnectionToServer.StartAsync();
                     });
                 });
+
+            //r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
         }
 
         public void InitializeGame()
@@ -79,20 +87,25 @@ namespace LogicUnit
             m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
             m_AmountOfPlayersThatAreAlive = m_GameInformation.AmountOfPlayers;
 
+            r_LiteNetClient.ReceivedData += OnUpdatesReceived;
+
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 m_DirectionsBuffer.Add(new List<Direction>());
                 m_AmountOfLivesPlayerHas[i] = m_AmountOfLivesPlayersGetAtStart;
             }
             SetGameScreen();
+
+            r_LiteNetClient.Run();
         }
 
-        public bool SetAmountOfPlayers(int i_amountOfPlayers)//for when you want to get ready in lobby 
+        public bool SetAmountOfPlayers(int i_AmountOfPlayers)//for when you want to get ready in lobby 
         {
-            if(i_amountOfPlayers >= 2 && i_amountOfPlayers <= 4)
+            if(i_AmountOfPlayers is >= 2 and <= 4)
             {
-                m_GameInformation.AmountOfPlayers = i_amountOfPlayers;
-                m_AmountOfActivePlayers = i_amountOfPlayers;
+                m_GameInformation.AmountOfPlayers = i_AmountOfPlayers;
+                m_AmountOfActivePlayers = i_AmountOfPlayers;
+                r_LiteNetClient.Init(i_AmountOfPlayers);
                 return true;
             }
             else
@@ -163,13 +176,8 @@ namespace LogicUnit
 
         protected bool isPointOnBoard(Point i_Point)
         {
-            bool isPointOnTheBoard = true;
-
-            if(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardSize.m_Height || i_Point.m_Column < 0
-               || i_Point.m_Column >= m_BoardSize.m_Width)
-            {
-                isPointOnTheBoard = false;
-            }
+            bool isPointOnTheBoard = !(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardSize.m_Height || i_Point.m_Column < 0
+                                       || i_Point.m_Column >= m_BoardSize.m_Width);
 
             return isPointOnTheBoard;
         }
@@ -220,16 +228,17 @@ namespace LogicUnit
             if (m_GameStatus == eGameStatus.Running)
             {
 
-                SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
+                 SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
                 //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
             }
         }
 
         public async Task SendServerMoveUpdate(eButton i_Button)
         {
-            await r_ConnectionToServer.SendAsync(
-                "MoveUpdate",
-                m_Player.ButtonThatPlayerPicked-1,(int)i_Button);
+            r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked,(int)i_Button);
+            //await r_ConnectionToServer.SendAsync(
+            //    "MoveUpdate",
+            //    m_Player.ButtonThatPlayerPicked-1,(int)i_Button);
         }
 
         protected void addGameBoardObject(eScreenObjectType i_Type,Point i_Point,int i_ObjectNumber,int i_BoardNumber,string i_Version, bool i_ToInitialize)
@@ -247,7 +256,7 @@ namespace LogicUnit
                 }
                 else
                 {
-                    m_gameObjects.Add(gameObject);
+                    m_GameObjects.Add(gameObject);
                 }
             }
 
@@ -259,7 +268,7 @@ namespace LogicUnit
             }
             else
             {
-                m_gameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
+                m_GameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
             }
 
             m_ScreenObjectList.Add(objectAdd);
@@ -297,6 +306,20 @@ namespace LogicUnit
         public virtual async void RunGame()
         {
 
+        }
+
+        protected void OnUpdatesReceived()
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+                {
+                    for (int i = 1; i <= 2; i++)
+                    {
+                        ChangeDirection(Direction.getDirection(r_LiteNetClient.PlayersData[i].Button),
+                            r_LiteNetClient.PlayersData[i].PlayerNumber);
+                    }
+
+                    gameLoop();
+                });
         }
     }
 }
