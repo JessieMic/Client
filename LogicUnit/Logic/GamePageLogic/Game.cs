@@ -312,7 +312,7 @@ namespace LogicUnit
         {
             MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    for (int i = 0; i < 2; i++)
+                    for (int i = 1; i <= 2; i++)
                     {
                         ChangeDirection(Direction.getDirection(r_LiteNetClient.PlayersData[i].Button),
                             r_LiteNetClient.PlayersData[i].PlayerNumber);

@@ -16,7 +16,15 @@ namespace LogicUnit.Logic.GamePageLogic
         private static object s_Lock = new object();
         private static LiteNetClient s_Instance = null;
         public event Action ReceivedData;
-        public List<PlayerData> PlayersData { get; set; }
+        public Dictionary<int, PlayerData> PlayersData { get; set; }
+
+        private static readonly ILoggerFactory sr_LoggerFactory = LoggerFactory.Create(
+            builder =>
+                {
+                    builder.AddConsole();
+                });
+
+        private readonly ILogger<LiteNetClient> r_Logger = sr_LoggerFactory.CreateLogger<LiteNetClient>();
 
         public int PlayerNumber { get; set; }
         //public int NumberOfPlayers { get; set; }
@@ -48,14 +56,14 @@ namespace LogicUnit.Logic.GamePageLogic
 
         public void Init(int i_NumberOfPlayers)
         {
-            PlayersData = new List<PlayerData>(i_NumberOfPlayers);
+            PlayersData = new Dictionary<int, PlayerData>();
 
-            for (int i = 0; i < i_NumberOfPlayers; i++)
+            for (int i = 1; i <= i_NumberOfPlayers; i++)
             {
-                PlayersData.Add(new PlayerData(i));
+                PlayersData.Add(i, new PlayerData(i));
             }
 
-            Console.WriteLine($"Client started");
+            r_Logger.LogInformation($"Initialized {i_NumberOfPlayers} players");
         }
 
 
@@ -68,16 +76,23 @@ namespace LogicUnit.Logic.GamePageLogic
                 {
                     r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
                 });
-            //r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
-            //r_Logger.LogInformation($"Sent: {i_PlayerNumber}");
+            r_Logger.LogInformation($"Sent {i_Button} to {i_PlayerNumber}");
         }
 
         private void OnReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
         {
-            Console.WriteLine($"Received:");
-            foreach(PlayerData t in PlayersData)
+            int playerNumber;
+            int button;
+            r_Logger.LogInformation("Received data");
+            foreach (KeyValuePair<int, PlayerData> t in PlayersData)
             {
-                PlayersData.ElementAt(i_Reader.GetInt()).Button = i_Reader.GetInt();
+                playerNumber = i_Reader.GetInt();
+                button = i_Reader.GetInt();
+                r_Logger.LogInformation($"Player number: {playerNumber}, Button: {button}");
+                if (playerNumber > 0 && playerNumber <= PlayersData.Count)
+                {
+                    PlayersData[playerNumber].Button = button;
+                }
             }
             ReceivedData?.Invoke();
             i_Reader.Recycle();
