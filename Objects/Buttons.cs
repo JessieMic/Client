@@ -56,6 +56,16 @@ namespace Objects
                 return values;
         }
 
+        public void ShowMenuButtons()
+        {
+
+        }
+
+        public void hideMenuButtons()
+        {
+
+        }
+
         protected string generatePngString(eButton i_Button)
         {
             string png;
@@ -138,7 +148,7 @@ namespace Objects
         {
             m_Buttons.Add(eButton.Right);
             m_Buttons.Add(eButton.Left);
-            m_Buttons.Add(eButton.Menu);
+            m_Buttons.Add(eButton.PauseMenu);
 
             if(m_TypeMovementButtons == eTypeOfGameMovementButtons.AllDirections)
             {

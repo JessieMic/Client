@@ -12,9 +12,11 @@ namespace Objects.Enums
         Down,
         Left,
         Right,
-        Menu,
+        PauseMenu,
         ButtonA,
-        ButtonB
-        //Add more buttons in the future for shooting etc
+        ButtonB,
+        Continue,
+        Restart,
+        Exit
     }
 }

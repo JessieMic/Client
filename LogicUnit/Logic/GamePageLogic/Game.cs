@@ -107,11 +107,6 @@ namespace LogicUnit
             }
         }
 
-        protected void showScoreBoard()
-        {
-
-        }
-
         protected void gameStatusUpdate()
         {
             //send ui to show defeated
@@ -145,25 +140,6 @@ namespace LogicUnit
             }
 
             return isPointOnTheBoard;
-        }
-
-        protected eGameStatus ClientLostGame(string i_NameOfClientThatLost)
-        {
-            eGameStatus returnStatus = eGameStatus.Running;
-
-            m_AmountOfActivePlayers--;
-
-            if (i_NameOfClientThatLost == m_Player.Name)
-            {
-                // Add a function here that tells the UI what to show to the client in case of 
-            }
-
-            if(m_AmountOfActivePlayers == 0)
-            {
-                returnStatus = eGameStatus.Ended;
-            }
-
-            return returnStatus;
         }
 
         protected virtual async Task gameLoop()
@@ -228,6 +204,28 @@ namespace LogicUnit
         protected virtual void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
         {
 
+        }
+
+        private void showPauseMenu()
+        {
+            //GameObject for menu
+            m_Buttons.ShowMenuButtons();
+        }
+
+        private void restartGame()
+        {
+
+        }
+
+        private void exitGame()
+        {
+
+        }
+
+        private void hidePauseMenu()
+        {
+            //Hide pause menu background
+            m_Buttons.hideMenuButtons();
         }
 
         public virtual async void RunGame()
