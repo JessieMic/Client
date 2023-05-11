@@ -75,6 +75,26 @@ namespace Objects
             return png.ToLower();
         }
 
+        public eButton StringToButton(string i_Button)
+        {
+            if (i_Button == eButton.Up.ToString())
+            {
+                return eButton.Up;
+            }
+            else if (i_Button == eButton.Down.ToString())
+            {
+                return eButton.Down;
+            }
+            else if (i_Button == eButton.Right.ToString())
+            {
+                return eButton.Right;
+            }
+            else
+            {
+                return eButton.Left;
+            }
+        }
+
         private Point getButtonPoint(eButton i_Type)
         {
             Point returnPoint = new Point(1,1);

@@ -31,16 +31,17 @@ namespace LogicUnit
         {
             //while (m_GameStatus == eGameStatus.Running)
             //{
-            //await Task.Delay(200);
 
-            m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
-            m_ScreenObjectList = new List<ScreenObjectAdd>();
-            moveSnakes();
-            OnUpdateScreenObject(m_ScreenObjectUpdate);
-            if (m_ScreenObjectList.Count != 0)
-            {
-                OnAddScreenObjects(m_ScreenObjectList);
-            }
+                //await Task.Delay(200);
+
+                m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
+                m_ScreenObjectList = new List<ScreenObjectAdd>();
+                moveSnakes();
+                OnUpdateScreenObject(m_ScreenObjectUpdate);
+                if (m_ScreenObjectList.Count != 0)
+                {
+                    OnAddScreenObjects(m_ScreenObjectList);
+                }
             //}
         }
 
