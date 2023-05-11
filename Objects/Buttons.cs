@@ -9,13 +9,30 @@ namespace Objects
 {
     public class Buttons
     {
-        public Size m_MovementButtonSize = new Size();
+        public Size m_MovementButtonSize = new Size(35,35);
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
-        public GameSettings m_GameSettings= new GameSettings();
+        private List<eButton> m_Buttons = new List<eButton>();
+        public Size m_ClientScreenSize = new Size();
+        public eTypeOfGameMovementButtons m_TypeMovementButtons;
+        public int m_AmountOfExtraButtons = 0;
+
         
-        public List<ScreenObjectAdd> GetGameButtons()
+        public void GetGameButtons(ref List<Image> i_GameObjectsToAdd)
         {
-            return addBasicGameButtons();//up down left right
+            setButtonList();
+            
+            foreach (var button in m_Buttons)
+            {
+                GameObject newButton = new GameObject();
+                newButton.InitializeButton(
+                    button,
+                    generatePngString(button),
+                    getButtonPoint(button),
+                    35,
+                    m_MovementButtonSize,
+                    getValuesToAdd(button));
+                i_GameObjectsToAdd.Add(newButton.m_Images[0]);
+            }
         }
 
         public void OnButtonClicked(object sender, EventArgs e)
@@ -23,16 +40,39 @@ namespace Objects
 
         }
 
-        protected List<ScreenObjectAdd> addBasicGameButtons()
+        private Point getValuesToAdd(eButton i_Button)
+        { 
+            Point values = new Point();
+
+            if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            {
+                values = new Point(10, 10);
+            }
+            else
+            {
+                values.m_Column = 10;
+                values.m_Row = m_ClientScreenSize.m_Height*35+10;
+            }
+                return values;
+        }
+
+        public void ShowMenuButtons()
         {
-            List<ScreenObjectAdd> returnButtons = new List<ScreenObjectAdd>(); ;
 
-            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Right, getButtonPoint(eButton.Right), m_MovementButtonSize, string.Empty, null,0));
-            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Left, getButtonPoint(eButton.Left), m_MovementButtonSize, string.Empty, null,0));
-            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Down, getButtonPoint(eButton.Down), m_MovementButtonSize, string.Empty, null, 0));
-            returnButtons.Add(new ScreenObjectAdd(eScreenObjectType.Button, eButton.Up, getButtonPoint(eButton.Up), m_MovementButtonSize, string.Empty, null, 0));
+        }
 
-            return returnButtons;
+        public void hideMenuButtons()
+        {
+
+        }
+
+        protected string generatePngString(eButton i_Button)
+        {
+            string png;
+
+            png = "upbutton.png";// i_Button.ToString() + "button" + ".png";
+
+            return png.ToLower();
         }
 
         public eButton StringToButton(string i_Button)
@@ -57,51 +97,93 @@ namespace Objects
 
         private Point getButtonPoint(eButton i_Type)
         {
-            Point returnPoint = new Point();
-            int space = m_GameSettings.m_SpacingAroundButtons;
-            Size buttonSize = m_GameSettings.m_MovementButtonSize;
+            Point returnPoint = new Point(1,1);
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 if (i_Type == eButton.Down)
                 {
-                    returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space + 2 * buttonSize.m_Height);
+                    returnPoint.SetAndGetPoint(1, 2);
                 }
                 else if (i_Type == eButton.Up)
                 {
-                    returnPoint.SetAndGetPoint(buttonSize.m_Width + space, space);
+                    returnPoint.SetAndGetPoint(1, 0);
                 }
                 else if (i_Type == eButton.Left)
                 {
-                    returnPoint.SetAndGetPoint(space, space + buttonSize.m_Height);
+                    returnPoint.SetAndGetPoint(0, 1);
+                }
+                else if(i_Type == eButton.Right) 
+                {
+                    returnPoint.SetAndGetPoint(2, 1);
+                }
+                else if(i_Type == eButton.ButtonA)
+                {
+                    returnPoint.SetAndGetPoint(5, 1);
+                }
+                else if(i_Type == eButton.ButtonB)
+                {
+                    returnPoint.SetAndGetPoint(7, 1);
                 }
                 else
                 {
-                    returnPoint.SetAndGetPoint(space + 2 * buttonSize.m_Width, space + buttonSize.m_Height);
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 0);
                 }
             }
             else
             {
-                int screenWidth = m_ClientScreenDimension.Size.m_Width;
-                int screenHeight = m_ClientScreenDimension.Size.m_Height;
                 if (i_Type == eButton.Up)
                 {
-                    returnPoint.SetAndGetPoint(screenWidth - (space + 2 * buttonSize.m_Width), screenHeight - (space + 3 * buttonSize.m_Height));
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 0);
                 }
                 else if (i_Type == eButton.Down)
                 {
-                    returnPoint.SetAndGetPoint(screenWidth - (space + 2 * buttonSize.m_Width), screenHeight - (space + buttonSize.m_Height));
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 2);
                 }
                 else if (i_Type == eButton.Right)
                 {
-                    returnPoint.SetAndGetPoint(screenWidth - (space + buttonSize.m_Width), screenHeight - (space + 2 * buttonSize.m_Height));
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 1, 1);
+                }
+                else if(i_Type == eButton.Left)
+                {
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 3, 1);
+                }
+                else if (i_Type == eButton.ButtonA)
+                {
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 6, 1);
+                }
+                else if (i_Type == eButton.ButtonB)
+                {
+                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 8, 1);
                 }
                 else
                 {
-                    returnPoint.SetAndGetPoint(screenWidth - (space + 3 * buttonSize.m_Width), screenHeight - (space + 2 * buttonSize.m_Height));
+                    returnPoint.SetAndGetPoint(1, 2);
                 }
             }
             return returnPoint;
+        }
+
+        private void setButtonList()
+        {
+            m_Buttons.Add(eButton.Right);
+            m_Buttons.Add(eButton.Left);
+            m_Buttons.Add(eButton.PauseMenu);
+
+            if(m_TypeMovementButtons == eTypeOfGameMovementButtons.AllDirections)
+            {
+                m_Buttons.Add(eButton.Down);
+                m_Buttons.Add(eButton.Up);
+            }
+
+            if(m_AmountOfExtraButtons != 0)
+            {
+                m_Buttons.Add(eButton.ButtonA);
+                if(m_AmountOfExtraButtons == 2)
+                {
+                    m_Buttons.Add(eButton.ButtonB);
+                }
+            }
         }
     }
 }

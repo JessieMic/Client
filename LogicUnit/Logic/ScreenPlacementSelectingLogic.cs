@@ -119,12 +119,11 @@ namespace LogicUnit
             Task.Run(() =>
             {
                 Application.Current.Dispatcher.Dispatch(async () =>
-                    {
-                        await r_ConnectionToServer.StartAsync();
-                        await r_ConnectionToServer.InvokeAsync("GetAmountOfPlayers");
-                    });
+                {
+                    await r_ConnectionToServer.StartAsync();
+                    await r_ConnectionToServer.InvokeAsync("GetAmountOfPlayers");
+                });
             });
-
         }
 
         public void OnUpdateButton(VisualUpdateSelectButtons i_VisualUpdate)

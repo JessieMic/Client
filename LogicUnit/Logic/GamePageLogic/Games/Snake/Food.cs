@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Objects;
 
-namespace Objects.Enums
+namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 {
-    public enum eTypeOfGameMovementButtons
+    public class Food : GameObject
     {
-        AllDirections,
-        RightAndLeft
+
     }
 }

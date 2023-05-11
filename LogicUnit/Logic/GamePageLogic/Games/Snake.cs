@@ -31,6 +31,7 @@ namespace LogicUnit
         {
             //while (m_GameStatus == eGameStatus.Running)
             //{
+
                 //await Task.Delay(200);
 
                 m_ScreenObjectUpdate = new List<ScreenObjectUpdate>();
@@ -51,7 +52,7 @@ namespace LogicUnit
 
         protected override void AddGameObjects()
         {
-            for(int player = 1; player <= m_GameInformation.AmountOfPlayers; player++)
+            for (int player = 1; player <= m_GameInformation.AmountOfPlayers; player++)
             {
                 addPlayerObjects(player);
             }
@@ -60,12 +61,12 @@ namespace LogicUnit
 
         private void addPlayerObjects(int i_Player)
         {
-            Point point = new Point(0,1);
+            Point point = new Point(0, 1);
             int until = 0;
             int inc;
             bool toInitialize = true;
 
-            if(m_GameInformation.ScreenInfoOfAllPlayers[i_Player-1].m_Position.Column == eColumnPosition.LeftColumn)// (i_Player <= 2)
+            if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Column == eColumnPosition.LeftColumn)// (i_Player <= 2)
             {
                 point.m_Column = 3;//column = 3;
                 until = 0;
@@ -85,7 +86,7 @@ namespace LogicUnit
 
             while (point.m_Column != until)
             {
-                addGameBoardObject(eScreenObjectType.Player,point,i_Player,i_Player+2,"body", toInitialize);
+                addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player + 2, "body", toInitialize);
                 toInitialize = false;
                 point.m_Column += inc;
             }
@@ -122,20 +123,20 @@ namespace LogicUnit
                 point = new Point(-1, -1);
             }
 
-            notifyGameObjectUpdate(eScreenObjectType.Object,1,null,point);
+            notifyGameObjectUpdate(eScreenObjectType.Object, 1, null, point);
         }
 
         public List<Point> getEmptyPositions()
         {
             List<Point> res = new List<Point>();
 
-            for(int col = 0; col < m_BoardSize.m_Width; col++)
+            for (int col = 0; col < m_BoardSize.m_Width; col++)
             {
-                for(int row = 0 ;row < m_BoardSize.m_Height; row++)
+                for (int row = 0; row < m_BoardSize.m_Height; row++)
                 {
-                    if(m_Board[col, row] == 0)
+                    if (m_Board[col, row] == 0)
                     {
-                        res.Add(new Point(col,row));
+                        res.Add(new Point(col, row));
                     }
                 }
             }
@@ -145,7 +146,7 @@ namespace LogicUnit
 
         private Point getSnakeHead(int i_Player)
         {
-           return  m_PlayerGameObjects[i_Player - 1].m_PointsOnGrid.First();
+            return m_PlayerGameObjects[i_Player - 1].m_PointsOnGrid.First();
         }
 
         private Point getSnakeTail(int i_Player)
@@ -155,7 +156,7 @@ namespace LogicUnit
 
         private void addHead(Point i_Point, int i_Player)
         {
-            m_PlayerGameObjects[i_Player-1].AddPointTop(i_Point);
+            m_PlayerGameObjects[i_Player - 1].AddPointTop(i_Point);
             m_Board[i_Point.m_Column, i_Point.m_Row] = i_Player + 2;
         }
 
@@ -177,7 +178,7 @@ namespace LogicUnit
         private Direction getLastDirection(int i_Player)
         {
             Direction result;
-            if(m_DirectionsBuffer[i_Player - 1].Count == 0)
+            if (m_DirectionsBuffer[i_Player - 1].Count == 0)
             {
                 result = m_PlayerGameObjects[i_Player - 1].m_Direction;
             }
@@ -193,7 +194,7 @@ namespace LogicUnit
         {
             bool result = true;
 
-            if(m_DirectionsBuffer[i_Player - 1].Count == 2)
+            if (m_DirectionsBuffer[i_Player - 1].Count == 2)
             {
                 result = false;
             }
@@ -203,7 +204,7 @@ namespace LogicUnit
             return i_NewDirection != lastDirection && i_NewDirection != lastDirection.OppositeDirection();
         }
 
-        private int whatSnakeWillHit(Point i_Point,int i_Player)//new snake head
+        private int whatSnakeWillHit(Point i_Point, int i_Player)//new snake head
         {
             int res;
 
@@ -211,7 +212,7 @@ namespace LogicUnit
             {
                 res = (int)eBoardObjectSnake.OutOfBounds;
             }
-            else if(i_Point == getSnakeTail(i_Player))
+            else if (i_Point == getSnakeTail(i_Player))
             {
                 res = (int)eBoardObjectSnake.Empty;
             }
@@ -225,9 +226,9 @@ namespace LogicUnit
 
         private void moveSnakes()
         {
-            for(int player = 1; player <= m_GameInformation.AmountOfPlayers; player++)
+            for (int player = 1; player <= m_GameInformation.AmountOfPlayers; player++)
             {
-                if(m_AmountOfLivesPlayerHas[player - 1] > 0 && m_PlayerGameObjects[player - 1].m_Direction != Direction.Stop)
+                if (m_AmountOfLivesPlayerHas[player - 1] > 0 && m_PlayerGameObjects[player - 1].m_Direction != Direction.Stop)
                 {
                     if (m_DirectionsBuffer[player - 1].Count > 0)
                     {
@@ -244,12 +245,12 @@ namespace LogicUnit
                     }
 
                     else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
-                    {   
+                    {
                         removeTail(player);
                         addHead(newHeadPoint, player);
                     }
                     else if (hit == (int)eBoardObjectSnake.Food)//Eats food
-                    {   
+                    {
                         addHead(newHeadPoint, player);
 
                         ScreenObjectAdd obj = new ScreenObjectAdd(eScreenObjectType.Player, null, newHeadPoint, m_ScreenMapping.m_MovementButtonSize, "player.png", string.Empty, 1);
@@ -258,7 +259,7 @@ namespace LogicUnit
 
                         //score ++
 
-                        if(m_Player.ButtonThatPlayerPicked == 1)
+                        if (m_Player.ButtonThatPlayerPicked == 1)
                         {
                             getNewPointForFood();
                         }
@@ -271,7 +272,7 @@ namespace LogicUnit
         private void PlayerGotHit(int i_Player)
         {
             OnDeleteGameObject(i_Player);
-            foreach (var point in m_PlayerGameObjects[i_Player-1].m_PointsOnGrid)
+            foreach (var point in m_PlayerGameObjects[i_Player - 1].m_PointsOnGrid)
             {
                 m_Board[point.m_Column, point.m_Row] = (int)eBoardObjectSnake.Empty;
             }

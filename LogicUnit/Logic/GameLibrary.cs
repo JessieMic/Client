@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LogicUnit.Logic.GamePageLogic.Games.Pacman;
+using LogicUnit.Logic.GamePageLogic.Games.Snake;
 using Objects.Enums;
 
 namespace LogicUnit
