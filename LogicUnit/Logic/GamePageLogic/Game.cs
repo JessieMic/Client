@@ -19,6 +19,7 @@ namespace LogicUnit
     public abstract partial class Game
     {
 
+
         private readonly HubConnection r_ConnectionToServer;
         private readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
