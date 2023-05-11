@@ -301,7 +301,6 @@ namespace LogicUnit
 
         protected virtual void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
         {
-
         }
         public virtual async void RunGame()
         {
