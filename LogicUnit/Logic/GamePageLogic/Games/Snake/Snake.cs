@@ -55,7 +55,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             foreach (var snake in m_PlayersSnakes)
             {
-                snake.update();
+               // snake.update();
             }
         }
 

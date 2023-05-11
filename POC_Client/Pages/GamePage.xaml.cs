@@ -12,8 +12,12 @@ public partial class GamePage : ContentPage
     private GameInformation m_GameInformation = GameInformation.Instance;
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
-    private List<List<Image>> m_PlayerObjects = new List<List<Image>>();
-    private List<Image> m_GameObjects = new List<Image>();
+    private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
+    private Dictionary<int,Button> m_gameButtons = new Dictionary<int,Button>();
+
+
+    //private List<List<Image>> m_PlayerObjects = new List<List<Image>>();
+    //private List<Image> m_GameObjects = new List<Image>();
 
     public GamePage()
     {
@@ -32,16 +36,11 @@ public partial class GamePage : ContentPage
 
     private void initializeGame()
     {
-        //Application.Current.Dispatcher.Dispatch(async () =>
-        //    {
-
-        //        gridLayout.Add(m_Game.a);
-        //    });
         m_Game.InitializeGame();
-        for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
-        {
-            m_PlayerObjects.Add(new List<Image>());
-        }
+        //for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+        //{
+        //    m_PlayerObjects.Add(new List<Image>());
+        //}
 
     }
 
@@ -49,7 +48,6 @@ public partial class GamePage : ContentPage
     {
         Application.Current.Dispatcher.Dispatch(async () =>
         {
-            //gridLayout.Add(m_Game.a);
             foreach (var gameObject in i_GameObjectsToAdd)
             {
                 if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
@@ -84,24 +82,10 @@ public partial class GamePage : ContentPage
         image.Aspect = Aspect.AspectFill;
 
         gridLayout.Add(image);
-        if (i_GameObjectToAdd.m_ScreenObjectType != eScreenObjectType.Image)
-        {
-            addGameObjectToList(image, i_GameObjectToAdd);
-        }
+        m_GameImages.Add(i_GameObjectToAdd.m_ID[0],image);
         image.Source = i_GameObjectToAdd.m_ImageSources[0];
     }
 
-    private void addGameObjectToList(Image i_image, GameObject i_GameObject)
-    {
-        if (i_GameObject.m_ScreenObjectType == eScreenObjectType.Player)
-        {
-            m_PlayerObjects[i_GameObject.m_ObjectNumber - 1].Add(i_image);
-        }
-        else
-        {
-            m_GameObjects.Add(i_image);
-        }
-    }
 
     private void addButton(GameObject i_ButtonToAdd)
     {
@@ -113,6 +97,7 @@ public partial class GamePage : ContentPage
         gridLayout.Add(button);
         button.TranslateTo(i_ButtonToAdd.m_PointsOnScreen[0].m_Column, i_ButtonToAdd.m_PointsOnScreen[0].m_Row);
         button.Clicked += m_Game.OnButtonClicked;
+        m_gameButtons.Add(i_ButtonToAdd.m_ID[0],button);
     }
 
     private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)
@@ -121,26 +106,12 @@ public partial class GamePage : ContentPage
         {
             foreach (var screenObject in i_ObjectUpdates)
             {
-                int i = 0;
-                if (screenObject.m_ScreenObjectType == eScreenObjectType.Player)
+                for(int i = 0; i < screenObject.m_ID.Count; i++)
                 {
-                    foreach (var playerObject in m_PlayerObjects[screenObject.m_ObjectNumber - 1])
-                    {
-                        //playerObject.Source = screenObject.m_ImageSources[i];
-                        //playerObject.TranslateTo(
-                        //    screenObject.m_NewPositions[i].m_Column,
-                        //    screenObject.m_NewPositions[i].m_Row);
-                        playerObject.TranslationX = screenObject.m_PointsOnScreen[i].m_Column;//m_NewPositions[i].m_Column;
-                        playerObject.TranslationY = screenObject.m_PointsOnScreen[i].m_Row;//.m_NewPositions[i].m_Row;
-                        i++;
-                    }
-                }
-                else
-                {
-                    m_GameObjects[screenObject.m_ObjectNumber - 1].Source = screenObject.m_ImageSources[i];
-                    m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;//.m_NewPositions[i].m_Column;
-                    m_GameObjects[screenObject.m_ObjectNumber - 1].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
-                    ;//.m_NewPositions[i].m_Row;
+                    m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
+                    m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                   
+                    i++;
                 }
             }
         });
@@ -148,19 +119,13 @@ public partial class GamePage : ContentPage
 
     public void deleteObject(object sender, GameObject i_ObjectToDelete)
     {
-        if (i_ObjectToDelete.m_ScreenObjectType == eScreenObjectType.Player)
-        {
-            foreach (var image in m_PlayerObjects[i_ObjectToDelete.m_ObjectNumber - 1])
-            {
-                image.FadeTo(0, 700, null);
-                //gridLayout.Remove(image);
-            }
 
-            m_PlayerObjects[i_ObjectToDelete.m_ObjectNumber - 1].Clear();
-        }
-        else
+        for (int i = 0; i < i_ObjectToDelete.m_ID.Count; i++)
         {
-            gridLayout.Remove(m_GameObjects[i_ObjectToDelete.m_ObjectNumber - 1]);
+            m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
+            gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
+            m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
+            i++;
         }
     }
 
@@ -171,3 +136,8 @@ public partial class GamePage : ContentPage
         m_Game.GameObjectToDelete += deleteObject;
     }
 }
+
+//playerObject.Source = screenObject.m_ImageSources[i];
+//playerObject.TranslateTo(
+//    screenObject.m_NewPositions[i].m_Column,
+//    screenObject.m_NewPositions[i].m_Row);

@@ -11,5 +11,6 @@ namespace Objects
         public static Size m_MovementButtonSize = new Size(35, 35);
         public static int m_GameBoardGridSize = 35;
         public static int m_SpacingAroundButtons = 10;
+        public static int m_ID = 0;
     }
 }
