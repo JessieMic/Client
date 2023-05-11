@@ -32,14 +32,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             while (m_GameStatus == eGameStatus.Running)
             {
-                await Task.Delay(400);
+                //await Task.Delay(400);
 
                 m_Ghost.m_Direction = Direction.Right;
                 m_Ghost.MoveSameDirection();
-                await Task.Delay(400);
+               // await Task.Delay(400);
                 m_Ghost.m_Direction = Direction.Down;
                 m_Ghost.MoveSameDirection();
-                await Task.Delay(400);
+                //await Task.Delay(400);
                 m_Ghost.MoveToPoint(new Point(1, 1));
                 
             }

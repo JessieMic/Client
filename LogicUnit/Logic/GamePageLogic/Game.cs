@@ -64,6 +64,7 @@ namespace LogicUnit
         //public List<Image> m_GameImagesToAdd = new List<Image>();
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
+        public bool isReady = false;
 
         public Game()
         {
@@ -78,27 +79,27 @@ namespace LogicUnit
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder);
 
-            r_ConnectionToServer.On("Update", (int[] i_Update) =>
-            {
-                MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
-                        ChangeDirection(Direction.getDirection(i_Update[i]), i + 1);
-                    }
+            //r_ConnectionToServer.On("Update", (int[] i_Update) =>
+            //{
+            //    MainThread.BeginInvokeOnMainThread(() =>
+            //    {
+            //        for (int i = 0; i < 2; i++)
+            //        {
+            //            ChangeDirection(Direction.getDirection(i_Update[i]), i + 1);
+            //        }
 
-                    gameLoop();
-                });
-            });
+            //        //gameLoop();
+            //    });
+            //});
 
 
-            Task.Run(() =>
-            {
-                Application.Current.Dispatcher.Dispatch(async () =>
-                {
-                    await r_ConnectionToServer.StartAsync();
-                });
-            });
+            //Task.Run(() =>
+            //{
+            //    Application.Current.Dispatcher.Dispatch(async () =>
+            //    {
+            //        await r_ConnectionToServer.StartAsync();
+            //    });
+            //});
 
             //r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
         }
@@ -213,7 +214,6 @@ namespace LogicUnit
 
             if (m_GameStatus == eGameStatus.Running)
             {
-
                 SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
                 //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
             }
@@ -346,18 +346,19 @@ namespace LogicUnit
         }
 
 
-        protected void OnUpdatesReceived()
+        protected async void OnUpdatesReceived()
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+
+            for(int i = 1; i <= 2; i++)
             {
-                for (int i = 1; i <= 2; i++)
+                //if(isReady)
                 {
-                    ChangeDirection(Direction.getDirection(r_LiteNetClient.PlayersData[i].Button),
+                    ChangeDirection(
+                        Direction.getDirection(r_LiteNetClient.PlayersData[i].Button),
                         r_LiteNetClient.PlayersData[i].PlayerNumber);
                 }
-
-                gameLoop();
-            });
+            }
+            gameLoop();
         }
     }
 }
