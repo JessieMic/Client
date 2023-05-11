@@ -23,9 +23,8 @@ namespace Objects
         public Direction m_Direction = Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;
-        public List<Image> m_Images = new List<Image>();
         public Size m_Size = new Size(35,35);
-
+        public List<int> m_ID = new List<int>();
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
             m_ObjectNumber = i_ObjectNumber;
@@ -36,15 +35,8 @@ namespace Objects
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
-            Image image = new Image();
-            image.TranslationX = m_PointsOnScreen[0].m_Column;
-            image.TranslationY = m_PointsOnScreen[0].m_Row;
-            image.WidthRequest = m_Size.m_Width;
-            image.HeightRequest = m_Size.m_Height;
-            image.Source = m_ImageSources[0];
-            image.Aspect = Aspect.AspectFill;
-            image.ClassId = String.Empty;
-            m_Images.Add(image);
+            m_ID.Add(GameSettings.m_ID);
+            GameSettings.m_ID++;
         }
 
         public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
@@ -57,16 +49,9 @@ namespace Objects
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
+            m_ID.Add(GameSettings.m_ID);
+            GameSettings.m_ID++;
             m_Size = i_Size;
-            Image image = new Image();
-            image.TranslationX = m_PointsOnScreen[0].m_Column;
-            image.TranslationY = m_PointsOnScreen[0].m_Row;
-            image.WidthRequest = m_Size.m_Width;
-            image.HeightRequest =m_Size.m_Height;
-            image.Source = m_ImageSources[0];
-            image.Aspect = Aspect.AspectFill;
-            image.ClassId = m_ButtonType.ToString();
-            m_Images.Add(image);
         }
 
         public void set(GameObject i_GameObject)
@@ -79,23 +64,24 @@ namespace Objects
             m_GameBoardGridSize = i_GameObject.m_GameBoardGridSize;
             m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
             m_Size = i_GameObject.m_Size;
-            m_Images = i_GameObject.m_Images;
+            m_ID = i_GameObject.m_ID;
         }
 
-        public void SetObject(string i_Image, Point i_Point)
-        {
-            m_PointsOnGrid.Add(i_Point);
-            Point point = getScreenPoint(i_Point);
-            m_PointsOnScreen.Add(point);
-            m_ImageSources.Add(i_Image);
-        }
+        //public void SetObject(string i_Image, Point i_Point)
+        //{
+        //    m_PointsOnGrid.Add(i_Point);
+        //    Point point = getScreenPoint(i_Point);
+        //    m_PointsOnScreen.Add(point);
+        //    m_ImageSources.Add(i_Image);
+        //    m_ID.Add();
+        //}
 
         public void CombineGameObjects(GameObject i_GameObject)
         {
             m_PointsOnGrid.Add(i_GameObject.m_PointsOnGrid[0]);
             m_PointsOnScreen.Add(i_GameObject.m_PointsOnScreen[0]);
             m_ImageSources.Add(i_GameObject.m_ImageSources[0]);
-            m_Images.Add(i_GameObject.m_Images[0]);
+            m_ID.Add(i_GameObject.m_ID[0]);
         }
 
 
@@ -109,14 +95,14 @@ namespace Objects
             return point;
         }
 
-        public void update()
-        {
-            for(int i=0; i< m_Images.Count; i++)
-            {
-                m_Images[i].TranslationX = m_PointsOnScreen[i].m_Column;
-                m_Images[i].TranslationY = m_PointsOnScreen[i].m_Row;
-            }
-        }
+        //public void update()
+        //{
+        //    for(int i=0; i< m_Images.Count; i++)
+        //    {
+        //        m_Images[i].TranslationX = m_PointsOnScreen[i].m_Column;
+        //        m_Images[i].TranslationY = m_PointsOnScreen[i].m_Row;
+        //    }
+        //}
 
         public void AddPointTop(Point i_Point)
         {
@@ -134,7 +120,7 @@ namespace Objects
             m_PointsOnGrid[0]=i_Point;
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen[0] = point;
-            update();
+            //update();
         }
 
         public void MoveSameDirection()

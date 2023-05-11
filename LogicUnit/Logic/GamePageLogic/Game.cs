@@ -21,32 +21,13 @@ namespace LogicUnit
         private readonly HubConnection r_ConnectionToServer;
         private readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
-        //public event EventHandler<List<ScreenObjectAdd>> AddScreenObject;
-        //public event EventHandler<List<ScreenObjectUpdate>> GameObjectUpdate;
-        //public event EventHandler<ScreenObjectUpdate> GameObjectToDelete;
+        public event EventHandler<List<GameObject>> AddGameObjectList;
+        public event EventHandler<List<GameObject>> GameObjectsUpdate;
+        public event EventHandler<GameObject> GameObjectToDelete;
 
-        //protected GameInformation m_GameInformation = GameInformation.Instance;
-        //protected Player m_Player = Player.Instance;
-        //protected ScreenMapping m_ScreenMapping = new ScreenMapping();
-        //protected eTypeOfGameButtons m_TypeOfGameButtons;
-        //protected int[] m_AmountOfLivesPlayerHas = new int[4];
-        //protected Size m_BoardSize = new Size();
-        //protected int[,] m_Board;
-        //protected int m_AmountOfActivePlayers;
-        //protected Buttons m_Buttons = new Buttons();
-        //protected List<GameObject> m_PlayerGameObjects = new List<GameObject>();
-        //protected List<GameObject> m_GameObjects = new List<GameObject>();
-        //public eGameStatus m_GameStatus = eGameStatus.Running;
-        //protected Random m_RandomPosition = new Random();
-        //protected int m_AmountOfLivesPlayersGetAtStart = 3;
-        //protected int m_AmountOfPlayersThatAreAlive;
-        //protected List<ScreenObjectUpdate> m_ScreenObjectUpdate;
-        //protected List<string> m_LoseOrder = new List<string>();
-        //protected string m_GameName;
 
-        //protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
         //Events
-        public event EventHandler<List<Image>> AddGameObjectList;
+        //public event EventHandler<List<Image>> AddGameObjectList;
         //public event EventHandler<List<GameObject>> GameObjectsUpdate;
         //public event EventHandler<GameObject> GameObjectToDelete;
 
@@ -78,7 +59,10 @@ namespace LogicUnit
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
         //List for Ui changes
-        public List<Image> m_GameImagesToAdd = new List<Image>();
+        //public List<Image> m_GameImagesToAdd = new List<Image>();
+        protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
+        protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
+
         public Game()
         {
             r_LiteNetClient.Init(2);
@@ -135,7 +119,7 @@ namespace LogicUnit
 
         protected virtual void OnAddScreenObjects()
         {
-            AddGameObjectList.Invoke(this, m_GameImagesToAdd); //..Invoke(this, i_ScreenObject));
+            AddGameObjectList.Invoke(this, m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
         }
 
         public bool SetAmountOfPlayers(int i_AmountOfPlayers)//for when you want to get ready in lobby 
@@ -241,49 +225,67 @@ namespace LogicUnit
             //    m_Player.ButtonThatPlayerPicked-1,(int)i_Button);
         }
 
-        protected GameObject addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
+        protected GameObject addGameBoardObject_(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
         {
             string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
             GameObject gameObject = new GameObject();
 
             gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
 
-            m_GameImagesToAdd.Add(gameObject.m_Images[0]);
+            m_GameObjectsToAdd.Add(gameObject);
             m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
 
             return gameObject;
-
-            //string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-            //GameObject gameObject = new GameObject();
-
-            //if (i_ToInitialize)
-            //{
-            //    gameObject.Initialize(i_Type, i_ObjectNumber, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-
-            //    if (i_Type == eScreenObjectType.Player)
-            //    {
-            //        m_PlayerGameObjects.Add(gameObject);
-            //    }
-            //    else
-            //    {
-            //        m_GameObjects.Add(gameObject);
-            //    }
-            //}
-
-            //ScreenObjectAdd objectAdd = new ScreenObjectAdd(i_Type, null, i_Point, m_ScreenMapping.m_MovementButtonSize, png, string.Empty, i_ObjectNumber);
-
-            //if (i_Type == eScreenObjectType.Player)
-            //{
-            //    m_PlayerGameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-            //}
-            //else
-            //{
-            //    m_GameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-            //}
-
-            //m_ScreenObjectList.Add(objectAdd);
-            //m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
         }
+
+        protected void OnUpdateScreenObject()
+        {
+            GameObjectsUpdate.Invoke(this, m_gameObjectsToUpdate);
+        }
+
+        //protected GameObject addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
+        //{
+        //    string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
+        //    GameObject gameObject = new GameObject();
+
+        //    gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
+
+        //    m_GameImagesToAdd.Add(gameObject.m_Images[0]);
+        //    m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
+
+        //    return gameObject;
+
+        //    //string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
+        //    //GameObject gameObject = new GameObject();
+
+        //    //if (i_ToInitialize)
+        //    //{
+        //    //    gameObject.Initialize(i_Type, i_ObjectNumber, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
+
+        //    //    if (i_Type == eScreenObjectType.Player)
+        //    //    {
+        //    //        m_PlayerGameObjects.Add(gameObject);
+        //    //    }
+        //    //    else
+        //    //    {
+        //    //        m_GameObjects.Add(gameObject);
+        //    //    }
+        //    //}
+
+        //    //ScreenObjectAdd objectAdd = new ScreenObjectAdd(i_Type, null, i_Point, m_ScreenMapping.m_MovementButtonSize, png, string.Empty, i_ObjectNumber);
+
+        //    //if (i_Type == eScreenObjectType.Player)
+        //    //{
+        //    //    m_PlayerGameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
+        //    //}
+        //    //else
+        //    //{
+        //    //    m_GameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
+        //    //}
+
+        //    //m_ScreenObjectList.Add(objectAdd);
+        //    //m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
+        //}
 
         protected string generatePngString(eScreenObjectType i_Type, int i_ObjectNumber, string i_Version)
         {

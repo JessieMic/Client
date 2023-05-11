@@ -49,7 +49,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             m_Ghost = new Ghost();
 
-            GameObject obj = addGameBoardObject(eScreenObjectType.Player, new Point(1, 1), 1, 1, "body");
+            GameObject obj =addGameBoardObject_(eScreenObjectType.Player, new Point(1, 1), 1, 1, "body");
 
             m_Ghost.set(obj);
         }
