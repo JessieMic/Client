@@ -4,6 +4,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+//using AuthenticationServices;
 //using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
@@ -30,25 +31,24 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         public override async void RunGame()
         {
-            await gameLoop();
+            isReady = true;
+            gameLoop();
         }
 
         protected override async Task gameLoop()
         {
-            while (m_GameStatus == eGameStatus.Running)
-            {
-                await Task.Delay(400);
-
-                m_gameObjectsToUpdate = new List<GameObject>();
+            m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameObjectsToAdd = new List<GameObject>();
                 moveSnakes();
-                OnUpdateScreenObject();
-
                 if (m_GameObjectsToAdd.Count != 0)
                 {
                     OnAddScreenObjects();
                 }
-            }
+
+                if (m_gameObjectsToUpdate.Count != 0)
+                {
+                    OnUpdateScreenObject();
+                }
         }
 
         private void updateSnake()
@@ -99,8 +99,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 point.m_Row = m_BoardSize.m_Height - 2;
             }
 
-            while (point.m_Column != until)
+            int i = 0;
+            while(i==0)// (point.m_Column != until)
             {
+                i++;
                 GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2, "body");
                 if (!toCombine)
                 {
@@ -147,7 +149,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 point = new Point(-1, -1);
             }
 
-            notifyGameObjectUpdate(eScreenObjectType.Object, 1, null, point);
+            //notifyGameObjectUpdate(eScreenObjectType.Object, 1, null, point);
         }
 
         public List<Point> getEmptyPositions()
@@ -249,7 +251,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private void PlayerGotHit(int i_Player)
         {
             //OnDeleteGameObject(m_PlayersSnakes[i_Player-1]);
-            PlayerLostALife(i_Player);//general ui update
+            //PlayerLostALife(i_Player);//general ui update
         }
     }
 }

@@ -80,7 +80,7 @@ public partial class GamePage : ContentPage
         }
 
         image.Aspect = Aspect.AspectFill;
-
+        image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
         gridLayout.Add(image);
         m_GameImages.Add(i_GameObjectToAdd.m_ID[0],image);
         image.Source = i_GameObjectToAdd.m_ImageSources[0];
@@ -110,8 +110,6 @@ public partial class GamePage : ContentPage
                 {
                     m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
                     m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
-                   
-                    i++;
                 }
             }
         });

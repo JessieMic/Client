@@ -49,10 +49,10 @@ namespace GameRoomServer
                 writer.Put(data.Button);
             }
 
-            foreach(ClientData data in r_Clients)
-            {
-                Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
-            }
+            //foreach(ClientData data in r_Clients)
+            //{
+            //    Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
+            //}
             foreach (ClientData client in r_Clients)
             {
                 client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
