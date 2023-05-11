@@ -16,8 +16,8 @@ namespace Objects
         public eTypeOfGameMovementButtons m_TypeMovementButtons;
         public int m_AmountOfExtraButtons = 0;
 
-        
-        public void GetGameButtons(ref List<Image> i_GameObjectsToAdd)
+
+        public void GetGameButtons(ref List<GameObject> i_GameObjectsToAdd)
         {
             setButtonList();
             
@@ -31,7 +31,7 @@ namespace Objects
                     35,
                     m_MovementButtonSize,
                     getValuesToAdd(button));
-                i_GameObjectsToAdd.Add(newButton.m_Images[0]);
+                i_GameObjectsToAdd.Add(newButton);
             }
         }
 
