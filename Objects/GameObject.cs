@@ -20,11 +20,12 @@ namespace Objects
         private int m_GameBoardGridSize;
         protected Point m_ValuesToAdd = new Point();
         protected int m_Velocity = 1;
-        public Direction m_Direction = Direction.Stop;
+        public Direction m_Direction = Direction.Right;//Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;
         public Size m_Size = new Size(35,35);
         public List<int> m_ID = new List<int>();
+        bool flag = false;
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
             m_ObjectNumber = i_ObjectNumber;
