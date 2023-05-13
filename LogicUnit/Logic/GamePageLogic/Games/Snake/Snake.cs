@@ -100,7 +100,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             }
 
             int i = 0;
-            while(i==0)// (point.m_Column != until)
+            while (point.m_Column != until) //(i == 0)//
             {
                 i++;
                 GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2, "body");

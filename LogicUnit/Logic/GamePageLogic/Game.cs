@@ -65,7 +65,7 @@ namespace LogicUnit
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
         public bool isReady = false;
-
+        bool f= false;
         public Game()
         {
             r_LiteNetClient.Init(2);
@@ -349,7 +349,7 @@ namespace LogicUnit
         protected async void OnUpdatesReceived()
         {
 
-            for(int i = 1; i <= 2; i++)
+            for (int i = 1; i <= 2; i++)
             {
                 //if(isReady)
                 {
@@ -358,7 +358,15 @@ namespace LogicUnit
                         r_LiteNetClient.PlayersData[i].PlayerNumber);
                 }
             }
-            gameLoop();
+            if (f)
+            {
+                f = false;
+                gameLoop();
+            }
+            else
+            {
+                f = true;
+            }
         }
     }
 }
