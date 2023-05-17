@@ -31,13 +31,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         public override async void RunGame()
         {
-            isReady = true;
-            gameLoop();
+            //gameLoop();
         }
 
         protected override async Task gameLoop()
         {
-            m_gameObjectsToUpdate = new List<GameObject>();
+                m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameObjectsToAdd = new List<GameObject>();
                 moveSnakes();
                 if (m_GameObjectsToAdd.Count != 0)
@@ -49,14 +48,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 {
                     OnUpdateScreenObject();
                 }
-        }
-
-        private void updateSnake()
-        {
-            foreach (var snake in m_PlayersSnakes)
-            {
-               // snake.update();
-            }
         }
 
         protected override void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
@@ -104,6 +95,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             {
                 i++;
                 GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2, "body");
+                gameObject.FadeWhenObjectIsRemoved();
                 if (!toCombine)
                 {
                     snake.set(gameObject);
@@ -122,6 +114,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             List<Point> emptyPositions = getEmptyPositions();
             Point randomPoint = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
+
+            //r_LiteNetClient.Send(randomPoint, (int)i_Button);
 
             m_food.set(addGameBoardObject_(
                 eScreenObjectType.Object, randomPoint, 1, (int)eBoardObjectSnake.Food,
@@ -146,7 +140,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             }
             else
             {
-                point = new Point(-1, -1);
+                m_GameStatus = eGameStatus.Tie;
+                //point = new Point(-1, -1);
             }
 
             //notifyGameObjectUpdate(eScreenObjectType.Object, 1, null, point);
@@ -221,7 +216,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
                     if (hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
                     {
-                        //PlayerGotHit(player);
+                        PlayerGotHit(player);
                     }
 
                     else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
@@ -250,8 +245,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         private void PlayerGotHit(int i_Player)
         {
-            //OnDeleteGameObject(m_PlayersSnakes[i_Player-1]);
-            //PlayerLostALife(i_Player);//general ui update
+            m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+            OnDeleteGameObject(m_PlayersSnakes[i_Player - 1]);
+            PlayerLostALife(i_Player);//general ui update
         }
     }
 }

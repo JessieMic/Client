@@ -1,6 +1,7 @@
 ﻿using System.Timers;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using LogicUnit.Logic.GamePageLogic;
 using Timer = System.Timers.Timer;
 
 namespace GameRoomServer
@@ -10,6 +11,7 @@ namespace GameRoomServer
         private static readonly EventBasedNetListener sr_NetListener = new EventBasedNetListener();
         private readonly NetManager r_NetManager = new NetManager(sr_NetListener);
         private readonly List<ClientData> r_Clients = new List<ClientData>();
+        private readonly ObjectPointData r_ObjectPointData;
         private readonly ILogger<LiteNetServer> r_Logger;
         //private readonly Timer r_Timer = new System.Timers.Timer(15);
 
@@ -48,6 +50,25 @@ namespace GameRoomServer
                 writer.Put(data.PlayerNumber);
                 writer.Put(data.Button);
             }
+
+            //foreach(ClientData data in r_Clients)
+            //{
+            //    Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
+            //}
+            foreach (ClientData client in r_Clients)
+            {
+                client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
+            }
+        }
+
+        private void updateClientsWithObjectPoint()
+        {
+            NetDataWriter writer = new();
+            
+            writer.Put(r_ObjectPointData.m_Column);
+            writer.Put(r_ObjectPointData.m_Row);
+            writer.Put(r_ObjectPointData.m_Object);
+            
 
             //foreach(ClientData data in r_Clients)
             //{

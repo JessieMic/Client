@@ -8,6 +8,7 @@ namespace Objects.Enums
 {
     public enum eButton
     {
+        Stop,
         Up,
         Down,
         Left,

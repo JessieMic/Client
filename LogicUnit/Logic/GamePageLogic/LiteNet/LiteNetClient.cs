@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 using LiteNetLib;
 using LiteNetLib.Utils;
 using Microsoft.Extensions.Logging;
-namespace LogicUnit.Logic.GamePageLogic
+namespace LogicUnit.Logic.GamePageLogic.LiteNet
 
 {
     public class LiteNetClient
@@ -16,7 +17,9 @@ namespace LogicUnit.Logic.GamePageLogic
         private static object s_Lock = new object();
         private static LiteNetClient s_Instance = null;
         public event Action ReceivedData;
+        public event Action ReceivedPoint;
         public Dictionary<int, PlayerData> PlayersData { get; set; }
+        public ObjectPointData m_ObjectData = new ObjectPointData();
 
         private static readonly ILoggerFactory sr_LoggerFactory = LoggerFactory.Create(
             builder =>
@@ -70,6 +73,7 @@ namespace LogicUnit.Logic.GamePageLogic
         public void Send(int i_PlayerNumber, int i_Button)
         {
             NetDataWriter writer = new NetDataWriter();
+
             writer.Put(i_PlayerNumber);
             writer.Put(i_Button);
             Task.Run(() =>
@@ -77,6 +81,39 @@ namespace LogicUnit.Logic.GamePageLogic
                     r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
                 });
             r_Logger.LogInformation($"Sent {i_Button} to {i_PlayerNumber}");
+        }
+
+        public void SendPoint(int i_Column, int i_Row, int i_Object)
+        {
+            NetDataWriter writer = new NetDataWriter();
+
+            writer.Put(i_Column);
+            writer.Put(i_Row);
+            writer.Put(i_Object);
+            Task.Run(() =>
+                {
+                    r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
+                });
+            r_Logger.LogInformation($"Sent point({i_Column},{i_Row}) for {i_Object}");
+        }
+
+        private void OnReceivePoint(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
+        {
+            int column;
+            int row;
+            int objectNumber;
+            r_Logger.LogInformation("Received point data");
+
+            column = i_Reader.GetInt();
+            row = i_Reader.GetInt();
+            objectNumber = i_Reader.GetInt();
+
+            r_Logger.LogInformation($"Got point({column},{row}) for {objectNumber}");
+
+            m_ObjectData.set(column, row, objectNumber);
+
+            ReceivedPoint?.Invoke();
+            i_Reader.Recycle();
         }
 
         private void OnReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)

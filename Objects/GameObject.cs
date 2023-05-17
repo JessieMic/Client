@@ -20,12 +20,13 @@ namespace Objects
         private int m_GameBoardGridSize;
         protected Point m_ValuesToAdd = new Point();
         protected int m_Velocity = 1;
-        public Direction m_Direction = Direction.Right;//Direction.Stop;
+        public Direction m_Direction = Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;
         public Size m_Size = new Size(35,35);
         public List<int> m_ID = new List<int>();
-        bool flag = false;
+        public bool m_Fade = false;
+        
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
             m_ObjectNumber = i_ObjectNumber;
@@ -66,6 +67,7 @@ namespace Objects
             m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
             m_Size = i_GameObject.m_Size;
             m_ID = i_GameObject.m_ID;
+            m_Fade = i_GameObject.m_Fade;
         }
 
         //public void SetObject(string i_Image, Point i_Point)
@@ -85,6 +87,10 @@ namespace Objects
             m_ID.Add(i_GameObject.m_ID[0]);
         }
 
+        public void FadeWhenObjectIsRemoved()
+        {
+            m_Fade = true;
+        }
 
         private Point getScreenPoint(Point i_Point)
         {
