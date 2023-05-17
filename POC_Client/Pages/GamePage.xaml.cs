@@ -120,10 +120,12 @@ public partial class GamePage : ContentPage
 
         for (int i = 0; i < i_ObjectToDelete.m_ID.Count; i++)
         {
-            m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
-            gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
-            m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
-            i++;
+            if(i_ObjectToDelete.m_Fade)
+            {
+                m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
+            }
+            //gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
+            //m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
         }
     }
 

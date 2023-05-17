@@ -35,6 +35,26 @@ namespace Objects
             }
         }
 
+        public eGameStatus GetGameStatue(int i_Button)
+        {
+            eGameStatus status;
+
+            if(i_Button == (int)eButton.PauseMenu)
+            {
+                status = eGameStatus.Paused;
+            }
+            else if(i_Button == (int)eButton.Exit)
+            {
+                status = eGameStatus.Exited;
+            }
+            else
+            {
+                status = eGameStatus.Running;
+            }
+
+            return status;
+        }
+
         public void OnButtonClicked(object sender, EventArgs e)
         {
 
@@ -85,9 +105,21 @@ namespace Objects
             {
                 return eButton.Down;
             }
+            else if (i_Button == eButton.PauseMenu.ToString())
+            {
+                return eButton.PauseMenu;
+            }
+            else if (i_Button == eButton.Exit.ToString())
+            {
+                return eButton.Exit;
+            }
             else if (i_Button == eButton.Right.ToString())
             {
                 return eButton.Right;
+            }
+            else if (i_Button == eButton.Continue.ToString())
+            {
+                return eButton.Continue;
             }
             else
             {

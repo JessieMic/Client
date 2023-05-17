@@ -24,9 +24,14 @@ namespace Objects
 
         public static Direction getDirection(string i_Button)
         {
+
             if (i_Button == eButton.Up.ToString())
             {
                 return Direction.Up;
+            }
+            else if(i_Button == eButton.Stop.ToString())
+            {
+                return Direction.Stop;
             }
             else if (i_Button == eButton.Down.ToString())
             {
@@ -43,7 +48,11 @@ namespace Objects
         }
         public static Direction getDirection(int i_Button)
         {
-            if (i_Button == (int)eButton.Up)
+            if(i_Button == (int)eButton.Stop)
+            {
+                return Direction.Stop;
+            }
+            else if (i_Button == (int)eButton.Up)
             {
                 return Direction.Up;
             }

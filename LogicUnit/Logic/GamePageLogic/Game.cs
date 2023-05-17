@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 //using ABI.Windows.Security.EnterpriseData;
 using LogicUnit.Logic.GamePageLogic;
+using LogicUnit.Logic.GamePageLogic.LiteNet;
 using Microsoft.AspNetCore.SignalR.Client;
 using Objects;
 using Objects.Enums;
@@ -61,11 +62,10 @@ namespace LogicUnit
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
 
         //List for Ui changes
-        //public List<Image> m_GameImagesToAdd = new List<Image>();
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
-        public bool isReady = false;
-        bool f= false;
+        private bool m_Flag= false;
+        
         public Game()
         {
             r_LiteNetClient.Init(2);
@@ -158,6 +158,7 @@ namespace LogicUnit
             }
         }
 
+
         protected void gameStatusUpdate()
         {
             //send ui to show defeated
@@ -193,10 +194,10 @@ namespace LogicUnit
 
         }
 
-        //protected void OnDeleteGameObject(int i_Player)
-        //{
-        //    GameObjectToDelete.Invoke(this, m_PlayerGameObjects[i_Player - 1].GetObjectUpdate());
-        //}
+        protected void OnDeleteGameObject(GameObject i_GameObject)
+        {
+            GameObjectToDelete.Invoke(this, i_GameObject);
+        }
 
         //protected void OnUpdateScreenObject(List<ScreenObjectUpdate> i_Update)
         //{
@@ -345,27 +346,35 @@ namespace LogicUnit
             m_Buttons.hideMenuButtons();
         }
 
+        protected virtual void getUpdate(int i_Player)
+        {
+            m_GameStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button);
+
+            if(m_GameStatus == eGameStatus.Running)
+            {
+                ChangeDirection(
+                    Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
+                    r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
+            }
+        }
 
         protected async void OnUpdatesReceived()
         {
-
-            for (int i = 1; i <= 2; i++)
+            for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
             {
-                //if(isReady)
                 {
-                    ChangeDirection(
-                        Direction.getDirection(r_LiteNetClient.PlayersData[i].Button),
-                        r_LiteNetClient.PlayersData[i].PlayerNumber);
+                    getUpdate(i);
                 }
             }
-            if (f)
+
+            if (m_Flag)
             {
-                f = false;
+                m_Flag = false;
                 gameLoop();
             }
             else
             {
-                f = true;
+                m_Flag = true;
             }
         }
     }

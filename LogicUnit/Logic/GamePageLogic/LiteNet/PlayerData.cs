@@ -1,4 +1,4 @@
-﻿namespace LogicUnit.Logic.GamePageLogic;
+﻿namespace LogicUnit.Logic.GamePageLogic.LiteNet;
 
 public class PlayerData
 {
