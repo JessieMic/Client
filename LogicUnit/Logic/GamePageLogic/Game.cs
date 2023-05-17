@@ -65,6 +65,7 @@ namespace LogicUnit
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
         private bool m_Flag= false;
+        private bool m_IsMenuVisible = false;  
         
         public Game()
         {
@@ -327,7 +328,13 @@ namespace LogicUnit
         private void showPauseMenu()
         {
             //GameObject for menu
-            m_Buttons.ShowMenuButtons();
+            Size screenSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1];
+            GameObject pauseMenu = new GameObject();
+            pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", new Point((screenSize.m_Width/2)-2, (screenSize.m_Height / 2) - 2), GameSettings.m_GameBoardGridSize, new Point(0,0));
+            pauseMenu.m_Size = GameSettings.m_PauseMenuSize;
+            m_GameObjectsToAdd.Add(pauseMenu);
+            m_Buttons.GetMenuButtons(ref m_GameObjectsToAdd);
+            OnAddScreenObjects();
         }
 
         private void restartGame()
@@ -348,13 +355,18 @@ namespace LogicUnit
 
         protected virtual void getUpdate(int i_Player)
         {
-            m_GameStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button);
+            eGameStatus returnStatus;
+            returnStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button);
 
-            if(m_GameStatus == eGameStatus.Running)
+            if(returnStatus == eGameStatus.Running)
             {
                 ChangeDirection(
                     Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
                     r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
+            }
+            else
+            {
+                m_GameStatus = returnStatus;
             }
         }
 
@@ -370,7 +382,16 @@ namespace LogicUnit
             if (m_Flag)
             {
                 m_Flag = false;
-                gameLoop();
+
+                if(m_GameStatus == eGameStatus.Running)
+                {
+                    gameLoop();
+                }
+                else if(!m_IsMenuVisible && m_GameStatus == eGameStatus.Paused)
+                {
+                    m_IsMenuVisible = true;
+                    showPauseMenu();
+                }
             }
             else
             {

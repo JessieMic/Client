@@ -95,7 +95,8 @@ public partial class GamePage : ContentPage
         button.WidthRequest = i_ButtonToAdd.m_Size.m_Width;
         button.CornerRadius = 70;
         gridLayout.Add(button);
-        button.TranslateTo(i_ButtonToAdd.m_PointsOnScreen[0].m_Column, i_ButtonToAdd.m_PointsOnScreen[0].m_Row);
+        button.TranslationX = i_ButtonToAdd.m_PointsOnScreen[0].m_Column;
+        button.TranslationY = i_ButtonToAdd.m_PointsOnScreen[0].m_Row;
         button.Clicked += m_Game.OnButtonClicked;
         m_gameButtons.Add(i_ButtonToAdd.m_ID[0],button);
     }
