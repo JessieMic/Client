@@ -50,6 +50,7 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\heart.png" />
+	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\snakeobject1food.png" />
 	  <None Remove="Resources\Images\snakeplayer1body.png" />
 	  <None Remove="Resources\Images\snakeplayer2body.png" />

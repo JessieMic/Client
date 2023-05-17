@@ -31,7 +31,12 @@ namespace Objects
                     35,
                     m_MovementButtonSize,
                     getValuesToAdd(button));
+                if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
+                {
+                    newButton.m_Size = GameSettings.m_PauseMenuButtonSize;
+                }
                 i_GameObjectsToAdd.Add(newButton);
+                
             }
         }
 
@@ -76,9 +81,23 @@ namespace Objects
                 return values;
         }
 
-        public void ShowMenuButtons()
+        public void GetMenuButtons(ref List<GameObject> i_GameObjectsToAdd)
         {
-
+            
+            List<eButton> buttonList = setPauseButtonList();
+            foreach (var button in buttonList)
+            {
+                GameObject newButton = new GameObject();
+                newButton.InitializeButton(
+                    button,
+                    generatePngString(button),
+                    getButtonPoint(button),
+                    35,
+                    GameSettings.m_PauseMenuButtonSize,
+                    getValuesToAdd(button));
+                
+                i_GameObjectsToAdd.Add(newButton);
+            }
         }
 
         public void hideMenuButtons()
@@ -157,9 +176,13 @@ namespace Objects
                 {
                     returnPoint.SetAndGetPoint(7, 1);
                 }
-                else
+                else if (i_Type == eButton.PauseMenu)
                 {
                     returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 0);
+                }
+                else
+                {
+                    returnPoint = getPauseMenuButtonPoint(i_Type);
                 }
             }
             else
@@ -188,12 +211,63 @@ namespace Objects
                 {
                     returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 8, 1);
                 }
-                else
+                else if (i_Type == eButton.PauseMenu)
                 {
                     returnPoint.SetAndGetPoint(1, 2);
                 }
+                else
+                {
+                    returnPoint = getPauseMenuButtonPoint(i_Type);
+                }
             }
             return returnPoint;
+        }
+
+        private Point getPauseMenuButtonPoint(eButton i_Type)
+        {
+            Point returnPoint = new Point(1, 1);
+
+            if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            {
+                if (i_Type == eButton.Continue)
+                {
+                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width/2)-2, (m_ClientScreenSize.m_Height/2)+3);
+                }
+                else if (i_Type == eButton.Restart)
+                {
+                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2)-2, (m_ClientScreenSize.m_Height / 2)+1);
+                }
+                else if (i_Type == eButton.Exit)
+                {
+                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2)-2, (m_ClientScreenSize.m_Height / 2)-1);
+                }
+            }
+            else
+            {
+                if (i_Type == eButton.Continue)
+                {
+                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2), (m_ClientScreenSize.m_Height / 2)-2);
+                }
+                else if (i_Type == eButton.Restart)
+                {
+                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2), (m_ClientScreenSize.m_Height / 2));
+                }
+                else if (i_Type == eButton.Exit)
+                {
+                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2), (m_ClientScreenSize.m_Height / 2)+2);
+                }
+            }
+            return returnPoint;
+        }
+
+        private List<eButton> setPauseButtonList()
+        {
+            List<eButton> buttonList = new List<eButton>();
+            buttonList.Add(eButton.Continue);
+            buttonList.Add(eButton.Exit);
+            buttonList.Add(eButton.Restart);
+
+            return buttonList;
         }
 
         private void setButtonList()
