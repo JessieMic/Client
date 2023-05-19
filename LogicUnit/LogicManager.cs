@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Objects;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -13,9 +14,15 @@ namespace LogicUnit
         private RoomData m_RoomData;
         private Action<List<string>> m_AddPlayersToScreen;
 
+        ///////////////
+        public GameInformation m_GameInformation = GameInformation.Instance;
+        public Player m_Player = Player.Instance;
+
         public LogicManager()
         {
             r_Connection = new Connection();
+            //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
+            m_GameInformation.AmountOfPlayers = 4;
         }
 
         public string GetRoomCode()
@@ -96,13 +103,16 @@ namespace LogicUnit
             return true;
         }
 
-        public void RemovePlayerByHost(string i_Code, string i_PlayerName)
+        public void RemovePlayerByHost(/*string i_Code,*/ string i_PlayerName)
         {
+            string code = m_Player.RoomCode;
             // remove in server
         }
 
-        public void PlayerLeft(string i_Code, string i_PlayerName)
+        public void PlayerLeft(/*string i_Code, string i_PlayerName*/)
         {
+            string code = m_Player.RoomCode;
+            string name = m_Player.Name;
             // remove in server
         }
 

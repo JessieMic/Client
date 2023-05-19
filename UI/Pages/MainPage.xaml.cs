@@ -1,4 +1,5 @@
 ﻿using LogicUnit;
+using Objects.Enums;
 using UI.Pages;
 
 namespace UI
@@ -15,14 +16,18 @@ namespace UI
 
         private async void OnCreateRoomClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(EnterNamePage) +
-                                          $"?{QueryIDs.k_PlayerType}={PlayerType.k_Host}");
+            m_LogicManager.m_Player.PlayerType = PlayerType.Host;
+            await Shell.Current.GoToAsync(nameof(EnterNamePage));
+            //await Shell.Current.GoToAsync(nameof(EnterNamePage) +
+            //                              $"?{QueryIDs.k_PlayerType}={PlayerType.k_Host}");
         }
 
         private async void OnJoinRoomClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
-                                          $"?{QueryIDs.k_PlayerType}={PlayerType.k_Guest}");
+            m_LogicManager.m_Player.PlayerType = PlayerType.Guest;
+            await Shell.Current.GoToAsync(nameof(EnterRoomCodePage));
+            //await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
+            //                              $"?{QueryIDs.k_PlayerType}={PlayerType.k_Guest}");
         }
     }
 }

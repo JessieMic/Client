@@ -72,5 +72,17 @@ namespace Objects
             get { return m_AmountOfPlayers; }
             set { m_AmountOfPlayers = value; }
         }
+
+        public eGames NameOfGame
+        {
+            get
+            {
+                return m_NameOfGame;
+            }
+            set
+            {
+                m_NameOfGame = value;
+            }
+        }
     }
 }
