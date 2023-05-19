@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Json;
+﻿using Objects;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
@@ -11,10 +12,19 @@ namespace LogicUnit
         private Uri m_Uri;
         private HttpClient m_HttpClient = new HttpClient();
         private RoomData m_RoomData;
+        private Action<List<string>> m_AddPlayersToScreen;
+
+        ///////////////
+        public GameInformation m_GameInformation = GameInformation.Instance;
+        public Player m_Player = Player.Instance;
 
         public LogicManager()
         {
             r_Connection = new Connection();
+
+            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
+            m_GameInformation.AmountOfPlayers = 2;
+            m_Player.Name = DateTime.Now.ToString();
         }
 
         public string GetRoomCode()
@@ -48,6 +58,10 @@ namespace LogicUnit
 
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_JoinRoom}");
                 HttpResponseMessage response = await m_HttpClient.PutAsync(m_Uri, stringContent);
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return eLoginErrors.CodeNotFound;
+                }
 
                 return eLoginErrors.Ok;
             }
@@ -89,6 +103,29 @@ namespace LogicUnit
             }
 
             return true;
+        }
+
+        public void RemovePlayerByHost(/*string i_Code,*/ string i_PlayerName)
+        {
+            string code = m_Player.RoomCode;
+            // remove in server
+        }
+
+        public void PlayerLeft(/*string i_Code, string i_PlayerName*/)
+        {
+            string code = m_Player.RoomCode;
+            string name = m_Player.Name;
+            // remove in server
+        }
+
+        public void SetAddPlayersAction(Action<List<string>> i_Action)
+        {
+            m_AddPlayersToScreen = i_Action;
+        }
+
+        public void AddPlayersRefresher()
+        {
+            // invoke m_AddPlayersToScreen with a list of players given from the server
         }
     }
 }

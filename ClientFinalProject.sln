@@ -3,15 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiUIClient-POC", "POC_Client\MauiUIClient-POC.csproj", "{D5845125-D277-47C5-86A3-B5AED8D4FE18}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{49219B08-B7D5-4A8A-B638-AA3D5073972B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LogicUnit", "LogicUnit\LogicUnit.csproj", "{EDA7FBDC-64D5-405C-83FB-8B21DC61DE38}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameRoomServer", "GameRoomServer\GameRoomServer.csproj", "{E20DD270-4813-4954-99AE-02D097FACFFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Objects", "Objects\Objects.csproj", "{A99E098A-5D48-46C4-9C72-291DA8787B9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Objects", "Objects\Objects.csproj", "{A99E098A-5D48-46C4-9C72-291DA8787B9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,12 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D5845125-D277-47C5-86A3-B5AED8D4FE18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D5845125-D277-47C5-86A3-B5AED8D4FE18}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D5845125-D277-47C5-86A3-B5AED8D4FE18}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{D5845125-D277-47C5-86A3-B5AED8D4FE18}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D5845125-D277-47C5-86A3-B5AED8D4FE18}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D5845125-D277-47C5-86A3-B5AED8D4FE18}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{49219B08-B7D5-4A8A-B638-AA3D5073972B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{49219B08-B7D5-4A8A-B638-AA3D5073972B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49219B08-B7D5-4A8A-B638-AA3D5073972B}.Debug|Any CPU.Deploy.0 = Debug|Any CPU

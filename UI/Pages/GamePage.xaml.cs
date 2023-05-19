@@ -4,7 +4,7 @@ using LogicUnit;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
-namespace POC_Client.Pages;
+namespace UI.Pages;
 
 public partial class GamePage : ContentPage
 {
@@ -15,10 +15,6 @@ public partial class GamePage : ContentPage
     private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
     private Dictionary<int,Button> m_gameButtons = new Dictionary<int,Button>();
 
-
-    //private List<List<Image>> m_PlayerObjects = new List<List<Image>>();
-    //private List<Image> m_GameObjects = new List<Image>();
-
     public GamePage()
     {
         InitializeComponent();
@@ -28,7 +24,7 @@ public partial class GamePage : ContentPage
 
     private void initializePage()
     {
-        m_Game = m_GameLibrary.CreateAGame(m_GameInformation.m_NameOfGame);//m_GameInformation.m_NameOfGame);
+        m_Game = m_GameLibrary.CreateAGame(eGames.Snake);//m_GameInformation.m_NameOfGame);
         initializeEvents();
         initializeGame();
 
@@ -37,11 +33,6 @@ public partial class GamePage : ContentPage
     private void initializeGame()
     {
         m_Game.InitializeGame();
-        //for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
-        //{
-        //    m_PlayerObjects.Add(new List<Image>());
-        //}
-
     }
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)

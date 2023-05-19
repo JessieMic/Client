@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:UI.Pages.LobbyPages"
+             x:Class="UI.Pages.LobbyPages.Lobby">
+    <Grid x:Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <Border/>
+        <Border Grid.Row="1"/>
+        <Border Grid.Row="2"/>
+        <Border Grid.Row="3"/>
+        <Border Grid.Row="0" Grid.Column="1"/>
+        <Border Grid.Row="1" Grid.Column="1"/>
+        <Border Grid.Row="2" Grid.Column="1"/>
+        <Border Grid.Row="3" Grid.Column="1"/>
+        <Border Grid.Row="0" Grid.Column="2"/>
+        <Border Grid.Row="1" Grid.Column="2"/>
+        <Border Grid.Row="2" Grid.Column="2"/>
+        <Border Grid.Row="3" Grid.Column="2"/>
+        <Border Grid.Row="0" Grid.Column="3"/>
+        <Border Grid.Row="1" Grid.Column="3"/>
+        <Border Grid.Row="2" Grid.Column="3"/>
+        <Border Grid.Row="3" Grid.Column="3"/>
+        
+
+        <Button
+            Text="Leave"
+            HorizontalOptions="StartAndExpand"
+            VerticalOptions="CenterAndExpand"
+            Clicked="OnLeaveClicked"
+            />
+
+        <!--<Button
+            Text="Choose a Game"
+            Grid.Row="2"
+            Grid.Column="2"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"
+            Clicked="OnChooseGameClicked"/>-->
+
+        <Label
+            Text=""
+            x:Name="StatusLabel"
+            Grid.Row="1"
+            Grid.Column="0"/>
+
+        <Label
+            Text=""
+            x:Name="CodeLabel"
+            FontAttributes="Bold"
+            Grid.Row="0"
+            Grid.Column="3"
+            TextColor="Purple"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand"/>
+
+        <FlexLayout
+            x:Name="PlayersComponent"
+            Grid.Row="2"
+            Grid.Column="0"/>
+
+        <StackLayout
+            x:Name="ChosenGameComponent"
+            Grid.Row="2"
+            Grid.Column="2"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            Spacing="10"/>
+
+        <VerticalStackLayout
+            x:Name="ButtonsComponent"
+            Grid.Row="2"
+            Grid.Column="3"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"/>
+
+        <Button
+            Text="continue"
+            x:Name="continueBtn"
+            Grid.Row="3"
+            Grid.Column="3"
+            Clicked="Oncontinue"/>
+    </Grid>
+</ContentPage>
