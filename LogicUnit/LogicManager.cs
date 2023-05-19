@@ -11,6 +11,7 @@ namespace LogicUnit
         private Uri m_Uri;
         private HttpClient m_HttpClient = new HttpClient();
         private RoomData m_RoomData;
+        private Action<List<string>> m_AddPlayersToScreen;
 
         public LogicManager()
         {
@@ -48,6 +49,10 @@ namespace LogicUnit
 
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_JoinRoom}");
                 HttpResponseMessage response = await m_HttpClient.PutAsync(m_Uri, stringContent);
+                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    return eLoginErrors.CodeNotFound;
+                }
 
                 return eLoginErrors.Ok;
             }
@@ -89,6 +94,26 @@ namespace LogicUnit
             }
 
             return true;
+        }
+
+        public void RemovePlayerByHost(string i_Code, string i_PlayerName)
+        {
+            // remove in server
+        }
+
+        public void PlayerLeft(string i_Code, string i_PlayerName)
+        {
+            // remove in server
+        }
+
+        public void SetAddPlayersAction(Action<List<string>> i_Action)
+        {
+            m_AddPlayersToScreen = i_Action;
+        }
+
+        public void AddPlayersRefresher()
+        {
+            // invoke m_AddPlayersToScreen with a list of players given from the server
         }
     }
 }
