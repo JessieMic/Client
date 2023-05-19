@@ -12,6 +12,8 @@ namespace UI
             Routing.RegisterRoute(nameof(EnterRoomCodePage), typeof(EnterRoomCodePage));
             Routing.RegisterRoute(nameof(Lobby), typeof(Lobby));
             Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
+            Routing.RegisterRoute(nameof(GamePage), typeof(GamePage));
+            Routing.RegisterRoute(nameof(ScreenPlacementSelectingPage), typeof(ScreenPlacementSelectingPage));
         }
     }
 }

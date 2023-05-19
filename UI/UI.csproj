@@ -49,8 +49,20 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\pacman.png" />
+	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\snake.png" />
+	  <None Remove="Resources\Images\snake\snakeobject1food.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer1body.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer2body.png" />
+	  <None Remove="Resources\Images\upbutton.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\snake\snakeobject1food.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer1body.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer2body.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -64,8 +76,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\GamePage.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\LobbyPages\PlayerCardHost.xaml.cs">
 	    <DependentUpon>PlayerCardHost.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\ScreenPlacementSelectingPage.xaml.cs">
+	    <DependentUpon>%(Filename)</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
@@ -74,6 +92,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\EnterRoomCodePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\GamePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LobbyPages\GameCard.xaml">
@@ -98,6 +119,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\LobbyPages\PlayerCardHost.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\ScreenPlacementSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
