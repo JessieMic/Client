@@ -8,10 +8,16 @@ namespace Objects.Enums
 {
     public enum eButton
     {
+        Stop,
         Up,
         Down,
         Left,
-        Right
-        //Add more buttons in the future for shooting etc
+        Right,
+        PauseMenu,
+        ButtonA,
+        ButtonB,
+        Continue,
+        Restart,
+        Exit
     }
 }

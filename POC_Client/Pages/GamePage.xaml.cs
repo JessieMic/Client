@@ -1,112 +1,144 @@
 //using Android.Widget;
-using POC_Client.Logic;
-using POC_Client.Logic.Games;
-using POC_Client.Objects;
-using POC_Client.Objects.Enums;
 
-
+using LogicUnit;
+using Objects;
+using Objects.Enums;
+using Point = Objects.Point;
 namespace POC_Client.Pages;
 
 public partial class GamePage : ContentPage
 {
+
     private GameInformation m_GameInformation = GameInformation.Instance;
     private GameLibrary m_GameLibrary = new GameLibrary();
-    private Game m_Game = new Snake();
+    private Game m_Game;
+    private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
+    private Dictionary<int,Button> m_gameButtons = new Dictionary<int,Button>();
+
+
+    //private List<List<Image>> m_PlayerObjects = new List<List<Image>>();
+    //private List<Image> m_GameObjects = new List<Image>();
 
     public GamePage()
-	{
-		InitializeComponent();
-        initializeEvents();
-        m_Game.SetGameScreen();
-        m_Game = m_GameLibrary.CreateAGame(m_GameInformation.m_NameOfGame);
+    {
+        InitializeComponent();
+        initializePage();
         m_Game.RunGame();
     }
 
-    public void addScreenObject(object sender,ScreenObject i_ScreenObject)
+    private void initializePage()
+    {
+        m_Game = m_GameLibrary.CreateAGame(eGames.Snake);//m_GameInformation.m_NameOfGame);
+        initializeEvents();
+        initializeGame();
+
+    }
+
+    private void initializeGame()
+    {
+        m_Game.InitializeGame();
+        //for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+        //{
+        //    m_PlayerObjects.Add(new List<Image>());
+        //}
+
+    }
+
+    public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
         {
-            if (i_ScreenObject.m_ScreenObjectType == eScreenObjectType.Button)
+            foreach (var gameObject in i_GameObjectsToAdd)
             {
-                addButton(i_ScreenObject);
-            }
-            else if(i_ScreenObject.m_ScreenObjectType == eScreenObjectType.Image)
-            {
-                addImage(i_ScreenObject);
-            }
-            else if(i_ScreenObject.m_ScreenObjectType == eScreenObjectType.Space)
-            {
-                addSpace(i_ScreenObject);
+                if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+                {
+                    addButton(gameObject);
+                }
+                else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                {
+                    addImage(gameObject);
+                }
             }
         });
     }
 
-    private void addSpace(ScreenObject i_ScreenObject)
-    {
-        //gridLayout.ColumnDefinitions[i_ScreenObject.m_Point.m_Column].Width = i_ScreenObject.m_Size.m_Width;
-        //gridLayout.RowDefinitions[i_ScreenObject.m_Point.m_Row].Height = i_ScreenObject.m_Size.m_Height;
-    }
-
-    private void addImage(ScreenObject i_ScreenObject)
+    private void addImage(GameObject i_GameObjectToAdd)
     {
         Image image = new Image();
-                image.Source = i_ScreenObject.m_ImageSource;
-   
-        if(i_ScreenObject.m_Size.m_Width != 0)
+
+        image.TranslationX = i_GameObjectToAdd.m_PointsOnScreen[0].m_Column;//.m_Point.m_Column;
+        image.TranslationY = i_GameObjectToAdd.m_PointsOnScreen[0].m_Row;
+
+        if (i_GameObjectToAdd.m_Size.m_Width != 0)
         {
-            image.WidthRequest= i_ScreenObject.m_Size.m_Width;
+            image.WidthRequest = i_GameObjectToAdd.m_Size.m_Width;
         }
-   
-        if(i_ScreenObject.m_Size.m_Height != 0)
+
+        if (i_GameObjectToAdd.m_Size.m_Height != 0)
         {
-            image.HeightRequest= i_ScreenObject.m_Size.m_Height;
+            image.HeightRequest = i_GameObjectToAdd.m_Size.m_Height;
         }
 
         image.Aspect = Aspect.AspectFill;
-        Image image1 = new Image();
-        image1.Source = i_ScreenObject.m_ImageSource;
-        image.BackgroundColor = Colors.Blue;
-        if (i_ScreenObject.m_Size.m_Width != 0)
-        {
-            image1.WidthRequest = i_ScreenObject.m_Size.m_Width;
-        }   
-
-        if (i_ScreenObject.m_Size.m_Height != 0)
-        {
-            image1.HeightRequest = i_ScreenObject.m_Size.m_Height;
-        }
-
-        gridLayout.Add(image);//,i_ScreenObject(.m_Point.m_Column,i_ScreenObject.m_Point.m_Row);
-        //gridLayout.Add(image1);
-            image.TranslateTo(0,125);
-            if(m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
-            {
-            image.TranslateTo(0, i_ScreenObject.m_Point.m_Row);
-        }
-            //image1.TranslateTo(i_ScreenObject.m_Point.m_Column, 0, 0);
-        //gridLayout.Add(new Imageima, new Rect((double)i_ScreenObject.m_Point.m_Column, (double)i_ScreenObject.m_Point.m_Row, i_ScreenObject.m_Size.m_Width, i_ScreenObject.m_Size.m_Height));
+        image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
+        gridLayout.Add(image);
+        m_GameImages.Add(i_GameObjectToAdd.m_ID[0],image);
+        image.Source = i_GameObjectToAdd.m_ImageSources[0];
     }
 
-    private void addButton(ScreenObject i_ScreenObject)
+
+    private void addButton(GameObject i_ButtonToAdd)
     {
         Button button = new Button();
-                button.ClassId = i_ScreenObject.m_KindOfButton.ToString();
-                button.HeightRequest = i_ScreenObject.m_Size.m_Height;
-                button.WidthRequest = i_ScreenObject.m_Size.m_Width;
-                button.CornerRadius = 70;
-                gridLayout.Add(button);
+        button.ClassId = i_ButtonToAdd.m_ButtonType.ToString();//.m_KindOfButton.ToString();
+        button.HeightRequest = i_ButtonToAdd.m_Size.m_Height;
+        button.WidthRequest = i_ButtonToAdd.m_Size.m_Width;
+        button.CornerRadius = 70;
+        gridLayout.Add(button);
+        button.TranslationX = i_ButtonToAdd.m_PointsOnScreen[0].m_Column;
+        button.TranslationY = i_ButtonToAdd.m_PointsOnScreen[0].m_Row;
+        button.Clicked += m_Game.OnButtonClicked;
+        m_gameButtons.Add(i_ButtonToAdd.m_ID[0],button);
+    }
 
-                button.TranslateTo(i_ScreenObject.m_Point.m_Column, i_ScreenObject.m_Point.m_Row);
-                if(m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
+    private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)
+    {
+        Application.Current.Dispatcher.Dispatch(async () =>
+        {
+            foreach (var screenObject in i_ObjectUpdates)
+            {
+                for(int i = 0; i < screenObject.m_ID.Count; i++)
                 {
-                    button.TranslateTo(i_ScreenObject.m_Point.m_Column, i_ScreenObject.m_Point.m_Row+115);
+                    m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
+                    m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
                 }
+            }
+        });
+    }
 
-            button.Clicked += m_Game.OnButtonClicked;
+    public void deleteObject(object sender, GameObject i_ObjectToDelete)
+    {
+
+        for (int i = 0; i < i_ObjectToDelete.m_ID.Count; i++)
+        {
+            if(i_ObjectToDelete.m_Fade)
+            {
+                m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
+            }
+            //gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
+            //m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
+        }
     }
 
     async Task initializeEvents()
     {
-        m_Game.AddScreenObject += addScreenObject;
+        m_Game.AddGameObjectList += addGameObjects;
+        m_Game.GameObjectsUpdate += gameObjectsUpdate;
+        m_Game.GameObjectToDelete += deleteObject;
     }
 }
+
+//playerObject.Source = screenObject.m_ImageSources[i];
+//playerObject.TranslateTo(
+//    screenObject.m_NewPositions[i].m_Column,
+//    screenObject.m_NewPositions[i].m_Row);

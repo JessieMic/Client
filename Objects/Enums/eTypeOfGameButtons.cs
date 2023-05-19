@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Objects
+namespace Objects.Enums
 {
-    public enum eTypeOfGameButtons
+    public enum eTypeOfGameMovementButtons
     {
-        MovementButtonsForAllDirections,
-        RightAndLeft //For Pong
-        //MovementButtonsAnd  - Add here the other type of buttons we will want, probably for tank game
+        AllDirections,
+        RightAndLeft
     }
 }

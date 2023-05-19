@@ -49,9 +49,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\heart.png" />
+	  <None Remove="Resources\Images\pausemenu.png" />
+	  <None Remove="Resources\Images\snakeobject1food.png" />
+	  <None Remove="Resources\Images\snakeplayer1body.png" />
+	  <None Remove="Resources\Images\snakeplayer2body.png" />
+	  <None Remove="Resources\Images\upbutton.png" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Maui" Version="5.1.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.0.0-preview3" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.5" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\LogicUnit\LogicUnit.csproj" />
+	  <ProjectReference Include="..\Objects\Objects.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -61,6 +76,12 @@
 	  <MauiXaml Update="Pages\ScreenPlacementSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiImage Include="Resources\Images\snake\snakeobject1food.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer1body.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer2body.png" />
 	</ItemGroup>
 
 </Project>

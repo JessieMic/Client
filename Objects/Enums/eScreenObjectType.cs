@@ -10,6 +10,8 @@ namespace Objects.Enums
     {
         Button,
         Space,
-        Image
+        Image,
+        Player,
+        Object
     }
 }

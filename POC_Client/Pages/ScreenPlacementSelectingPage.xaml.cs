@@ -1,11 +1,13 @@
 //using Keyboard = Android.InputMethodServices.Keyboard;
 
+using Objects;
+
 namespace POC_Client;
 
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Maui.Controls;
-using POC_Client.Logic;
-using POC_Client.Objects;
+using LogicUnit;
+
 using System.Xml.Linq;
 public partial class ScreenPlacementSelectingPage : ContentPage
 {
@@ -53,8 +55,8 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     protected override async void OnSizeAllocated(double i_Width, double i_Height)
     {
         base.OnSizeAllocated(i_Width,i_Height);
-        m_pageLogic.SetPlayerScreenSize(i_Width, i_Height);
-        
+        m_pageLogic.SetPlayerScreenSize((int)i_Width, (int)i_Height);
+       
     }
 
     private void initializeButtons()

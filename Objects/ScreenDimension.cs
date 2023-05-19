@@ -11,10 +11,9 @@ namespace Objects
         private Size m_Size = new Size();
         public Position m_Position = new Position();
 
-        public ScreenDimension(Size i_Size,Position i_Position)
+        public ScreenDimension(Size i_Size, Position i_Position)
         {
             m_Size = i_Size;
-            //m_Size.m_Height -= 115;
             m_Position = i_Position;
         }
 
@@ -32,7 +31,7 @@ namespace Objects
             set
             {
                 m_Size = value;
-                m_Size.m_Height -= 115;
+                //m_Size.m_Height-= 115;
             }
         }
 
