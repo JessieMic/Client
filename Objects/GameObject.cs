@@ -37,8 +37,7 @@ namespace Objects
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
-            m_ID.Add(GameSettings.m_ID);
-            GameSettings.m_ID++;
+            m_ID.Add(GameSettings.getID());
         }
 
         public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
@@ -51,8 +50,7 @@ namespace Objects
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
-            m_ID.Add(GameSettings.m_ID);
-            GameSettings.m_ID++;
+            m_ID.Add(GameSettings.getID());
             m_Size = i_Size;
         }
 
