@@ -1,6 +1,7 @@
 using LogicUnit;
 //using System.Xml.Linq;
 //using static ObjCRuntime.Dlfcn;
+using UI.Pages.LobbyPages;
 
 namespace UI.Pages;
 
@@ -39,7 +40,10 @@ public partial class EnterNamePage : ContentPage
 
         if (logicResponse == eLoginErrors.Ok)
         {
-            // go to next page with the code
+            await Shell.Current.GoToAsync(nameof(Lobby) +
+                $"?{QueryIDs.k_PlayerType}={PlayerType}&" +
+                $"{QueryIDs.k_Code}={RoomCode}&" +
+                $"{QueryIDs.k_Name}={username}");
         }
         else
         {

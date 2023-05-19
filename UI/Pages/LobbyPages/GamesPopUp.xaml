@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+           x:Class="UI.Pages.LobbyPages.GamesPopUp"
+           CanBeDismissedByTappingOutsideOfPopup="False"
+           Color="White">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <FlexLayout
+        Grid.Row="1"
+        Grid.Column="1"
+        x:Name="GamesComponent"/>
+
+        <Button
+            Text="OK"
+            x:Name="OkButton"
+            Grid.Row="2"
+            Grid.Column="2"
+            Clicked="OnOkClicked"/>
+
+        <Button
+            Text="Cancel"
+            x:Name="CancelButton"
+            Grid.Row="2"
+            Grid.Column="0"
+            Clicked="OnCancelClicked"/>
+    </Grid>
+</mct:Popup>

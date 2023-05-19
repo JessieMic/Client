@@ -17,8 +17,6 @@
                    VerticalOptions="Center"
                    FontSize="30"
                    ReturnType="Next">
-                <!--TextChanged="OnEntryTextChanged"
-               Completed="OnEntryCompleted"-->
             </Entry>
 
             <Label Text =""

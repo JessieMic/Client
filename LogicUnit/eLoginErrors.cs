@@ -13,7 +13,10 @@ namespace LogicUnit
         [Description("Please enter a code.")]
         EmptyCode,
 
-        Ok
+        Ok,
+
+        [Description("Code not found.")]
+        CodeNotFound
     }
 
     public static class EnumHelper
