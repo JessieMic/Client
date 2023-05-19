@@ -16,7 +16,7 @@ public partial class MainPage : ContentPage
 	{
         InitializeComponent();
         //StatusBar.SetColor(Colors.Transparent);
-        m_PlayerInfo.Name = DateAndTime.TimeString;
+        //m_PlayerInfo.Name = "a";
         Shell.Current.GoToAsync("ScreenPlacementSelectingPage");
     }
 

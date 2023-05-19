@@ -15,6 +15,7 @@ namespace Objects
         private string m_Name;
         private int m_ButtonThatPlayerPicked;
 
+
         private static readonly object s_InstanceLock = new object();
         private Player()
         {
