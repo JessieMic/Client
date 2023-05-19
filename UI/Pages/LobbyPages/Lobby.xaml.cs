@@ -207,4 +207,9 @@ public partial class Lobby : ContentPage
             }
         }
     }
+
+    public async void Oncontinue(object sender, EventArgs e)
+    {
+        await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
+    }
 }

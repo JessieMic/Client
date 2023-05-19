@@ -29,5 +29,10 @@ namespace UI
             //await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
             //                              $"?{QueryIDs.k_PlayerType}={PlayerType.k_Guest}");
         }
+
+        private async void OnSkipClicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
+        }
     }
 }
