@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR.Client;
+using Objects.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace Objects
         private bool m_DidPlayerPickAPlacement;
         private string m_Name;
         private int m_ButtonThatPlayerPicked;
+        private PlayerType m_PlayerType;
+        private string m_RoomCade;
 
 
         private static readonly object s_InstanceLock = new object();
@@ -70,6 +73,30 @@ namespace Objects
             set
             {
                 m_ButtonThatPlayerPicked = value;
+            }
+        }
+
+        public PlayerType PlayerType
+        {
+            get
+            {
+                return m_PlayerType;
+            }
+            set
+            {
+                m_PlayerType = value;
+            }
+        }
+
+        public string RoomCode
+        {
+            get
+            {
+                return m_RoomCade;
+            }
+            set
+            {
+                m_RoomCade = value;
             }
         }
     }

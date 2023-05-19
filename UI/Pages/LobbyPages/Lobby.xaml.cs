@@ -1,16 +1,21 @@
 using CommunityToolkit.Maui.Views;
 using LogicUnit;
+using Objects.Enums;
 using UI.Pages.LobbyPages.Utils;
+using Game = UI.Pages.LobbyPages.Utils.Game;
 
 namespace UI.Pages.LobbyPages;
 
-[QueryProperty(nameof(PlayerType), QueryIDs.k_PlayerType)]
-[QueryProperty(nameof(RoomCode), QueryIDs.k_Code)]
-[QueryProperty(nameof(PlayerName), QueryIDs.k_Name)]
+//[QueryProperty(nameof(PlayerType), QueryIDs.k_PlayerType)]
+//[QueryProperty(nameof(RoomCode), QueryIDs.k_Code)]
+//[QueryProperty(nameof(PlayerName), QueryIDs.k_Name)]
 public partial class Lobby : ContentPage
 {
-    public string PlayerType { get; set; }
-    string m_code;
+    //public string PlayerType { get; set; }
+    private string m_Code;
+    private PlayerType m_PlayerType;
+    private string m_PlayerName;
+
     private LogicManager m_LogicManager = new LogicManager();
     public Button ChooseGameButton;
     public Button InstructionsButton;
@@ -18,31 +23,34 @@ public partial class Lobby : ContentPage
     private Label GameDetailsLabel = new Label();
     private Game m_ChosenGame;
 
-    public string RoomCode {
-        get => m_code;
-        set
-        {
-            m_code = value;
-            CodeLabel.Text = value;
-        }
-    }
-    public string PlayerName { get; set; }
+    //public string RoomCode {
+    //    get => m_code;
+    //    set
+    //    {
+    //        m_code = value;
+    //        CodeLabel.Text = value;
+    //    }
+    //}
+    //public string PlayerName { get; set; }
 
     public Lobby()
 	{
         InitializeComponent();
         StatusLabel.Text = "Waiting for all players...";
-	}
+        m_PlayerName = m_LogicManager.m_Player.Name;
+        m_Code = m_LogicManager.m_Player.RoomCode;
+        m_PlayerType = m_LogicManager.m_Player.PlayerType;
+    }
 
     [Obsolete]
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
 
-        PlayerCard playerCard = new PlayerCard(RemovePlayer, PlayerName);
+        PlayerCard playerCard = new PlayerCard(RemovePlayer, m_PlayerName);
         PlayersComponent.Add(playerCard);
 
-        if (PlayerType == LogicUnit.PlayerType.k_Host)
+        if (m_PlayerType == PlayerType.Host)
         {
             //playerCard.AddRemoveButton();
 
@@ -68,15 +76,15 @@ public partial class Lobby : ContentPage
 
     private async void OnLeaveClicked(object sender, EventArgs e)
     {
-        m_LogicManager.PlayerLeft(RoomCode, PlayerName);
+        m_LogicManager.PlayerLeft();
 
-        if (PlayerType == LogicUnit.PlayerType.k_Host)
+        if (m_PlayerType == PlayerType.Host)
         {
             await Shell.Current.GoToAsync("../.."); // two pages back - goes to the main page
         }
         else
         {
-            await Shell.Current.GoToAsync("../../..");
+            await Shell.Current.GoToAsync("../../.."); // three pages back - goes to the main page
         }
     }
 
@@ -88,8 +96,8 @@ public partial class Lobby : ContentPage
         //GameCard snakeCard = new GameCard("snake.png", "Snake");
         //GameCard pacmanCard = new GameCard("pacman.png", "Pacman");
 
-        Game snakeGame = GameLibrary.GetSnakeGame();
-        Game pacmanGame = GameLibrary.GetPacmanGame();
+        Game snakeGame = Utils.GameLibrary.GetSnakeGame();
+        Game pacmanGame = Utils.GameLibrary.GetPacmanGame();
 
         GameCard snakeCard = new GameCard(snakeGame);
         GameCard pacmanCard = new GameCard(pacmanGame);
@@ -102,7 +110,7 @@ public partial class Lobby : ContentPage
 
     public void RemovePlayer(PlayerCard i_PlayerCard, string i_PlayerName)
     {
-        m_LogicManager.RemovePlayerByHost(RoomCode, i_PlayerName);
+        m_LogicManager.RemovePlayerByHost(i_PlayerName);
         PlayersComponent.Remove(i_PlayerCard);
     }
 
@@ -131,6 +139,15 @@ public partial class Lobby : ContentPage
         m_ChosenGame = i_ChosenGame;
         m_ChosenGameCard = new GameCard(i_ChosenGame);
         ChosenGameComponent.Add(m_ChosenGameCard);
+
+        if(m_ChosenGame.GetName() == "Snake")
+        {
+            m_LogicManager.m_GameInformation.NameOfGame = eGames.Snake;
+        }
+        else
+        {
+            m_LogicManager.m_GameInformation.NameOfGame = eGames.Pacman;
+        }
 
         editGameDetailsLabel();
         createInstructionsButton();
@@ -177,11 +194,11 @@ public partial class Lobby : ContentPage
     {
         foreach (string name in i_PlayersNames)
         {
-            if (name != PlayerName)
+            if (name != m_PlayerName)
             {
                 PlayerCard newCard = new PlayerCard(RemovePlayer, name);
 
-                if (PlayerType == LogicUnit.PlayerType.k_Host)
+                if (m_PlayerType == PlayerType.Host)
                 {
                     newCard.AddRemoveButton();
                 }

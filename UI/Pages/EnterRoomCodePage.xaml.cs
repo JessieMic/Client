@@ -3,10 +3,10 @@ using LogicUnit;
 
 namespace UI.Pages;
 
-[QueryProperty(nameof(PlayerType), QueryIDs.k_PlayerType)]
+//[QueryProperty(nameof(PlayerType), QueryIDs.k_PlayerType)]
 public partial class EnterRoomCodePage : ContentPage
 {
-    public string PlayerType { get; set; }
+    //public string PlayerType { get; set; }
 
     private readonly LogicManager r_LogicManager;
 
@@ -23,9 +23,10 @@ public partial class EnterRoomCodePage : ContentPage
 
         if (logicResponse == eLoginErrors.Ok)
         {
-            await Shell.Current.GoToAsync(nameof(EnterNamePage) +
-                                          $"?{QueryIDs.k_PlayerType}={PlayerType}&" +
-                                          $"{QueryIDs.k_Code}={code}");
+            await Shell.Current.GoToAsync(nameof(EnterNamePage));
+            //await Shell.Current.GoToAsync(nameof(EnterNamePage) +
+            //                              $"?{QueryIDs.k_PlayerType}={PlayerType}&" +
+            //                              $"{QueryIDs.k_Code}={code}");
         }
         else
         {
