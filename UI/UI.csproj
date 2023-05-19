@@ -49,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\aa.png" />
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\pacman.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />

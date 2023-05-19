@@ -10,6 +10,12 @@
             VerticalOptions="Center">
 
             <Button
+                x:Name="SkipBtn"
+                Text="SKIP:)"
+                HorizontalOptions="Center"
+                Clicked="OnSkipClicked"/>
+
+            <Button
                 x:Name="CreateRoomBtn"
                 Text="Create a Room"
                 HorizontalOptions="Center"

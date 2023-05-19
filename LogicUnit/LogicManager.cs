@@ -21,8 +21,10 @@ namespace LogicUnit
         public LogicManager()
         {
             r_Connection = new Connection();
-            //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
-            m_GameInformation.AmountOfPlayers = 4;
+
+            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
+            m_GameInformation.AmountOfPlayers = 2;
+            m_Player.Name = DateTime.Now.ToString();
         }
 
         public string GetRoomCode()

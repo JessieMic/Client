@@ -43,7 +43,7 @@ namespace LogicUnit
             r_ConnectionToServer.On<int>
             ("GetAmountOfPlayers", (i_AmountOfPlayers) =>
                 {
-                    m_GameInformation.AmountOfPlayers = i_AmountOfPlayers;
+                    //m_GameInformation.AmountOfPlayers = i_AmountOfPlayers;
                     OnReceivedAmountOfPlayers();
                 });
 

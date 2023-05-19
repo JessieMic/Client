@@ -85,5 +85,12 @@
             Grid.Column="3"
             VerticalOptions="Center"
             HorizontalOptions="Center"/>
+
+        <Button
+            Text="continue"
+            x:Name="continueBtn"
+            Grid.Row="3"
+            Grid.Column="3"
+            Clicked="Oncontinue"/>
     </Grid>
 </ContentPage>
