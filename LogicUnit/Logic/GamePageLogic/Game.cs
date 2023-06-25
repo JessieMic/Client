@@ -66,11 +66,13 @@ namespace LogicUnit
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
         private bool m_Flag= false;
         private bool m_IsMenuVisible = false;  
+        private readonly int r_GameSpeed = 100;
+        private Thread m_networkThread;
         
         public Game()
         {
             r_LiteNetClient.Init(2);
-            r_LiteNetClient.ReceivedData += OnUpdatesReceived;
+            //r_LiteNetClient.ReceivedData += OnUpdatesReceived;
             r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
 
             r_ConnectionToServer = new HubConnectionBuilder()
@@ -118,6 +120,8 @@ namespace LogicUnit
             }
             SetGameScreen();
 
+            //m_networkThread = new Thread(() => r_LiteNetClient.Run());
+            //m_networkThread.Start();
             r_LiteNetClient.Run();
         }
 
@@ -301,17 +305,17 @@ namespace LogicUnit
         }
 
 
-        protected void notifyGameObjectUpdate(eScreenObjectType i_ObjectType, int i_ObjectNumber, Direction i_Direction, Point i_Point)
-        {
-            if (i_ObjectType == eScreenObjectType.Player)
-            {
-                ChangeDirection(i_Direction, i_ObjectNumber);
-            }
-            else
-            {
-                ChangeGameObject(i_ObjectNumber, i_Direction, i_Point);
-            }
-        }
+        //protected void notifyGameObjectUpdate(eScreenObjectType i_ObjectType, int i_ObjectNumber, Direction i_Direction, Point i_Point)
+        //{
+        //    if (i_ObjectType == eScreenObjectType.Player)
+        //    {
+        //        ChangeDirection(i_Direction, i_ObjectNumber);
+        //    }
+        //    else
+        //    {
+        //        ChangeGameObject(i_ObjectNumber, i_Direction, i_Point);
+        //    }
+        //}
 
         // notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
 
@@ -385,7 +389,8 @@ namespace LogicUnit
 
                 if(m_GameStatus == eGameStatus.Running)
                 {
-                    gameLoop();
+                    //TODO: update other players direction
+                    //gameLoop();
                 }
                 else if(!m_IsMenuVisible && m_GameStatus == eGameStatus.Paused)
                 {

@@ -51,14 +51,11 @@ namespace GameRoomServer
                 writer.Put(data.Button);
             }
 
-            //foreach(ClientData data in r_Clients)
-            //{
-            //    Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
-            //}
             foreach (ClientData client in r_Clients)
             {
                 client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
             }
+
         }
 
         private void updateClientsWithObjectPoint()
@@ -69,11 +66,6 @@ namespace GameRoomServer
             writer.Put(r_ObjectPointData.m_Row);
             writer.Put(r_ObjectPointData.m_Object);
             
-
-            //foreach(ClientData data in r_Clients)
-            //{
-            //    Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
-            //}
             foreach (ClientData client in r_Clients)
             {
                 client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
@@ -92,11 +84,6 @@ namespace GameRoomServer
                     clientData.Button = i_Reader.GetInt();
                 }
             }
-            //int playerIndex = i_Reader.GetInt();
-            //int button = i_Reader.GetInt();
-            //ClientData clientData = r_Clients.Find(client => client.PlayerNumber == i_Reader.GetInt());
-            //clientData.Button = i_Reader.GetInt();
-            //r_Clients.Find(client => client.PlayerNumber == playerIndex).Button = button;
 
             i_Reader.Recycle();
         }
