@@ -42,6 +42,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             {
                 gameLoop();
                 Thread.Sleep(500);
+                lock(m_PlayersDirectionsFromServer)
+                {
+                    foreach(int player in m_PlayersDirectionsFromServer.Keys.Where(i_Player => i_Player != m_Player.ButtonThatPlayerPicked))
+                    {
+                        ChangeDirection(m_PlayersDirectionsFromServer[player], player);
+                    }
+                }
             }
         }
 

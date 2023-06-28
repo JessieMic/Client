@@ -19,7 +19,8 @@ var app = builder.Build();
 //    app.UseSwaggerUI();
 //}
 LiteNetServer liteNetServer = new LiteNetServer(5555);
-new Thread(liteNetServer.Run).Start();
+Task.Run(() => liteNetServer.Run());
+//new Thread(liteNetServer.Run).Start();
 app.UseHttpsRedirection();
 
 

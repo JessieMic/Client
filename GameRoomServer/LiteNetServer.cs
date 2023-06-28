@@ -28,7 +28,7 @@ namespace GameRoomServer
             //r_Timer.Elapsed += onTimerElapsed;
         }
 
-        public void Run()
+        public async Task Run()
         {
             while (true)
             {
@@ -37,7 +37,8 @@ namespace GameRoomServer
                 {
                     updateClients();
                 }
-                Thread.Sleep(700);
+                Thread.Sleep(10);
+                //await Task.Delay(10);
                 //Console.WriteLine($"sent: {r_Clients.ToString()}");
             }
         }
