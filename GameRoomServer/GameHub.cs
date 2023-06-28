@@ -1,13 +1,13 @@
-﻿using Objects;
-using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.SignalR;
 using System.Drawing;
+using DTOs;
 
 public class GameHub : Hub
 {
     public static string[] buttonsThatAreOccupied = new string[4];
-    public static Objects.Size[] screenSize = new Objects.Size[4];
+    public static SizeDTO[] screenSize = new SizeDTO[4];
 
-    public async Task TryPickAScreenSpot(string nameOfPlayer, String numberOfButton, Objects.Size i_ScreenSize)
+    public async Task TryPickAScreenSpot(string nameOfPlayer, String numberOfButton, SizeDTO i_ScreenOurSize)
     {
         int chosenButtonNumber;
 
@@ -20,7 +20,7 @@ public class GameHub : Hub
             {
                 //Player can pick the spot so we will update all of the Players
                 buttonsThatAreOccupied[chosenButtonNumber] = nameOfPlayer;
-                screenSize[chosenButtonNumber] = i_ScreenSize;
+                screenSize[chosenButtonNumber] = i_ScreenOurSize;
                 await Clients.All.SendAsync("PlacementUpdateRecevied", nameOfPlayer,
                 chosenButtonNumber);
             }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 using Objects.Enums;
 
 namespace Objects
@@ -37,7 +38,7 @@ namespace Objects
             }
         }
 
-        public void SetScreenInfo(string[] i_NamesOfPlayers, Size[] i_ScreenSizes)
+        public void SetScreenInfo(string[] i_NamesOfPlayers, SizeDTO[] i_ScreenSizes)
         {
             m_NamesOfAllPlayers = i_NamesOfPlayers;
 
@@ -47,7 +48,7 @@ namespace Objects
             {
                 //if(true)//(i == 1)
                 //{
-                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.Size, new Position(m_AmountOfPlayers, i + 1)));
+                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.SizeDTO, new Position(m_AmountOfPlayers, i + 1)));
                 //}
                 //else
                 //{

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 //using ABI.Windows.Security.EnterpriseData;
 using LogicUnit.Logic.GamePageLogic;
 using LogicUnit.Logic.GamePageLogic.LiteNet;
@@ -13,7 +14,6 @@ using Objects;
 using Objects.Enums;
 using Objects.Enums.BoardEnum;
 using Point = Objects.Point;
-using Size = Objects.Size;
 
 namespace LogicUnit
 {
@@ -40,7 +40,7 @@ namespace LogicUnit
 
         //Screen info 
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
-        protected Size m_BoardSize = new Size();
+        protected SizeDTO m_BoardOurSize = new SizeDTO();
 
         //Need to initialize each different game
         //protected int[] m_AmountOfLivesPlayerHas = new int[4];
@@ -110,8 +110,8 @@ namespace LogicUnit
 
         public void InitializeGame()
         {
-            m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
-            m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
+            m_BoardOurSize = m_ScreenMapping.m_TotalScreenOurSize;
+            m_Board = new int[m_BoardOurSize.m_Width, m_BoardOurSize.m_Height];
 
             r_LiteNetClient.ReceivedData += OnUpdatesReceived;
 
@@ -174,8 +174,8 @@ namespace LogicUnit
         {
             bool isPointOnTheBoard = true;
 
-            if (i_Point.m_Row < 0 || i_Point.m_Column < 0 || i_Point.m_Column > m_BoardSize.m_Width
-               || i_Point.m_Row > m_BoardSize.m_Height)
+            if (i_Point.m_Row < 0 || i_Point.m_Column < 0 || i_Point.m_Column > m_BoardOurSize.m_Width
+               || i_Point.m_Row > m_BoardOurSize.m_Height)
             {
                 isPointOnTheBoard = false;
             }
@@ -189,8 +189,8 @@ namespace LogicUnit
 
         protected bool isPointOnBoard(Point i_Point)
         {
-            bool isPointOnTheBoard = !(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardSize.m_Height || i_Point.m_Column < 0
-                                       || i_Point.m_Column >= m_BoardSize.m_Width);
+            bool isPointOnTheBoard = !(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardOurSize.m_Height || i_Point.m_Column < 0
+                                       || i_Point.m_Column >= m_BoardOurSize.m_Width);
 
             return isPointOnTheBoard;
         }
@@ -334,10 +334,10 @@ namespace LogicUnit
         private void showPauseMenu()
         {
             //GameObject for menu
-            Size screenSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1];
+            SizeDTO screenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1];
             GameObject pauseMenu = new GameObject();
-            pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", new Point((screenSize.m_Width / 2) - 2, (screenSize.m_Height / 2) - 2), GameSettings.m_GameBoardGridSize, new Point(0, 0));
-            pauseMenu.m_Size = GameSettings.m_PauseMenuSize;
+            pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", new Point((screenOurSize.m_Width / 2) - 2, (screenOurSize.m_Height / 2) - 2), GameSettings.m_GameBoardGridSize, new Point(0, 0));
+            pauseMenu.m_OurSize = GameSettings.m_PauseMenuOurSize;
             m_GameObjectsToAdd.Add(pauseMenu);
             m_Buttons.GetMenuButtons(ref m_GameObjectsToAdd);
             OnAddScreenObjects();

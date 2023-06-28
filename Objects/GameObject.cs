@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
-using Size = Objects.Size;
 
 namespace Objects
 {
@@ -23,7 +23,7 @@ namespace Objects
         public Direction m_Direction = Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;
-        public Size m_Size = new Size(35,35);
+        public SizeDTO m_OurSize = new SizeDTO(35,35);
         public List<int> m_ID = new List<int>();
         public bool m_Fade = false;
         
@@ -40,7 +40,7 @@ namespace Objects
             m_ID.Add(GameSettings.getID());
         }
 
-        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, Size i_Size, Point i_ValuesToAdd)
+        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, SizeDTO i_OurSize, Point i_ValuesToAdd)
         {
             m_ButtonType = i_ButtonType;
             m_ScreenObjectType = eScreenObjectType.Button;
@@ -51,7 +51,7 @@ namespace Objects
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
             m_ID.Add(GameSettings.getID());
-            m_Size = i_Size;
+            m_OurSize = i_OurSize;
         }
 
         public void set(GameObject i_GameObject)
@@ -63,7 +63,7 @@ namespace Objects
             m_ScreenObjectType = i_GameObject.m_ScreenObjectType;
             m_GameBoardGridSize = i_GameObject.m_GameBoardGridSize;
             m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
-            m_Size = i_GameObject.m_Size;
+            m_OurSize = i_GameObject.m_OurSize;
             m_ID = i_GameObject.m_ID;
             m_Fade = i_GameObject.m_Fade;
         }

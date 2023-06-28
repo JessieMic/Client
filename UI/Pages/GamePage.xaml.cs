@@ -60,14 +60,14 @@ public partial class GamePage : ContentPage
         image.TranslationX = i_GameObjectToAdd.m_PointsOnScreen[0].m_Column;//.m_Point.m_Column;
         image.TranslationY = i_GameObjectToAdd.m_PointsOnScreen[0].m_Row;
 
-        if (i_GameObjectToAdd.m_Size.m_Width != 0)
+        if (i_GameObjectToAdd.m_OurSize.m_Width != 0)
         {
-            image.WidthRequest = i_GameObjectToAdd.m_Size.m_Width;
+            image.WidthRequest = i_GameObjectToAdd.m_OurSize.m_Width;
         }
 
-        if (i_GameObjectToAdd.m_Size.m_Height != 0)
+        if (i_GameObjectToAdd.m_OurSize.m_Height != 0)
         {
-            image.HeightRequest = i_GameObjectToAdd.m_Size.m_Height;
+            image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
         }
 
         image.Aspect = Aspect.AspectFill;
@@ -82,8 +82,8 @@ public partial class GamePage : ContentPage
     {
         Button button = new Button();
         button.ClassId = i_ButtonToAdd.m_ButtonType.ToString();//.m_KindOfButton.ToString();
-        button.HeightRequest = i_ButtonToAdd.m_Size.m_Height;
-        button.WidthRequest = i_ButtonToAdd.m_Size.m_Width;
+        button.HeightRequest = i_ButtonToAdd.m_OurSize.m_Height;
+        button.WidthRequest = i_ButtonToAdd.m_OurSize.m_Width;
         button.CornerRadius = 70;
         gridLayout.Add(button);
         button.TranslationX = i_ButtonToAdd.m_PointsOnScreen[0].m_Column;

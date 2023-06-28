@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 
 namespace Objects
 {
     public static class GameSettings
     {
-        public static Size m_MovementButtonSize = new Size(35, 35);
+        public static SizeDTO m_MovementButtonOurSize = new SizeDTO(35, 35);
         public static int m_GameBoardGridSize = 35;
         public static int m_SpacingAroundButtons = 10;
         public static int m_ID = 0;
-        public static Size m_PauseMenuSize = new Size(210, 245);
-        public static Size m_PauseMenuButtonSize = new Size(175,35);
+        public static SizeDTO m_PauseMenuOurSize = new SizeDTO(210, 245);
+        public static SizeDTO m_PauseMenuButtonOurSize = new SizeDTO(175,35);
 
         public static int getID()
         {
