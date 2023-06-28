@@ -123,12 +123,15 @@ namespace LogicUnit.Logic.GamePageLogic.LiteNet
             r_Logger.LogInformation("Received data");
             foreach (KeyValuePair<int, PlayerData> t in PlayersData)
             {
-                playerNumber = i_Reader.GetInt();
-                button = i_Reader.GetInt();
-                r_Logger.LogInformation($"Player number: {playerNumber}, Button: {button}");
-                if (playerNumber > 0 && playerNumber <= PlayersData.Count)
+                if(i_Reader.AvailableBytes > 0)
                 {
-                    PlayersData[playerNumber].Button = button;
+                    playerNumber = i_Reader.GetInt();
+                    button = i_Reader.GetInt();
+                    r_Logger.LogInformation($"Player number: {playerNumber}, Button: {button}");
+                    if(playerNumber > 0 && playerNumber <= PlayersData.Count)
+                    {
+                        PlayersData[playerNumber].Button = button;
+                    }
                 }
             }
             ReceivedData?.Invoke();
@@ -140,12 +143,13 @@ namespace LogicUnit.Logic.GamePageLogic.LiteNet
             new Thread(update).Start();
         }
 
-        private void update()
+        private async void update()
         {
             while (true)
             {
+                Thread.Sleep(5);
                 r_NetManager.PollEvents();
-                Thread.Sleep(100);
+                //await Task.Delay(15);
             }
         }
 

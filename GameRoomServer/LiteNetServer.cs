@@ -4,6 +4,7 @@ using LiteNetLib.Utils;
 using LogicUnit.Logic.GamePageLogic;
 using Timer = System.Timers.Timer;
 
+
 namespace GameRoomServer
 {
     public class LiteNetServer
@@ -32,12 +33,13 @@ namespace GameRoomServer
         {
             while (true)
             {
+                var time = DateTime.Now.Millisecond;
                 r_NetManager.PollEvents();
                 if (r_Clients.Count > 0)
                 {
                     updateClients();
                 }
-                Thread.Sleep(10);
+                Thread.Sleep(5);
                 //await Task.Delay(10);
                 //Console.WriteLine($"sent: {r_Clients.ToString()}");
             }

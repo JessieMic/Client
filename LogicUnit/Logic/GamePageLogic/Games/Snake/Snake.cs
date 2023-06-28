@@ -33,15 +33,19 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             Thread newThread = new(actualGameLoop) { Name = "SnakeLoop" };
             newThread.Start();
+            //Task.Run(actualGameLoop);
 
         }
 
         private void actualGameLoop()
+
+        //private async Task actualGameLoop()
         {
             while(true)
             {
                 gameLoop();
                 Thread.Sleep(500);
+                //await Task.Delay(500);
                 lock(m_PlayersDirectionsFromServer)
                 {
                     foreach(int player in m_PlayersDirectionsFromServer.Keys.Where(i_Player => i_Player != m_Player.ButtonThatPlayerPicked))
