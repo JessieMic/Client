@@ -31,7 +31,18 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         public override async void RunGame()
         {
-            //gameLoop();
+            Thread newThread = new(actualGameLoop) { Name = "SnakeLoop" };
+            newThread.Start();
+
+        }
+
+        private void actualGameLoop()
+        {
+            while(true)
+            {
+                gameLoop();
+                Thread.Sleep(500);
+            }
         }
 
         protected override async Task gameLoop()

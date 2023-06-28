@@ -19,7 +19,7 @@ namespace LogicUnit
 {
     public abstract partial class Game
     {
-
+        private List<string> m_PlayerMovementsLogs = new List<string>();
 
         private readonly HubConnection r_ConnectionToServer;
         private readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
@@ -72,7 +72,8 @@ namespace LogicUnit
         public Game()
         {
             r_LiteNetClient.Init(2);
-            //r_LiteNetClient.ReceivedData += OnUpdatesReceived;
+            //TODO: blocks the server updates
+            r_LiteNetClient.ReceivedData += OnUpdatesReceived;
             r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
 
             r_ConnectionToServer = new HubConnectionBuilder()
@@ -220,6 +221,7 @@ namespace LogicUnit
 
             if (m_GameStatus == eGameStatus.Running)
             {
+                ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);
                 SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
                 //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
             }
@@ -367,6 +369,7 @@ namespace LogicUnit
                 ChangeDirection(
                     Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
                     r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
+                //m_PlayerMovementsLogs.Add($"player {i_Player} sent {r_LiteNetClient.PlayersData[i_Player].Button}");
             }
             else
             {
@@ -378,6 +381,7 @@ namespace LogicUnit
         {
             for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
             {
+                if(i != m_Player.ButtonThatPlayerPicked)//update the player that is not the current player
                 {
                     getUpdate(i);
                 }
