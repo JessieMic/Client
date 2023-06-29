@@ -3,16 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 using Objects.Enums;
 
 namespace Objects
 {
     public class Buttons
     {
-        public Size m_MovementButtonSize = new Size(35,35);
+        public SizeDTO m_MovementButtonOurSize = new SizeDTO(35,35);
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<eButton> m_Buttons = new List<eButton>();
-        public Size m_ClientScreenSize = new Size();
+        public SizeDTO m_ClientScreenOurSize = new SizeDTO();
         public eTypeOfGameMovementButtons m_TypeMovementButtons;
         public int m_AmountOfExtraButtons = 0;
 
@@ -29,11 +30,11 @@ namespace Objects
                     generatePngString(button),
                     getButtonPoint(button),
                     35,
-                    m_MovementButtonSize,
+                    m_MovementButtonOurSize,
                     getValuesToAdd(button));
                 if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
                 {
-                    newButton.m_Size = GameSettings.m_PauseMenuButtonSize;
+                    newButton.m_OurSize = GameSettings.m_PauseMenuButtonOurSize;
                 }
                 i_GameObjectsToAdd.Add(newButton);
                 
@@ -76,7 +77,7 @@ namespace Objects
             else
             {
                 values.m_Column = 10;
-                values.m_Row = m_ClientScreenSize.m_Height*35+10;
+                values.m_Row = m_ClientScreenOurSize.m_Height*35+10;
             }
                 return values;
         }
@@ -93,7 +94,7 @@ namespace Objects
                     generatePngString(button),
                     getButtonPoint(button),
                     35,
-                    GameSettings.m_PauseMenuButtonSize,
+                    GameSettings.m_PauseMenuButtonOurSize,
                     getValuesToAdd(button));
                 
                 i_GameObjectsToAdd.Add(newButton);
@@ -178,7 +179,7 @@ namespace Objects
                 }
                 else if (i_Type == eButton.PauseMenu)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 0);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2, 0);
                 }
                 else
                 {
@@ -189,27 +190,27 @@ namespace Objects
             {
                 if (i_Type == eButton.Up)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 0);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2, 0);
                 }
                 else if (i_Type == eButton.Down)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 2, 2);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2, 2);
                 }
                 else if (i_Type == eButton.Right)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 1, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 1, 1);
                 }
                 else if(i_Type == eButton.Left)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 3, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 3, 1);
                 }
                 else if (i_Type == eButton.ButtonA)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 6, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 6, 1);
                 }
                 else if (i_Type == eButton.ButtonB)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenSize.m_Width - 8, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 8, 1);
                 }
                 else if (i_Type == eButton.PauseMenu)
                 {
@@ -231,30 +232,30 @@ namespace Objects
             {
                 if (i_Type == eButton.Continue)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width/2)-2, (m_ClientScreenSize.m_Height/2)+3);
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width/2)-2, (m_ClientScreenOurSize.m_Height/2)+3);
                 }
                 else if (i_Type == eButton.Restart)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2)-2, (m_ClientScreenSize.m_Height / 2)+1);
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2)-2, (m_ClientScreenOurSize.m_Height / 2)+1);
                 }
                 else if (i_Type == eButton.Exit)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2)-2, (m_ClientScreenSize.m_Height / 2)-1);
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2)-2, (m_ClientScreenOurSize.m_Height / 2)-1);
                 }
             }
             else
             {
                 if (i_Type == eButton.Continue)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2), (m_ClientScreenSize.m_Height / 2)-2);
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2), (m_ClientScreenOurSize.m_Height / 2)-2);
                 }
                 else if (i_Type == eButton.Restart)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2), (m_ClientScreenSize.m_Height / 2));
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2), (m_ClientScreenOurSize.m_Height / 2));
                 }
                 else if (i_Type == eButton.Exit)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenSize.m_Width / 2), (m_ClientScreenSize.m_Height / 2)+2);
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2), (m_ClientScreenOurSize.m_Height / 2)+2);
                 }
             }
             return returnPoint;

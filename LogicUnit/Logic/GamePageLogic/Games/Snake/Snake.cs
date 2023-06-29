@@ -10,7 +10,6 @@ using Objects;
 using Objects.Enums;
 using Objects.Enums.BoardEnum;
 using Point = Objects.Point;
-using Size = Objects.Size;
 
 namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 {
@@ -31,7 +30,29 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         public override async void RunGame()
         {
-            //gameLoop();
+            Thread newThread = new(actualGameLoop) { Name = "SnakeLoop" };
+            newThread.Start();
+            //Task.Run(actualGameLoop);
+
+        }
+
+        private void actualGameLoop()
+
+        //private async Task actualGameLoop()
+        {
+            while(true)
+            {
+                gameLoop();
+                Thread.Sleep(500);
+                //await Task.Delay(500);
+                lock(m_PlayersDirectionsFromServer)
+                {
+                    foreach(int player in m_PlayersDirectionsFromServer.Keys.Where(i_Player => i_Player != m_Player.ButtonThatPlayerPicked))
+                    {
+                        ChangeDirection(m_PlayersDirectionsFromServer[player], player);
+                    }
+                }
+            }
         }
 
         protected override async Task gameLoop()
@@ -80,14 +101,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             }
             else
             {
-                point.m_Column = m_BoardSize.m_Width - 4;
-                until = m_BoardSize.m_Width - 1;
+                point.m_Column = m_BoardOurSize.m_Width - 4;
+                until = m_BoardOurSize.m_Width - 1;
                 inc = 1;
             }
 
             if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Row == eRowPosition.LowerRow)
             {
-                point.m_Row = m_BoardSize.m_Height - 2;
+                point.m_Row = m_BoardOurSize.m_Height - 2;
             }
 
             int i = 0;
@@ -151,9 +172,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             List<Point> res = new List<Point>();
 
-            for (int col = 0; col < m_BoardSize.m_Width; col++)
+            for (int col = 0; col < m_BoardOurSize.m_Width; col++)
             {
-                for (int row = 0; row < m_BoardSize.m_Height; row++)
+                for (int row = 0; row < m_BoardOurSize.m_Height; row++)
                 {
                     if (m_Board[col, row] == 0)
                     {

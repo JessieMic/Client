@@ -1,26 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Objects
+﻿namespace DTOs
 {
-
-    public struct Size
+    public struct SizeDTO
     {
         public int m_Width = 0;
         public int m_Height = 0;
 
-        public Size() { }
+        public SizeDTO() { }
 
-        public Size(int i_Width, int i_Height)
+        public SizeDTO(int i_Width, int i_Height)
         {
             m_Width = i_Width;
             m_Height = i_Height;
         }
 
-        public Size SetAndGetSize(int i_Width, int i_Height)
+        public SizeDTO SetAndGetSize(int i_Width, int i_Height)
         {
             m_Width = i_Width;
             m_Height = i_Height;
@@ -34,12 +27,12 @@ namespace Objects
             m_Height = i_Height;
         }
 
-        public static bool operator ==(Size i_P1, Size i_P2)
+        public static bool operator ==(SizeDTO i_P1, SizeDTO i_P2)
         {
             return i_P1.m_Width == i_P2.m_Width && i_P1.m_Height == i_P2.m_Height;
         }
 
-        public static bool operator !=(Size i_P1, Size i_P2)
+        public static bool operator !=(SizeDTO i_P1, SizeDTO i_P2)
         {
             return i_P1.m_Width != i_P2.m_Width || i_P1.m_Height != i_P2.m_Height;
         }
