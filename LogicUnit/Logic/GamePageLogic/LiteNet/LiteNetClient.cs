@@ -53,7 +53,7 @@ namespace LogicUnit.Logic.GamePageLogic.LiteNet
         {
             //r_Logger = i_Logger;
             r_NetManager.Start();
-            r_NetManager.Connect("127.0.0.1", 5555, "myKey");
+            r_NetManager.Connect("192.168.68.122", 5555, "myKey");//("127.0.0.1", 5555, "myKey");
             sr_Listener.NetworkReceiveEvent += OnReceive;
         }
 
