@@ -20,10 +20,9 @@ namespace LogicUnit
         private int m_MinimumLeftColumn;
         private int m_MinimumUpperRow;
         public List<SizeDTO> m_PlayerGameBoardScreenSize = new List<SizeDTO>();
-        
-        public SizeDTO m_MovementButtonOurSize = new SizeDTO(35, 35);
-        public int m_GameBoardGridSize = 35;
-        public int m_SpacingAroundButtons = 10;
+        public SizeDTO m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
+        public int m_GameBoardGridSize = GameSettings.m_GameBoardGridSize;
+        public int m_SpacingAroundButtons = GameSettings.m_SpacingAroundButtons;
         public int m_ControllBoardTotalHeight;
 
         public ScreenMapping()
