@@ -17,11 +17,20 @@ namespace LogicUnit
         {
             setGameButtons();
             setGameBackground();
+            setHearts();
             AddGameObjects();
             OnAddScreenObjects();
         }
 
         protected abstract void AddGameObjects();
+
+        protected void setHearts()
+        {
+            m_Hearts.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
+            m_Hearts.m_ClientScreenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1];
+            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder,m_Player.ButtonThatPlayerPicked);
+            m_Hearts.getHearts(ref m_GameObjectsToAdd);
+        }
 
         protected void setGameButtons()
         {

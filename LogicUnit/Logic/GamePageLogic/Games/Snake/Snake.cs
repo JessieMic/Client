@@ -24,7 +24,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Buttons.m_AmountOfExtraButtons = 2;
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 5;
             m_scoreBoard.m_ShowScoreBoardByOrder = true;
         }
 
@@ -266,7 +266,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         private void PlayerGotHit(int i_Player)
         {
-            m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+            //m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
             OnDeleteGameObject(m_PlayersSnakes[i_Player - 1]);
             PlayerLostALife(i_Player);//general ui update
         }

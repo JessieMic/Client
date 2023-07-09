@@ -31,7 +31,7 @@ namespace Objects
                     getButtonPoint(button),
                     35,
                     m_MovementButtonOurSize,
-                    getValuesToAdd(button));
+                    getValuesToAdd());
                 if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
                 {
                     newButton.m_OurSize = GameSettings.m_PauseMenuButtonOurSize;
@@ -66,7 +66,7 @@ namespace Objects
 
         }
 
-        private Point getValuesToAdd(eButton i_Button)
+        private Point getValuesToAdd()
         { 
             Point values = new Point();
 
@@ -79,7 +79,8 @@ namespace Objects
                 values.m_Column = 10;
                 values.m_Row = m_ClientScreenOurSize.m_Height*35+10;
             }
-                return values;
+
+            return values;
         }
 
         public void GetMenuButtons(ref List<GameObject> i_GameObjectsToAdd)
@@ -95,7 +96,7 @@ namespace Objects
                     getButtonPoint(button),
                     35,
                     GameSettings.m_PauseMenuButtonOurSize,
-                    getValuesToAdd(button));
+                    getValuesToAdd());
                 
                 i_GameObjectsToAdd.Add(newButton);
             }

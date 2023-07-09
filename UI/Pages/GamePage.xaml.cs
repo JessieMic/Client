@@ -70,6 +70,7 @@ public partial class GamePage : ContentPage
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
         }
 
+        image.Rotation = i_GameObjectToAdd.m_rotate;
         image.Aspect = Aspect.AspectFill;
         image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
         gridLayout.Add(image);
@@ -115,6 +116,10 @@ public partial class GamePage : ContentPage
             if(i_ObjectToDelete.m_Fade)
             {
                 m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
+            }
+            else
+            {
+                m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 100, null);
             }
             //gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
             //m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
