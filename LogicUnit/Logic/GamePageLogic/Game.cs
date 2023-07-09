@@ -80,9 +80,6 @@ namespace LogicUnit
                 .WithUrl(Utils.m_GameHubAddress)
                 .Build();
 
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
-            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder);
-
             //r_ConnectionToServer.On("Update", (int[] i_Update) =>
             //{
             //    MainThread.BeginInvokeOnMainThread(() =>
@@ -148,7 +145,13 @@ namespace LogicUnit
 
         protected void PlayerLostALife(int i_Player)
         {
-            m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+            m_GameStatus =m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+
+            if(m_Hearts.m_HeartToRemove != null)
+            {
+                OnDeleteGameObject(m_Hearts.m_HeartToRemove);
+                m_Hearts.m_HeartToRemove = null;
+            }
 
             if (m_GameStatus != eGameStatus.Running)
             {
@@ -205,11 +208,6 @@ namespace LogicUnit
             GameObjectToDelete.Invoke(this, i_GameObject);
         }
 
-        //protected void OnUpdateScreenObject(List<ScreenObjectUpdate> i_Update)
-        //{
-        //    GameObjectUpdate.Invoke(this, i_Update);
-        //}
-
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player)
         {
             // m_PlayerGameObjects[i_Player - 1].m_Direction = i_Direction;
@@ -252,50 +250,6 @@ namespace LogicUnit
         {
             GameObjectsUpdate.Invoke(this, m_gameObjectsToUpdate);
         }
-
-        //protected GameObject addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
-        //{
-        //    string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-        //    GameObject gameObject = new GameObject();
-
-        //    gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-
-        //    m_GameImagesToAdd.Add(gameObject.m_Images[0]);
-        //    m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
-
-        //    return gameObject;
-
-        //    //string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-        //    //GameObject gameObject = new GameObject();
-
-        //    //if (i_ToInitialize)
-        //    //{
-        //    //    gameObject.Initialize(i_Type, i_ObjectNumber, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-
-        //    //    if (i_Type == eScreenObjectType.Player)
-        //    //    {
-        //    //        m_PlayerGameObjects.Add(gameObject);
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        m_GameObjects.Add(gameObject);
-        //    //    }
-        //    //}
-
-        //    //ScreenObjectAdd objectAdd = new ScreenObjectAdd(i_Type, null, i_Point, m_ScreenMapping.m_MovementButtonSize, png, string.Empty, i_ObjectNumber);
-
-        //    //if (i_Type == eScreenObjectType.Player)
-        //    //{
-        //    //    m_PlayerGameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-        //    //}
-        //    //else
-        //    //{
-        //    //    m_GameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-        //    //}
-
-        //    //m_ScreenObjectList.Add(objectAdd);
-        //    //m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
-        //}
 
         protected string generatePngString(eScreenObjectType i_Type, int i_ObjectNumber, string i_Version)
         {

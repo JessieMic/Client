@@ -23,6 +23,7 @@ namespace Objects
         public Direction m_Direction = Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;
+        public int m_rotate = 0;
         public SizeDTO m_OurSize = GameSettings.m_MovementButtonOurSize;
         public List<int> m_ID = new List<int>();
         public bool m_Fade = false;
