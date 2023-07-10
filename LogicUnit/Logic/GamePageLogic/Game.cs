@@ -24,15 +24,12 @@ namespace LogicUnit
         private readonly HubConnection r_ConnectionToServer;
         private readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
+        //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
         public event EventHandler<List<GameObject>> GameObjectsUpdate;
         public event EventHandler<GameObject> GameObjectToDelete;
-
-
-        //Events
-        //public event EventHandler<List<Image>> AddGameObjectList;
-        //public event EventHandler<List<GameObject>> GameObjectsUpdate;
-        //public event EventHandler<GameObject> GameObjectToDelete;
+        public event EventHandler<List<int>> GameObjectsToHide;
+        public event EventHandler<List<int>> GameObjectsToShow;
 
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
@@ -43,16 +40,14 @@ namespace LogicUnit
         protected SizeDTO m_BoardOurSize = new SizeDTO();
 
         //Need to initialize each different game
-        //protected int[] m_AmountOfLivesPlayerHas = new int[4];
-        //protected int m_AmountOfLivesPlayersGetAtStart = 3;
         protected string m_GameName;
         protected ScoreBoard m_scoreBoard = new ScoreBoard();
         protected Hearts m_Hearts = new Hearts();
+        protected PauseMenu m_PauseMenu = new PauseMenu();
 
         //Things that might change while playing 
         protected int[,] m_Board;
         protected int m_AmountOfActivePlayers;
-        //protected int m_AmountOfPlayersThatAreAlive;
         public eGameStatus m_GameStatus = eGameStatus.Running;
         protected List<string> m_LoseOrder = new List<string>();
 
@@ -126,6 +121,16 @@ namespace LogicUnit
         protected virtual void OnAddScreenObjects()
         {
             AddGameObjectList.Invoke(this, m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
+        }
+
+        protected virtual void OnHideGameObjects(List<int> i_GameObjectsIDToHide)
+        {
+            GameObjectsToHide.Invoke(this, i_GameObjectsIDToHide);
+        }
+
+        protected virtual void OnShowGameObjects(List<int> i_GameObjectsIDToShow)
+        {
+            GameObjectsToShow.Invoke(this, i_GameObjectsIDToShow);
         }
 
         public bool SetAmountOfPlayers(int i_AmountOfPlayers)//for when you want to get ready in lobby 
@@ -287,14 +292,7 @@ namespace LogicUnit
 
         private void showPauseMenu()
         {
-            //GameObject for menu
-            SizeDTO screenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1];
-            GameObject pauseMenu = new GameObject();
-            pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", new Point((screenOurSize.m_Width / 2) - 2, (screenOurSize.m_Height / 2) - 2), GameSettings.m_GameBoardGridSize, new Point(0, 0));
-            pauseMenu.m_OurSize = GameSettings.m_PauseMenuOurSize;
-            m_GameObjectsToAdd.Add(pauseMenu);
-            m_Buttons.GetMenuButtons(ref m_GameObjectsToAdd);
-            OnAddScreenObjects();
+            
         }
 
         private void restartGame()

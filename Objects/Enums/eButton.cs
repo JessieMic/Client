@@ -16,7 +16,7 @@ namespace Objects.Enums
         PauseMenu,
         ButtonA,
         ButtonB,
-        Continue,
+        Resume,
         Restart,
         Exit
     }

@@ -126,11 +126,56 @@ public partial class GamePage : ContentPage
         }
     }
 
+    private void hideGameObjects(object sender, List<int> i_IDlist)
+    {
+        foreach(var ID in i_IDlist)
+        {
+            if(getObjectTypeFromID(ID) == eScreenObjectType.Image)
+            {
+                m_GameImages[ID].IsVisible = false;
+            }
+            else
+            {
+                m_gameButtons[ID].IsVisible = false;
+                m_gameButtons[ID].IsEnabled = false;
+            }
+        }
+    }
+
+    private void showGameObjects(object sender, List<int> i_IDlist)
+    {
+        foreach (var ID in i_IDlist)
+        {
+            if (getObjectTypeFromID(ID) == eScreenObjectType.Image)
+            {
+                m_GameImages[ID].IsVisible = true;
+            }
+            else
+            {
+                m_gameButtons[ID].IsVisible = false;
+                m_gameButtons[ID].IsEnabled = false;
+            }
+        }
+    }
+
+    private eScreenObjectType getObjectTypeFromID(int ID)
+    {
+        eScreenObjectType type = eScreenObjectType.Image;
+
+        if(m_gameButtons.ContainsKey(ID))
+        {
+            type = eScreenObjectType.Button;
+        }
+        return type;
+    }
+
     async Task initializeEvents()
     {
         m_Game.AddGameObjectList += addGameObjects;
         m_Game.GameObjectsUpdate += gameObjectsUpdate;
         m_Game.GameObjectToDelete += deleteObject;
+        m_Game.GameObjectsToHide +=hideGameObjects;
+        m_Game.GameObjectsToShow += showGameObjects;
     }
 }
 

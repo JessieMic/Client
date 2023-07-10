@@ -24,10 +24,10 @@ namespace LogicUnit.Logic.GamePageLogic
         public List<GameObject> m_HeartsOnScreen = new List<GameObject>();
         public GameObject m_HeartToRemove = null;
 
-        public void setHearts(int i_AmountOfPlayers,ref eGameStatus i_Status, ref List<string> i_LoseList, int i_ClientNumber)
+        public void setHearts(int i_AmountOfPlayers,ref eGameStatus o_Status, ref List<string> o_LoseList, int i_ClientNumber)
         {
-            m_GameStatus = i_Status;
-            m_LoseOrder = i_LoseList;
+            m_GameStatus = o_Status;
+            m_LoseOrder = o_LoseList;
             m_AmountOfPlayers = m_AmountOfPlayersThatAreAlive = i_AmountOfPlayers;
             m_ClientNumber = i_ClientNumber;
             for (int i = 0; i < m_AmountOfPlayers; i++)
@@ -36,7 +36,7 @@ namespace LogicUnit.Logic.GamePageLogic
             }
         }
 
-        public void getHearts(ref List<GameObject> i_GameObjectsToAdd)
+        public void getHearts(ref List<GameObject> o_GameObjectsToAdd)
         {
             for (int i = 0; i < m_AmountOfLivesPlayersGetAtStart; i++)
             {
@@ -48,7 +48,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 {
                     newHeart.m_rotate = 180;
                 }
-                i_GameObjectsToAdd.Add(newHeart);
+                o_GameObjectsToAdd.Add(newHeart);
                 m_HeartsOnScreen.Add(newHeart);
             }
         }
