@@ -13,10 +13,10 @@ namespace Objects.Enums
         Down,
         Left,
         Right,
-        PauseMenu,
         ButtonA,
         ButtonB,
         Resume,
+        PauseMenu,
         Restart,
         Exit
     }

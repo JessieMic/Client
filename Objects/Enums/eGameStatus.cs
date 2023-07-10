@@ -13,6 +13,7 @@ namespace Objects.Enums
         Lost,
         Ended,
         Won,
+        Restarted,
         Tie,
         Exited
     }
