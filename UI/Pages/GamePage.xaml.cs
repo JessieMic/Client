@@ -18,9 +18,16 @@ public partial class GamePage : ContentPage
     public GamePage()
     {
         InitializeComponent();
+        //startGame();
         initializePage();
         m_Game.RunGame();
     }
+
+    //private void startGame()
+    //{
+    //    initializePage();
+    //    m_Game.RunGame();
+    //}
 
     private void initializePage()
     {
@@ -37,20 +44,17 @@ public partial class GamePage : ContentPage
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
     {
-        Application.Current.Dispatcher.Dispatch(async () =>
+        foreach (var gameObject in i_GameObjectsToAdd)
         {
-            foreach (var gameObject in i_GameObjectsToAdd)
+            if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
             {
-                if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
-                {
-                    addButton(gameObject);
-                }
-                else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
-                {
-                    addImage(gameObject);
-                }
+                addButton(gameObject);
             }
-        });
+            else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+            {
+                addImage(gameObject);
+            }
+        }
     }
 
     private void addImage(GameObject i_GameObjectToAdd)
@@ -70,6 +74,7 @@ public partial class GamePage : ContentPage
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
         }
 
+        image.ZIndex = -1;
         image.Rotation = i_GameObjectToAdd.m_rotate;
         image.Aspect = Aspect.AspectFill;
         image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
@@ -90,6 +95,9 @@ public partial class GamePage : ContentPage
         button.TranslationX = i_ButtonToAdd.m_PointsOnScreen[0].m_Column;
         button.TranslationY = i_ButtonToAdd.m_PointsOnScreen[0].m_Row;
         button.Clicked += m_Game.OnButtonClicked;
+        button.Text = i_ButtonToAdd.m_ButtonType.ToString();
+        button.Rotation = i_ButtonToAdd.m_rotate;
+        button.ZIndex = -1;
         m_gameButtons.Add(i_ButtonToAdd.m_ID[0],button);
     }
 
@@ -101,8 +109,14 @@ public partial class GamePage : ContentPage
             {
                 for(int i = 0; i < screenObject.m_ID.Count; i++)
                 {
-                    m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
-                    m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                    if(getObjectTypeFromID(screenObject.m_ID[i]) == eScreenObjectType.Image)
+                    {
+                        if(m_GameImages.ContainsKey(screenObject.m_ID[i]))
+                        {
+                            m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
+                            m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                        }
+                    }
                 }
             }
         });
@@ -128,34 +142,49 @@ public partial class GamePage : ContentPage
 
     private void hideGameObjects(object sender, List<int> i_IDlist)
     {
-        foreach(var ID in i_IDlist)
+        Application.Current.Dispatcher.Dispatch(async () =>
         {
-            if(getObjectTypeFromID(ID) == eScreenObjectType.Image)
+            foreach (var ID in i_IDlist)
             {
-                m_GameImages[ID].IsVisible = false;
+                if(getObjectTypeFromID(ID) == eScreenObjectType.Image)
+                {
+                    m_GameImages[ID].IsVisible = false;
+                }
+                else
+                {
+                    m_gameButtons[ID].IsVisible = false;
+                    m_gameButtons[ID].IsEnabled = false;
+                }
             }
-            else
+
+            if(m_Game.m_GameStatus != eGameStatus.Restarted || m_Game.m_GameStatus != eGameStatus.Ended)
             {
-                m_gameButtons[ID].IsVisible = false;
-                m_gameButtons[ID].IsEnabled = false;
+                //m_GameImages.Clear();
+                //m_gameButtons.Clear();
+                //startGame();
             }
-        }
+        });
     }
 
     private void showGameObjects(object sender, List<int> i_IDlist)
     {
-        foreach (var ID in i_IDlist)
+        Application.Current.Dispatcher.Dispatch(async () =>
         {
-            if (getObjectTypeFromID(ID) == eScreenObjectType.Image)
+            foreach (var ID in i_IDlist)
             {
-                m_GameImages[ID].IsVisible = true;
+                if (getObjectTypeFromID(ID) == eScreenObjectType.Image)
+                {
+                    m_GameImages[ID].IsVisible = true;
+                    m_GameImages[ID].ZIndex = 0;
+                }
+                else
+                {
+                    m_gameButtons[ID].IsVisible = true;
+                    m_gameButtons[ID].IsEnabled = true;
+                    m_gameButtons[ID].ZIndex = 1;
+                }
             }
-            else
-            {
-                m_gameButtons[ID].IsVisible = false;
-                m_gameButtons[ID].IsEnabled = false;
-            }
-        }
+        });
     }
 
     private eScreenObjectType getObjectTypeFromID(int ID)
@@ -169,7 +198,7 @@ public partial class GamePage : ContentPage
         return type;
     }
 
-    async Task initializeEvents()
+    void initializeEvents()
     {
         m_Game.AddGameObjectList += addGameObjects;
         m_Game.GameObjectsUpdate += gameObjectsUpdate;

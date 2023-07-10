@@ -28,6 +28,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             m_scoreBoard.m_ShowScoreBoardByOrder = true;
         }
 
+        private void Init()
+        {
+
+        }
+
         public override async void RunGame()
         {
             Thread newThread = new(actualGameLoop) { Name = "SnakeLoop" };
@@ -40,23 +45,29 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         //private async Task actualGameLoop()
         {
-            while(true)
+            while(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
             {
-                gameLoop();
-                Thread.Sleep(500);
-                //await Task.Delay(500);
-                lock(m_PlayersDirectionsFromServer)
+                if(m_GameStatus == eGameStatus.Running)
                 {
-                    foreach(int player in m_PlayersDirectionsFromServer.Keys.Where(i_Player => i_Player != m_Player.ButtonThatPlayerPicked))
+                    gameLoop();
+                    Thread.Sleep(500);
+                    //await Task.Delay(500);
+                    lock (m_PlayersDirectionsFromServer)
                     {
-                        ChangeDirection(m_PlayersDirectionsFromServer[player], player);
+                        foreach (int player in m_PlayersDirectionsFromServer.Keys.Where(i_Player => i_Player != m_Player.ButtonThatPlayerPicked))
+                        {
+                            ChangeDirection(m_PlayersDirectionsFromServer[player], player);
+                        }
                     }
                 }
+                Thread.Sleep(500);
             }
         }
 
         protected override async Task gameLoop()
         {
+            if(m_GameStatus == eGameStatus.Running)
+            {
                 m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameObjectsToAdd = new List<GameObject>();
                 moveSnakes();
@@ -69,6 +80,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 {
                     OnUpdateScreenObject();
                 }
+            }
         }
 
         protected override void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)

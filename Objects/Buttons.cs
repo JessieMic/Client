@@ -41,29 +41,35 @@ namespace Objects
             }
         }
 
-        public eGameStatus GetGameStatue(int i_Button)
+        public eGameStatus GetGameStatue(int i_Button,eGameStatus i_GameStatus)
         {
-            eGameStatus status;
+            eGameStatus status = eGameStatus.Running;
 
-            if(i_Button == (int)eButton.PauseMenu)
+            if(i_GameStatus == eGameStatus.Running && i_Button == (int)eButton.PauseMenu)
             {
                 status = eGameStatus.Paused;
             }
-            else if(i_Button == (int)eButton.Exit)
-            {
-                status = eGameStatus.Exited;
-            }
             else
             {
-                status = eGameStatus.Running;
+                if (i_Button == (int)eButton.Exit)
+                {
+                    status = eGameStatus.Exited;
+                }
+                else if(i_Button == (int)eButton.Restart)
+                {
+                    status = eGameStatus.Restarted;
+                }
+                else if(i_Button == (int)eButton.Resume)
+                {
+                    status = eGameStatus.Running;
+                }
+                else if (i_Button != (int)eButton.Resume)
+                {
+                    status = i_GameStatus;
+                }
             }
 
             return status;
-        }
-
-        public void OnButtonClicked(object sender, EventArgs e)
-        {
-
         }
 
         private Point getValuesToAdd()
@@ -97,16 +103,16 @@ namespace Objects
                     GameSettings.m_GameBoardGridSize,
                     GameSettings.m_PauseMenuButtonOurSize,
                     getValuesToAdd());
-
+                if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+                {
+                    newButton.m_rotate = 180;
+                }
                 menuButtons.Add(newButton);
             }
             return menuButtons;
         }
 
-        public void hideMenuButtons()
-        {
-
-        }
+       
 
         protected string generatePngString(eButton i_Button)
         {
@@ -249,15 +255,15 @@ namespace Objects
             {
                 if (i_Type == eButton.Resume)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2), (m_ClientScreenOurSize.m_Height / 2)-2);
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2)-2, (m_ClientScreenOurSize.m_Height / 2)-2-5);
                 }
                 else if (i_Type == eButton.Restart)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2), (m_ClientScreenOurSize.m_Height / 2));
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2) - 2, (m_ClientScreenOurSize.m_Height / 2-5));
                 }
                 else if (i_Type == eButton.Exit)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2), (m_ClientScreenOurSize.m_Height / 2)+2);
+                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2) - 2, (m_ClientScreenOurSize.m_Height / 2)+2-5);
                 }
             }
             return returnPoint;

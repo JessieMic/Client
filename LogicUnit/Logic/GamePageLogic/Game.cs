@@ -151,7 +151,7 @@ namespace LogicUnit
         protected void PlayerLostALife(int i_Player)
         {
             m_GameStatus =m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
-
+            
             if(m_Hearts.m_HeartToRemove != null)
             {
                 OnDeleteGameObject(m_Hearts.m_HeartToRemove);
@@ -222,7 +222,7 @@ namespace LogicUnit
         {
             Button button = sender as Button;
 
-            if (m_GameStatus == eGameStatus.Running)
+            //if (m_GameStatus == eGameStatus.Running)
             {
                 ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);
                 SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
@@ -290,10 +290,6 @@ namespace LogicUnit
 
         }
 
-        private void showPauseMenu()
-        {
-            
-        }
 
         private void restartGame()
         {
@@ -305,30 +301,30 @@ namespace LogicUnit
 
         }
 
-        private void hidePauseMenu()
-        {
-            //Hide pause menu background
-            m_Buttons.hideMenuButtons();
-        }
-
         protected virtual void getUpdate(int i_Player)
         {
             eGameStatus returnStatus;
-            returnStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button);
+            m_GameStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button,m_GameStatus);
 
-            if (returnStatus == eGameStatus.Running)
+            if (m_GameStatus == eGameStatus.Running)
             {
                 m_PlayersDirectionsFromServer[r_LiteNetClient.PlayersData[i_Player].PlayerNumber] =
                     Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button);
+
+
                 //ChangeDirection(
                 //    Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
                 //    r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
                 //m_PlayerMovementsLogs.Add($"player {i_Player} sent {r_LiteNetClient.PlayersData[i_Player].Button}");
             }
-            else
+            
+
+            if(m_IsMenuVisible && m_GameStatus != eGameStatus.Paused)
             {
-                m_GameStatus = returnStatus;
+                m_IsMenuVisible = false;
+                OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
             }
+            
         }
 
         protected async void OnUpdatesReceived()
@@ -356,7 +352,7 @@ namespace LogicUnit
                 else if (!m_IsMenuVisible && m_GameStatus == eGameStatus.Paused)
                 {
                     m_IsMenuVisible = true;
-                    showPauseMenu();
+                    OnShowGameObjects(m_PauseMenu.m_PauseMenuIDList);
                 }
             }
             else
