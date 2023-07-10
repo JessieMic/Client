@@ -32,10 +32,10 @@ namespace Objects
                     35,
                     m_MovementButtonOurSize,
                     getValuesToAdd());
-                if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
-                {
-                    newButton.m_OurSize = GameSettings.m_PauseMenuButtonOurSize;
-                }
+                //if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
+                //{
+                //    newButton.m_OurSize = GameSettings.m_PauseMenuButtonOurSize;
+                //}
                 i_GameObjectsToAdd.Add(newButton);
                 
             }
@@ -83,10 +83,10 @@ namespace Objects
             return values;
         }
 
-        public void GetMenuButtons(ref List<GameObject> i_GameObjectsToAdd)
+        public List<GameObject> GetMenuButtons()// List<GameObject> o_GameObjectsToAdd)
         {
-            
             List<eButton> buttonList = setPauseButtonList();
+            List<GameObject> menuButtons = new List<GameObject>();
             foreach (var button in buttonList)
             {
                 GameObject newButton = new GameObject();
@@ -94,12 +94,13 @@ namespace Objects
                     button,
                     generatePngString(button),
                     getButtonPoint(button),
-                    35,
+                    GameSettings.m_GameBoardGridSize,
                     GameSettings.m_PauseMenuButtonOurSize,
                     getValuesToAdd());
-                
-                i_GameObjectsToAdd.Add(newButton);
+
+                menuButtons.Add(newButton);
             }
+            return menuButtons;
         }
 
         public void hideMenuButtons()
@@ -138,9 +139,9 @@ namespace Objects
             {
                 return eButton.Right;
             }
-            else if (i_Button == eButton.Continue.ToString())
+            else if (i_Button == eButton.Resume.ToString())
             {
-                return eButton.Continue;
+                return eButton.Resume;
             }
             else
             {
@@ -231,7 +232,7 @@ namespace Objects
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                if (i_Type == eButton.Continue)
+                if (i_Type == eButton.Resume)
                 {
                     returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width/2)-2, (m_ClientScreenOurSize.m_Height/2)+3);
                 }
@@ -246,7 +247,7 @@ namespace Objects
             }
             else
             {
-                if (i_Type == eButton.Continue)
+                if (i_Type == eButton.Resume)
                 {
                     returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2), (m_ClientScreenOurSize.m_Height / 2)-2);
                 }
@@ -265,7 +266,7 @@ namespace Objects
         private List<eButton> setPauseButtonList()
         {
             List<eButton> buttonList = new List<eButton>();
-            buttonList.Add(eButton.Continue);
+            buttonList.Add(eButton.Resume);
             buttonList.Add(eButton.Exit);
             buttonList.Add(eButton.Restart);
 
