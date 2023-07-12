@@ -6,7 +6,6 @@
              Title="">
     <Grid x:Name="gridLayout"
           RowDefinitions="*,Auto,Auto,*"
-          BackgroundColor="LightGray"
           ColumnDefinitions="*,Auto,Auto,*">
     </Grid>
     

@@ -56,9 +56,13 @@
 	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />
+	  <None Remove="Resources\Images\snaaplayer1body.png" />
 	  <None Remove="Resources\Images\snake.png" />
+	  <None Remove="Resources\Images\snake1.png" />
+	  <None Remove="Resources\Images\snake2.png" />
+	  <None Remove="Resources\Images\snake3.png" />
+	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snake\snakeobject1food.png" />
-	  <None Remove="Resources\Images\snake\snakeplayer1body.png" />
 	  <None Remove="Resources\Images\snake\snakeplayer2body.png" />
 	  <None Remove="Resources\Images\upbutton.png" />
 	</ItemGroup>
@@ -68,7 +72,6 @@
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <MauiImage Include="Resources\Images\snake\snakeobject1food.png" />
-	  <MauiImage Include="Resources\Images\snake\snakeplayer1body.png" />
 	  <MauiImage Include="Resources\Images\snake\snakeplayer2body.png" />
 	</ItemGroup>
 
