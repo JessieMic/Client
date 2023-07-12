@@ -1,6 +1,7 @@
 //using Android.Widget;
 
 using LogicUnit;
+using LogicUnit.Logic.GamePageLogic.Games.Snake;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
@@ -13,7 +14,7 @@ public partial class GamePage : ContentPage
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
     private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
-    private Dictionary<int,Button> m_gameButtons = new Dictionary<int,Button>();
+    private Dictionary<int,ImageButton> m_gameButtons = new Dictionary<int, ImageButton>();
 
     public GamePage()
     {
@@ -22,12 +23,6 @@ public partial class GamePage : ContentPage
         initializePage();
         m_Game.RunGame();
     }
-
-    //private void startGame()
-    //{
-    //    initializePage();
-    //    m_Game.RunGame();
-    //}
 
     private void initializePage()
     {
@@ -44,6 +39,7 @@ public partial class GamePage : ContentPage
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
     {
+        int i = 1;
         foreach (var gameObject in i_GameObjectsToAdd)
         {
             if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
@@ -52,12 +48,16 @@ public partial class GamePage : ContentPage
             }
             else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
             {
-                addImage(gameObject);
+                addImage(gameObject, i);
+                if (gameObject.m_ImageSources[0][5] == 'p' && gameObject.m_ImageSources[0][11] == '1')
+                {
+                    i++;
+                }
             }
         }
     }
 
-    private void addImage(GameObject i_GameObjectToAdd)
+    private void addImage(GameObject i_GameObjectToAdd,int i)
     {
         Image image = new Image();
 
@@ -74,19 +74,29 @@ public partial class GamePage : ContentPage
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
         }
 
+        if (i_GameObjectToAdd.m_ImageSources[0][5] == 'p')
+        {
+            image.ClassId = "snake" + i.ToString() + ".png";
+            image.Source = "snake" + i.ToString() + ".png";
+        }
+        else
+        {
+            image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
+            image.Source = i_GameObjectToAdd.m_ImageSources[0];
+        }
         image.ZIndex = -1;
         image.Rotation = i_GameObjectToAdd.m_rotate;
         image.Aspect = Aspect.AspectFill;
-        image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
+        
         gridLayout.Add(image);
         m_GameImages.Add(i_GameObjectToAdd.m_ID[0],image);
-        image.Source = i_GameObjectToAdd.m_ImageSources[0];
     }
 
 
     private void addButton(GameObject i_ButtonToAdd)
     {
-        Button button = new Button();
+        ImageButton button = new ImageButton();
+        //Button button = new Button();
         button.ClassId = i_ButtonToAdd.m_ButtonType.ToString();//.m_KindOfButton.ToString();
         button.HeightRequest = i_ButtonToAdd.m_OurSize.m_Height;
         button.WidthRequest = i_ButtonToAdd.m_OurSize.m_Width;
@@ -94,11 +104,14 @@ public partial class GamePage : ContentPage
         gridLayout.Add(button);
         button.TranslationX = i_ButtonToAdd.m_PointsOnScreen[0].m_Column;
         button.TranslationY = i_ButtonToAdd.m_PointsOnScreen[0].m_Row;
-        button.Clicked += m_Game.OnButtonClicked;
-        button.Text = i_ButtonToAdd.m_ButtonType.ToString();
+        
+        //button.Text = i_ButtonToAdd.m_ButtonType.ToString();
         button.Rotation = i_ButtonToAdd.m_rotate;
+        button.Source = i_ButtonToAdd.m_ImageSources[0];
+        //button.Aspect = Aspect.AspectFit;
         button.ZIndex = -1;
         m_gameButtons.Add(i_ButtonToAdd.m_ID[0],button);
+        button.Clicked += m_Game.OnButtonClicked;
     }
 
     private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)

@@ -220,7 +220,7 @@ namespace LogicUnit
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
-            Button button = sender as Button;
+            ImageButton button = sender as ImageButton;
 
             //if (m_GameStatus == eGameStatus.Running)
             {
