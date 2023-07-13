@@ -15,6 +15,7 @@ public partial class GamePage : ContentPage
     private Game m_Game;
     private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
     private Dictionary<int,ImageButton> m_gameButtons = new Dictionary<int, ImageButton>();
+    private int k = 0;
 
     public GamePage()
     {
@@ -74,16 +75,16 @@ public partial class GamePage : ContentPage
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
         }
 
-        if (i_GameObjectToAdd.m_ImageSources[0][5] == 'p')
-        {
-            image.ClassId = "snake" + i.ToString() + ".png";
-            image.Source = "snake" + i.ToString() + ".png";
-        }
-        else
-        {
+        //if (i_GameObjectToAdd.m_ImageSources[0][5] == 'p' && i_GameObjectToAdd.m_ImageSources[0][11] == '1')
+        //{
+        //    image.ClassId = i_GameObjectToAdd.m_ImageSources[i];
+        //    image.Source = i_GameObjectToAdd.m_ImageSources[i];
+        //}
+        //else
+        //{
             image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
             image.Source = i_GameObjectToAdd.m_ImageSources[0];
-        }
+        //}
         image.ZIndex = -1;
         image.Rotation = i_GameObjectToAdd.m_rotate;
         image.Aspect = Aspect.AspectFill;
@@ -126,11 +127,27 @@ public partial class GamePage : ContentPage
                     {
                         if(m_GameImages.ContainsKey(screenObject.m_ID[i]))
                         {
+                            m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
+                            //m_GameImages[screenObject.m_ID[i]].Rotation = 0;
+                            // m_GameImages[screenObject.m_ID[i]].ScaleXTo(-1);
+                            // m_GameImages[screenObject.m_ID[i]].ScaleX = -1;
+                            //if (k % 2 == 0)
+                            //{
+                            //    m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
+                            //    // m_GameImages[screenObject.m_ID[i]].Rotation = 90;
+                            //}
+
+                            //m_GameImages[screenObject.m_ID[i]].TranslateTo(
+                            //    screenObject.m_PointsOnScreen[i].m_Column,
+                            //    screenObject.m_PointsOnScreen[i].m_Row);
+                            //m_GameImages[screenObject.m_ID[i]].s
                             m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
                             m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
                         }
                     }
                 }
+
+                k++;
             }
         });
     }

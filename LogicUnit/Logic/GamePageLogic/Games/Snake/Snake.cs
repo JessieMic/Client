@@ -50,7 +50,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 if(m_GameStatus == eGameStatus.Running)
                 {
                     gameLoop();
-                    Thread.Sleep(500);
+                    Thread.Sleep(200);
                     //await Task.Delay(500);
                     lock (m_PlayersDirectionsFromServer)
                     {
@@ -60,7 +60,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         }
                     }
                 }
-                Thread.Sleep(500);
+                Thread.Sleep(200);
             }
         }
 
@@ -127,7 +127,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             while (point.m_Column != until) //(i == 0)//
             {
                 i++;
-                GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2,  "body");
+                GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2,getBodyPartString(i) );
                 gameObject.FadeWhenObjectIsRemoved();
                 if (!toCombine)
                 {
@@ -141,6 +141,22 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 toCombine = true;
                 point.m_Column += inc;
             }
+        }
+
+        private string getBodyPartString(int i_Index)
+        {
+            string bodyPart = eSnakeBodyParts.Head.ToString();
+
+            if(i_Index == 3)
+            {
+                bodyPart = eSnakeBodyParts.Tail.ToString();
+            }
+            else if(i_Index == 2)
+            {
+                bodyPart = eSnakeBodyParts.Body.ToString();
+            }
+
+            return bodyPart;
         }
 
         private void addFood()
@@ -262,7 +278,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         snake.addHead(newHeadPoint);
 
 
-                        snake.CombineGameObjects(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player, "body"));
+                        snake.CombineGameObjects(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player, "---"));
                         //score ++
 
                         if (m_Player.ButtonThatPlayerPicked == 1)

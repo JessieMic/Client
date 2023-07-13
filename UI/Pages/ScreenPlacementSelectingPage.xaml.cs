@@ -68,7 +68,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         {
             Application.Current.Dispatcher.Dispatch(async () =>
                 {
-                    //startGame();   
                     for (int i = 0; i < m_pageLogic.AmountOfPlayers; i++)
                     {
                         Button button = new Button();
@@ -82,8 +81,8 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                         m_PlacementButton[i].Clicked += m_pageLogic.OnButtonClicked;
                     }
                     m_Player.isInitialized = true;
+                    getScreenUpdate();
                 });
-            getScreenUpdate();
         }
     }
 }
