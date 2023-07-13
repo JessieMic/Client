@@ -14,6 +14,9 @@ namespace Objects
     {
         public List<Point> m_PointsOnGrid = new List<Point>();
         public List<Point> m_PointsOnScreen = new List<Point>();
+        public List<int> m_Rotatation= new List<int>();
+        public List<int> m_ScaleX = new List<int>();
+        public List<int> m_ScaleY = new List<int>();
         public List<string> m_ImageSources = new List<string>();
         public int m_ObjectNumber;
         public eScreenObjectType m_ScreenObjectType;
