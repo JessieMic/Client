@@ -127,8 +127,17 @@ public partial class GamePage : ContentPage
                     {
                         if(m_GameImages.ContainsKey(screenObject.m_ID[i]))
                         {
+                            m_GameImages[screenObject.m_ID[i]].Rotation = 0;
+                            //m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
+                            //m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
                             m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
-                            //m_GameImages[screenObject.m_ID[i]].Rotation = 0;
+                            m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
+                           // m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
+                            //m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
+                            m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
+                            m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+
+
                             // m_GameImages[screenObject.m_ID[i]].ScaleXTo(-1);
                             // m_GameImages[screenObject.m_ID[i]].ScaleX = -1;
                             //if (k % 2 == 0)
@@ -141,8 +150,7 @@ public partial class GamePage : ContentPage
                             //    screenObject.m_PointsOnScreen[i].m_Column,
                             //    screenObject.m_PointsOnScreen[i].m_Row);
                             //m_GameImages[screenObject.m_ID[i]].s
-                            m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
-                            m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+
                         }
                     }
                 }

@@ -62,6 +62,7 @@
 	  <None Remove="Resources\Images\snakeplayer1body.png" />
 	  <None Remove="Resources\Images\snakeplayer1head.png" />
 	  <None Remove="Resources\Images\snakeplayer1tail.png" />
+	  <None Remove="Resources\Images\snakeplayer1turn.png" />
 	  <None Remove="Resources\Images\snakeplayer2body.png" />
 	  <None Remove="Resources\Images\snakeplayer2head.png" />
 	  <None Remove="Resources\Images\snakeplayer2tail.png" />

@@ -14,7 +14,7 @@ namespace Objects
     {
         public List<Point> m_PointsOnGrid = new List<Point>();
         public List<Point> m_PointsOnScreen = new List<Point>();
-        public List<int> m_Rotatation= new List<int>();
+        public List<int> m_Rotatation = new List<int>();
         public List<int> m_ScaleX = new List<int>();
         public List<int> m_ScaleY = new List<int>();
         public List<string> m_ImageSources = new List<string>();
@@ -42,6 +42,54 @@ namespace Objects
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
             m_ID.Add(GameSettings.getID());
+            m_Rotatation.Add(0);
+            m_ScaleX.Add(1);
+            m_ScaleY.Add(1);
+        }
+
+        public void SetImageDirection(int i_Index, Direction i_Direction)
+        {
+            if(i_Direction == Direction.Up)
+            {
+                m_Rotatation[i_Index] = 270;
+            }
+            else if(i_Direction == Direction.Down)
+            {
+                m_Rotatation[i_Index] = 90;
+            }
+            else if(i_Direction == Direction.Left)
+            {
+                m_Rotatation[i_Index] = 180;
+            }
+            else
+            {
+                m_Rotatation[i_Index] = 0;
+            }
+        }
+
+        public void FlipImage(int i_Index,eImageScale i_Scale)
+        {
+            if(i_Scale == eImageScale.FlipX)
+            {
+                m_ScaleX[i_Index] = -1;
+            }
+            else if(i_Scale == eImageScale.FlipY)
+            {
+                m_ScaleY[i_Index] = -1;
+            }
+            if (i_Scale == eImageScale.OriginalX)
+            {
+                m_ScaleX[i_Index] = 1;
+            }
+            else
+            {
+                m_ScaleY[i_Index] = 1;
+            }
+        }
+
+        protected int getAmountOfCombinedObjects()
+        {
+            return m_ID.Count;
         }
 
         public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, SizeDTO i_OurSize, Point i_ValuesToAdd)
@@ -70,16 +118,10 @@ namespace Objects
             m_OurSize = i_GameObject.m_OurSize;
             m_ID = i_GameObject.m_ID;
             m_Fade = i_GameObject.m_Fade;
+            m_Rotatation = i_GameObject.m_Rotatation;
+            m_ScaleX = i_GameObject.m_ScaleX;
+            m_ScaleY = i_GameObject.m_ScaleY;
         }
-
-        //public void SetObject(string i_Image, Point i_Point)
-        //{
-        //    m_PointsOnGrid.Add(i_Point);
-        //    Point point = getScreenPoint(i_Point);
-        //    m_PointsOnScreen.Add(point);
-        //    m_ImageSources.Add(i_Image);
-        //    m_ID.Add();
-        //}
 
         public void CombineGameObjects(GameObject i_GameObject)
         {
@@ -87,6 +129,9 @@ namespace Objects
             m_PointsOnScreen.Add(i_GameObject.m_PointsOnScreen[0]);
             m_ImageSources.Add(i_GameObject.m_ImageSources[0]);
             m_ID.Add(i_GameObject.m_ID[0]);
+            m_ScaleX.Add(i_GameObject.m_ScaleX[0]);
+            m_ScaleY.Add(i_GameObject.m_ScaleY[0]);
+            m_Rotatation.Add(i_GameObject.m_Rotatation[0]);
         }
 
         public void FadeWhenObjectIsRemoved()
@@ -129,7 +174,6 @@ namespace Objects
             m_PointsOnGrid[0]=i_Point;
             Point point = getScreenPoint(i_Point);
             m_PointsOnScreen[0] = point;
-            //update();
         }
 
         public void MoveSameDirection()
