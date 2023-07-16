@@ -14,7 +14,7 @@ public partial class GamePage : ContentPage
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
     private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
-    private Dictionary<int,ImageButton> m_gameButtons = new Dictionary<int, ImageButton>();
+    private Dictionary<int,Button> m_gameButtons = new Dictionary<int, Button>();
     private int k = 0;
 
     public GamePage()
@@ -40,30 +40,30 @@ public partial class GamePage : ContentPage
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
     {
-        int i = 1;
-        foreach (var gameObject in i_GameObjectsToAdd)
-        {
-            if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+        Application.Current.Dispatcher.Dispatch(async () =>
             {
-                addButton(gameObject);
-            }
-            else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                int i = 1;
+            foreach (var gameObject in i_GameObjectsToAdd)
             {
-                addImage(gameObject, i);
-                if (gameObject.m_ImageSources[0][5] == 'p' && gameObject.m_ImageSources[0][11] == '1')
+                if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
                 {
-                    i++;
+                    addButton(gameObject);
+                }
+                else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                {
+                    addImage(gameObject);
                 }
             }
-        }
+            });
     }
 
-    private void addImage(GameObject i_GameObjectToAdd,int i)
+    private void addImage(GameObject i_GameObjectToAdd)
     {
         Image image = new Image();
 
         image.TranslationX = i_GameObjectToAdd.m_PointsOnScreen[0].m_Column;//.m_Point.m_Column;
         image.TranslationY = i_GameObjectToAdd.m_PointsOnScreen[0].m_Row;
+        image.Aspect = Aspect.AspectFill;
 
         if (i_GameObjectToAdd.m_OurSize.m_Width != 0)
         {
@@ -73,42 +73,32 @@ public partial class GamePage : ContentPage
         if (i_GameObjectToAdd.m_OurSize.m_Height != 0)
         {
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
+            image.Aspect = Aspect.Fill;
         }
 
-        //if (i_GameObjectToAdd.m_ImageSources[0][5] == 'p' && i_GameObjectToAdd.m_ImageSources[0][11] == '1')
-        //{
-        //    image.ClassId = i_GameObjectToAdd.m_ImageSources[i];
-        //    image.Source = i_GameObjectToAdd.m_ImageSources[i];
-        //}
-        //else
-        //{
-            image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
-            image.Source = i_GameObjectToAdd.m_ImageSources[0];
-        //}
+        image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
+        image.Source = i_GameObjectToAdd.m_ImageSources[0];
         image.ZIndex = -1;
-        image.Rotation = i_GameObjectToAdd.m_rotate;
-        image.Aspect = Aspect.AspectFill;
-        
+        image.Rotation = i_GameObjectToAdd.m_Rotatation[0];
         gridLayout.Add(image);
         m_GameImages.Add(i_GameObjectToAdd.m_ID[0],image);
     }
 
 
     private void addButton(GameObject i_ButtonToAdd)
-    {
-        ImageButton button = new ImageButton();
-        //Button button = new Button();
+    { 
+        Button button = new Button();
+        addImage(i_ButtonToAdd);
         button.ClassId = i_ButtonToAdd.m_ButtonType.ToString();//.m_KindOfButton.ToString();
         button.HeightRequest = i_ButtonToAdd.m_OurSize.m_Height;
         button.WidthRequest = i_ButtonToAdd.m_OurSize.m_Width;
-        button.CornerRadius = 70;
         gridLayout.Add(button);
         button.TranslationX = i_ButtonToAdd.m_PointsOnScreen[0].m_Column;
         button.TranslationY = i_ButtonToAdd.m_PointsOnScreen[0].m_Row;
         
         //button.Text = i_ButtonToAdd.m_ButtonType.ToString();
-        button.Rotation = i_ButtonToAdd.m_rotate;
-        button.Source = i_ButtonToAdd.m_ImageSources[0];
+        //button.Source = i_ButtonToAdd.m_ImageSources[0];
+        button.Opacity = 0;
         //button.Aspect = Aspect.AspectFit;
         button.ZIndex = -1;
         m_gameButtons.Add(i_ButtonToAdd.m_ID[0],button);
@@ -128,12 +118,12 @@ public partial class GamePage : ContentPage
                         if(m_GameImages.ContainsKey(screenObject.m_ID[i]))
                         {
                             m_GameImages[screenObject.m_ID[i]].Rotation = 0;
-                            //m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
-                            //m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
+                            m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
+                            m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
                             m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
                             m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
-                           // m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
-                            //m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
+                            m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
+                            m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
                             m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
                             m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
 

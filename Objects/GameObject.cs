@@ -26,11 +26,17 @@ namespace Objects
         public Direction m_Direction = Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;
-        public int m_rotate = 0;
         public SizeDTO m_OurSize = GameSettings.m_MovementButtonOurSize;
         public List<int> m_ID = new List<int>();
         public bool m_Fade = false;
-        
+
+        public GameObject()
+        {
+            m_Rotatation.Add(0);
+            m_ScaleX.Add(1);
+            m_ScaleY.Add(1);
+        }
+
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
             m_ObjectNumber = i_ObjectNumber;
@@ -42,9 +48,6 @@ namespace Objects
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
             m_ID.Add(GameSettings.getID());
-            m_Rotatation.Add(0);
-            m_ScaleX.Add(1);
-            m_ScaleY.Add(1);
         }
 
         public void SetImageDirection(int i_Index, Direction i_Direction)
@@ -104,6 +107,7 @@ namespace Objects
             m_ImageSources.Add(i_Png);
             m_ID.Add(GameSettings.getID());
             m_OurSize = i_OurSize;
+            m_Rotatation.Add(0);
         }
 
         public void set(GameObject i_GameObject)
@@ -132,6 +136,16 @@ namespace Objects
             m_ScaleX.Add(i_GameObject.m_ScaleX[0]);
             m_ScaleY.Add(i_GameObject.m_ScaleY[0]);
             m_Rotatation.Add(i_GameObject.m_Rotatation[0]);
+        }
+        public void CombineGameObjectsTop(GameObject i_GameObject)
+        {
+            m_PointsOnGrid.Insert(0, i_GameObject.m_PointsOnGrid[0]);
+            m_PointsOnScreen.Insert(0, i_GameObject.m_PointsOnScreen[0]);
+            m_ImageSources.Insert(0, i_GameObject.m_ImageSources[0]);
+            m_ID.Insert(0, i_GameObject.m_ID[0]);
+            m_ScaleX.Insert(0, i_GameObject.m_ScaleX[0]);
+            m_ScaleY.Insert(0, i_GameObject.m_ScaleY[0]);
+            m_Rotatation.Insert(0, i_GameObject.m_Rotatation[0]);
         }
 
         public void FadeWhenObjectIsRemoved()
@@ -186,5 +200,6 @@ namespace Objects
             m_PointsOnGrid.RemoveAt(m_PointsOnGrid.Count - 1);
             m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count - 1);
         }
+
     }
 }

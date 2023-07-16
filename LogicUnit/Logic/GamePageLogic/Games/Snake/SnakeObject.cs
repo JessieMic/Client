@@ -17,27 +17,42 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         public SnakeObject(ref int[,] i_Board)
         {
             m_Board = i_Board;
-            m_DirectionsForTail.Add(Direction.Right);
+           // m_DirectionsForTail.Add(Direction.Right);
         }
 
-        public void Eat(Point i_NewPoint)
+        public void Eat(GameObject i, Direction i_LastDirection, Direction i_CurrentDirection)
         {
+            CombineGameObjectsTop(i);
+            SetImageDirection(0, i_CurrentDirection);
 
+            if (i_LastDirection != i_CurrentDirection)
+            {
+                turnBody(i_LastDirection, i_CurrentDirection);
+                m_ImageSources[1] = "snakeplayer" + m_ObjectNumber.ToString() + "turn.png";
+                m_DirectionsForTail.Add(i_CurrentDirection);
+            }
+            else
+            {
+                m_ImageSources[1] = "snakeplayer"+ m_ObjectNumber.ToString() +"body.png";
+                SetImageDirection(1, i_CurrentDirection);
+            }
+            
+           // m_DirectionsForTail.Add(i_LastDirection);
+           // m_DirectionsForTail.Add(i_CurrentDirection);
         }
 
         public void Move(Point i_NewPoint, Direction i_LastDirection,Direction i_CurrentDirection)
         {
-            m_DirectionsForTail.Add(i_CurrentDirection);
             removeTail();
             addHead(i_NewPoint);
             moveTail();
             moveBody(i_CurrentDirection);
-
-            if(i_LastDirection != m_Direction)
+            if (i_LastDirection != i_CurrentDirection)
             {
                 SetImageDirection(0, i_CurrentDirection);//Set head to a new direction
                 turnBody(i_LastDirection, i_CurrentDirection);
-                m_ImageSources[1] = "snakeplayer1turn.png";
+                m_ImageSources[1] = "snakeplayer" + m_ObjectNumber.ToString() + "turn.png";
+                m_DirectionsForTail.Add(i_CurrentDirection);
             }
         }
 
@@ -74,23 +89,23 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 copyNextImageDirection(i);
             }
 
-            m_ImageSources[1] = "snakeplayer1body.png";
+            m_ImageSources[1] = "snakeplayer" + m_ObjectNumber.ToString() + "body.png";
             SetImageDirection(1, i_CurrentDirection);
         }
 
         private void moveTail()
         {
-            SetImageDirection(getAmountOfCombinedObjects() - 1, m_DirectionsForTail[0]);
-            m_DirectionsForTail.RemoveAt(0);
-            m_ImageSources[getAmountOfCombinedObjects() - 1] = "snakeplayer1tail.png";
-            //if(isPartTurnBodyPart())
-            //{
-            //    SetImageDirection(getAmountOfCombinedObjects()-1, getDirectionOfTurnPart());
-            //}
-            //else
-            //{
-            //    copyNextImageDirection(getAmountOfCombinedObjects() - 1);
-            //}
+            if (m_ImageSources[getAmountOfCombinedObjects() - 2] == "snakeplayer" + m_ObjectNumber.ToString() + "body.png")
+            {
+                copyNextImageDirection(getAmountOfCombinedObjects() - 1);
+            }
+            else
+            {
+                SetImageDirection(getAmountOfCombinedObjects() - 1, m_DirectionsForTail[0]);
+                //m_Rotatation[getAmountOfCombinedObjects() - 1] += 180;
+                m_DirectionsForTail.RemoveAt(0);
+                m_ImageSources[getAmountOfCombinedObjects() - 1] = "snakeplayer" + m_ObjectNumber.ToString() + "tail.png";
+            }
         }
 
         private void copyNextImageDirection(int i_Index)

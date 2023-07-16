@@ -49,14 +49,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\aa.png" />
 	  <None Remove="Resources\Images\heart.png" />
+	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
 	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />
+	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\snake.png" />
+	  <None Remove="Resources\Images\snakebackground.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snakeobject1food.png" />
 	  <None Remove="Resources\Images\snakeplayer1body.png" />
@@ -66,8 +68,9 @@
 	  <None Remove="Resources\Images\snakeplayer2body.png" />
 	  <None Remove="Resources\Images\snakeplayer2head.png" />
 	  <None Remove="Resources\Images\snakeplayer2tail.png" />
+	  <None Remove="Resources\Images\snakeplayer2turn.png" />
 	  <None Remove="Resources\Images\snake\snakeobject1food.png" />
-	  <None Remove="Resources\Images\upbutton.png" />
+	  <None Remove="Resources\Images\uibackground.png" />
 	</ItemGroup>
 
 	<ItemGroup>

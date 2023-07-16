@@ -46,7 +46,7 @@ namespace LogicUnit.Logic.GamePageLogic
 
                 if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
-                    newHeart.m_rotate = 180;
+                    newHeart.m_Rotatation[0] = 180;
                 }
                 o_GameObjectsToAdd.Add(newHeart);
                 m_HeartsOnScreen.Add(newHeart);

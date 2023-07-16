@@ -27,7 +27,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             //gameLoop();
         }
 
-        protected override async Task gameLoop() // copied from snake
+        protected override void gameLoop() // copied from snake
         {
             m_gameObjectsToUpdate = new List<GameObject>(); // -> objects that need to be updated (pacman that moves)
             m_GameObjectsToAdd = new List<GameObject>(); // -> new objects on screen
