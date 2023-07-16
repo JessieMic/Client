@@ -32,6 +32,9 @@ namespace Objects
                     35,
                     m_MovementButtonOurSize,
                     getValuesToAdd());
+
+                newButton.SetImageDirection(0, Direction.getDirection(button.ToString()));
+
                 //if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
                 //{
                 //    newButton.m_OurSize = GameSettings.m_PauseMenuButtonOurSize;
@@ -103,9 +106,11 @@ namespace Objects
                     GameSettings.m_GameBoardGridSize,
                     GameSettings.m_PauseMenuButtonOurSize,
                     getValuesToAdd());
-                if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+               
+
+                if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
-                    newButton.m_rotate = 180;
+                    newButton.SetImageDirection(0, Direction.getDirection(button.ToString()));
                 }
                 menuButtons.Add(newButton);
             }
@@ -118,8 +123,11 @@ namespace Objects
         {
             string png;
 
-            png = "upbutton.png";// i_Button.ToString() + "button" + ".png";
-
+            png = "movebutton.png";// i_Button.ToString() + "button" + ".png";
+            if(i_Button == eButton.PauseMenu)
+            {
+                png = "pausemenubutton.png";
+            }
             return png.ToLower();
         }
 

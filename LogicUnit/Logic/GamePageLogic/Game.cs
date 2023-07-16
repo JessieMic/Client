@@ -203,7 +203,7 @@ namespace LogicUnit
             return isPointOnTheBoard;
         }
 
-        protected virtual async Task gameLoop()
+        protected virtual void gameLoop()
         {
 
         }
@@ -220,8 +220,8 @@ namespace LogicUnit
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
-            ImageButton button = sender as ImageButton;
-
+            Button button = sender as Button;
+                
             //if (m_GameStatus == eGameStatus.Running)
             {
                 ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);

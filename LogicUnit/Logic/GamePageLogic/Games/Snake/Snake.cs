@@ -18,13 +18,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private List<SnakeObject> m_PlayersSnakes = new List<SnakeObject>();
         private Food m_food = new Food();
         private List<Direction> m_SnakeLastDirection = new List<Direction>();
-
+        int o = 0;
         public Snake()
         {
             m_GameName = "Snake";
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
-            m_Buttons.m_AmountOfExtraButtons = 2;
+            //m_Buttons.m_AmountOfExtraButtons = 2;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 5;
             m_scoreBoard.m_ShowScoreBoardByOrder = true;
         }
@@ -39,6 +39,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             Thread newThread = new(actualGameLoop) { Name = "SnakeLoop" };
             newThread.Start();
             //Task.Run(actualGameLoop);
+            //Task.Run(actualGameLoop);
 
         }
 
@@ -50,9 +51,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             {
                 if(m_GameStatus == eGameStatus.Running)
                 {
-                    gameLoop();
-                    Thread.Sleep(1000);
-                    //await Task.Delay(500);
                     lock (m_PlayersDirectionsFromServer)
                     {
                         foreach (int player in m_PlayersDirectionsFromServer.Keys.Where(i_Player => i_Player != m_Player.ButtonThatPlayerPicked))
@@ -60,12 +58,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                             ChangeDirection(m_PlayersDirectionsFromServer[player], player);
                         }
                     }
+                    gameLoop();
+                    Thread.Sleep(200);
+                    //await Task.Delay(500);
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(200);
             }
         }
 
-        protected override async Task gameLoop()
+        protected override void gameLoop()
         {
             if(m_GameStatus == eGameStatus.Running)
             {
@@ -268,9 +269,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                     Point newHeadPoint = snake.GetOneMoveAhead();
                     int hit = snake.whatSnakeWillHit(newHeadPoint, isPointOnBoard(newHeadPoint));
 
-                    if (hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
+                    if (o<7 && o>=3 && m_Player.ButtonThatPlayerPicked == 2)//(hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
                     {
+                        snake.Eat(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player + 2,
+                            eSnakeBodyParts.Head.ToString()), m_SnakeLastDirection[player - 1], currentDirection);
                         //PlayerGotHit(player);
+                        
                     }
                     else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
                     {
@@ -278,17 +282,16 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                     }
                     else if (hit == (int)eBoardObjectSnake.Food)//Eats food
                     {
-                        //snake
-                        //snake.addHead(newHeadPoint);
-                        m_GameObjectsToAdd.Add(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player+2, "head"));
-                        snake.CombineGameObjects(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player+2, eSnakeBodyParts.Body.ToString()));
-                        //score ++
-                        
+                        snake.Eat(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player+2,
+                            eSnakeBodyParts.Head.ToString()), m_SnakeLastDirection[player - 1], currentDirection);
+
                         if (m_Player.ButtonThatPlayerPicked == 1)
                         {
                             getNewPointForFood();
                         }
+                        
                     }
+                    o++;
                     m_gameObjectsToUpdate.Add(snake);
                     m_SnakeLastDirection[player - 1] = currentDirection;
                     snake.m_Direction = currentDirection;
