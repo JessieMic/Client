@@ -128,8 +128,8 @@ public partial class GamePage : ContentPage
                         if(m_GameImages.ContainsKey(screenObject.m_ID[i]))
                         {
                             m_GameImages[screenObject.m_ID[i]].Rotation = 0;
-                            //m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
-                            //m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
+                            m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
+                            m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
                             m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
                             m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
                            // m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];

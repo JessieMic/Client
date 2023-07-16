@@ -164,7 +164,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private void addFood()
         {
             List<Point> emptyPositions = getEmptyPositions();
-            Point randomPoint = emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
+            Point randomPoint = new Point(5, 1);//emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
 
             //r_LiteNetClient.Send(randomPoint, (int)i_Button);
 
@@ -279,10 +279,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                     else if (hit == (int)eBoardObjectSnake.Food)//Eats food
                     {
                         //snake
-                        snake.addHead(newHeadPoint);
-                        snake.CombineGameObjects(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player, eSnakeBodyParts.Tail.ToString()));
+                        //snake.addHead(newHeadPoint);
+                        m_GameObjectsToAdd.Add(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player+2, "head"));
+                        snake.CombineGameObjects(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player+2, eSnakeBodyParts.Body.ToString()));
                         //score ++
-
+                        
                         if (m_Player.ButtonThatPlayerPicked == 1)
                         {
                             getNewPointForFood();

@@ -186,5 +186,6 @@ namespace Objects
             m_PointsOnGrid.RemoveAt(m_PointsOnGrid.Count - 1);
             m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count - 1);
         }
+
     }
 }
