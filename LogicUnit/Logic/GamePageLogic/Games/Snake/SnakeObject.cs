@@ -66,14 +66,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             else if((i_LastDirection == Direction.Right && i_CurrentDirection == Direction.Down)
                     || (i_LastDirection == Direction.Up && i_CurrentDirection == Direction.Left))
             {
-                //m_ScaleX[1] = -1;
                 m_Rotatation[1] = 90;
             }
             else if ((i_LastDirection == Direction.Down && i_CurrentDirection == Direction.Right)
                      || (i_LastDirection == Direction.Left && i_CurrentDirection == Direction.Up))
             {
                 m_Rotatation[1] = 270;
-                //m_ScaleY[1] = -1;
             }
             else
             {

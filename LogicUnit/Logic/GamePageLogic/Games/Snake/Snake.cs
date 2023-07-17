@@ -25,7 +25,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             //m_Buttons.m_AmountOfExtraButtons = 2;
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 5;
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_scoreBoard.m_ShowScoreBoardByOrder = true;
         }
 
@@ -131,11 +131,22 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 i++;
                 GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player + 2,getBodyPartString(i) );
                 gameObject.FadeWhenObjectIsRemoved();
+
+                if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player-1].Position.Column == eColumnPosition.RightColumn)
+                {
+                    gameObject.SetImageDirection(0,Direction.Left);
+                    snake.m_Direction = Direction.Left;
+                }
+                else
+                {
+                    snake.m_Direction = Direction.Right;
+                }
+
                 if (!toCombine)
                 {
                     snake.set(gameObject);
                     m_PlayersSnakes.Add(snake);
-                    m_SnakeLastDirection.Add(Direction.Right);
+                    m_SnakeLastDirection.Add(snake.m_Direction);
                 }
                 else
                 {
@@ -219,8 +230,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         protected override void ChangeDirection(Direction i_Direction, int i_Player)
         {
-            m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
-
+            if (i_Direction != Direction.Stop)
+            {
+                m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
+            
+                m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
+            }
+            
 
             //if (canChangeDirection(i_Direction, i_Player))
             //{
@@ -263,13 +279,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             Direction currentDirection;
             foreach (var snake in m_PlayersSnakes)
             {
-                if (m_Hearts.m_AmountOfLivesPlayerHas[player - 1] > 0 && snake.m_Direction != Direction.Stop)
+                if (m_Hearts.m_AmountOfLivesPlayerHas[player - 1] > 0 && snake.m_IsObjectMoving)
                 {
                     currentDirection = snake.m_Direction;
                     Point newHeadPoint = snake.GetOneMoveAhead();
                     int hit = snake.whatSnakeWillHit(newHeadPoint, isPointOnBoard(newHeadPoint));
 
-                    if (o<7 && o>=3 && m_Player.ButtonThatPlayerPicked == 2)//(hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
+                    if (o<7 && o>=3 && m_Player.ButtonThatPlayerPicked == 1)//(hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
                     {
                         snake.Eat(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player + 2,
                             eSnakeBodyParts.Head.ToString()), m_SnakeLastDirection[player - 1], currentDirection);
