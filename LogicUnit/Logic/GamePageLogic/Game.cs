@@ -66,7 +66,7 @@ namespace LogicUnit
 
         public Game()
         {
-            r_LiteNetClient.Init(2);
+            r_LiteNetClient.Init(m_GameInformation.AmountOfPlayers);
             //TODO: blocks the server updates
             r_LiteNetClient.ReceivedData += OnUpdatesReceived;
             r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;

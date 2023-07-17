@@ -69,6 +69,14 @@
 	  <None Remove="Resources\Images\snakeplayer2head.png" />
 	  <None Remove="Resources\Images\snakeplayer2tail.png" />
 	  <None Remove="Resources\Images\snakeplayer2turn.png" />
+	  <None Remove="Resources\Images\snakeplayer3body.png" />
+	  <None Remove="Resources\Images\snakeplayer3head.png" />
+	  <None Remove="Resources\Images\snakeplayer3tail.png" />
+	  <None Remove="Resources\Images\snakeplayer3turn.png" />
+	  <None Remove="Resources\Images\snakeplayer4body.png" />
+	  <None Remove="Resources\Images\snakeplayer4head.png" />
+	  <None Remove="Resources\Images\snakeplayer4tail.png" />
+	  <None Remove="Resources\Images\snakeplayer4turn.png" />
 	  <None Remove="Resources\Images\snake\snakeobject1food.png" />
 	  <None Remove="Resources\Images\uibackground.png" />
 	</ItemGroup>

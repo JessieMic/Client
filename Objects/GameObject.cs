@@ -23,6 +23,7 @@ namespace Objects
         private int m_GameBoardGridSize;
         protected Point m_ValuesToAdd = new Point();
         protected int m_Velocity = 1;
+        public bool m_IsObjectMoving = false;
         public Direction m_Direction = Direction.Stop;
         public eButton m_ButtonType;
         public string m_text;

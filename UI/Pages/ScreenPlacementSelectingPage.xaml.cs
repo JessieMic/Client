@@ -50,9 +50,9 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         m_pageLogic.GetScreenUpdate();
     }
 
-    private async void startGame()
+    private void startGame()
     {
-        await Shell.Current.GoToAsync("GamePage");
+        Shell.Current.GoToAsync("GamePage");
     }
 
     protected override async void OnSizeAllocated(double i_Width, double i_Height)
