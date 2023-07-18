@@ -43,7 +43,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 GameObject newHeart = new GameObject();
                 newHeart.Initialize(eScreenObjectType.Image, 0, "heart.png",
                     getHeartPoint(i), GameSettings.m_GameBoardGridSize, getValuesToAdd());
-
+                newHeart.m_OurSize = GameSettings.m_HeartSize;
                 if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
                     newHeart.m_Rotatation[0] = 180;
@@ -65,21 +65,24 @@ namespace LogicUnit.Logic.GamePageLogic
             return heartPoint;
         }
 
+
         private Point getValuesToAdd()
         {
             Point values = new Point();
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                values = new Point(10, 10);
+                values = new Point(GameSettings.m_SpacingAroundButtons, GameSettings.m_SpacingAroundButtons);
             }
             else
             {
-                values.m_Column = 10;
-                values.m_Row = m_ClientScreenOurSize.m_Height * 35 + 10;
+                values.m_Column = GameSettings.m_SpacingAroundButtons;
+                values.m_Row = m_ClientScreenOurSize.m_Height * GameSettings.m_GameBoardGridSize + GameSettings.m_SpacingAroundButtons;
             }
+
             return values;
         }
+
 
         public eGameStatus setPlayerLifeAndGetGameStatus(int i_Player)
         {

@@ -42,18 +42,9 @@ namespace Objects
         {
             m_NamesOfAllPlayers = i_NamesOfPlayers;
 
-            ////Size s = new Size(m_ClientScreenDimension.Size.m_Width+120, m_ClientScreenDimension.Size.m_Height);
-
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-                //if(true)//(i == 1)
-                //{
                 m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.SizeDTO, new Position(m_AmountOfPlayers, i + 1)));
-                //}
-                //else
-                //{
-                //    m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(s, new Position(m_AmountOfPlayers, i + 1)));
-                //}
 
                 if (m_Player.ButtonThatPlayerPicked == i + 1)
                 {

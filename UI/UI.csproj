@@ -49,6 +49,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Resources\Images\boarder.png" />
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />

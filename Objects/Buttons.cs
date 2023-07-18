@@ -10,7 +10,7 @@ namespace Objects
 {
     public class Buttons
     {
-        public SizeDTO m_MovementButtonOurSize = new SizeDTO(35,35);
+        public SizeDTO m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<eButton> m_Buttons = new List<eButton>();
         public SizeDTO m_ClientScreenOurSize = new SizeDTO();
@@ -29,12 +29,15 @@ namespace Objects
                     button,
                     generatePngString(button),
                     getButtonPoint(button),
-                    35,
+                    GameSettings.m_GameBoardGridSize,
                     m_MovementButtonOurSize,
                     getValuesToAdd());
 
                 newButton.SetImageDirection(0, Direction.getDirection(button.ToString()));
-
+                if(button == eButton.PauseMenu && m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
+                {
+                    newButton.m_Rotatation[0] = 0;
+                }
                 //if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
                 //{
                 //    newButton.m_OurSize = GameSettings.m_PauseMenuButtonOurSize;
@@ -81,12 +84,12 @@ namespace Objects
 
             if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                values = new Point(10, 10);
+                values = new Point(GameSettings.m_SpacingAroundButtons, GameSettings.m_SpacingAroundButtons);
             }
             else
             {
-                values.m_Column = 10;
-                values.m_Row = m_ClientScreenOurSize.m_Height*35+10;
+                values.m_Column = GameSettings.m_SpacingAroundButtons;
+                values.m_Row = m_ClientScreenOurSize.m_Height*GameSettings.m_GameBoardGridSize+GameSettings.m_SpacingAroundButtons;
             }
 
             return values;
@@ -116,8 +119,6 @@ namespace Objects
             }
             return menuButtons;
         }
-
-       
 
         protected string generatePngString(eButton i_Button)
         {
@@ -162,7 +163,6 @@ namespace Objects
                 return eButton.Left;
             }
         }
-
         private Point getButtonPoint(eButton i_Type)
         {
             Point returnPoint = new Point(1,1);

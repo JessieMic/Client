@@ -52,6 +52,7 @@ namespace LogicUnit
 
         protected void setGameBackground()
         {
+            //setBoarder();
             SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenOurSize.m_Width * m_ScreenMapping.m_GameBoardGridSize,
                 m_ScreenMapping.m_TotalScreenOurSize.m_Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
@@ -60,6 +61,20 @@ namespace LogicUnit
             m_GameObjectsToAdd.Add(background);
         }
 
+        void setBoarder()
+        {
+            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenOurSize.m_Width * m_ScreenMapping.m_GameBoardGridSize,
+                m_ScreenMapping.m_TotalScreenOurSize.m_Height * m_ScreenMapping.m_GameBoardGridSize);
+            GameObject background = new GameObject();
+            Point p = m_ScreenMapping.m_ValueToAdd;
+            p.m_Column -= 15;
+            p.m_Row -= 15;
+            actualOurSize.m_Height += 20;
+            actualOurSize.m_Width += 20;
+            background.Initialize(eScreenObjectType.Image, 0, "boarder.png", new Point(0, 0), actualOurSize.m_Height, m_ScreenMapping.m_ValueToAdd);
+            background.m_OurSize = actualOurSize;
+            m_GameObjectsToAdd.Add(background);
+        }
         private void setUIBackground()
         {
             Point point = new Point(
@@ -69,7 +84,7 @@ namespace LogicUnit
             if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 point.SetAndGetPoint(0, 0);
-                UIBackground.m_Rotatation[0] = 180;
+                UIBackground.SetImageDirection(0,Direction.Left);
             }
             SizeDTO actualOurSize = new SizeDTO(m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Width+5,
                 GameSettings.m_UIBackgroundHeight);
