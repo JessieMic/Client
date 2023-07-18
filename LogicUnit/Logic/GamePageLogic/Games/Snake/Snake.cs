@@ -18,6 +18,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private List<SnakeObject> m_PlayersSnakes = new List<SnakeObject>();
         private Food m_food = new Food();
         private List<Direction> m_SnakeLastDirection = new List<Direction>();
+        private List<Point> spot = new List<Point>();
         int o = 0;
         public Snake()
         {
@@ -40,7 +41,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             newThread.Start();
             //Task.Run(actualGameLoop);
             //Task.Run(actualGameLoop);
-
         }
 
         private void actualGameLoop()
@@ -175,6 +175,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         private void addFood()
         {
+            spot.Add(new Point(8,3));
+            spot.Add(new Point(2, 5));
+            spot.Add(new Point(4, 6));
+            spot.Add(new Point(1, 5));
+            spot.Add(new Point(8, 3));
+            spot.Add(new Point(2, 5));
+            spot.Add(new Point(4, 6));
             List<Point> emptyPositions = getEmptyPositions();
             Point randomPoint = new Point(5, 1);//emptyPositions[m_randomPosition.Next(emptyPositions.Count)];
 
@@ -187,7 +194,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private void updateFoodToNewPoint(Point i_Point)
         {
             m_food.PopPoint();
+            while(m_Board[spot[0].m_Column, spot[0].m_Row] != (int)eBoardObjectSnake.Empty)
+            {
+                spot.RemoveAt(0);
+            }
+            i_Point = spot[0];
             m_food.AddPointTop(i_Point);
+            spot.RemoveAt(0);
             m_gameObjectsToUpdate.Add(m_food);
             m_Board[i_Point.m_Column, i_Point.m_Row] = (int)eBoardObjectSnake.Food;
         }
@@ -285,12 +298,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                     Point newHeadPoint = snake.GetOneMoveAhead();
                     int hit = snake.whatSnakeWillHit(newHeadPoint, isPointOnBoard(newHeadPoint));
 
-                    if (o<7 && o>=3 && m_Player.ButtonThatPlayerPicked == 1)//(hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
+                    if (false)//(o < 7 && o >= 3 && m_Player.ButtonThatPlayerPicked == 1)//(hit == (int)eBoardObjectSnake.OutOfBounds || hit >= 3)
                     {
                         snake.Eat(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player + 2,
                             eSnakeBodyParts.Head.ToString()), m_SnakeLastDirection[player - 1], currentDirection);
                         //PlayerGotHit(player);
-                        
+
                     }
                     else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
                     {
@@ -301,11 +314,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         snake.Eat(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player+2,
                             eSnakeBodyParts.Head.ToString()), m_SnakeLastDirection[player - 1], currentDirection);
 
-                        if (m_Player.ButtonThatPlayerPicked == 1)
-                        {
-                            getNewPointForFood();
-                        }
-                        
+                        //if (m_Player.ButtonThatPlayerPicked == 1)
+                        //{
+                        //    getNewPointForFood();
+                        //}
+                        updateFoodToNewPoint(new Point(0, 0));
                     }
                     o++;
                     m_gameObjectsToUpdate.Add(snake);

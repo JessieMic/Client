@@ -164,15 +164,6 @@ namespace Objects
             return point;
         }
 
-        //public void update()
-        //{
-        //    for(int i=0; i< m_Images.Count; i++)
-        //    {
-        //        m_Images[i].TranslationX = m_PointsOnScreen[i].m_Column;
-        //        m_Images[i].TranslationY = m_PointsOnScreen[i].m_Row;
-        //    }
-        //}
-
         public void AddPointTop(Point i_Point)
         {
             m_PointsOnGrid.Insert(0, i_Point);
@@ -201,6 +192,5 @@ namespace Objects
             m_PointsOnGrid.RemoveAt(m_PointsOnGrid.Count - 1);
             m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count - 1);
         }
-
     }
 }

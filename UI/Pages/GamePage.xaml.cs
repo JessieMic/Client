@@ -1,5 +1,6 @@
 //using Android.Widget;
-
+using Microsoft.Maui.Controls.Shapes;
+using GradientStop = Microsoft.Maui.Controls.GradientStop;
 using LogicUnit;
 using LogicUnit.Logic.GamePageLogic.Games.Snake;
 using Objects;
@@ -20,7 +21,6 @@ public partial class GamePage : ContentPage
     public GamePage()
     {
         InitializeComponent();
-        //startGame();
         initializePage();
         m_Game.RunGame();
     }
@@ -41,27 +41,27 @@ public partial class GamePage : ContentPage
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
+        {
+            int i = 1;
+        foreach (var gameObject in i_GameObjectsToAdd)
+        {
+            if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
             {
-                int i = 1;
-            foreach (var gameObject in i_GameObjectsToAdd)
-            {
-                if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
-                {
-                    addButton(gameObject);
-                }
-                else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
-                {
-                    addImage(gameObject);
-                }
+                addButton(gameObject);
             }
-            });
+            else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+            {
+                addImage(gameObject);
+            }
+        }
+        });
     }
 
     private void addImage(GameObject i_GameObjectToAdd)
     {
         Image image = new Image();
 
-        image.TranslationX = i_GameObjectToAdd.m_PointsOnScreen[0].m_Column;//.m_Point.m_Column;
+        image.TranslationX = i_GameObjectToAdd.m_PointsOnScreen[0].m_Column;
         image.TranslationY = i_GameObjectToAdd.m_PointsOnScreen[0].m_Row;
         image.Aspect = Aspect.AspectFill;
 
@@ -73,15 +73,22 @@ public partial class GamePage : ContentPage
         if (i_GameObjectToAdd.m_OurSize.m_Height != 0)
         {
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
-            image.Aspect = Aspect.Fill;
+            if (i_GameObjectToAdd.m_ImageSources[0] == "snakebackground.png")
+            {
+                
+                image.Aspect = Aspect.AspectFill;
+            }
+            else
+            {
+                image.Aspect = Aspect.Fill;
+            }
         }
-
         image.ClassId = i_GameObjectToAdd.m_ImageSources[0];
         image.Source = i_GameObjectToAdd.m_ImageSources[0];
         image.ZIndex = -1;
         image.Rotation = i_GameObjectToAdd.m_Rotatation[0];
         gridLayout.Add(image);
-        m_GameImages.Add(i_GameObjectToAdd.m_ID[0],image);
+        m_GameImages.Add(i_GameObjectToAdd.m_ID[0], image);
     }
 
 

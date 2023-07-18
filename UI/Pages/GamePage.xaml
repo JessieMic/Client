@@ -9,7 +9,6 @@
              Title="">
     
     <AbsoluteLayout x:Name="gridLayout">
-        
     </AbsoluteLayout>
 
 
