@@ -6,7 +6,7 @@ public partial class InstructionsPopUp : Popup
 {
 	public InstructionsPopUp(string i_GameName, string i_Instructions)
 	{
-		InitializeComponent();
+        InitializeComponent();
 
 		HeaderLabel.Text = "Instructions - " + i_GameName;
 		InstructionsLabel.Text = i_Instructions;

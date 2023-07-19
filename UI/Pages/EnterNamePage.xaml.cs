@@ -36,7 +36,7 @@ public partial class EnterNamePage : ContentPage
         }
         else
         {
-            logicResponse = r_LogicManager.AddPlayerToRoom(username, r_LogicManager.m_Player.RoomCode);
+            logicResponse = await r_LogicManager.AddPlayerToRoom(username, r_LogicManager.m_Player.RoomCode);
         }
 
         if (logicResponse == eLoginErrors.Ok)
