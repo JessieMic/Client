@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 //using ABI.Windows.Security.EnterpriseData;
 using LogicUnit.Logic.GamePageLogic;
 using LogicUnit.Logic.GamePageLogic.LiteNet;
@@ -13,26 +14,22 @@ using Objects;
 using Objects.Enums;
 using Objects.Enums.BoardEnum;
 using Point = Objects.Point;
-using Size = Objects.Size;
 
 namespace LogicUnit
 {
     public abstract partial class Game
     {
-
+        private List<string> m_PlayerMovementsLogs = new List<string>();
 
         private readonly HubConnection r_ConnectionToServer;
         private readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
+        //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
         public event EventHandler<List<GameObject>> GameObjectsUpdate;
         public event EventHandler<GameObject> GameObjectToDelete;
-
-
-        //Events
-        //public event EventHandler<List<Image>> AddGameObjectList;
-        //public event EventHandler<List<GameObject>> GameObjectsUpdate;
-        //public event EventHandler<GameObject> GameObjectToDelete;
+        public event EventHandler<List<int>> GameObjectsToHide;
+        public event EventHandler<List<int>> GameObjectsToShow;
 
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
@@ -40,19 +37,17 @@ namespace LogicUnit
 
         //Screen info 
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
-        protected Size m_BoardSize = new Size();
+        protected SizeDTO m_BoardOurSize = new SizeDTO();
 
         //Need to initialize each different game
-        //protected int[] m_AmountOfLivesPlayerHas = new int[4];
-        //protected int m_AmountOfLivesPlayersGetAtStart = 3;
         protected string m_GameName;
         protected ScoreBoard m_scoreBoard = new ScoreBoard();
         protected Hearts m_Hearts = new Hearts();
+        protected PauseMenu m_PauseMenu = new PauseMenu();
 
         //Things that might change while playing 
         protected int[,] m_Board;
         protected int m_AmountOfActivePlayers;
-        //protected int m_AmountOfPlayersThatAreAlive;
         public eGameStatus m_GameStatus = eGameStatus.Running;
         protected List<string> m_LoseOrder = new List<string>();
 
@@ -60,25 +55,25 @@ namespace LogicUnit
         protected Buttons m_Buttons = new Buttons();
         protected Random m_randomPosition = new Random();
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
+        protected Dictionary<int, Direction> m_PlayersDirectionsFromServer = new Dictionary<int, Direction>();
+
 
         //List for Ui changes
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
-        private bool m_Flag= false;
-        private bool m_IsMenuVisible = false;  
-        
+        private bool m_Flag = false;
+        private bool m_IsMenuVisible = false;
+
         public Game()
         {
-            r_LiteNetClient.Init(2);
+            r_LiteNetClient.Init(m_GameInformation.AmountOfPlayers);
+            //TODO: blocks the server updates
             r_LiteNetClient.ReceivedData += OnUpdatesReceived;
             r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
 
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_GameHubAddress)
                 .Build();
-
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
-            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder);
 
             //r_ConnectionToServer.On("Update", (int[] i_Update) =>
             //{
@@ -107,8 +102,8 @@ namespace LogicUnit
 
         public void InitializeGame()
         {
-            m_BoardSize = m_ScreenMapping.m_TotalScreenSize;
-            m_Board = new int[m_BoardSize.m_Width, m_BoardSize.m_Height];
+            m_BoardOurSize = m_ScreenMapping.m_TotalScreenOurSize;
+            m_Board = new int[m_BoardOurSize.m_Width, m_BoardOurSize.m_Height];
 
             r_LiteNetClient.ReceivedData += OnUpdatesReceived;
 
@@ -118,12 +113,24 @@ namespace LogicUnit
             }
             SetGameScreen();
 
+            //m_networkThread = new Thread(() => r_LiteNetClient.Run());
+            //m_networkThread.Start();
             r_LiteNetClient.Run();
         }
 
         protected virtual void OnAddScreenObjects()
         {
             AddGameObjectList.Invoke(this, m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
+        }
+
+        protected virtual void OnHideGameObjects(List<int> i_GameObjectsIDToHide)
+        {
+            GameObjectsToHide.Invoke(this, i_GameObjectsIDToHide);
+        }
+
+        protected virtual void OnShowGameObjects(List<int> i_GameObjectsIDToShow)
+        {
+            GameObjectsToShow.Invoke(this, i_GameObjectsIDToShow);
         }
 
         public bool SetAmountOfPlayers(int i_AmountOfPlayers)//for when you want to get ready in lobby 
@@ -143,7 +150,13 @@ namespace LogicUnit
 
         protected void PlayerLostALife(int i_Player)
         {
-            m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+            m_GameStatus =m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+            
+            if(m_Hearts.m_HeartToRemove != null)
+            {
+                OnDeleteGameObject(m_Hearts.m_HeartToRemove);
+                m_Hearts.m_HeartToRemove = null;
+            }
 
             if (m_GameStatus != eGameStatus.Running)
             {
@@ -169,8 +182,8 @@ namespace LogicUnit
         {
             bool isPointOnTheBoard = true;
 
-            if (i_Point.m_Row < 0 || i_Point.m_Column < 0 || i_Point.m_Column > m_BoardSize.m_Width
-               || i_Point.m_Row > m_BoardSize.m_Height)
+            if (i_Point.m_Row < 0 || i_Point.m_Column < 0 || i_Point.m_Column > m_BoardOurSize.m_Width
+               || i_Point.m_Row > m_BoardOurSize.m_Height)
             {
                 isPointOnTheBoard = false;
             }
@@ -184,13 +197,13 @@ namespace LogicUnit
 
         protected bool isPointOnBoard(Point i_Point)
         {
-            bool isPointOnTheBoard = !(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardSize.m_Height || i_Point.m_Column < 0
-                                       || i_Point.m_Column >= m_BoardSize.m_Width);
+            bool isPointOnTheBoard = !(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardOurSize.m_Height || i_Point.m_Column < 0
+                                       || i_Point.m_Column >= m_BoardOurSize.m_Width);
 
             return isPointOnTheBoard;
         }
 
-        protected virtual async Task gameLoop()
+        protected virtual void gameLoop()
         {
 
         }
@@ -200,22 +213,18 @@ namespace LogicUnit
             GameObjectToDelete.Invoke(this, i_GameObject);
         }
 
-        //protected void OnUpdateScreenObject(List<ScreenObjectUpdate> i_Update)
-        //{
-        //    GameObjectUpdate.Invoke(this, i_Update);
-        //}
-
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player)
         {
-           // m_PlayerGameObjects[i_Player - 1].m_Direction = i_Direction;
+            // m_PlayerGameObjects[i_Player - 1].m_Direction = i_Direction;
         }
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
-
-            if (m_GameStatus == eGameStatus.Running)
+                
+            //if (m_GameStatus == eGameStatus.Running)
             {
+                ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);
                 SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
                 //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
             }
@@ -247,50 +256,6 @@ namespace LogicUnit
             GameObjectsUpdate.Invoke(this, m_gameObjectsToUpdate);
         }
 
-        //protected GameObject addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
-        //{
-        //    string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-        //    GameObject gameObject = new GameObject();
-
-        //    gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-
-        //    m_GameImagesToAdd.Add(gameObject.m_Images[0]);
-        //    m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
-
-        //    return gameObject;
-
-        //    //string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-        //    //GameObject gameObject = new GameObject();
-
-        //    //if (i_ToInitialize)
-        //    //{
-        //    //    gameObject.Initialize(i_Type, i_ObjectNumber, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
-
-        //    //    if (i_Type == eScreenObjectType.Player)
-        //    //    {
-        //    //        m_PlayerGameObjects.Add(gameObject);
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        m_GameObjects.Add(gameObject);
-        //    //    }
-        //    //}
-
-        //    //ScreenObjectAdd objectAdd = new ScreenObjectAdd(i_Type, null, i_Point, m_ScreenMapping.m_MovementButtonSize, png, string.Empty, i_ObjectNumber);
-
-        //    //if (i_Type == eScreenObjectType.Player)
-        //    //{
-        //    //    m_PlayerGameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-        //    //}
-        //    //else
-        //    //{
-        //    //    m_GameObjects[i_ObjectNumber - 1].SetObject(ref objectAdd);
-        //    //}
-
-        //    //m_ScreenObjectList.Add(objectAdd);
-        //    //m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
-        //}
-
         protected string generatePngString(eScreenObjectType i_Type, int i_ObjectNumber, string i_Version)
         {
             string png;
@@ -301,17 +266,17 @@ namespace LogicUnit
         }
 
 
-        protected void notifyGameObjectUpdate(eScreenObjectType i_ObjectType, int i_ObjectNumber, Direction i_Direction, Point i_Point)
-        {
-            if (i_ObjectType == eScreenObjectType.Player)
-            {
-                ChangeDirection(i_Direction, i_ObjectNumber);
-            }
-            else
-            {
-                ChangeGameObject(i_ObjectNumber, i_Direction, i_Point);
-            }
-        }
+        //protected void notifyGameObjectUpdate(eScreenObjectType i_ObjectType, int i_ObjectNumber, Direction i_Direction, Point i_Point)
+        //{
+        //    if (i_ObjectType == eScreenObjectType.Player)
+        //    {
+        //        ChangeDirection(i_Direction, i_ObjectNumber);
+        //    }
+        //    else
+        //    {
+        //        ChangeGameObject(i_ObjectNumber, i_Direction, i_Point);
+        //    }
+        //}
 
         // notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
 
@@ -325,17 +290,6 @@ namespace LogicUnit
 
         }
 
-        private void showPauseMenu()
-        {
-            //GameObject for menu
-            Size screenSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1];
-            GameObject pauseMenu = new GameObject();
-            pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", new Point((screenSize.m_Width/2)-2, (screenSize.m_Height / 2) - 2), GameSettings.m_GameBoardGridSize, new Point(0,0));
-            pauseMenu.m_Size = GameSettings.m_PauseMenuSize;
-            m_GameObjectsToAdd.Add(pauseMenu);
-            m_Buttons.GetMenuButtons(ref m_GameObjectsToAdd);
-            OnAddScreenObjects();
-        }
 
         private void restartGame()
         {
@@ -347,35 +301,42 @@ namespace LogicUnit
 
         }
 
-        private void hidePauseMenu()
-        {
-            //Hide pause menu background
-            m_Buttons.hideMenuButtons();
-        }
-
         protected virtual void getUpdate(int i_Player)
         {
             eGameStatus returnStatus;
-            returnStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button);
+            m_GameStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button,m_GameStatus);
 
-            if(returnStatus == eGameStatus.Running)
+            if (m_GameStatus == eGameStatus.Running)
             {
-                ChangeDirection(
-                    Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
-                    r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
+                m_PlayersDirectionsFromServer[r_LiteNetClient.PlayersData[i_Player].PlayerNumber] =
+                    Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button);
+
+
+                //ChangeDirection(
+                //    Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
+                //    r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
+                //m_PlayerMovementsLogs.Add($"player {i_Player} sent {r_LiteNetClient.PlayersData[i_Player].Button}");
             }
-            else
+            
+
+            if(m_IsMenuVisible && m_GameStatus != eGameStatus.Paused)
             {
-                m_GameStatus = returnStatus;
+                m_IsMenuVisible = false;
+                OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
             }
+            
         }
 
         protected async void OnUpdatesReceived()
         {
             for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
             {
+                lock (m_PlayersDirectionsFromServer)
                 {
-                    getUpdate(i);
+                    //if (i != m_Player.ButtonThatPlayerPicked) //update the player that is not the current player
+                    {
+                        getUpdate(i);
+                    }
                 }
             }
 
@@ -383,14 +344,15 @@ namespace LogicUnit
             {
                 m_Flag = false;
 
-                if(m_GameStatus == eGameStatus.Running)
+                if (m_GameStatus == eGameStatus.Running)
                 {
-                    gameLoop();
+                    //TODO: update other players direction
+                    //gameLoop();
                 }
-                else if(!m_IsMenuVisible && m_GameStatus == eGameStatus.Paused)
+                else if (!m_IsMenuVisible && m_GameStatus == eGameStatus.Paused)
                 {
                     m_IsMenuVisible = true;
-                    showPauseMenu();
+                    OnShowGameObjects(m_PauseMenu.m_PauseMenuIDList);
                 }
             }
             else

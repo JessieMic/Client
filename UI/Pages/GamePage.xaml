@@ -8,10 +8,7 @@
              Shell.FlyoutItemIsVisible="False"
              Title="">
     
-    <AbsoluteLayout x:Name="gridLayout"
-                    BackgroundColor="LightGray"
-                    >
-        
+    <AbsoluteLayout x:Name="gridLayout">
     </AbsoluteLayout>
 
 

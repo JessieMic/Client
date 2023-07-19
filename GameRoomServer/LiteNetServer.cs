@@ -1,8 +1,9 @@
 ﻿using System.Timers;
 using LiteNetLib;
 using LiteNetLib.Utils;
-using LogicUnit.Logic.GamePageLogic;
+//using LogicUnit.Logic.GamePageLogic;
 using Timer = System.Timers.Timer;
+
 
 namespace GameRoomServer
 {
@@ -11,7 +12,7 @@ namespace GameRoomServer
         private static readonly EventBasedNetListener sr_NetListener = new EventBasedNetListener();
         private readonly NetManager r_NetManager = new NetManager(sr_NetListener);
         private readonly List<ClientData> r_Clients = new List<ClientData>();
-        private readonly ObjectPointData r_ObjectPointData;
+        //private readonly ObjectPointData r_ObjectPointData;
         private readonly ILogger<LiteNetServer> r_Logger;
         //private readonly Timer r_Timer = new System.Timers.Timer(15);
 
@@ -28,16 +29,18 @@ namespace GameRoomServer
             //r_Timer.Elapsed += onTimerElapsed;
         }
 
-        public void Run()
+        public async Task Run()
         {
             while (true)
             {
+                var time = DateTime.Now.Millisecond;
                 r_NetManager.PollEvents();
                 if (r_Clients.Count > 0)
                 {
                     updateClients();
                 }
-                Thread.Sleep(700);
+                Thread.Sleep(5);
+                //await Task.Delay(10);
                 //Console.WriteLine($"sent: {r_Clients.ToString()}");
             }
         }
@@ -51,34 +54,26 @@ namespace GameRoomServer
                 writer.Put(data.Button);
             }
 
-            //foreach(ClientData data in r_Clients)
-            //{
-            //    Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
-            //}
             foreach (ClientData client in r_Clients)
             {
                 client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
             }
+
         }
 
-        private void updateClientsWithObjectPoint()
-        {
-            NetDataWriter writer = new();
+        //private void updateClientsWithObjectPoint()
+        //{
+        //    NetDataWriter writer = new();
             
-            writer.Put(r_ObjectPointData.m_Column);
-            writer.Put(r_ObjectPointData.m_Row);
-            writer.Put(r_ObjectPointData.m_Object);
+        //    writer.Put(r_ObjectPointData.m_Column);
+        //    writer.Put(r_ObjectPointData.m_Row);
+        //    writer.Put(r_ObjectPointData.m_Object);
             
-
-            //foreach(ClientData data in r_Clients)
-            //{
-            //    Console.WriteLine($"sent: {data.PlayerNumber}, {data.Button}");
-            //}
-            foreach (ClientData client in r_Clients)
-            {
-                client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
-            }
-        }
+        //    foreach (ClientData client in r_Clients)
+        //    {
+        //        client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
+        //    }
+        //}
 
 
         private void onNetworkReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
@@ -92,11 +87,6 @@ namespace GameRoomServer
                     clientData.Button = i_Reader.GetInt();
                 }
             }
-            //int playerIndex = i_Reader.GetInt();
-            //int button = i_Reader.GetInt();
-            //ClientData clientData = r_Clients.Find(client => client.PlayerNumber == i_Reader.GetInt());
-            //clientData.Button = i_Reader.GetInt();
-            //r_Clients.Find(client => client.PlayerNumber == playerIndex).Button = button;
 
             i_Reader.Recycle();
         }

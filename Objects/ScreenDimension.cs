@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 
 namespace Objects
 {
     public struct ScreenDimension
     {
-        private Size m_Size = new Size();
+        private SizeDTO m_OurSize = new SizeDTO();
         public Position m_Position = new Position();
 
-        public ScreenDimension(Size i_Size, Position i_Position)
+        public ScreenDimension(SizeDTO i_OurSize, Position i_Position)
         {
-            m_Size = i_Size;
+            m_OurSize = i_OurSize;
             m_Position = i_Position;
         }
 
@@ -25,12 +26,12 @@ namespace Objects
             }
         }
 
-        public Size Size
+        public SizeDTO SizeDTO
         {
-            get { return m_Size; }
+            get { return m_OurSize; }
             set
             {
-                m_Size = value;
+                m_OurSize = value;
                 //m_Size.m_Height-= 115;
             }
         }

@@ -49,18 +49,37 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="Resources\Images\aa.png" />
+	  <None Remove="Resources\Images\boarder.png" />
 	  <None Remove="Resources\Images\heart.png" />
+	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
 	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />
+	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\snake.png" />
+	  <None Remove="Resources\Images\snakebackground.png" />
+	  <None Remove="Resources\Images\snakeobject10body.png" />
+	  <None Remove="Resources\Images\snakeobject1food.png" />
+	  <None Remove="Resources\Images\snakeplayer1body.png" />
+	  <None Remove="Resources\Images\snakeplayer1head.png" />
+	  <None Remove="Resources\Images\snakeplayer1tail.png" />
+	  <None Remove="Resources\Images\snakeplayer1turn.png" />
+	  <None Remove="Resources\Images\snakeplayer2body.png" />
+	  <None Remove="Resources\Images\snakeplayer2head.png" />
+	  <None Remove="Resources\Images\snakeplayer2tail.png" />
+	  <None Remove="Resources\Images\snakeplayer2turn.png" />
+	  <None Remove="Resources\Images\snakeplayer3body.png" />
+	  <None Remove="Resources\Images\snakeplayer3head.png" />
+	  <None Remove="Resources\Images\snakeplayer3tail.png" />
+	  <None Remove="Resources\Images\snakeplayer3turn.png" />
+	  <None Remove="Resources\Images\snakeplayer4body.png" />
+	  <None Remove="Resources\Images\snakeplayer4head.png" />
+	  <None Remove="Resources\Images\snakeplayer4tail.png" />
+	  <None Remove="Resources\Images\snakeplayer4turn.png" />
 	  <None Remove="Resources\Images\snake\snakeobject1food.png" />
-	  <None Remove="Resources\Images\snake\snakeplayer1body.png" />
-	  <None Remove="Resources\Images\snake\snakeplayer2body.png" />
-	  <None Remove="Resources\Images\upbutton.png" />
+	  <None Remove="Resources\Images\uibackground.png" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -68,8 +87,6 @@
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <MauiImage Include="Resources\Images\snake\snakeobject1food.png" />
-	  <MauiImage Include="Resources\Images\snake\snakeplayer1body.png" />
-	  <MauiImage Include="Resources\Images\snake\snakeplayer2body.png" />
 	</ItemGroup>
 
 	<ItemGroup>

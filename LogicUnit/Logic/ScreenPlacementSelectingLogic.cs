@@ -16,9 +16,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using DTOs;
 using Objects;
 using Point = Objects.Point;
-using Size = Objects.Size;
 
 namespace LogicUnit
 {
@@ -84,7 +84,7 @@ namespace LogicUnit
                 });
             });
 
-            r_ConnectionToServer.On("StartGame", (string[] i_NamesOfPlayers, Size[] i_ScreenSizes) =>
+            r_ConnectionToServer.On("StartGame", (string[] i_NamesOfPlayers, SizeDTO[] i_ScreenSizes) =>
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
@@ -169,7 +169,7 @@ namespace LogicUnit
 
         public void SetPlayerScreenSize(int i_Width, int i_Height)
         {
-            m_GameInformation.m_ClientScreenDimension.Size = new Size(i_Width, i_Height);
+            m_GameInformation.m_ClientScreenDimension.SizeDTO = new SizeDTO(i_Width, i_Height);
 
         }
 
@@ -198,7 +198,7 @@ namespace LogicUnit
                 "TryPickAScreenSpot",
                 m_Player.Name,
                 i_TextOnButton,
-                m_GameInformation.m_ClientScreenDimension.Size);
+                m_GameInformation.m_ClientScreenDimension.SizeDTO);
 
         }
 

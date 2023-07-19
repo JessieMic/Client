@@ -28,7 +28,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             //gameLoop();
         }
 
-        protected override async Task gameLoop() // copied from snake
+        protected override void gameLoop() // copied from snake
         {
             m_gameObjectsToUpdate = new List<GameObject>(); // -> objects that need to be updated (pacman that moves)
             m_GameObjectsToAdd = new List<GameObject>(); // -> new objects on screen
@@ -78,9 +78,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             Point point;
             Food food = new Food();
 
-            for (int col = 0; col < m_BoardSize.m_Width; col++)
+            for (int col = 0; col < m_BoardOurSize.m_Width; col++)
             {
-                for (int row = 0; row < m_BoardSize.m_Height; row++)
+                for (int row = 0; row < m_BoardOurSize.m_Height; row++)
                 {
                     if (m_Board[col, row] == 0)
                     {
@@ -102,12 +102,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
             if (playerCol == eColumnPosition.RightColumn)
             {
-                point.m_Column = m_BoardSize.m_Width - 2;
+                point.m_Column = m_BoardOurSize.m_Width - 2;
             }
 
             if (playerRow == eRowPosition.LowerRow)
             {
-                point.m_Row = m_BoardSize.m_Height - 2;
+                point.m_Row = m_BoardOurSize.m_Height - 2;
             }
 
             GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player, "body");
