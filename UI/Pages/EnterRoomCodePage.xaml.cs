@@ -23,6 +23,8 @@ public partial class EnterRoomCodePage : ContentPage
 
         if (logicResponse == eLoginErrors.Ok)
         {
+            r_LogicManager.m_Player.RoomCode = code;
+
             await Shell.Current.GoToAsync(nameof(EnterNamePage));
             //await Shell.Current.GoToAsync(nameof(EnterNamePage) +
             //                              $"?{QueryIDs.k_PlayerType}={PlayerType}&" +

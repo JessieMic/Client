@@ -14,5 +14,15 @@
         {
             return m_Pacman;
         }
+
+        public static Game GetGameByName(string i_Name)
+        {
+            if (i_Name == "Snake")
+                return m_Snake;
+
+            return m_Pacman;
+
+            // TODO: add more games when created
+        }
     }
 }

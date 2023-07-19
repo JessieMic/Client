@@ -11,7 +11,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         //Ghost m_Ghost;
         //private List<PacmanObject> m_PacmanPlayers = new List<PacmanObject>();
         //private List<GhostObject> m_GhostPlayers = new List<GhostObject>();
-        private List<Food> m_Food = new List<Food>();
+        //private List<Food> m_Food = new List<Food>();
+        private Dictionary<Point, Food> m_Food = new Dictionary<Point, Food>();
         private List<GameObject> m_AllPlayers = new List<GameObject>();
 
         public Pacman()
@@ -68,7 +69,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 addPlayerObjects(i);
             }
 
-            //addFood();
+            addFood();
         }
 
         private void addFood()
@@ -86,7 +87,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                         point = new Point(col,row);
                         food.set(addGameBoardObject_(eScreenObjectType.Object, point, 1,
                             (int)eBoardObjectPacman.Food, eBoardObjectPacman.Food.ToString()));
-                        m_Food.Add(food);
+                        //m_Food.Add(food);
+                        m_Food.Add(point, food);
                     }
                 }
             }
@@ -111,15 +113,17 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player, "body");
             gameObject.FadeWhenObjectIsRemoved();
 
-            if (i_Player % 2 == 0)
+            if (i_Player % 2 == 1)
             {
                 PacmanObject pacman = new PacmanObject(ref m_Board);
+                pacman.set(gameObject);
                 //m_PacmanPlayers.Add(pacman);
                 m_AllPlayers.Add(pacman);
             }
             else
             {
                 GhostObject ghost = new GhostObject(ref m_Board);
+                ghost.set(gameObject);
                 //m_GhostPlayers.Add(ghost);
                 m_AllPlayers.Add(ghost);
             }
@@ -150,6 +154,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                         else if (hit == (int)eBoardObjectPacman.Food)
                         {
                             pacman.Move(newPoint);
+                            //removeFood(newPoint);
                             //score++
                         }
                         else if (hit == (int)eBoardObjectPacman.Ghost1 || hit == (int)eBoardObjectPacman.Ghost2)
@@ -177,5 +182,28 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             OnDeleteGameObject(m_AllPlayers[i_Player - 1]);
             PlayerLostALife(i_Player);
         }
+
+        private void removeFood(Point i_Point)
+        {
+            if (m_Food[i_Point] != null)
+            {
+                Food food = m_Food[i_Point];
+
+                food.PopPoint();
+                OnDeleteGameObject(m_Food[i_Point]);
+            }
+
+        }
+
+        //protected override void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
+        //{
+        //    removeFoodFromPoint(i_Point);
+        //}
+
+        //private void removeFoodFromPoint(Point i_Point)
+        //{
+        //    Food foodToRemove = m_Food[i_Point];
+        //    foodToRemove.PopPoint();
+        //}
     }
 }

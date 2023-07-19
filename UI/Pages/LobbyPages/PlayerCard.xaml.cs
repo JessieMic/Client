@@ -14,6 +14,17 @@ public partial class PlayerCard : ContentView
         PlayerNameLabel.Text = i_PlayerName;
     }
 
+    public PlayerCard(Action<PlayerCard, string> i_RemoveAction, string i_PlayerName, bool i_IsHost)
+    {
+        InitializeComponent();
+        m_RemoveAction = i_RemoveAction;
+        PlayerNameLabel.Text = i_PlayerName;
+        if (i_IsHost)
+        {
+            AddRemoveButton();
+        }
+    }
+
     public void AddRemoveButton()
 	{
 		m_RemoveBtn = new Button();

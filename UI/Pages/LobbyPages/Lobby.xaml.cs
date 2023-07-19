@@ -1,5 +1,6 @@
 using CommunityToolkit.Maui.Views;
 using LogicUnit;
+using Microsoft.Maui.ApplicationModel;
 using Objects.Enums;
 using UI.Pages.LobbyPages.Utils;
 using Game = UI.Pages.LobbyPages.Utils.Game;
@@ -22,24 +23,21 @@ public partial class Lobby : ContentPage
     private GameCard m_ChosenGameCard;
     private Label GameDetailsLabel = new Label();
     private Game m_ChosenGame;
-
-    //public string RoomCode {
-    //    get => m_code;
-    //    set
-    //    {
-    //        m_code = value;
-    //        CodeLabel.Text = value;
-    //    }
-    //}
-    //public string PlayerName { get; set; }
+    private bool m_IsPageinitialized = false;
 
     public Lobby()
-	{
+    {
         InitializeComponent();
         StatusLabel.Text = "Waiting for all players...";
         m_PlayerName = m_LogicManager.m_Player.Name;
         m_Code = m_LogicManager.m_Player.RoomCode;
         m_PlayerType = m_LogicManager.m_Player.PlayerType;
+
+
+        //m_LogicManager.SetAddPlayersAction(AddPlayers);
+        //m_LogicManager.SetPlayersToRemoveAction(RemovedByHost);
+        //m_LogicManager.StartPlayersListRefresher();
+        //m_LogicManager.SetChosenGameAction(ShowChosenGame);
     }
 
     [Obsolete]
@@ -47,8 +45,8 @@ public partial class Lobby : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        PlayerCard playerCard = new PlayerCard(RemovePlayer, m_PlayerName);
-        PlayersComponent.Add(playerCard);
+        //PlayerCard playerCard = new PlayerCard(RemovePlayer, m_PlayerName);
+        //PlayersComponent.Add(playerCard);
 
         if (m_PlayerType == PlayerType.Host)
         {
@@ -62,7 +60,12 @@ public partial class Lobby : ContentPage
             ButtonsComponent.Add(ChooseGameButton);
         }
 
-        m_LogicManager.SetAddPlayersAction(AddPlayers);
+        //m_LogicManager.SetAddPlayersAction(AddPlayers);
+        //m_LogicManager.SetPlayersToRemoveAction(RemovedByHost);
+        //m_LogicManager.SetChosenGameAction(ShowChosenGame);
+        //m_LogicManager.StartUpdatesRefresher();
+
+        //m_IsPageinitialized = true;
 
         //List<string> list = new List<string>
         //{
@@ -74,10 +77,25 @@ public partial class Lobby : ContentPage
         //AddPlayers(list);
     }
 
-    private async void OnLeaveClicked(object sender, EventArgs e)
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        m_LogicManager.SetAddPlayersAction(AddPlayers);
+        m_LogicManager.SetPlayersToRemoveAction(RemovedByHost);
+        m_LogicManager.SetChosenGameAction(ShowChosenGame);
+        m_LogicManager.StartUpdatesRefresher();
+
+        m_IsPageinitialized = true;
+    }
+
+    private void OnLeaveClicked(object sender, EventArgs e)
     {
         m_LogicManager.PlayerLeft();
+        goToMainPage();
+    }
 
+    private async void goToMainPage()
+    {
         if (m_PlayerType == PlayerType.Host)
         {
             await Shell.Current.GoToAsync("../.."); // two pages back - goes to the main page
@@ -91,7 +109,7 @@ public partial class Lobby : ContentPage
     [Obsolete]
     private void OnChooseGameClicked(object sender, EventArgs e)
     {
-        GamesPopUp gamesPopUp = new GamesPopUp(ShowChosenGame);
+        GamesPopUp gamesPopUp = new GamesPopUp(UpdateChosenGame);
 
         //GameCard snakeCard = new GameCard("snake.png", "Snake");
         //GameCard pacmanCard = new GameCard("pacman.png", "Pacman");
@@ -108,17 +126,17 @@ public partial class Lobby : ContentPage
         this.ShowPopup(gamesPopUp);
     }
 
-    public void RemovePlayer(PlayerCard i_PlayerCard, string i_PlayerName)
+    public async void RemovePlayerByHost(PlayerCard i_PlayerCard, string i_PlayerName)
     {
-        m_LogicManager.RemovePlayerByHost(i_PlayerName);
-        PlayersComponent.Remove(i_PlayerCard);
+        eLoginErrors logicResponse = await m_LogicManager.RemovePlayerByHost(m_Code, i_PlayerName);
+        //PlayersComponent.Remove(i_PlayerCard);
     }
 
-    public void DeletePlayerFromScreen(string i_PlayerName)
+    public void PlayerClickedLeave(string i_PlayerName)
     {
-        foreach(PlayerCard card in PlayersComponent.Children.ToList())
+        foreach (PlayerCard card in PlayersComponent.Children.ToList())
         {
-            if(card.CheckIfName(i_PlayerName))
+            if (card.CheckIfName(i_PlayerName))
             {
                 PlayersComponent.Remove(card);
             }
@@ -131,26 +149,31 @@ public partial class Lobby : ContentPage
     }
 
     [Obsolete]
-    public void ShowChosenGame(Game i_ChosenGame)
+    public void ShowChosenGame(string i_ChosenGameName)
     {
-        ChosenGameComponent.Remove(m_ChosenGameCard);
-        ChosenGameComponent.Remove(GameDetailsLabel);
-
-        m_ChosenGame = i_ChosenGame;
-        m_ChosenGameCard = new GameCard(i_ChosenGame);
-        ChosenGameComponent.Add(m_ChosenGameCard);
-
-        if(m_ChosenGame.GetName() == "Snake")
+        Application.Current.Dispatcher.Dispatch(() =>
         {
-            m_LogicManager.m_GameInformation.NameOfGame = eGames.Snake;
-        }
-        else
-        {
-            m_LogicManager.m_GameInformation.NameOfGame = eGames.Pacman;
-        }
+            ChosenGameComponent.Remove(m_ChosenGameCard);
+            ChosenGameComponent.Remove(GameDetailsLabel);
+        });
 
-        editGameDetailsLabel();
-        createInstructionsButton();
+        //m_ChosenGame = i_ChosenGame;
+        m_ChosenGame = Utils.GameLibrary.GetGameByName(i_ChosenGameName);
+        m_ChosenGameCard = new GameCard(m_ChosenGame);
+
+        Application.Current.Dispatcher.Dispatch(() =>
+        {
+            ChosenGameComponent.Add(m_ChosenGameCard);
+
+            editGameDetailsLabel();
+            createInstructionsButton();
+        });
+
+    }
+
+    public void UpdateChosenGame(Game i_ChosenGame)
+    {
+        m_LogicManager.UpdateChosenGame(i_ChosenGame.GetName(), m_Code);
     }
 
     private void editGameDetailsLabel()
@@ -190,23 +213,68 @@ public partial class Lobby : ContentPage
         this.ShowPopup(instructionsPopUp);
     }
 
-    public void AddPlayers(List<string> i_PlayersNames)
+
+    public bool AddPlayers(List<string> i_PlayersNames)
     {
-        foreach (string name in i_PlayersNames)
+        if (m_IsPageinitialized)
         {
-            if (name != m_PlayerName)
+            //PlayerCard newCard;
+
+            Application.Current.Dispatcher.Dispatch(PlayersComponent.Children.Clear);
+
+            Application.Current.Dispatcher.Dispatch(() =>
             {
-                PlayerCard newCard = new PlayerCard(RemovePlayer, name);
+                PlayersComponent.Add(new PlayerCard(RemovePlayerByHost, $"{m_PlayerName} (You)")); //adds the player itself
+            });
 
-                if (m_PlayerType == PlayerType.Host)
+            foreach (string name in i_PlayersNames)
+            {
+                if (name != m_PlayerName)
                 {
-                    newCard.AddRemoveButton();
-                }
+                    if (m_PlayerType == PlayerType.Host)
+                    {
+                        //PlayerCard newCard = new PlayerCard(RemovePlayerByHost, name);
+                        //newCard.AddRemoveButton();
+                        Application.Current.Dispatcher.Dispatch(() =>
+                        {
+                            PlayersComponent.Add(new PlayerCard(RemovePlayerByHost, name, true));
+                        });
+                    }
+                    else
+                    {
+                        Application.Current.Dispatcher.Dispatch(() =>
+                        {
+                            PlayersComponent.Add(new PlayerCard(RemovePlayerByHost, name));
+                        });
+                    }
 
-                PlayersComponent.Add(newCard);
+                    //MainThread.BeginInvokeOnMainThread(() => PlayersComponent.Add(newCard));
+                    //Application.Current.Dispatcher.Dispatch(async () => PlayersComponent.Add(newCard));
+                }
             }
+
+            return true;
+        }
+
+        return true;
+    }
+
+    public void RemovedByHost(List<string> i_RemovedPlayers)
+    {
+        if (i_RemovedPlayers.Contains(m_PlayerName))
+        {
+            // show a popup message with ok button
+            // when clicked OK move to the main page
+
+            RemovedByHostPopUp removedByHostPopUp = new RemovedByHostPopUp(goToMainPage);
+            Application.Current.Dispatcher.Dispatch(() =>
+            {
+                this.ShowPopup(removedByHostPopUp);
+            });
         }
     }
+
+
 
     public async void Oncontinue(object sender, EventArgs e)
     {

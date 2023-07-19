@@ -68,6 +68,7 @@
 
         <FlexLayout
             x:Name="PlayersComponent"
+            x:Shared="false"
             Grid.Row="2"
             Grid.Column="0"/>
 
