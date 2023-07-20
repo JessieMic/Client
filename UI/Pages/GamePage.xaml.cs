@@ -60,7 +60,6 @@ public partial class GamePage : ContentPage
     private void addImage(GameObject i_GameObjectToAdd)
     {
         Image image = new Image();
-
         image.TranslationX = i_GameObjectToAdd.m_PointsOnScreen[0].m_Column;
         image.TranslationY = i_GameObjectToAdd.m_PointsOnScreen[0].m_Row;
         image.Aspect = Aspect.AspectFill;
