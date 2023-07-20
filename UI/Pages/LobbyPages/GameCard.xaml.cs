@@ -16,7 +16,7 @@ public partial class GameCard : ContentView
 	public GameCard(string i_Url, string i_Name)
 	{
 		InitializeComponent();
-		GameImage.Source = i_Url;
+		//GameImage.Source = ImageSource.FromFile(i_Url);
 		GameNameLabel.Text = i_Name;
 	}
 
@@ -24,7 +24,7 @@ public partial class GameCard : ContentView
 	{
 		InitializeComponent();
 		m_Game = i_Game;
-		GameImage.Source = i_Game.GetPicUrl();
+		GameImage.Source = ImageSource.FromFile(i_Game.GetPicUrl());
         GameNameLabel.Text = i_Game.GetName();
     }
 

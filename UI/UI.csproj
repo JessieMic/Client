@@ -87,6 +87,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Include="Resources\Images\lobby\code_placeholder.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\entrance_btn.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\game_placeholder.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\instructions_btn.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\leave_btn.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\lobby_ready_btn.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\pick_a_game_btn.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\player_name_placeholder.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\remove_btn.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\snake_img.PNG" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanobject1food.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer2body.png" />
@@ -155,10 +165,6 @@
 	  <MauiXaml Update="Pages\ScreenPlacementSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Resources\Images\lobby\" />
 	</ItemGroup>
 
 </Project>
