@@ -40,13 +40,6 @@ namespace LogicUnit
                 .WithUrl(Utils.m_GameHubAddress)
                 .Build();
 
-            r_ConnectionToServer.On<int>
-            ("GetAmountOfPlayers", (i_AmountOfPlayers) =>
-                {
-                    //m_GameInformation.AmountOfPlayers = i_AmountOfPlayers;
-                    OnReceivedAmountOfPlayers();
-                });
-
             r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (i_ButtonsThatAreOccupied) =>
                 {
                     MainThread.BeginInvokeOnMainThread(() =>
@@ -84,11 +77,11 @@ namespace LogicUnit
                 });
             });
 
-            r_ConnectionToServer.On("StartGame", (string[] i_NamesOfPlayers, SizeDTO[] i_ScreenSizes) =>
+            r_ConnectionToServer.On("StartGame", (string[] i_NamesOfPlayers, int[] i_ScreenSizeWidth, int[] i_ScreenSizeHeight) =>
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                 {
-                    m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizes);
+                    m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizeWidth, i_ScreenSizeHeight);
                     OnEnterGameRoom();
                 });
             });
@@ -121,7 +114,6 @@ namespace LogicUnit
                 Application.Current.Dispatcher.Dispatch(async () =>
                 {
                     await r_ConnectionToServer.StartAsync();
-                    await r_ConnectionToServer.InvokeAsync("GetAmountOfPlayers");
                 });
             });
         }
@@ -138,8 +130,6 @@ namespace LogicUnit
 
         protected virtual void OnEnterGameRoom()
         {
-            //m_GameInformation.m_ClientScreenDimension.m_Position.SetPosition
-            //    (m_GameInformation.AmountOfPlayers,m_Player.ButtonThatPlayerPicked);
             GameIsStarting?.Invoke();
         }
 
@@ -198,7 +188,7 @@ namespace LogicUnit
                 "TryPickAScreenSpot",
                 m_Player.Name,
                 i_TextOnButton,
-                m_GameInformation.m_ClientScreenDimension.SizeDTO);
+                m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Width, m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Height);
 
         }
 

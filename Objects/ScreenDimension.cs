@@ -12,9 +12,10 @@ namespace Objects
         private SizeDTO m_OurSize = new SizeDTO();
         public Position m_Position = new Position();
 
-        public ScreenDimension(SizeDTO i_OurSize, Position i_Position)
+        public ScreenDimension(int i_ScreenWidth,int i_ScreenHeight, Position i_Position)
         {
-            m_OurSize = i_OurSize;
+            m_OurSize.m_Width = i_ScreenWidth;
+            m_OurSize.m_Height = i_ScreenHeight;
             m_Position = i_Position;
         }
 
@@ -32,7 +33,6 @@ namespace Objects
             set
             {
                 m_OurSize = value;
-                //m_Size.m_Height-= 115;
             }
         }
 

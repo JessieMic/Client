@@ -38,18 +38,13 @@ namespace Objects
             }
         }
 
-        public void SetScreenInfo(string[] i_NamesOfPlayers, SizeDTO[] i_ScreenSizes)
+        public void SetScreenInfo(string[] i_NamesOfPlayers, int[] i_ScreenSizeWidth, int[] i_ScreenSizeHeight)
         {
             m_NamesOfAllPlayers = i_NamesOfPlayers;
 
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(m_ClientScreenDimension.SizeDTO, new Position(m_AmountOfPlayers, i + 1)));
-
-                if (m_Player.ButtonThatPlayerPicked == i + 1)
-                {
-                    m_ClientScreenDimension = m_ScreenInfoOfAllPlayers[i];
-                }
+                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(i_ScreenSizeWidth[i], i_ScreenSizeHeight[i], new Position(m_AmountOfPlayers, i + 1)));
             }
         }
 

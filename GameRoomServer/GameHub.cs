@@ -5,13 +5,14 @@ using DTOs;
 public class GameHub : Hub
 {
     public static string[] buttonsThatAreOccupied = new string[4];
-    public static SizeDTO[] screenSize = new SizeDTO[4];
+    public static int[] screenSizeWidth = new int[4];
+    public static int[] screenSizeHeight = new int[4];
 
-    public async Task TryPickAScreenSpot(string nameOfPlayer, String numberOfButton, SizeDTO i_ScreenOurSize)
+    public async Task TryPickAScreenSpot(string i_NameOfPlayer, String i_NumberOfButton,int i_ScreenWidth, int i_ScreenHeight)
     {
         int chosenButtonNumber;
 
-        if (int.TryParse(numberOfButton, out chosenButtonNumber))
+        if (int.TryParse(i_NumberOfButton, out chosenButtonNumber))
         {
             chosenButtonNumber--;
 
@@ -19,9 +20,10 @@ public class GameHub : Hub
                 || buttonsThatAreOccupied[chosenButtonNumber] == null)
             {
                 //Player can pick the spot so we will update all of the Players
-                buttonsThatAreOccupied[chosenButtonNumber] = nameOfPlayer;
-                screenSize[chosenButtonNumber] = i_ScreenOurSize;
-                await Clients.All.SendAsync("PlacementUpdateRecevied", nameOfPlayer,
+                buttonsThatAreOccupied[chosenButtonNumber] = i_NameOfPlayer;
+                screenSizeWidth[chosenButtonNumber] = i_ScreenWidth;
+                screenSizeHeight[chosenButtonNumber] = i_ScreenHeight;
+                await Clients.All.SendAsync("PlacementUpdateRecevied", i_NameOfPlayer,
                 chosenButtonNumber);
             }
         }
@@ -45,12 +47,6 @@ public class GameHub : Hub
         }
     }
 
-    public async Task GetAmountOfPlayers()
-    {
-        int amountOfPlayers = 2;
-        await Clients.All.SendAsync("GetAmountOfPlayers", amountOfPlayers);
-    }
-
     public async Task RequestScreenUpdate(string PlayerId)
     {
         await Clients.Client(PlayerId).SendAsync("RecieveScreenUpdate", buttonsThatAreOccupied);
@@ -58,7 +54,7 @@ public class GameHub : Hub
 
     public async Task GameIsAboutToStart()
     {
-        await Clients.All.SendAsync("StartGame", buttonsThatAreOccupied, screenSize);
+        await Clients.All.SendAsync("StartGame", buttonsThatAreOccupied, screenSizeWidth, screenSizeHeight);
         buttonsThatAreOccupied[0] = string.Empty;
         buttonsThatAreOccupied[1] = string.Empty;
         buttonsThatAreOccupied[2] = string.Empty;
@@ -66,6 +62,4 @@ public class GameHub : Hub
         buttonsThatAreOccupied[4] = string.Empty;
         buttonsThatAreOccupied[5] = string.Empty;
     }
-
-
 }

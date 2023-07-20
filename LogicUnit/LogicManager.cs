@@ -30,7 +30,7 @@ namespace LogicUnit
 
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
             m_GameInformation.AmountOfPlayers = 2;
-            //m_Player.Name = DateTime.Now.ToString();
+            m_Player.Name = DateTime.Now.ToString();
             //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
         }
 
