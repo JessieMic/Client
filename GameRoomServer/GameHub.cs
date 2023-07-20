@@ -59,7 +59,5 @@ public class GameHub : Hub
         buttonsThatAreOccupied[1] = string.Empty;
         buttonsThatAreOccupied[2] = string.Empty;
         buttonsThatAreOccupied[3] = string.Empty;
-        buttonsThatAreOccupied[4] = string.Empty;
-        buttonsThatAreOccupied[5] = string.Empty;
     }
 }

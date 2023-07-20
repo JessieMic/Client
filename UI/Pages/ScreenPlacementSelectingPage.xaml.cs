@@ -43,6 +43,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;
         m_pageLogic.ReceivedPlayerAmount += initializeButtons;
         m_pageLogic.GameIsStarting += startGame;
+        initializeButtons();
     }
 
     async Task getScreenUpdate()

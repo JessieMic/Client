@@ -30,9 +30,9 @@ namespace LogicUnit
         public event Notify GameIsStarting;
         private readonly HubConnection r_ConnectionToServer;
         Player m_Player = Player.Instance;
-        private int m_AmountOfPlayerThatAreConnected;
         private GameInformation m_GameInformation = GameInformation.Instance;
-        
+        private int m_AmountOfPlayerThatAreConnected;
+
         public ScreenPlacementSelectingLogic()
         {
 
@@ -189,7 +189,6 @@ namespace LogicUnit
                 m_Player.Name,
                 i_TextOnButton,
                 m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Width, m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Height);
-
         }
 
         public async Task TryToDeselectScreenSpot(string i_TextOnButton)
