@@ -1,11 +1,6 @@
-﻿//using System.Threading;
-//using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.SignalR.Client;
+﻿using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Maui;
 using Microsoft.Maui.Controls;
-//using static Java.Util.Jar.Attributes;
-//using Microsoft.Maui.Controls;
-//using static Java.Util.Jar.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -83,6 +78,7 @@ namespace LogicUnit
                 {
                     m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizeWidth, i_ScreenSizeHeight);
                     OnEnterGameRoom();
+                  
                 });
             });
 
@@ -160,7 +156,6 @@ namespace LogicUnit
         public void SetPlayerScreenSize(int i_Width, int i_Height)
         {
             m_GameInformation.m_ClientScreenDimension.SizeDTO = new SizeDTO(i_Width, i_Height);
-
         }
 
         public async void OnButtonClicked(object sender, EventArgs e)

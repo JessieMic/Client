@@ -27,7 +27,7 @@ public partial class GamePage : ContentPage
 
     private void initializePage()
     {
-        m_Game = m_GameLibrary.CreateAGame(eGames.Pacman);//m_GameInformation.m_NameOfGame);
+        m_Game = m_GameLibrary.CreateAGame(m_GameInformation.NameOfGame);//m_GameInformation.m_NameOfGame);
         initializeEvents();
         initializeGame();
 

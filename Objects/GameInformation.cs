@@ -46,6 +46,8 @@ namespace Objects
             {
                 m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(i_ScreenSizeWidth[i], i_ScreenSizeHeight[i], new Position(m_AmountOfPlayers, i + 1)));
             }
+
+            m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[m_Player.ButtonThatPlayerPicked-1].Position;
         }
 
         public List<ScreenDimension> ScreenInfoOfAllPlayers

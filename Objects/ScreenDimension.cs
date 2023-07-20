@@ -9,7 +9,7 @@ namespace Objects
 {
     public struct ScreenDimension
     {
-        private SizeDTO m_OurSize = new SizeDTO();
+        public SizeDTO m_OurSize = new SizeDTO();
         public Position m_Position = new Position();
 
         public ScreenDimension(int i_ScreenWidth,int i_ScreenHeight, Position i_Position)
