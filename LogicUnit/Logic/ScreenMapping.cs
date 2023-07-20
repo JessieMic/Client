@@ -23,7 +23,6 @@ namespace LogicUnit
         public SizeDTO m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
         public int m_GameBoardGridSize = GameSettings.m_GameBoardGridSize;
         public int m_SpacingAroundButtons = GameSettings.m_SpacingAroundButtons;
-        public int m_ControllBoardTotalHeight;
 
         public ScreenMapping()
         {
@@ -34,12 +33,10 @@ namespace LogicUnit
 
         private void calculateMaxBoardSizeByGrid()
         {
-            m_ControllBoardTotalHeight = m_MovementButtonOurSize.m_Height * 3 + m_SpacingAroundButtons * 2;
-
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 SizeDTO maxScreenOurSize = new SizeDTO();
-                maxScreenOurSize.m_Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeDTO.m_Height - m_ControllBoardTotalHeight) / m_GameBoardGridSize);
+                maxScreenOurSize.m_Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeDTO.m_Height - GameSettings.ControllBoardTotalHeight) / m_GameBoardGridSize);
                 maxScreenOurSize.m_Width = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeDTO.m_Width) / m_GameBoardGridSize);
                 m_PlayerGameBoardScreenSize.Add(maxScreenOurSize);
             }
@@ -75,9 +72,9 @@ namespace LogicUnit
             }
             else
             {
-                m_ValueToAdd.m_Row += m_ControllBoardTotalHeight;
+                m_ValueToAdd.m_Row += GameSettings.ControllBoardTotalHeight;
                 m_ValueToAdd.m_Row +=
-                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.m_Height - (m_ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].m_Height * m_GameBoardGridSize);
+                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.m_Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].m_Height * m_GameBoardGridSize);
             }
         }
 

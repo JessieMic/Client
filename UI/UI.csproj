@@ -126,6 +126,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="NewContent1.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\EnterNamePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
