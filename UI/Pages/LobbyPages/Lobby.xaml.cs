@@ -28,7 +28,7 @@ public partial class Lobby : ContentPage
     public Lobby()
     {
         InitializeComponent();
-        StatusLabel.Text = "Waiting for all players...";
+        //StatusLabel.Text = "Waiting for all players...";
         m_PlayerName = m_LogicManager.m_Player.Name;
         m_Code = m_LogicManager.m_Player.RoomCode;
         m_PlayerType = m_LogicManager.m_Player.PlayerType;
@@ -44,6 +44,8 @@ public partial class Lobby : ContentPage
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
+
+        CodeLabel.Text = m_Code;
 
         //PlayerCard playerCard = new PlayerCard(RemovePlayer, m_PlayerName);
         //PlayersComponent.Add(playerCard);
@@ -83,7 +85,7 @@ public partial class Lobby : ContentPage
         m_LogicManager.SetAddPlayersAction(AddPlayers);
         m_LogicManager.SetPlayersToRemoveAction(RemovedByHost);
         m_LogicManager.SetChosenGameAction(ShowChosenGame);
-        m_LogicManager.StartUpdatesRefresher();
+        //m_LogicManager.StartUpdatesRefresher();
 
         m_IsPageinitialized = true;
     }
@@ -143,10 +145,10 @@ public partial class Lobby : ContentPage
         }
     }
 
-    public void ChangeStatusLabelToReady()
-    {
-        StatusLabel.Text = "All players connected!";
-    }
+    //public void ChangeStatusLabelToReady()
+    //{
+    //    StatusLabel.Text = "All players connected!";
+    //}
 
     [Obsolete]
     public void ShowChosenGame(string i_ChosenGameName)

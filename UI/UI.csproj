@@ -153,4 +153,8 @@
 	  </MauiXaml>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Resources\Images\lobby\" />
+	</ItemGroup>
+
 </Project>
