@@ -5,8 +5,9 @@
              Shell.NavBarIsVisible="false"
              Title="">
     <Grid x:Name="gridLayout"
-          RowDefinitions="*,Auto,Auto,*"
-          ColumnDefinitions="*,Auto,Auto,*">
+          RowDefinitions="*,Auto,10,Auto,*"
+          ColumnDefinitions="*,Auto,Auto,*"
+          >
     </Grid>
     
 </ContentPage>

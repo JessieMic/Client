@@ -23,16 +23,17 @@ public partial class EnterNamePage : ContentPage
     private async void OnContinueClicked(object sender, EventArgs e)
     {
         string username = Entry.Text;
-        eLoginErrors logicResponse = eLoginErrors.Ok;
+        //eLoginErrors logicResponse = eLoginErrors.Ok;
+        eLoginErrors logicResponse =0;
 
         if (r_LogicManager.m_Player.PlayerType == PlayerType.Host)
         {
-            //logicResponse = await r_LogicManager.CreateNewRoom(username);
+            logicResponse = await r_LogicManager.CreateNewRoom(username);
 
-            //if (logicResponse == eLoginErrors.Ok)
-            //{
-            //    r_LogicManager.m_Player.RoomCode = r_LogicManager.GetRoomCode();
-            //}
+            if (logicResponse == eLoginErrors.Ok)
+            {
+                r_LogicManager.m_Player.RoomCode = r_LogicManager.GetRoomCode();
+            }
         }
         else
         {

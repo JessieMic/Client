@@ -16,6 +16,10 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 {
     private ScreenPlacementSelectingLogic m_pageLogic = new ScreenPlacementSelectingLogic();
     private static List<Button> m_PlacementButton = new List<Button>();
+    private List<Image> m_Images = new List<Image>();
+    private int m_ScreenSizeWidth;
+    private int m_ScreenSizeHeight;
+
     Player m_Player = Player.Instance;
 
     public ScreenPlacementSelectingPage()
@@ -43,6 +47,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;
         m_pageLogic.ReceivedPlayerAmount += initializeButtons;
         m_pageLogic.GameIsStarting += startGame;
+        initializeButtons();
     }
 
     async Task getScreenUpdate()
@@ -58,8 +63,9 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     protected override async void OnSizeAllocated(double i_Width, double i_Height)
     {
         base.OnSizeAllocated(i_Width,i_Height);
+        m_ScreenSizeHeight = (int)i_Height;
+        m_ScreenSizeWidth = (int)i_Width;
         m_pageLogic.SetPlayerScreenSize((int)i_Width, (int)i_Height);
-       
     }
 
     private void initializeButtons()
@@ -70,13 +76,20 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                 {
                     for (int i = 0; i < m_pageLogic.AmountOfPlayers; i++)
                     {
+                        Image image = new Image();
                         Button button = new Button();
                         Position position = new Position(m_pageLogic.AmountOfPlayers, i + 1);
-
+                        
                         button.Text = (i + 1).ToString();
-                        button.HeightRequest = 70;
-                        button.WidthRequest = 150;
+                        int a = ((m_ScreenSizeHeight) / 12)/3;
+                        image.HeightRequest =button.HeightRequest =  12*a;
+                        image.WidthRequest=button.WidthRequest = 19*a;
+                        image.Source = "placementbutton.png";
                         m_PlacementButton.Add(button);
+                        m_Images.Add(image);
+                        
+                        button.Background = Brush.Transparent;
+                        gridLayout.Add(image, (int)position.Column, (int)position.Row);
                         gridLayout.Add(m_PlacementButton[i], (int)position.Column, (int)position.Row);
                         m_PlacementButton[i].Clicked += m_pageLogic.OnButtonClicked;
                     }
