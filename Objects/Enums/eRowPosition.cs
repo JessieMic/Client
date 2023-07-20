@@ -9,6 +9,6 @@ namespace Objects.Enums
     public enum eRowPosition
     {
         UpperRow = 1,
-        LowerRow
+        LowerRow=3
     }
 }
