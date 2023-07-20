@@ -23,7 +23,7 @@ public partial class EnterNamePage : ContentPage
     private async void OnContinueClicked(object sender, EventArgs e)
     {
         string username = Entry.Text;
-        eLoginErrors logicResponse;
+        eLoginErrors logicResponse =0;
 
         if (r_LogicManager.m_Player.PlayerType == PlayerType.Host)
         {
