@@ -50,11 +50,11 @@
             VerticalOptions="CenterAndExpand"
             Clicked="OnChooseGameClicked"/>-->
 
-        <Label
+        <!--<Label
             Text=""
             x:Name="StatusLabel"
             Grid.Row="1"
-            Grid.Column="0"/>
+            Grid.Column="0"/>-->
 
         <Label
             Text=""
