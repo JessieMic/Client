@@ -2,19 +2,149 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:UI.Pages.LobbyPages"
-             x:Class="UI.Pages.LobbyPages.Lobby">
-    <Grid x:Name="grid">
+             x:Class="UI.Pages.LobbyPages.Lobby"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="false">
+
+    <Grid x:Name="grid" Margin="2" RowSpacing="5">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="15*"/>
+            <RowDefinition Height="17.5*"/>
+            <RowDefinition Height="17.5*"/>
+            <RowDefinition Height="17.5*"/>
+            <RowDefinition Height="17.5*"/>
+            <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="35*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!--REMOVE LATER-->
+        <Border/>
+        <Border Grid.Row="1"/>
+        <Border Grid.Row="2"/>
+        <Border Grid.Row="3"/>
+        <Border Grid.Row="4"/>
+        <Border Grid.Row="5"/>
+        <Border Grid.Row="6"/>
+        <Border Grid.Row="0" Grid.Column="1"/>
+        <Border Grid.Row="1" Grid.Column="1"/>
+        <Border Grid.Row="2" Grid.Column="1"/>
+        <Border Grid.Row="3" Grid.Column="1"/>
+        <Border Grid.Row="4" Grid.Column="1"/>
+        <Border Grid.Row="5" Grid.Column="1"/>
+        <Border Grid.Row="6" Grid.Column="1"/>
+        <Border Grid.Row="0" Grid.Column="2"/>
+        <Border Grid.Row="1" Grid.Column="2"/>
+        <Border Grid.Row="2" Grid.Column="2"/>
+        <Border Grid.Row="3" Grid.Column="2"/>
+        <Border Grid.Row="4" Grid.Column="2"/>
+        <Border Grid.Row="5" Grid.Column="2"/>
+        <Border Grid.Row="6" Grid.Column="2"/>
+        <Border Grid.Row="0" Grid.Column="3"/>
+        <Border Grid.Row="1" Grid.Column="3"/>
+        <Border Grid.Row="2" Grid.Column="3"/>
+        <Border Grid.Row="3" Grid.Column="3"/>
+        <Border Grid.Row="4" Grid.Column="3"/>
+        <Border Grid.Row="5" Grid.Column="3"/>
+        <Border Grid.Row="6" Grid.Column="3"/>
+        <Border Grid.Row="0" Grid.Column="4"/>
+        <Border Grid.Row="1" Grid.Column="4"/>
+        <Border Grid.Row="2" Grid.Column="4"/>
+        <Border Grid.Row="3" Grid.Column="4"/>
+        <Border Grid.Row="4" Grid.Column="4"/>
+        <Border Grid.Row="5" Grid.Column="4"/>
+        <Border Grid.Row="6" Grid.Column="4"/>
+        <Border Grid.Row="0" Grid.Column="5"/>
+        <Border Grid.Row="1" Grid.Column="5"/>
+        <Border Grid.Row="2" Grid.Column="5"/>
+        <Border Grid.Row="3" Grid.Column="5"/>
+        <Border Grid.Row="4" Grid.Column="5"/>
+        <Border Grid.Row="5" Grid.Column="5"/>
+        <Border Grid.Row="6" Grid.Column="5"/>
+        <Border Grid.Row="0" Grid.Column="6"/>
+        <Border Grid.Row="1" Grid.Column="6"/>
+        <Border Grid.Row="2" Grid.Column="6"/>
+        <Border Grid.Row="3" Grid.Column="6"/>
+        <Border Grid.Row="4" Grid.Column="6"/>
+        <Border Grid.Row="5" Grid.Column="6"/>
+        <Border Grid.Row="6" Grid.Column="6"/>
+        <!--REMOVE LATER-->
+        
+        <Image
+            Source="leave_btn.PNG"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="StartAndExpand"/>
+
+        <Image
+            Source="code_placeholder.PNG"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="EndAndExpand"
+            Grid.Column="5"/>
+
+        <Image
+            Source="player_name_placeholder.PNG"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="StartAndExpand"
+            Grid.Row="1"
+            Grid.Column="1"/>
+        <Image
+            Source="player_name_placeholder.PNG"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="StartAndExpand"
+            Grid.Row="2"
+            Grid.Column="1"/>
+        <Image
+            Source="player_name_placeholder.PNG"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="StartAndExpand"
+            Grid.Row="3"
+            Grid.Column="1"/>
+        <Image
+            Source="player_name_placeholder.PNG"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="StartAndExpand"
+            Grid.Row="4"
+            Grid.Column="1"/>
+
+        <Image
+            Source="game_placeholder.PNG"
+            Grid.RowSpan="2"
+            Grid.Row="1"
+            Grid.Column="5"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            ZIndex="1"/>
+
+        <Image
+            Source="lobby_ready_btn.PNG"
+            Grid.Row="5"
+            Grid.Column="5"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="EndAndExpand"/>
+
+    </Grid>
+
+    
+
+
+    <!--<Grid x:Name="grid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="50*"/>
+            <RowDefinition Height="10*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="20*"/>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
 
         <Border/>
@@ -33,7 +163,7 @@
         <Border Grid.Row="1" Grid.Column="3"/>
         <Border Grid.Row="2" Grid.Column="3"/>
         <Border Grid.Row="3" Grid.Column="3"/>
-        
+
 
         <Button
             Text="Leave"
@@ -42,7 +172,7 @@
             Clicked="OnLeaveClicked"
             />
 
-        <!--<Button
+        --><!--<Button
             Text="Choose a Game"
             Grid.Row="2"
             Grid.Column="2"
@@ -54,7 +184,7 @@
             Text=""
             x:Name="StatusLabel"
             Grid.Row="1"
-            Grid.Column="0"/>-->
+            Grid.Column="0"/>--><!--
 
         <Label
             Text=""
@@ -85,13 +215,37 @@
             Grid.Row="2"
             Grid.Column="3"
             VerticalOptions="Center"
-            HorizontalOptions="Center"/>
+            HorizontalOptions="Center"/>-->
 
-        <Button
+        <!--<Button
             Text="continue"
             x:Name="continueBtn"
             Grid.Row="3"
             Grid.Column="3"
-            Clicked="Oncontinue"/>
-    </Grid>
+            Clicked="Oncontinue"/>-->
+
+        <!--<Button
+            Grid.Row="3"
+            Grid.Column="3"
+            Clicked="Oncontinue"
+            x:Name="continueBtn"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Padding="0,0,0,0"
+            BackgroundColor="Transparent"
+            BorderColor="Transparent"
+            ContentLayout="Center"
+            Text="Ready"
+            ImageSource="lobby_ready_btn.PNG"
+            Background=""/>-->
+
+        <!--<ImageButton
+            Grid.Row="3"
+            Grid.Column="3"
+            Clicked="Oncontinue"
+            x:Name="continueBtn"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Source="lobby_ready_btn.PNG"/>-->
+    <!--</Grid>-->
 </ContentPage>

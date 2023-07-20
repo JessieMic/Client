@@ -3,12 +3,15 @@ namespace UI.Pages.LobbyPages;
 public partial class GameCardButton : ContentView
 {
 	private Action<GameCard> m_FuncForGameChosen;
+    private GameCard m_GameCard;
 
     public GameCardButton(GameCard i_Card)
 	{
 		InitializeComponent();
-		RadioBtn.Content = i_Card;
-	}
+        //RadioBtn.Content = i_Card;
+        GameButtonComponent.Add(i_Card);
+        m_GameCard = i_Card;
+    }
 
 	public bool IsButtonChecked()
 	{
@@ -17,7 +20,8 @@ public partial class GameCardButton : ContentView
 
 	public GameCard GetGameCard()
     {
-        return (GameCard)RadioBtn.Content;
+        return m_GameCard;
+        //return (GameCard)RadioBtn.Content;
     }
 
     //public void AddActionToRadioBtn(Action<GameCard> i_Func)

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="UI.Pages.EnterNamePage">
+             x:Class="UI.Pages.EnterNamePage"
+             NavigationPage.HasNavigationBar="False"
+             Shell.NavBarIsVisible="false">
 
     <Grid RowDefinitions=".50*,.20*,.30*"
           ColumnDefinitions=".40*,*,.40*"
