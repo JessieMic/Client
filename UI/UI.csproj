@@ -62,6 +62,7 @@
 	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\placementbutton.png" />
+	  <None Remove="Resources\Images\pressedplacementbutton.png" />
 	  <None Remove="Resources\Images\snake.png" />
 	  <None Remove="Resources\Images\snakebackground.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />

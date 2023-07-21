@@ -30,19 +30,18 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     public static void visualButtonUpdate(object sender, VisualUpdateSelectButtons i_VisualUpdate)
     {
-        //Application.Current.Dispatcher.Dispatch(async () =>
-        //{
-            m_PlacementButtons[i_VisualUpdate.spot].Text = i_VisualUpdate.textOnButton;
+        m_PlacementButtons[i_VisualUpdate.spot].Text = i_VisualUpdate.textOnButton;
 
             if (i_VisualUpdate.didPlayerSelect)
             {
-                //m_PlacementButtons[i_VisualUpdate.spot];
+                m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(true);
+                m_PlacementButtons[i_VisualUpdate.spot].FontSize = m_PlacementButtons[i_VisualUpdate.spot].FontSize*0.3;
             }
             else
             {
-                //m_PlacementButtons[i_VisualUpdate.spot].FontSize = 13;
+            m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(false);
+            //m_PlacementButtons[i_VisualUpdate.spot].FontSize = 13;
             }
-       
     }
 
     async Task initializePage()
@@ -62,15 +61,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     {
         Shell.Current.GoToAsync("GamePage");
     }
-
-    //protected override void OnSizeAllocated(double i_Width, double i_Height)
-    //{
-    
-    //            base.OnSizeAllocated(i_Width,i_Height);
-    //        m_ScreenSizeHeight = (int)i_Height;
-    //        m_ScreenSizeWidth = (int)i_Width;
-    //        m_pageLogic.SetPlayerScreenSize((int)i_Width, (int)i_Height);
-    //}
 
     private void initializeButtons()
     {
@@ -92,24 +82,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                         gridLayout.Add(buttonImage.GetImage(), (int)position.Column, (int)position.Row);
                         gridLayout.Add(buttonImage.GetButton(), (int)position.Column, (int)position.Row);
                         buttonImage.GetButton().Clicked += m_pageLogic.OnButtonClicked;
-
-                        //Image image = new Image();
-                        //Button button = new Button();
-                        ////Position position = new Position(m_pageLogic.AmountOfPlayers, i + 1);
-                        //button.BorderColor = Colors.Transparent;
-                        //button.Text = (i + 1).ToString();
-                        ////int a = ((m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Height) / 12)/3;
-                        //image.HeightRequest =button.HeightRequest =  12*a;
-                        //image.WidthRequest=button.WidthRequest = 19*a;
-                        //image.Source = "placementbutton.png";
-                        //m_PlacementButton.Add(button);
-                        //m_Images.Add(image);
-                        //button.FontSize = a * 3;
-                        //button.FontAutoScalingEnabled = true;
-                        //button.Background = Brush.Transparent;
-                        //gridLayout.Add(image, (int)position.Column, (int)position.Row);
-                        //gridLayout.Add(m_PlacementButton[i], (int)position.Column, (int)position.Row);
-                        //m_PlacementButton[i].Clicked += m_pageLogic.OnButtonClicked;
                     }
                     m_Player.isInitialized = true;
                     getScreenUpdate();
