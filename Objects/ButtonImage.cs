@@ -9,10 +9,25 @@ namespace Objects
     public class ButtonImage : Image
     {
         public Button m_Button = new Button();
+        private string m_SourcePressed;
 
         public Button GetButton()
         {
+            m_Button.CancelAnimations();
+            m_SourcePressed = "pressed" + m_Source;
             return m_Button;
+        }
+
+        public void IsButtonPressed(bool i_IsButtonPressed)
+        {
+            if(i_IsButtonPressed)
+            {
+                m_Image.Source = m_SourcePressed;
+            }
+            else
+            {
+                m_Image.Source = m_Source;
+            }
         }
 
         public ButtonImage()
@@ -35,10 +50,19 @@ namespace Objects
 
         public double FontSize
         {
+            get
+            {
+                return m_Button.FontSize;
+            }
             set
             {
                 m_Button.FontSize = value;
             }
+        }
+
+        public void SetDefualtFontSize()
+        {
+            m_Button.FontSize = m_Button.HeightRequest * 0.3;
         }
 
         override public double HeightRequest

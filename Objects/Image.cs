@@ -9,6 +9,7 @@ namespace Objects
     public class Image
     {
         public Microsoft.Maui.Controls.Image m_Image = new Microsoft.Maui.Controls.Image();
+        protected string m_Source;
 
         public Microsoft.Maui.Controls.Image GetImage()
         {
@@ -83,6 +84,7 @@ namespace Objects
         {
             set
             {
+                m_Source = value;
                 m_Image.Source = value;
             }
         }
