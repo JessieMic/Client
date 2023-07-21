@@ -19,10 +19,10 @@ namespace LogicUnit
             setGameButtons();
             setGameBackground();
             setHearts();
-            //setPauseMenu();
+            setPauseMenu();
             AddGameObjects();
             OnAddScreenObjects();
-            //OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
+            OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
         }
 
         protected abstract void AddGameObjects();

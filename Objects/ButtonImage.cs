@@ -11,11 +11,36 @@ namespace Objects
         public Button m_Button = new Button();
         private string m_SourcePressed;
 
+        public ButtonImage()
+        {
+            m_Button.BorderColor = Colors.Transparent;
+            m_Button.Background = Brush.Transparent;
+            m_Button.ZIndex = 0;
+            m_Image.ZIndex = -1;
+        }
+
         public Button GetButton()
         {
-            m_Button.CancelAnimations();
             m_SourcePressed = "pressed" + m_Source;
             return m_Button;
+        }
+
+        public void SetButtonImage(GameObject i_GameObject)
+        {
+            SetImage(i_GameObject);
+
+            m_Button.TranslationX = i_GameObject.m_PointsOnScreen[0].m_Column;
+            m_Button.TranslationY = i_GameObject.m_PointsOnScreen[0].m_Row;
+            m_Button.ClassId = i_GameObject.m_ButtonType.ToString();
+            m_Button.ZIndex = -1;
+            m_Button.Rotation = i_GameObject.m_Rotatation[0];
+            if (i_GameObject.m_OurSize.m_Width != 0)
+            {
+                m_Button.WidthRequest = i_GameObject.m_OurSize.m_Width;
+                m_Button.HeightRequest = i_GameObject.m_OurSize.m_Height;
+            }
+
+            Text = i_GameObject.m_text;
         }
 
         public void IsButtonPressed(bool i_IsButtonPressed)
@@ -30,14 +55,6 @@ namespace Objects
             }
         }
 
-        public ButtonImage()
-        {
-            m_Button.BorderColor = Colors.Transparent;
-            m_Button.Background = Brush.Transparent;
-            m_Button.ZIndex = 0;
-            m_Image.ZIndex = -1;
-        }
-
         public string Text
         {
             set
@@ -45,6 +62,14 @@ namespace Objects
                 m_Button.Text = value;
                 m_Button.FontSize = m_Button.HeightRequest * 0.3;
                 m_Button.FontAutoScalingEnabled = true;
+            }
+        }
+
+        public bool IsEnabled
+        {
+            set
+            {
+                m_Button.IsEnabled = value;
             }
         }
 

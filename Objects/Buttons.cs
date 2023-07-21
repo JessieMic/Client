@@ -38,10 +38,7 @@ namespace Objects
                 {
                     newButton.m_Rotatation[0] = 0;
                 }
-                //if(button == eButton.Restart || button == eButton.Exit || button == eButton.Continue)
-                //{
-                //    newButton.m_OurSize = GameSettings.m_PauseMenuButtonOurSize;
-                //}
+                
                 i_GameObjectsToAdd.Add(newButton);
                 
             }
@@ -104,17 +101,18 @@ namespace Objects
                 GameObject newButton = new GameObject();
                 newButton.InitializeButton(
                     button,
-                    generatePngString(button),
+                    "pause_menu_option_button.png",
                     getButtonPoint(button),
                     GameSettings.m_GameBoardGridSize,
                     GameSettings.m_PauseMenuButtonOurSize,
                     getValuesToAdd());
-               
+                newButton.m_text = button.ToString();
 
                 if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
                     newButton.SetImageDirection(0, Direction.getDirection(button.ToString()));
                 }
+
                 menuButtons.Add(newButton);
             }
             return menuButtons;

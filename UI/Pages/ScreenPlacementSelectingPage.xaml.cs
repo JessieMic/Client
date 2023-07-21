@@ -39,8 +39,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
             }
             else
             {
-            m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(false);
-            //m_PlacementButtons[i_VisualUpdate.spot].FontSize = 13;
+                m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(false);
             }
     }
 

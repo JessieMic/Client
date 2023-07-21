@@ -221,13 +221,10 @@ namespace LogicUnit
         public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
-                
-            //if (m_GameStatus == eGameStatus.Running)
-            {
-                ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);
-                SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
-                //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
-            }
+            
+            //ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);
+            SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
+            //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
         }
 
         public async Task SendServerMoveUpdate(eButton i_Button)
