@@ -6,6 +6,7 @@ using LogicUnit.Logic.GamePageLogic.Games.Snake;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
+using Image = Microsoft.Maui.Controls.Image;
 namespace UI.Pages;
 
 public partial class GamePage : ContentPage

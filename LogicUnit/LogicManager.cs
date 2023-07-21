@@ -29,7 +29,7 @@ namespace LogicUnit
             r_Connection = new Connection();
 
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
-            m_GameInformation.AmountOfPlayers = 4;
+            m_GameInformation.AmountOfPlayers = 2;
             m_Player.Name = DateTime.Now.ToString();
             //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
         }
