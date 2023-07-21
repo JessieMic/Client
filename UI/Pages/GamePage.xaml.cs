@@ -16,7 +16,8 @@ public partial class GamePage : ContentPage
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
     private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
-    private Dictionary<int,Button> m_gameButtons = new Dictionary<int, Button>();
+    //private Dictionary<int,Button> m_gameButtons = new Dictionary<int, Button>();
+    private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
     private int k = 0;
 
     public GamePage()
@@ -93,23 +94,14 @@ public partial class GamePage : ContentPage
 
 
     private void addButton(GameObject i_ButtonToAdd)
-    { 
-        Button button = new Button();
-        addImage(i_ButtonToAdd);
-        button.ClassId = i_ButtonToAdd.m_ButtonType.ToString();//.m_KindOfButton.ToString();
-        button.HeightRequest = i_ButtonToAdd.m_OurSize.m_Height;
-        button.WidthRequest = i_ButtonToAdd.m_OurSize.m_Width;
-        gridLayout.Add(button);
-        button.TranslationX = i_ButtonToAdd.m_PointsOnScreen[0].m_Column;
-        button.TranslationY = i_ButtonToAdd.m_PointsOnScreen[0].m_Row;
-        
-        //button.Text = i_ButtonToAdd.m_ButtonType.ToString();
-        //button.Source = i_ButtonToAdd.m_ImageSources[0];
-        button.Opacity = 0;
-        //button.Aspect = Aspect.AspectFit;
-        button.ZIndex = -1;
-        m_gameButtons.Add(i_ButtonToAdd.m_ID[0],button);
-        button.Clicked += m_Game.OnButtonClicked;
+    {
+        ButtonImage buttonImage = new ButtonImage();
+        buttonImage.SetButtonImage(i_ButtonToAdd);
+        buttonImage.ZIndex = 1;
+        gridLayout.Add(buttonImage.GetImage());
+        gridLayout.Add(buttonImage.GetButton());
+        buttonImage.GetButton().Clicked += m_Game.OnButtonClicked;
+        m_GameButtonsImages.Add(i_ButtonToAdd.m_ID[0], buttonImage);
     }
 
     private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)
@@ -187,8 +179,8 @@ public partial class GamePage : ContentPage
                 }
                 else
                 {
-                    m_gameButtons[ID].IsVisible = false;
-                    m_gameButtons[ID].IsEnabled = false;
+                    m_GameButtonsImages[ID].IsVisible = false;
+                    m_GameButtonsImages[ID].IsEnabled = false;
                 }
             }
 
@@ -214,9 +206,9 @@ public partial class GamePage : ContentPage
                 }
                 else
                 {
-                    m_gameButtons[ID].IsVisible = true;
-                    m_gameButtons[ID].IsEnabled = true;
-                    m_gameButtons[ID].ZIndex = 1;
+                    m_GameButtonsImages[ID].IsVisible = true;
+                    m_GameButtonsImages[ID].IsEnabled = true;
+                    m_GameButtonsImages[ID].ZIndex = 1;
                 }
             }
         });
@@ -226,7 +218,7 @@ public partial class GamePage : ContentPage
     {
         eScreenObjectType type = eScreenObjectType.Image;
 
-        if(m_gameButtons.ContainsKey(ID))
+        if(m_GameButtonsImages.ContainsKey(ID))
         {
             type = eScreenObjectType.Button;
         }
