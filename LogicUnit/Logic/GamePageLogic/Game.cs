@@ -93,9 +93,10 @@ namespace LogicUnit
 
             r_ConnectionToServer.On<int, int, int, int>("GameUpdateReceived", (int i_PlayerID, int i_button, int i_X, int i_Y) =>
                 {
-                    Point point = new Point(i_X, i_Y);
-                    r_PlayersData[i_PlayerID - 1].Button = i_button;
-                    r_PlayersData[i_PlayerID - 1].PlayerPointData = point;
+                    //Point point = new Point(i_X, i_Y);
+                    //r_PlayersData[i_PlayerID - 1].Button = i_button;
+                    //r_PlayersData[i_PlayerID - 1].PlayerPointData = point;
+                    ChangeDirection(Direction.getDirection(i_button),i_PlayerID );
 
                 });
 
@@ -173,23 +174,24 @@ namespace LogicUnit
                 m_LoopStopwatch.Restart();
                 if (m_GameStatus == eGameStatus.Running)
                 {
-                    updateGame();
-                    while (m_GapInFrames > 0)
-                    {
-                        updateGame();
-                        m_GapInFrames--;
-                    }
+                    Thread.Sleep(500);
+                    //updateGame();
+                    //while (m_GapInFrames > 0)
+                    //{
+                    //    //updateGame();
+                    //    m_GapInFrames--;
+                    //}
 
                     Draw();
                     m_GapInFrames = (int)((m_LoopStopwatch.Elapsed.TotalSeconds - k_DesiredFrameTime) / k_DesiredFrameTime);
-                    if (m_GapInFrames < 0)
-                    {
-                        Thread.Sleep((int)(k_DesiredFrameTime - m_LoopStopwatch.Elapsed.TotalSeconds));
-                    }
+                    //if (m_GapInFrames < 0)
+                    //{
+                    //    Thread.Sleep((int)(k_DesiredFrameTime - m_LoopStopwatch.Elapsed.TotalSeconds));
+                    //}
                 }
             }
 
-            throw new Exception("exit the game loop");
+            /// throw new Exception("exit the game loop");
         }
 
         protected virtual void Draw()
@@ -199,23 +201,26 @@ namespace LogicUnit
 
         protected virtual async void updateGame()
         {
-            if(m_NewButtonPressed)
-            {
-                await r_ConnectionToServer.SendAsync(
-                    "UpdatePlayerSelection",
-                    m_Player.ButtonThatPlayerPicked,
-                    m_CurrentPlayerData.Button,
-                    -1, //X
-                    -1); //Y
-            }
+            //if(m_NewButtonPressed)
+            //{
+            //    await r_ConnectionToServer.SendAsync(
+            //        "UpdatePlayerSelection",
+            //        m_Player.ButtonThatPlayerPicked,
+            //        m_CurrentPlayerData.Button,
+            //        -1, //X
+            //        -1); //Y
+            //}
 
-            //int[] temp =  await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+            //int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
 
             //for (int i = 0; i < 4; i++)
             //{
             //    r_PlayersData[i].Button = temp[i];
+            //    if(temp[i] != 0)
+            //    {
+            //        int a = 3;
+            //    }
             //}
-
         }
 
         protected virtual void OnAddScreenObjects()
@@ -299,13 +304,19 @@ namespace LogicUnit
         {
 
         }
-
-        public void OnButtonClicked(object sender, EventArgs e)
+        public async void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
+            //m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
 
-            m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
+            //m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
+            await r_ConnectionToServer.SendAsync(
+                "UpdatePlayerSelection",
+                m_Player.ButtonThatPlayerPicked,
+                (int)m_Buttons.StringToButton(button.ClassId),
+                -1, //X
+                -1); //Y
+
 
             //.Button = (int)m_Buttons.StringToButton(button.ClassId);
             //ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);

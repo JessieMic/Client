@@ -34,9 +34,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         public override void RunGame()
         {
-            GameLoop();
-            //Thread newThread = new(actualGameLoop) { Name = "SnakeLoop" };
-            //newThread.Start();
+            //GameLoop();
+            Thread newThread = new(GameLoop) { Name = "SnakeLoop" };
+            newThread.Start();
             //Task.Run(actualGameLoop);
             //Task.Run(actualGameLoop);
         }
