@@ -17,7 +17,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         public SnakeObject(ref int[,] i_Board)
         {
             m_Board = i_Board;
-           // m_DirectionsForTail.Add(Direction.Right);
         }
 
         public void Eat(GameObject i, Direction i_LastDirection, Direction i_CurrentDirection)
@@ -36,9 +35,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 m_ImageSources[1] = "snakeplayer"+ m_ObjectNumber.ToString() +"body.png";
                 SetImageDirection(1, i_CurrentDirection);
             }
-            
-           // m_DirectionsForTail.Add(i_LastDirection);
-           // m_DirectionsForTail.Add(i_CurrentDirection);
         }
 
         public void Move(Point i_NewPoint, Direction i_LastDirection,Direction i_CurrentDirection)
@@ -109,8 +105,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private void copyNextImageDirection(int i_Index)
         {
             m_Rotatation[i_Index] = m_Rotatation[i_Index - 1];
-            m_ScaleX[i_Index] = m_ScaleX[i_Index];
-            m_ScaleY[i_Index] = m_ScaleY[i_Index];
         }
 
         private Direction getDirectionOfTurnPart()
@@ -151,13 +145,16 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         public void addHead(Point i_Point)
         {
             AddPointTop(i_Point);
-            //m_Board[i_Point.m_Column, i_Point.m_Row] = i_Player + 2;
+            m_Board[i_Point.m_Column, i_Point.m_Row] = m_ObjectNumber + 2;
         }
 
         public void removeTail()
         {
             Point tail = getSnakeTail();
-            m_Board[tail.m_Column, tail.m_Row] = 0;
+            if(m_Board[tail.m_Column, tail.m_Row] == m_ObjectNumber + 2)
+            {
+                m_Board[tail.m_Column, tail.m_Row] = 0;
+            }
             PopPoint();
         }
 

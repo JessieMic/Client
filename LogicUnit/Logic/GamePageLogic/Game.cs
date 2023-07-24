@@ -22,7 +22,7 @@ namespace LogicUnit
         private List<string> m_PlayerMovementsLogs = new List<string>();
 
         private readonly HubConnection r_ConnectionToServer;
-        private readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
+        protected readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
@@ -47,7 +47,6 @@ namespace LogicUnit
 
         //Things that might change while playing 
         protected int[,] m_Board;
-        protected int m_AmountOfActivePlayers;
         public eGameStatus m_GameStatus = eGameStatus.Running;
         protected List<string> m_LoseOrder = new List<string>();
 
@@ -66,7 +65,7 @@ namespace LogicUnit
 
         public Game()
         {
-            r_LiteNetClient.Init(m_GameInformation.AmountOfPlayers);
+            r_LiteNetClient.Init(m_GameInformation.AmountOfPlayers+1);
             //TODO: blocks the server updates
             r_LiteNetClient.ReceivedData += OnUpdatesReceived;
             r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
@@ -74,6 +73,8 @@ namespace LogicUnit
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_GameHubAddress)
                 .Build();
+
+            
 
             //r_ConnectionToServer.On("Update", (int[] i_Update) =>
             //{
@@ -116,6 +117,10 @@ namespace LogicUnit
             //m_networkThread = new Thread(() => r_LiteNetClient.Run());
             //m_networkThread.Start();
             r_LiteNetClient.Run();
+            for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
+            {
+                r_LiteNetClient.PlayersData[i].Button = 0;
+            }
         }
 
         protected virtual void OnAddScreenObjects()
@@ -133,21 +138,6 @@ namespace LogicUnit
             GameObjectsToShow.Invoke(this, i_GameObjectsIDToShow);
         }
 
-        public bool SetAmountOfPlayers(int i_AmountOfPlayers)//for when you want to get ready in lobby 
-        {
-            if (i_AmountOfPlayers is >= 2 and <= 4)
-            {
-                m_GameInformation.AmountOfPlayers = i_AmountOfPlayers;
-                m_AmountOfActivePlayers = i_AmountOfPlayers;
-                r_LiteNetClient.Init(i_AmountOfPlayers);
-                return true;
-            }
-            else
-            {
-                return false; //If false is returned tell user that the number of players isn't right
-            }
-        }
-
         protected void PlayerLostALife(int i_Player)
         {
             m_GameStatus =m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
@@ -163,19 +153,13 @@ namespace LogicUnit
                 m_scoreBoard.m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player - 1]);
                 if (m_GameStatus == eGameStatus.Lost)
                 {
-                    gameStatusUpdate();//Will show client that he lost 
+                    //gameStatusUpdate();//Will show client that he lost 
                 }
                 else //Game has ended 
                 {
                     m_scoreBoard.ShowScoreBoard();
                 }
             }
-        }
-
-
-        protected void gameStatusUpdate()
-        {
-            //send ui to show defeated
         }
 
         private bool checkThatPointIsOnBoardGrid(Point i_Point)
@@ -215,7 +199,7 @@ namespace LogicUnit
 
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player)
         {
-            // m_PlayerGameObjects[i_Player - 1].m_Direction = i_Direction;
+            
         }
 
         public void OnButtonClicked(object sender, EventArgs e)
@@ -227,9 +211,19 @@ namespace LogicUnit
             //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
         }
 
-        public async Task SendServerMoveUpdate(eButton i_Button)
+        public async Task SendServerMoveUpdate(eButton i_Button, int i_X = -1, int i_Y = -1)
         {
-            r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button);
+            r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button, i_X, i_Y);
+            //r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button);
+            //await r_ConnectionToServer.SendAsync(
+            //    "MoveUpdate",
+            //    m_Player.ButtonThatPlayerPicked-1,(int)i_Button);
+        }
+
+        public async Task SendServerObjectUpdate(eButton i_Button, int i_X = -1, int i_Y = -1)
+        {
+            r_LiteNetClient.Send(m_GameInformation.AmountOfPlayers+1, (int)i_Button, i_X, i_Y);
+            //r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button);
             //await r_ConnectionToServer.SendAsync(
             //    "MoveUpdate",
             //    m_Player.ButtonThatPlayerPicked-1,(int)i_Button);
@@ -247,7 +241,7 @@ namespace LogicUnit
 
             return gameObject;
         }
-
+   
         protected void OnUpdateScreenObject()
         {
             GameObjectsUpdate.Invoke(this, m_gameObjectsToUpdate);
@@ -287,34 +281,22 @@ namespace LogicUnit
 
         }
 
-
-        private void restartGame()
-        {
-
-        }
-
-        private void exitGame()
-        {
-
-        }
-
         protected virtual void getUpdate(int i_Player)
         {
             eGameStatus returnStatus;
             m_GameStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button,m_GameStatus);
 
+
             if (m_GameStatus == eGameStatus.Running)
             {
-                m_PlayersDirectionsFromServer[r_LiteNetClient.PlayersData[i_Player].PlayerNumber] =
-                    Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button);
-
-
-                //ChangeDirection(
-                //    Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
-                //    r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
-                //m_PlayerMovementsLogs.Add($"player {i_Player} sent {r_LiteNetClient.PlayersData[i_Player].Button}");
+                if(r_LiteNetClient.PlayersData[i_Player].Button <= 4)
+                {
+                    ChangeDirection(
+                        Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
+                        r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
+                }
             }
-            
+
 
             if(m_IsMenuVisible && m_GameStatus != eGameStatus.Paused)
             {
@@ -330,10 +312,7 @@ namespace LogicUnit
             {
                 lock (m_PlayersDirectionsFromServer)
                 {
-                    //if (i != m_Player.ButtonThatPlayerPicked) //update the player that is not the current player
-                    {
-                        getUpdate(i);
-                    }
+                    getUpdate(i);
                 }
             }
 
