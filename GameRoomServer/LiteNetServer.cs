@@ -31,6 +31,7 @@ namespace GameRoomServer
 
         public async Task Run()
         {
+            int counter = 0;
             while (true)
             {
                 var time = DateTime.Now.Millisecond;
@@ -94,6 +95,22 @@ namespace GameRoomServer
         //    i_Reader.Recycle();
         //}
 
+        private void updateSenderClient(NetPeer i_Peer)
+        {
+            NetDataWriter writer = new();
+            foreach (ClientData data in r_Clients)
+            {
+                writer.Put(data.PlayerNumber);
+                writer.Put(data.Button);
+                writer.Put(data.X);
+                writer.Put(data.Y);
+            }
+
+            i_Peer.Send(writer, DeliveryMethod.ReliableOrdered);
+            Console.WriteLine($"sent data to{i_Peer.Id}");
+
+        }
+
         private void onNetworkReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
         {
             if (r_Clients.Exists(client => client.Peer == i_Peer))
@@ -108,6 +125,7 @@ namespace GameRoomServer
                 }
             }
 
+            updateSenderClient(i_Peer);
             i_Reader.Recycle();
         }
 

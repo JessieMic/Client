@@ -14,7 +14,7 @@ public partial class GamePage : ContentPage
     private GameInformation m_GameInformation = GameInformation.Instance;
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
-    private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
+    private Dictionary<int, Image> m_GameImages = new Dictionary<int, Image>();
     //private Dictionary<int,Button> m_gameButtons = new Dictionary<int, Button>();
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
 
@@ -22,7 +22,7 @@ public partial class GamePage : ContentPage
     {
         InitializeComponent();
         initializePage();
-        m_Game.RunGame();
+
     }
 
     private void initializePage()
@@ -43,17 +43,17 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
         {
             int i = 1;
-        foreach (var gameObject in i_GameObjectsToAdd)
-        {
-            if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+            foreach (var gameObject in i_GameObjectsToAdd)
             {
-                addButton(gameObject);
+                if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+                {
+                    addButton(gameObject);
+                }
+                else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                {
+                    addImage(gameObject);
+                }
             }
-            else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
-            {
-                addImage(gameObject);
-            }
-        }
         });
     }
 
@@ -74,7 +74,7 @@ public partial class GamePage : ContentPage
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
             if (i_GameObjectToAdd.m_ImageSources[0] == "snakebackground.png")
             {
-                
+
                 image.Aspect = Aspect.AspectFill;
             }
             else
@@ -108,11 +108,11 @@ public partial class GamePage : ContentPage
         {
             foreach (var screenObject in i_ObjectUpdates)
             {
-                for(int i = 0; i < screenObject.m_ID.Count; i++)
+                for (int i = 0; i < screenObject.m_ID.Count; i++)
                 {
-                    if(getObjectTypeFromID(screenObject.m_ID[i]) == eScreenObjectType.Image)
+                    if (getObjectTypeFromID(screenObject.m_ID[i]) == eScreenObjectType.Image)
                     {
-                        if(m_GameImages.ContainsKey(screenObject.m_ID[i]))
+                        if (m_GameImages.ContainsKey(screenObject.m_ID[i]))
                         {
                             m_GameImages[screenObject.m_ID[i]].Rotation = 0;
                             m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
@@ -130,22 +130,23 @@ public partial class GamePage : ContentPage
         });
     }
 
-    public void deleteObject(object sender, GameObject i_ObjectToDelete)
+    public void deleteObject(object sender, GameObject? i_ObjectToDelete)
     {
+        m_Game.RunGame();
 
-        for (int i = 0; i < i_ObjectToDelete.m_ID.Count; i++)
-        {
-            if(i_ObjectToDelete.m_Fade)
-            {
-                m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
-            }
-            else
-            {
-                m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 100, null);
-            }
-            //gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
-            //m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
-        }
+        //for (int i = 0; i < i_ObjectToDelete.m_ID.Count; i++)
+        //{
+        //    if(i_ObjectToDelete.m_Fade)
+        //    {
+        //        m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
+        //    }
+        //    else
+        //    {
+        //        m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 100, null);
+        //    }
+        //    //gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
+        //    //m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
+        //}
     }
 
     private void hideGameObjects(object sender, List<int> i_IDlist)
@@ -154,7 +155,7 @@ public partial class GamePage : ContentPage
         {
             foreach (var ID in i_IDlist)
             {
-                if(getObjectTypeFromID(ID) == eScreenObjectType.Image)
+                if (getObjectTypeFromID(ID) == eScreenObjectType.Image)
                 {
                     m_GameImages[ID].IsVisible = false;
                 }
@@ -165,7 +166,7 @@ public partial class GamePage : ContentPage
                 }
             }
 
-            if(m_Game.m_GameStatus != eGameStatus.Restarted || m_Game.m_GameStatus != eGameStatus.Ended)
+            if (m_Game.m_GameStatus != eGameStatus.Restarted || m_Game.m_GameStatus != eGameStatus.Ended)
             {
                 //m_GameImages.Clear();
                 //m_gameButtons.Clear();
@@ -199,7 +200,7 @@ public partial class GamePage : ContentPage
     {
         eScreenObjectType type = eScreenObjectType.Image;
 
-        if(m_GameButtonsImages.ContainsKey(ID))
+        if (m_GameButtonsImages.ContainsKey(ID))
         {
             type = eScreenObjectType.Button;
         }
@@ -211,7 +212,7 @@ public partial class GamePage : ContentPage
         m_Game.AddGameObjectList += addGameObjects;
         m_Game.GameObjectsUpdate += gameObjectsUpdate;
         m_Game.GameObjectToDelete += deleteObject;
-        m_Game.GameObjectsToHide +=hideGameObjects;
+        m_Game.GameObjectsToHide += hideGameObjects;
         m_Game.GameObjectsToShow += showGameObjects;
     }
 }

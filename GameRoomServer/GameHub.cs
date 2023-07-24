@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Drawing;
 using DTOs;
+using GameRoomServer;
 
 public class GameHub : Hub
 {
     public static string[] buttonsThatAreOccupied = new string[4];
     public static int[] screenSizeWidth = new int[4];
     public static int[] screenSizeHeight = new int[4];
+    private readonly int[] r_PlayersPressedButtons = new int[4];
 
     public async Task TryPickAScreenSpot(string i_NameOfPlayer, String i_NumberOfButton,int i_ScreenWidth, int i_ScreenHeight)
     {
@@ -59,5 +61,22 @@ public class GameHub : Hub
         buttonsThatAreOccupied[1] = string.Empty;
         buttonsThatAreOccupied[2] = string.Empty;
         buttonsThatAreOccupied[3] = string.Empty;
+    }
+
+    public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
+    {
+        if(i_button != 0)
+        {
+            r_PlayersPressedButtons[i_PlayerID] = i_button;
+        }
+        else
+        {
+            await Clients.All.SendAsync("GameUpdateReceived", i_PlayerID, i_button, i_X, i_Y);
+        }
+    }
+
+    public async Task GetPlayersData()
+    {
+        await Clients.Caller.SendAsync("GameStateReceived", r_PlayersPressedButtons);
     }
 }

@@ -53,7 +53,7 @@ namespace LogicUnit.Logic.GamePageLogic.LiteNet
         {
             //r_Logger = i_Logger;
             r_NetManager.Start();
-            r_NetManager.Connect("192.168.68.122", 5555, "myKey");//("127.0.0.1", 5555, "myKey");
+            r_NetManager.Connect("127.0.0.1", 5555, "myKey");//("127.0.0.1", 5555, "myKey");
             sr_Listener.NetworkReceiveEvent += OnReceive;
         }
 
@@ -91,26 +91,24 @@ namespace LogicUnit.Logic.GamePageLogic.LiteNet
             writer.Put(i_Button);
             writer.Put(i_X);
             writer.Put(i_Y);
-            Task.Run(() =>
-                {
-                    r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
-                });
+
+            r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
             r_Logger.LogInformation($"Sent {i_Button} to {i_PlayerNumber}");
         }
 
-        public void SendPoint(int i_Column, int i_Row, int i_Object)
-        {
-            NetDataWriter writer = new NetDataWriter();
+        //public void SendPoint(int i_Column, int i_Row, int i_Object)
+        //{
+        //    NetDataWriter writer = new NetDataWriter();
 
-            writer.Put(i_Column);
-            writer.Put(i_Row);
-            writer.Put(i_Object);
-            Task.Run(() =>
-                {
-                    r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
-                });
-            r_Logger.LogInformation($"Sent point({i_Column},{i_Row}) for {i_Object}");
-        }
+        //    writer.Put(i_Column);
+        //    writer.Put(i_Row);
+        //    writer.Put(i_Object);
+        //    Task.Run(() =>
+        //        {
+        //            r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
+        //        });
+        //    r_Logger.LogInformation($"Sent point({i_Column},{i_Row}) for {i_Object}");
+        //}
 
         //private void OnReceivePoint(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
         //{

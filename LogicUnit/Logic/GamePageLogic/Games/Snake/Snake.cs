@@ -23,6 +23,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         bool flag = false;
         public Snake()
         {
+            
             m_GameName = "Snake";
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
@@ -31,11 +32,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             m_scoreBoard.m_ShowScoreBoardByOrder = true;
         }
 
-        public override async void RunGame()
+        public override void RunGame()
         {
+            GameLoop();
             //Thread newThread = new(actualGameLoop) { Name = "SnakeLoop" };
             //newThread.Start();
-            Task.Run(actualGameLoop);
+            //Task.Run(actualGameLoop);
             //Task.Run(actualGameLoop);
         }
 
@@ -60,35 +62,71 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         //    }
         //}
 
-        //private void actualGameLoop()
-        private async Task actualGameLoop()
+        protected override void updateGame()
         {
-            //Stopwatch timer = new Stopwatch();
-            //timer.Start();  timer.Elapsed.TotalMilliseconds<200 &&
-            while ( (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended))
+            base.updateGame();
+            for (int i = 0; i < 4; i++)
             {
-                if (m_GameStatus == eGameStatus.Running)
+                ChangeDirection(Direction.getDirection(r_PlayersData[i].Button), i);
+            }
+            //foreach (int player in m_PlayersDirectionsFromServer.Keys)
+            //{
+            //    ChangeDirection(m_PlayersDirectionsFromServer[player], player);
+            //}
+        }
+
+        protected override void Draw()
+        {
+            if (m_GameStatus == eGameStatus.Running)
+            {
+                m_gameObjectsToUpdate = new List<GameObject>();
+                m_GameObjectsToAdd = new List<GameObject>();
+                //if (m_GameStopwatch.Elapsed.Milliseconds >= 400)
                 {
-                    
-                    //lock (m_PlayersDirectionsFromServer)
-                    //{
-                    //    foreach (int player in m_PlayersDirectionsFromServer.Keys)
-                    //    {
-                    //        ChangeDirection(m_PlayersDirectionsFromServer[player], player);
-                    //    }
-                    //}
-                    gameLoop();
-                    await Task.Delay(500);
-                    //Thread.Sleep(400);
-                }
-                else
-                {
-                    await Task.Delay(500);
-                    //Thread.Sleep(400);
+                    moveSnakes();
+                    if (m_GameObjectsToAdd.Count != 0)
+                    {
+                        OnAddScreenObjects();
+                    }
+
+                    if (m_gameObjectsToUpdate.Count != 0)
+                    {
+                        OnUpdateScreenObject();
+                    }
+                    m_GameStopwatch.Restart();
                 }
             }
-           // timer.Stop();
         }
+
+        //private void actualGameLoop()
+        //private async Task actualGameLoop()
+        //{
+        //    //Stopwatch timer = new Stopwatch();
+        //    //timer.Start();  timer.Elapsed.TotalMilliseconds<200 &&
+        //    while ( (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended))
+        //    {
+        //        if (m_GameStatus == eGameStatus.Running)
+        //        {
+                    
+        //            //lock (m_PlayersDirectionsFromServer)
+        //            //{
+        //            //    foreach (int player in m_PlayersDirectionsFromServer.Keys)
+        //            //    {
+        //            //        ChangeDirection(m_PlayersDirectionsFromServer[player], player);
+        //            //    }
+        //            //}
+        //            OBgameLoop();
+        //            await Task.Delay(500);
+        //            //Thread.Sleep(400);
+        //        }
+        //        else
+        //        {
+        //            await Task.Delay(500);
+        //            //Thread.Sleep(400);
+        //        }
+        //    }
+        //   // timer.Stop();
+        //}
 
         private void updatefoodd()
         {
@@ -100,29 +138,29 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
            // }
         }
 
-        protected override void gameLoop()
-        {
-            if(m_GameStatus == eGameStatus.Running)
-            {
+        //protected override void OBgameLoop()
+        //{
+        //    if(m_GameStatus == eGameStatus.Running)
+        //    {
                
-                m_gameObjectsToUpdate = new List<GameObject>();
-                m_GameObjectsToAdd = new List<GameObject>();
-                moveSnakes();
-                if (flag)
-                {
-                    updatefoodd();
-                }
-                if (m_GameObjectsToAdd.Count != 0)
-                {
-                    OnAddScreenObjects();
-                }
+        //        m_gameObjectsToUpdate = new List<GameObject>();
+        //        m_GameObjectsToAdd = new List<GameObject>();
+        //        moveSnakes();
+        //        if (flag)
+        //        {
+        //            updatefoodd();
+        //        }
+        //        if (m_GameObjectsToAdd.Count != 0)
+        //        {
+        //            OnAddScreenObjects();
+        //        }
 
-                if (m_gameObjectsToUpdate.Count != 0)
-                {
-                    OnUpdateScreenObject();
-                }
-            }
-        }
+        //        if (m_gameObjectsToUpdate.Count != 0)
+        //        {
+        //            OnUpdateScreenObject();
+        //        }
+        //    }
+        //}
 
         protected override void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
         {

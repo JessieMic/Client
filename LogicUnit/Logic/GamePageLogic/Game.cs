@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -34,6 +35,9 @@ namespace LogicUnit
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
         protected Player m_Player = Player.Instance;
+        protected PlayerData[] r_PlayersData = new PlayerData[4]; //TODO replace with 4
+        protected PlayerData m_CurrentPlayerData;
+
 
         //Screen info 
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
@@ -63,18 +67,53 @@ namespace LogicUnit
         private bool m_Flag = false;
         private bool m_IsMenuVisible = false;
 
+        //Game loop variables
+        private bool m_IsGameRunning = true;
+        private int m_GapInFrames = 0;
+        private Stopwatch m_LoopStopwatch = new Stopwatch();
+        protected Stopwatch m_GameStopwatch = new Stopwatch();
+        private double k_DesiredFrameTime = 0.032;
+        protected eButton m_LastClickedButton = 0;
+        private bool m_FlagUpdateRecived = false;
+        public bool m_NewButtonPressed = false;
+
+
+
+
         public Game()
         {
-            r_LiteNetClient.Init(m_GameInformation.AmountOfPlayers+1);
-            //TODO: blocks the server updates
-            r_LiteNetClient.ReceivedData += OnUpdatesReceived;
-            r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
+            for (int i = 0; i < 4; i++)
+            {
+                r_PlayersData[i] = new(i);
+            }
 
             r_ConnectionToServer = new HubConnectionBuilder()
-                .WithUrl(Utils.m_GameHubAddress)
+                .WithUrl(Utils.m_InGameHubAddress)
                 .Build();
 
-            
+            r_ConnectionToServer.On<int, int, int, int>("GameUpdateReceived", (int i_PlayerID, int i_button, int i_X, int i_Y) =>
+                {
+                    Point point = new Point(i_X, i_Y);
+                    r_PlayersData[i_PlayerID - 1].Button = i_button;
+                    r_PlayersData[i_PlayerID - 1].PlayerPointData = point;
+
+                });
+
+            r_ConnectionToServer.On<int[]>("GetPlayersData", (int[] i_PlayersButtons) =>
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        r_PlayersData[i].Button = i_PlayersButtons[i];
+                    }
+                });
+
+
+            //r_LiteNetClient.Init(m_GameInformation.AmountOfPlayers + 1);
+            //TODO: blocks the server updates
+            //r_LiteNetClient.ReceivedData += OnUpdatesReceived;
+            //r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
+
+
 
             //r_ConnectionToServer.On("Update", (int[] i_Update) =>
             //{
@@ -90,14 +129,15 @@ namespace LogicUnit
             //});
 
 
-            //Task.Run(() =>
-            //{
-            //    Application.Current.Dispatcher.Dispatch(async () =>
-            //    {
-            //        await r_ConnectionToServer.StartAsync();
-            //    });
-            //});
-
+            Task.Run(() =>
+           {
+               Application.Current.Dispatcher.Dispatch(async () =>
+               {
+                   await r_ConnectionToServer.StartAsync();
+                   OnDeleteGameObject(new GameObject());
+               });
+           });
+            //OnDeleteGameObject(new GameObject());
             //r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
         }
 
@@ -105,8 +145,10 @@ namespace LogicUnit
         {
             m_BoardOurSize = m_ScreenMapping.m_TotalScreenOurSize;
             m_Board = new int[m_BoardOurSize.m_Width, m_BoardOurSize.m_Height];
+            m_CurrentPlayerData = new PlayerData(m_Player.ButtonThatPlayerPicked);
+            m_CurrentPlayerData.Button = -1;
 
-            r_LiteNetClient.ReceivedData += OnUpdatesReceived;
+            //r_LiteNetClient.ReceivedData += OnUpdatesReceived;
 
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
@@ -116,11 +158,64 @@ namespace LogicUnit
 
             //m_networkThread = new Thread(() => r_LiteNetClient.Run());
             //m_networkThread.Start();
-            r_LiteNetClient.Run();
-            for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
+            ////r_LiteNetClient.Run();
+            ////for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
+            ////{
+            ////    r_LiteNetClient.PlayersData[i].Button = 0;
+            ////}
+        }
+
+        public void GameLoop()
+        {
+            m_LoopStopwatch.Start();
+            while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
             {
-                r_LiteNetClient.PlayersData[i].Button = 0;
+                m_LoopStopwatch.Restart();
+                if (m_GameStatus == eGameStatus.Running)
+                {
+                    updateGame();
+                    while (m_GapInFrames > 0)
+                    {
+                        updateGame();
+                        m_GapInFrames--;
+                    }
+
+                    Draw();
+                    m_GapInFrames = (int)((m_LoopStopwatch.Elapsed.TotalSeconds - k_DesiredFrameTime) / k_DesiredFrameTime);
+                    if (m_GapInFrames < 0)
+                    {
+                        Thread.Sleep((int)(k_DesiredFrameTime - m_LoopStopwatch.Elapsed.TotalSeconds));
+                    }
+                }
             }
+
+            throw new Exception("exit the game loop");
+        }
+
+        protected virtual void Draw()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual async void updateGame()
+        {
+            if(m_NewButtonPressed)
+            {
+                await r_ConnectionToServer.SendAsync(
+                    "UpdatePlayerSelection",
+                    m_Player.ButtonThatPlayerPicked,
+                    m_CurrentPlayerData.Button,
+                    -1, //X
+                    -1); //Y
+            }
+
+            //int[] temp =  await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    r_PlayersData[i].Button = temp[i];
+            //}
+
         }
 
         protected virtual void OnAddScreenObjects()
@@ -140,9 +235,9 @@ namespace LogicUnit
 
         protected void PlayerLostALife(int i_Player)
         {
-            m_GameStatus =m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
-            
-            if(m_Hearts.m_HeartToRemove != null)
+            m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+
+            if (m_Hearts.m_HeartToRemove != null)
             {
                 OnDeleteGameObject(m_Hearts.m_HeartToRemove);
                 m_Hearts.m_HeartToRemove = null;
@@ -187,32 +282,40 @@ namespace LogicUnit
             return isPointOnTheBoard;
         }
 
-        protected virtual void gameLoop()
+        //todo: remove
+        protected virtual void OBgameLoop()
         {
 
         }
 
         protected void OnDeleteGameObject(GameObject i_GameObject)
         {
-            GameObjectToDelete.Invoke(this, i_GameObject);
+            GameObject background = new GameObject();
+            background.Initialize(eScreenObjectType.Image, 0, "snakebackground.png", new Point(0, 0), 2, m_ScreenMapping.m_ValueToAdd);
+            GameObjectToDelete.Invoke(this, background);
         }
 
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player)
         {
-            
+
         }
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            
+            m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
+
+            m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
+
+            //.Button = (int)m_Buttons.StringToButton(button.ClassId);
             //ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);
-            SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
+            //SendServerMoveUpdate(m_Buttons.StringToButton(button.ClassId));
             //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
         }
 
-        public async Task SendServerMoveUpdate(eButton i_Button, int i_X = -1, int i_Y = -1)
+        public void SendServerMoveUpdate(eButton i_Button, int i_X = -1, int i_Y = -1)
         {
+            m_FlagUpdateRecived = false;
             r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button, i_X, i_Y);
             //r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button);
             //await r_ConnectionToServer.SendAsync(
@@ -222,7 +325,7 @@ namespace LogicUnit
 
         public async Task SendServerObjectUpdate(eButton i_Button, int i_X = -1, int i_Y = -1)
         {
-            r_LiteNetClient.Send(m_GameInformation.AmountOfPlayers+1, (int)i_Button, i_X, i_Y);
+            r_LiteNetClient.Send(m_GameInformation.AmountOfPlayers + 1, (int)i_Button, i_X, i_Y);
             //r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button);
             //await r_ConnectionToServer.SendAsync(
             //    "MoveUpdate",
@@ -241,7 +344,7 @@ namespace LogicUnit
 
             return gameObject;
         }
-   
+
         protected void OnUpdateScreenObject()
         {
             GameObjectsUpdate.Invoke(this, m_gameObjectsToUpdate);
@@ -276,7 +379,7 @@ namespace LogicUnit
 
         }
 
-        public virtual async void RunGame()
+        public virtual void RunGame()
         {
 
         }
@@ -284,36 +387,33 @@ namespace LogicUnit
         protected virtual void getUpdate(int i_Player)
         {
             eGameStatus returnStatus;
-            m_GameStatus = m_Buttons.GetGameStatue(r_LiteNetClient.PlayersData[i_Player].Button,m_GameStatus);
+            m_GameStatus = m_Buttons.GetGameStatue(r_PlayersData[i_Player - 1].Button, m_GameStatus);
 
 
             if (m_GameStatus == eGameStatus.Running)
             {
-                if(r_LiteNetClient.PlayersData[i_Player].Button <= 4)
+                if (r_PlayersData[i_Player - 1].Button <= 4)
                 {
                     ChangeDirection(
-                        Direction.getDirection(r_LiteNetClient.PlayersData[i_Player].Button),
-                        r_LiteNetClient.PlayersData[i_Player].PlayerNumber);
+                        Direction.getDirection(r_PlayersData[i_Player - 1].Button),
+                        r_LiteNetClient.PlayersData[i_Player - 1].PlayerNumber);
                 }
             }
 
 
-            if(m_IsMenuVisible && m_GameStatus != eGameStatus.Paused)
+            if (m_IsMenuVisible && m_GameStatus != eGameStatus.Paused)
             {
                 m_IsMenuVisible = false;
                 OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
             }
-            
+
         }
 
-        protected async void OnUpdatesReceived()
+        protected void OnUpdatesReceived()
         {
             for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
             {
-                lock (m_PlayersDirectionsFromServer)
-                {
-                    getUpdate(i);
-                }
+                getUpdate(i);
             }
 
             if (m_Flag)
@@ -335,6 +435,8 @@ namespace LogicUnit
             {
                 m_Flag = true;
             }
+
+            m_FlagUpdateRecived = true;
         }
     }
 }
