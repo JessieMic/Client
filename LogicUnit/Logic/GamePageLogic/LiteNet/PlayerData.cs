@@ -6,7 +6,7 @@ public class PlayerData
     {
         PlayerNumber = i_PlayerNumber;
     }
-
+    public Objects.Point PlayerPointData { get; set; }
     public int PlayerNumber { get; init; }
     public int Button { get; set; }
 }

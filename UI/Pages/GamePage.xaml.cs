@@ -1,4 +1,3 @@
-//using Android.Widget;
 using Microsoft.Maui.Controls.Shapes;
 using GradientStop = Microsoft.Maui.Controls.GradientStop;
 using LogicUnit;
@@ -18,7 +17,6 @@ public partial class GamePage : ContentPage
     private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
     //private Dictionary<int,Button> m_gameButtons = new Dictionary<int, Button>();
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
-    private int k = 0;
 
     public GamePage()
     {
@@ -125,26 +123,9 @@ public partial class GamePage : ContentPage
                             m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
                             m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
                             m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
-
-
-                            // m_GameImages[screenObject.m_ID[i]].ScaleXTo(-1);
-                            // m_GameImages[screenObject.m_ID[i]].ScaleX = -1;
-                            //if (k % 2 == 0)
-                            //{
-                            //    m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
-                            //    // m_GameImages[screenObject.m_ID[i]].Rotation = 90;
-                            //}
-
-                            //m_GameImages[screenObject.m_ID[i]].TranslateTo(
-                            //    screenObject.m_PointsOnScreen[i].m_Column,
-                            //    screenObject.m_PointsOnScreen[i].m_Row);
-                            //m_GameImages[screenObject.m_ID[i]].s
-
                         }
                     }
                 }
-
-                k++;
             }
         });
     }

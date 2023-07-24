@@ -45,6 +45,21 @@ namespace GameRoomServer
             }
         }
 
+        //private void updateClients()
+        //{
+        //    NetDataWriter writer = new();
+        //    foreach (ClientData data in r_Clients)
+        //    {
+        //        writer.Put(data.PlayerNumber);
+        //        writer.Put(data.Button);
+        //    }
+
+        //    foreach (ClientData client in r_Clients)
+        //    {
+        //        client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
+        //    }
+
+        //}
         private void updateClients()
         {
             NetDataWriter writer = new();
@@ -52,6 +67,8 @@ namespace GameRoomServer
             {
                 writer.Put(data.PlayerNumber);
                 writer.Put(data.Button);
+                writer.Put(data.X);
+                writer.Put(data.Y);
             }
 
             foreach (ClientData client in r_Clients)
@@ -61,30 +78,33 @@ namespace GameRoomServer
 
         }
 
-        //private void updateClientsWithObjectPoint()
-        //{
-        //    NetDataWriter writer = new();
-            
-        //    writer.Put(r_ObjectPointData.m_Column);
-        //    writer.Put(r_ObjectPointData.m_Row);
-        //    writer.Put(r_ObjectPointData.m_Object);
-            
-        //    foreach (ClientData client in r_Clients)
-        //    {
-        //        client.Peer.Send(writer, DeliveryMethod.ReliableOrdered);
-        //    }
-        //}
 
+        //private void onNetworkReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
+        //{
+        //    if(r_Clients.Exists(client => client.Peer == i_Peer))
+        //    {
+        //        ClientData clientData = r_Clients.Find(client => client.Peer == i_Peer);
+        //        if(clientData != null)
+        //        {
+        //            clientData.PlayerNumber = i_Reader.GetInt();
+        //            clientData.Button = i_Reader.GetInt();
+        //        }
+        //    }
+
+        //    i_Reader.Recycle();
+        //}
 
         private void onNetworkReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
         {
-            if(r_Clients.Exists(client => client.Peer == i_Peer))
+            if (r_Clients.Exists(client => client.Peer == i_Peer))
             {
                 ClientData clientData = r_Clients.Find(client => client.Peer == i_Peer);
-                if(clientData != null)
+                if (clientData != null)
                 {
                     clientData.PlayerNumber = i_Reader.GetInt();
                     clientData.Button = i_Reader.GetInt();
+                    clientData.X = i_Reader.GetInt();
+                    clientData.Y = i_Reader.GetInt();
                 }
             }
 

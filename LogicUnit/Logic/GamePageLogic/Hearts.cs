@@ -44,10 +44,20 @@ namespace LogicUnit.Logic.GamePageLogic
                 newHeart.Initialize(eScreenObjectType.Image, 0, "heart.png",
                     getHeartPoint(i), GameSettings.m_GameBoardGridSize, getValuesToAdd());
                 newHeart.m_OurSize = GameSettings.m_HeartSize;
-                if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+
+                Point a = newHeart.m_PointsOnScreen[0];
+
+                if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
                     newHeart.m_Rotatation[0] = 180;
+                    a.m_Column -= i * 10;
                 }
+                else
+                {
+                    a.m_Column += i * 10;
+                }
+
+                newHeart.m_PointsOnScreen[0] = a;
                 o_GameObjectsToAdd.Add(newHeart);
                 m_HeartsOnScreen.Add(newHeart);
             }

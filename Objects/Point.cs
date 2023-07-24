@@ -11,7 +11,9 @@ namespace Objects
         public int m_Column;
         public int m_Row;
 
-        public Point() { }
+        public Point()
+        {
+        }
 
         public Point(int i_Column, int i_Row)
         {

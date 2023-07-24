@@ -92,7 +92,7 @@ namespace Objects
             return values;
         }
 
-        public List<GameObject> GetMenuButtons()// List<GameObject> o_GameObjectsToAdd)
+        public List<GameObject> GetMenuButtons(Point i_MenuPoint)// List<GameObject> o_GameObjectsToAdd)
         {
             List<eButton> buttonList = setPauseButtonList();
             List<GameObject> menuButtons = new List<GameObject>();
@@ -102,10 +102,9 @@ namespace Objects
                 newButton.InitializeButton(
                     button,
                     "pause_menu_option_button.png",
-                    getButtonPoint(button),
-                    GameSettings.m_GameBoardGridSize,
-                    GameSettings.m_PauseMenuButtonOurSize,
-                    getValuesToAdd());
+                    getPauseMenuButtonPoint(button,i_MenuPoint),
+                    1,
+                    GameSettings.m_PauseMenuButtonOurSize, new Point(0, 0));
                 newButton.m_text = button.ToString();
 
                 if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
@@ -195,10 +194,6 @@ namespace Objects
                 {
                     returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2, 0);
                 }
-                else
-                {
-                    returnPoint = getPauseMenuButtonPoint(i_Type);
-                }
             }
             else
             {
@@ -230,46 +225,43 @@ namespace Objects
                 {
                     returnPoint.SetAndGetPoint(1, 2);
                 }
-                else
-                {
-                    returnPoint = getPauseMenuButtonPoint(i_Type);
-                }
             }
             return returnPoint;
         }
 
-        private Point getPauseMenuButtonPoint(eButton i_Type)
+        private Point getPauseMenuButtonPoint(eButton i_Type, Point i_MenuPoint)
         {
             Point returnPoint = new Point(1, 1);
+            int colum = (int)(i_MenuPoint.m_Column + GameSettings.m_GameBoardGridSize * 0.5);
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 if (i_Type == eButton.Resume)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width/2)-2, (m_ClientScreenOurSize.m_Height/2)+3);
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.m_Row + GameSettings.m_GameBoardGridSize * 3.5));
                 }
                 else if (i_Type == eButton.Restart)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2)-2, (m_ClientScreenOurSize.m_Height / 2)+1);
+                    returnPoint.SetAndGetPoint(colum, i_MenuPoint.m_Row + GameSettings.m_GameBoardGridSize * 2);
                 }
                 else if (i_Type == eButton.Exit)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2)-2, (m_ClientScreenOurSize.m_Height / 2)-1);
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.m_Row + GameSettings.m_GameBoardGridSize * 0.5));
                 }
             }
             else
             {
                 if (i_Type == eButton.Resume)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2)-2, (m_ClientScreenOurSize.m_Height / 2)-2-5);
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.m_Row + GameSettings.m_GameBoardGridSize*0.5));
                 }
                 else if (i_Type == eButton.Restart)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2) - 2, (m_ClientScreenOurSize.m_Height / 2-5));
+                    returnPoint.SetAndGetPoint(colum, i_MenuPoint.m_Row + GameSettings.m_GameBoardGridSize * 2);
                 }
                 else if (i_Type == eButton.Exit)
                 {
-                    returnPoint.SetAndGetPoint((m_ClientScreenOurSize.m_Width / 2) - 2, (m_ClientScreenOurSize.m_Height / 2)+2-5);
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.m_Row + GameSettings.m_GameBoardGridSize * 3.5));
                 }
             }
             return returnPoint;

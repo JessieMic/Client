@@ -29,7 +29,7 @@ namespace LogicUnit
 
         protected void setPauseMenu()
         {
-           m_PauseMenu.GetPauseMenu(m_ScreenMapping,m_Buttons,ref m_GameObjectsToAdd);
+           m_PauseMenu.GetPauseMenu(m_Buttons,ref m_GameObjectsToAdd);
         }
 
 

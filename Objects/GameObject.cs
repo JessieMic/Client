@@ -51,6 +51,11 @@ namespace Objects
             m_ID.Add(GameSettings.getID());
         }
 
+        public void w(int i )
+        {
+            m_PointsOnScreen[0] =new Point(5,0);
+        }
+
         public void SetImageDirection(int i_Index, Direction i_Direction)
         {
             if(i_Direction == Direction.Up)

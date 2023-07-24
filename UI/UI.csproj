@@ -39,7 +39,6 @@
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.svg" BaseSize="168,208" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -64,31 +63,37 @@
 	  <None Remove="Resources\Images\pause_menu_option_button.png" />
 	  <None Remove="Resources\Images\placementbutton.png" />
 	  <None Remove="Resources\Images\pressedplacementbutton.png" />
-	  <None Remove="Resources\Images\snake.png" />
-	  <None Remove="Resources\Images\snakebackground.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />
-	  <None Remove="Resources\Images\snakeobject1food.png" />
-	  <None Remove="Resources\Images\snakeplayer1body.png" />
-	  <None Remove="Resources\Images\snakeplayer1head.png" />
-	  <None Remove="Resources\Images\snakeplayer1tail.png" />
-	  <None Remove="Resources\Images\snakeplayer1turn.png" />
-	  <None Remove="Resources\Images\snakeplayer2body.png" />
-	  <None Remove="Resources\Images\snakeplayer2head.png" />
-	  <None Remove="Resources\Images\snakeplayer2tail.png" />
-	  <None Remove="Resources\Images\snakeplayer2turn.png" />
-	  <None Remove="Resources\Images\snakeplayer3body.png" />
-	  <None Remove="Resources\Images\snakeplayer3head.png" />
-	  <None Remove="Resources\Images\snakeplayer3tail.png" />
-	  <None Remove="Resources\Images\snakeplayer3turn.png" />
-	  <None Remove="Resources\Images\snakeplayer4body.png" />
-	  <None Remove="Resources\Images\snakeplayer4head.png" />
-	  <None Remove="Resources\Images\snakeplayer4tail.png" />
-	  <None Remove="Resources\Images\snakeplayer4turn.png" />
+	  <None Remove="Resources\Images\snake\snakebackground.png" />
 	  <None Remove="Resources\Images\snake\snakeobject1food.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer1body.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer1head.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer1tail.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer1turn.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer2body.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer2head.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer2tail.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer2turn.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer3body.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer3head.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer3tail.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer3turn.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer4body.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer4head.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer4tail.png" />
+	  <None Remove="Resources\Images\snake\snakeplayer4turn.png" />
 	  <None Remove="Resources\Images\uibackground.png" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Include="Resources\Images\Game\boarder.png" />
+	  <MauiImage Include="Resources\Images\Game\boarder1.png" />
+	  <MauiImage Include="Resources\Images\Game\boarder2.png" />
+	  <MauiImage Include="Resources\Images\Game\heart.png" />
+	  <MauiImage Include="Resources\Images\Game\movebutton.png" />
+	  <MauiImage Include="Resources\Images\Game\pausemenu.png" />
+	  <MauiImage Include="Resources\Images\Game\pausemenubutton.png" />
+	  <MauiImage Include="Resources\Images\Game\pause_menu_option_button.png" />
 	  <MauiImage Include="Resources\Images\lobby\code_placeholder.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\entrance_btn.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\game_placeholder.PNG" />
@@ -102,7 +107,26 @@
 	  <MauiImage Include="Resources\Images\pacman\pacmanobject1food.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer2body.png" />
+	  <MauiImage Include="Resources\Images\SelectingPositionScreen\placementbutton.png" />
+	  <MauiImage Include="Resources\Images\SelectingPositionScreen\pressedplacementbutton.png" />
+	  <MauiImage Include="Resources\Images\snake\snakebackground.png" />
 	  <MauiImage Include="Resources\Images\snake\snakeobject1food.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer1body.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer1head.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer1tail.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer1turn.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer2body.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer2head.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer2tail.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer2turn.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer3body.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer3head.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer3tail.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer3turn.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer4body.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer4head.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer4tail.png" />
+	  <MauiImage Include="Resources\Images\snake\snakeplayer4turn.png" />
 	</ItemGroup>
 
 	<ItemGroup>
