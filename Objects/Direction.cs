@@ -71,8 +71,6 @@ namespace Objects
             }
         }
 
-
-
         public Direction OppositeDirection()
         {
             return new Direction(-m_ColumnOffset, -m_RowOffset);
