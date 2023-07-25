@@ -130,10 +130,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         private void updatefoodd()
         {
-            Point p = r_LiteNetClient.PlayersData[m_GameInformation.AmountOfPlayers+1].PlayerPointData;
+            //Point p = r_LiteNetClient.PlayersData[m_GameInformation.AmountOfPlayers+1].PlayerPointData;
             //if (p != m_food.m_PointsOnGrid[0])
             //{
-                updateFoodToNewPoint(p);
+              //  updateFoodToNewPoint(p);
                 //OnShowGameObjects(m_food.m_ID);
            // }
         }

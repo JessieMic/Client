@@ -11,8 +11,8 @@ builder.Services.AddSignalR();
 builder.Logging.AddConsole();
 var app = builder.Build();
 
-LiteNetServer liteNetServer = new LiteNetServer(5555);
-Task.Run(() => liteNetServer.Run());
+//LiteNetServer liteNetServer = new LiteNetServer(5555);
+//Task.Run(() => liteNetServer.Run());
 app.UseHttpsRedirection();
 
 

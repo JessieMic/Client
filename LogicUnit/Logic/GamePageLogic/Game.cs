@@ -23,7 +23,7 @@ namespace LogicUnit
         private List<string> m_PlayerMovementsLogs = new List<string>();
 
         private readonly HubConnection r_ConnectionToServer;
-        protected readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
+        //protected readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
@@ -326,8 +326,8 @@ namespace LogicUnit
 
         public void SendServerMoveUpdate(eButton i_Button, int i_X = -1, int i_Y = -1)
         {
-            m_FlagUpdateRecived = false;
-            r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button, i_X, i_Y);
+            //m_FlagUpdateRecived = false;
+            //r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button, i_X, i_Y);
             //r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button);
             //await r_ConnectionToServer.SendAsync(
             //    "MoveUpdate",
@@ -336,7 +336,7 @@ namespace LogicUnit
 
         public async Task SendServerObjectUpdate(eButton i_Button, int i_X = -1, int i_Y = -1)
         {
-            r_LiteNetClient.Send(m_GameInformation.AmountOfPlayers + 1, (int)i_Button, i_X, i_Y);
+            //r_LiteNetClient.Send(m_GameInformation.AmountOfPlayers + 1, (int)i_Button, i_X, i_Y);
             //r_LiteNetClient.Send(m_Player.ButtonThatPlayerPicked, (int)i_Button);
             //await r_ConnectionToServer.SendAsync(
             //    "MoveUpdate",
@@ -405,9 +405,9 @@ namespace LogicUnit
             {
                 if (r_PlayersData[i_Player - 1].Button <= 4)
                 {
-                    ChangeDirection(
-                        Direction.getDirection(r_PlayersData[i_Player - 1].Button),
-                        r_LiteNetClient.PlayersData[i_Player - 1].PlayerNumber);
+                    //ChangeDirection(
+                    //    Direction.getDirection(r_PlayersData[i_Player - 1].Button),
+                    //    r_LiteNetClient.PlayersData[i_Player - 1].PlayerNumber);
                 }
             }
 
