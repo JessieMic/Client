@@ -12,9 +12,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
     public class SnakeObject : GameObject
     {
         private int[,] m_Board;
-        private List<Direction> m_DirectionsForTail = new List<Direction>();
+        public List<Direction> m_DirectionsForTail = new List<Direction>();
         //private List<Ga>
-
+        //public SnakeObject()
+        //{
+            
+        //}
         public SnakeObject(ref int[,] i_Board)
         {
             m_Board = i_Board;

@@ -37,7 +37,7 @@ namespace LogicUnit
         protected Player m_Player = Player.Instance;
         protected PlayerData[] r_PlayersDataArray = new PlayerData[4]; //TODO replace with 4
         protected PlayerData m_CurrentPlayerData;
-
+        private LinkedList<PlayerData> moveBuffer = new LinkedList<PlayerData>();
 
         //Screen info 
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
@@ -72,11 +72,14 @@ namespace LogicUnit
         private int m_GapInFrames = 0;
         private Stopwatch m_LoopStopwatch = new Stopwatch();
         protected Stopwatch m_GameStopwatch = new Stopwatch();
+        private Stopwatch m_ServerStopwatch = new Stopwatch();
+
         private double k_DesiredFrameTime = 0.064;
         protected eButton m_LastClickedButton = 0;
         private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
 
+        public int m_loopNumber = 0;
 
 
 
@@ -93,11 +96,12 @@ namespace LogicUnit
 
             r_ConnectionToServer.On<int, int, int, int>("GameUpdateReceived", (int i_PlayerID, int i_button, int i_X, int i_Y) =>
             {
-                //Point point = ;
+                //moveBuffer(new PlayerData(i_PlayerID)).
+                //Point point = new Point(i_X, i_Y);
                 //r_PlayersDataArray[i_PlayerID - 1].Button = i_button;
                 //r_PlayersDataArray[i_PlayerID - 1].PlayerPointData = point;
-                ChangeDirection(Direction.getDirection(i_button),i_PlayerID, new Point(i_X, i_Y));
-
+                //ChangeDirection(Direction.getDirection(i_button),i_PlayerID, new Point(i_X, i_Y));
+                ChangeDirection(Direction.getDirection(i_button), i_PlayerID, i_X);
             });
 
             r_ConnectionToServer.On<int[]>("GetPlayersData", (int[] i_PlayersButtons) =>
@@ -107,6 +111,8 @@ namespace LogicUnit
                     r_PlayersDataArray[i].Button = i_PlayersButtons[i];
                 }
             });
+
+            
 
             Task.Run(() =>
            {
@@ -159,7 +165,7 @@ namespace LogicUnit
                     //    m_GapInFrames--;
                     //    //Thread.Sleep((int)(k_DesiredFrameTime * 1000));
                     //}
-
+                    
                     Draw();
                     m_GapInFrames = (int)((m_LoopStopwatch.Elapsed.Seconds - k_DesiredFrameTime) / k_DesiredFrameTime);
                     if (m_GapInFrames <= 0)
@@ -290,7 +296,10 @@ namespace LogicUnit
             background.Initialize(eScreenObjectType.Image, 0, "snakebackground.png", new Point(0, 0), 2, m_ScreenMapping.m_ValueToAdd);
             GameObjectToDelete.Invoke(this, background);
         }
+        protected virtual void ChangeDirection(Direction i_Direction, int i_Player, int i_LoopNumber)
+        {
 
+        }
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player, Point i_Point)
         {
 
@@ -301,15 +310,25 @@ namespace LogicUnit
             m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
 
             m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
-            Point point = m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
+            //Point point = m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
 
+            //await r_ConnectionToServer.SendAsync(
+            //    "UpdatePlayerSelection",
+            //    m_Player.ButtonThatPlayerPicked,
+            //    (int)m_Buttons.StringToButton(button.ClassId),
+            //    point.m_Column, //X
+            //    point.m_Row); //Y
+            int loopnum = m_loopNumber;
+            if(m_GameStopwatch.Elapsed.Milliseconds > 150)
+            {
+                loopnum++;
+            }
             await r_ConnectionToServer.SendAsync(
                 "UpdatePlayerSelection",
                 m_Player.ButtonThatPlayerPicked,
                 (int)m_Buttons.StringToButton(button.ClassId),
-                point.m_Column, //X
-                point.m_Row); //Y
-
+                loopnum, //X
+                0); //Y
 
             //.Button = (int)m_Buttons.StringToButton(button.ClassId);
             //ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);

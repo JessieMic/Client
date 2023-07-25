@@ -29,6 +29,11 @@ namespace Objects
             return this;
         }
 
+        public Point(Point p)
+        {
+            new Point(p.m_Column, p.m_Row);
+        }
+
         public Point Move(Direction i_Direction)
         {
             return new Point(m_Column + i_Direction.m_ColumnOffset, m_Row+i_Direction.m_RowOffset);

@@ -105,7 +105,8 @@ public partial class GamePage : ContentPage
     private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
-        {
+            {
+                loopLabel.Text = m_Game.m_loopNumber.ToString();
             foreach (var screenObject in i_ObjectUpdates)
             {
                 for (int i = 0; i < screenObject.m_ID.Count; i++)
@@ -121,8 +122,11 @@ public partial class GamePage : ContentPage
                             m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
                             m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
                             m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
-                            m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
-                            m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                            m_GameImages[screenObject.m_ID[i]].TranslateTo(
+                                screenObject.m_PointsOnScreen[i].m_Column,
+                                screenObject.m_PointsOnScreen[i].m_Row,100);
+                                //m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
+                            //m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
                         }
                     }
                 }

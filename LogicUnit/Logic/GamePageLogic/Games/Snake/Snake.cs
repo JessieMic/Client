@@ -20,7 +20,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         //private List<SnakePlayer> m_SnakePlayers = new List<SnakePlayer>();
         private Food m_food = new Food();
         private List<Direction> m_SnakeLastDirection = new List<Direction>();
-        private List<SnakeObject>[] m_PastVersions = new List<SnakeObject>[4];
+        //private List<SnakeObject>[] m_PastVersions = new List<SnakeObject>[4];
+        protected Dictionary<int, List<SnakeObject>> Past = new Dictionary<int, List<SnakeObject>>();
         bool flag = false;
 
         public Snake()
@@ -32,10 +33,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             //m_Buttons.m_AmountOfExtraButtons = 2;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_scoreBoard.m_ShowScoreBoardByOrder = true;
-            for (int i = 0; i < 4; i++)
-            {
-                m_PastVersions[i] = new List<SnakeObject>();
-            }
+            //for (int i = 0; i < 4; i++)
+            //{
+            //    m_PastVersions[i] = new List<SnakeObject>();
+            //}
         }
 
         public override void RunGame()
@@ -50,6 +51,20 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             return m_PlayersSnakes[i_Player - 1].getSnakeHead();
         }
 
+        private List<SnakeObject> cloneSnakes()
+        {
+            List<SnakeObject> a = new List<SnakeObject>();
+            foreach(var snake in m_PlayersSnakes)
+            {
+                SnakeObject newSnake = new SnakeObject(ref m_Board);
+                newSnake.Copyy(snake);
+                newSnake.m_DirectionsForTail = snake.m_DirectionsForTail;
+                a.Add(newSnake);
+            }
+
+            return a;
+        }
+
         protected override void Draw()
         {
             if (m_GameStatus == eGameStatus.Running)
@@ -58,8 +73,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 m_GameObjectsToAdd = new List<GameObject>();
                 if (m_GameStopwatch.Elapsed.Milliseconds >= 400)
                 {
-                    OnUpdatesReceived();
+                    //OnUpdatesReceived();
+                    m_loopNumber++;
                     moveSnakes();
+                    if(!Past.ContainsKey(m_loopNumber))
+                    {
+                        Past.Add(m_loopNumber, cloneSnakes());
+                    }
                     if (m_GameObjectsToAdd.Count != 0)
                     {
                         OnAddScreenObjects();
@@ -115,6 +135,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         protected override void AddGameObjects()
         {
+            addFoor();
             addFood();
             for (int player = 1; player <= m_GameInformation.AmountOfPlayers; player++)
             {
@@ -261,7 +282,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             {
                 SendServerObjectUpdate(eButton.ButtonA, 5, 1);
             }
-
         }
 
         private void updateFoodToNewPoint(Point i_Point)
@@ -319,63 +339,112 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             bool foundSkip = false;
             Point futurePoint = getPlayerCurrentPointPoint(i_Player);
 
-            while (!foundSkip && amountOfSkips < 9)
-            {
-                if (futurePoint.Move(m_PlayersSnakes[i_Player - 1].m_Direction) == i_Point)
-                {
-                    foundSkip = true;
-                    for (int i = 0; i <= amountOfSkips; i++)
-                    {
-                        moveSnakes();
-                    }
-                }
-                else if (amountOfSkips < m_PastVersions[i_Player - 1].Count && i_Point == m_PastVersions[i_Player - 1][amountOfSkips].getSnakeHead())
-                {
-                    for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
-                    {
-                        m_PlayersSnakes[i] = m_PastVersions[i][amountOfSkips];
-                    }
-                    foundSkip = true;
-                }
-                amountOfSkips++;
-            }
+            //while (!foundSkip && amountOfSkips < 9)
+            //{
+            //    if (futurePoint.Move(m_PlayersSnakes[i_Player - 1].m_Direction) == i_Point)
+            //    {
+            //        foundSkip = true;
+            //        for (int i = 0; i <= amountOfSkips; i++)
+            //        {
+            //            moveSnakes();
+            //        }
+            //    }
+            //    else if (amountOfSkips < m_PastVersions[i_Player - 1].Count && i_Point == m_PastVersions[i_Player - 1][amountOfSkips].getSnakeHead())
+            //    {
+            //        for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+            //        {
+            //            m_PlayersSnakes[i] = m_PastVersions[i][amountOfSkips];
+            //        }
+            //        foundSkip = true;
+            //    }
+            //    amountOfSkips++;
+            //}
 
             return foundSkip;
         }
 
-
-        protected override void ChangeDirection(Direction i_Direction, int i_Player, Point i_PointOfWhenWeChanged)
+        protected override void ChangeDirection(Direction i_Direction, int i_Player, int i_LoopNumber)
         {
-            if (i_Direction != Direction.Stop)
+            if(i_Direction != Direction.Stop)
             {
+                //if(i_LoopNumber < m_loopNumber)
+                //{
+                //    m_PlayersSnakes = Past[i_LoopNumber];
+                //    m_loopNumber = i_LoopNumber;
+                //}
+                //else
+                //{
+                //    while (i_LoopNumber > m_loopNumber)
+                //    {
+                //        m_loopNumber++;
+                //        moveSnakes();
+                //    }
+                //    Past.Clear();
+                //}
+
                 if (canChangeDirection(i_Direction, i_Player))
                 {
-                    if (checkIfPlayerIsSyncWithChangedPoint(i_Player, i_PointOfWhenWeChanged))
+                    m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
+                    m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
+                }
+            }
+        }
+
+        private void addFoor()
+        {
+            int i = 0;
+            Point point;
+
+
+            for (int col = 0; col < m_BoardOurSize.m_Width; col++)
+            {
+                for (int row = 0; row < m_BoardOurSize.m_Height; row++)
+                {
+                    if (m_Board[col, row] == 0)
                     {
-                        m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
-                        m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
-                    }
-                    else
-                    {
-                        if (fixDelay(i_Player, i_PointOfWhenWeChanged))
-                        {
-                            m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
-                            m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
-                        }
-                        //else
-                        //{
-                        //    throw new Exception("One of the players has connection issues");
-                        //}
+                        GameObject floor = new GameObject();
+                        point = new Point(col, row);
+                        floor.set(addGameBoardObject_(eScreenObjectType.Object, point, 1,
+                            (int)eBoardObjectPacman.Food, eBoardObjectPacman.Food.ToString()));
+                        //m_Food.Add(food);
+                        floor.m_ImageSources[0] = "floor.png";
                     }
                 }
             }
-
-
-            //if (canChangeDirection(i_Direction, i_Player))
-            //{
-            //    m_DirectionsBuffer[i_Player - 1].Add(i_Direction);
-            //}
         }
+
+        //protected override void ChangeDirection(Direction i_Direction, int i_Player, Point i_PointOfWhenWeChanged)
+        //{
+        //    if (i_Direction != Direction.Stop)
+        //    {
+        //        if (canChangeDirection(i_Direction, i_Player))
+        //        {
+        //            if (checkIfPlayerIsSyncWithChangedPoint(i_Player, i_PointOfWhenWeChanged))
+        //            {
+        //                m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
+        //                m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
+        //            //}
+        //            //else
+        //            //{
+        //            //    if (fixDelay(i_Player, i_PointOfWhenWeChanged))
+        //            //    {
+        //            //        m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
+        //            //        m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
+        //            //    }
+        //            //    //else
+        //            //    //{
+        //            //    //    throw new Exception("One of the players has connection issues");
+        //            //    //}
+        //            //}
+        //        }
+        //    }
+
+
+        //    //if (canChangeDirection(i_Direction, i_Player))
+        //    //{
+        //    //    m_DirectionsBuffer[i_Player - 1].Add(i_Direction);
+        //    //}
+        //}
 
         //protected override void ChangeDirection(Direction i_Direction, int i_Player)
         //{
@@ -458,6 +527,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                     }
                     else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
                     {
+                        //snake.Eat(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player + 2,
+                        //    eSnakeBodyParts.Head.ToString()), m_SnakeLastDirection[player - 1], currentDirection);
                         snake.Move(newHeadPoint, m_SnakeLastDirection[player - 1], currentDirection);
                     }
                     else if (hit == (int)eBoardObjectSnake.Food)//Eats food
@@ -480,12 +551,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         m_Board[newHeadPoint.m_Column, newHeadPoint.m_Row] = player + 2;
                         // updateFoodToNewPoint(new Point(0, 0));
                     }
-                    m_PastVersions[player - 1].Add(snake);
-                    int count = m_PastVersions[player - 1].Count;
-                    if (count > 10)
-                    {
-                        m_PastVersions[player - 1].RemoveAt(count - 1);
-                    }
+                    //m_PastVersions[player - 1].Add(snake);
+                    //int count = m_PastVersions[player - 1].Count;
+                    //if (count > 10)
+                    //{
+                    //    m_PastVersions[player - 1].RemoveAt(count - 1);
+                    //}
                     m_gameObjectsToUpdate.Add(snake);
                     m_SnakeLastDirection[player - 1] = currentDirection;
                     snake.m_Direction = currentDirection;

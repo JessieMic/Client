@@ -22,9 +22,11 @@ namespace Objects
 
         public static int getID()
         {
-            int res = m_ID;
-            m_ID++;
-            return res;
+          
+                int res = m_ID;
+                m_ID++;
+                return res;
+            
         }
     }
 }
