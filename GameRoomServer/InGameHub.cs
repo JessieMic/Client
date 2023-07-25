@@ -13,20 +13,21 @@ public class InGameHub : Hub
     public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
     {
 
-        //Console.WriteLine($"{i_PlayerID} sent");
+        Console.WriteLine($"{i_PlayerID} sent {i_button}");
         //if (i_button != 0)
         //{
-        //    r_PlayersPressedButtons[i_PlayerID] = i_button;
+        r_PlayersPressedButtons[i_PlayerID] = i_button;
+
         //}
         //else
         //{
-          await Clients.All.SendAsync("GameUpdateReceived", i_PlayerID, i_button, i_X, i_Y);
+        //  await Clients.All.SendAsync("GameUpdateReceived", i_PlayerID, i_button, i_X, i_Y);
         //}
     }
 
     public int[] GetPlayersData()
     {
-        Console.WriteLine("got an update");
+        //Console.WriteLine("got an update");
 
         return r_PlayersPressedButtons;
         //await Clients.All.SendAsync("GetPlayersData", r_PlayersPressedButtons);

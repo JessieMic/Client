@@ -21,6 +21,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private Food m_food = new Food();
         private List<Direction> m_SnakeLastDirection = new List<Direction>();
         bool flag = false;
+
+        int counter = 0;
+
         public Snake()
         {
             
@@ -75,6 +78,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             //}
         }
 
+        
+
         protected override void Draw()
         {
             if (m_GameStatus == eGameStatus.Running)
@@ -83,6 +88,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 m_GameObjectsToAdd = new List<GameObject>();
                 //if (m_GameStopwatch.Elapsed.Milliseconds >= 400)
                 {
+                    OnUpdatesReceived();
                     moveSnakes();
                     if (m_GameObjectsToAdd.Count != 0)
                     {
@@ -94,6 +100,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         OnUpdateScreenObject();
                     }
                     m_GameStopwatch.Restart();
+                    
+                    //if (counter == 100)
+                    //{
+                    //    throw new Exception("counter reached 100");
+                    //}
+
+                    counter++;
                 }
             }
         }
@@ -369,7 +382,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             if (i_Direction != Direction.Stop)
             {
-                if(canChangeDirection(i_Direction, i_Player))
+                if(i_Direction == Direction.Right)//if(canChangeDirection(i_Direction, i_Player))
                 {
                     m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
                     m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
