@@ -216,6 +216,7 @@ namespace LogicUnit
 
             int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
 
+
             for (int i = 0; i < 4; i++)
             {
                 r_PlayersData[i].Button = temp[i];

@@ -7,7 +7,7 @@ namespace GameRoomServer;
 
 public class InGameHub : Hub
 {
-    private readonly int[] r_PlayersPressedButtons = new int[4];
+    private static int[] r_PlayersPressedButtons = new int[4];
 
 
     public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
