@@ -7,7 +7,7 @@ namespace GameRoomServer;
 
 public class InGameHub : Hub
 {
-    private static int[] r_PlayersPressedButtons = new int[12];
+    private static int[] s_PlayersPressedButtons = new int[12];
 
 
     public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
@@ -16,9 +16,9 @@ public class InGameHub : Hub
         Console.WriteLine($"{i_PlayerID} sent {i_button}");
         //if (i_button != 0)
         //{
-        r_PlayersPressedButtons[i_PlayerID] = i_button;
-        r_PlayersPressedButtons[i_PlayerID + 4] = i_X;
-        r_PlayersPressedButtons[i_PlayerID + 8] = i_Y;
+        s_PlayersPressedButtons[i_PlayerID] = i_button;
+        s_PlayersPressedButtons[i_PlayerID + 4] = i_X;
+        s_PlayersPressedButtons[i_PlayerID + 8] = i_Y;
 
 
 
@@ -33,8 +33,13 @@ public class InGameHub : Hub
     {
         //Console.WriteLine("got an update");
 
-        return r_PlayersPressedButtons;
+        return s_PlayersPressedButtons;
         //await Clients.All.SendAsync("GetPlayersData", r_PlayersPressedButtons);
         //await Clients.Caller.SendAsync("GameStateReceived", r_PlayersPressedButtons);
+    }
+
+    public void ResetHub()
+    {
+        s_PlayersPressedButtons = new int[12];
     }
 }
