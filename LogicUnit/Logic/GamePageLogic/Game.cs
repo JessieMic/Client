@@ -35,7 +35,7 @@ namespace LogicUnit
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
         protected Player m_Player = Player.Instance;
-        protected PlayerData[] r_PlayersData = new PlayerData[4]; //TODO replace with 4
+        protected PlayerData[] r_PlayersDataArray = new PlayerData[4]; //TODO replace with 4
         protected PlayerData m_CurrentPlayerData;
 
 
@@ -84,7 +84,7 @@ namespace LogicUnit
         {
             for (int i = 0; i < 4; i++)
             {
-                r_PlayersData[i] = new(i);
+                r_PlayersDataArray[i] = new(i);
             }
 
             r_ConnectionToServer = new HubConnectionBuilder()
@@ -94,9 +94,9 @@ namespace LogicUnit
             r_ConnectionToServer.On<int, int, int, int>("GameUpdateReceived", (int i_PlayerID, int i_button, int i_X, int i_Y) =>
             {
                 //Point point = new Point(i_X, i_Y);
-                //r_PlayersData[i_PlayerID - 1].Button = i_button;
-                //r_PlayersData[i_PlayerID - 1].PlayerPointData = point;
-                ChangeDirection(Direction.getDirection(i_button),i_PlayerID );
+                //r_PlayersDataArray[i_PlayerID - 1].Button = i_button;
+                //r_PlayersDataArray[i_PlayerID - 1].PlayerPointData = point;
+                //ChangeDirection(Direction.getDirection(i_button),i_PlayerID );
 
             });
 
@@ -104,7 +104,7 @@ namespace LogicUnit
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    r_PlayersData[i].Button = i_PlayersButtons[i];
+                    r_PlayersDataArray[i].Button = i_PlayersButtons[i];
                 }
             });
 
@@ -183,6 +183,8 @@ namespace LogicUnit
         {
             if (m_NewButtonPressed)
             {
+                m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
+                
                 await r_ConnectionToServer.SendAsync(
                     "UpdatePlayerSelection",
                     m_Player.ButtonThatPlayerPicked,
@@ -192,19 +194,17 @@ namespace LogicUnit
                 m_NewButtonPressed = false;
             }
 
-            int[,] temp = await r_ConnectionToServer.InvokeAsync<int[,]>("GetPlayersData");
-
-
+            //get data from the server
+            int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
             for (int i = 0; i < 4; i++)
             {
-                if (r_PlayersData[i].Button != temp[i,0])
+                if (r_PlayersDataArray[i].Button != temp[i])
                 {
-                    r_PlayersData[i].Button = temp[i,0];
-                    m_CurrentPlayerData.PlayerPointData.m_Column = temp[i,1];
-                    m_CurrentPlayerData.PlayerPointData.m_Row) = temp[i,2];
+                    r_PlayersDataArray[i].Button = temp[i];
+                    r_PlayersDataArray[i].PlayerPointData = new Point(temp[i + 4], temp[i + 8]);
                     ChangeDirection(
-                        Direction.getDirection(r_PlayersData[i].Button),
-                        i, r_PlayerData.PlayerPointData) ;
+                        Direction.getDirection(r_PlayersDataArray[i].Button),
+                        i, r_PlayersDataArray[i].PlayerPointData);
                 }
             }
         }
@@ -301,7 +301,7 @@ namespace LogicUnit
             m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
 
             m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
-            m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber)
+
             //await r_ConnectionToServer.SendAsync(
             //    "UpdatePlayerSelection",
             //    m_Player.ButtonThatPlayerPicked,
@@ -390,16 +390,16 @@ namespace LogicUnit
         protected virtual void getUpdate(int i_Player)
         {
             eGameStatus returnStatus;
-            m_GameStatus = m_Buttons.GetGameStatue(r_PlayersData[i_Player - 1].Button, m_GameStatus);
+            m_GameStatus = m_Buttons.GetGameStatue(r_PlayersDataArray[i_Player - 1].Button, m_GameStatus);
 
 
             if (m_GameStatus == eGameStatus.Running)
             {
-                if (r_PlayersData[i_Player - 1].Button <= 4)
+                if (r_PlayersDataArray[i_Player - 1].Button <= 4)
                 {
-                    ChangeDirection(
-                        Direction.getDirection(r_PlayersData[i_Player - 1].Button),
-                        i_Player - 1);
+                    //ChangeDirection(
+                    //    Direction.getDirection(r_PlayersDataArray[i_Player - 1].Button),
+                    //    i_Player - 1);
                 }
             }
 

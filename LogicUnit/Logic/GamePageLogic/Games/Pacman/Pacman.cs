@@ -170,7 +170,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             }
         }
 
-        protected override void ChangeDirection(Direction i_Direction, int i_Player)
+        protected override void ChangeDirection(Direction i_Direction, int i_Player, Point i_Point)
         {
             m_AllPlayers[i_Player - 1].m_Direction = i_Direction;
         }

@@ -20,7 +20,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         //private List<SnakePlayer> m_SnakePlayers = new List<SnakePlayer>();
         private Food m_food = new Food();
         private List<Direction> m_SnakeLastDirection = new List<Direction>();
-        
+        private List<SnakeObject>[] m_PastVersions = new List<SnakeObject>[4];
         bool flag = false;
 
         int counter = 0;
@@ -66,18 +66,18 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         //    }
         //}
 
-        protected override void updateGame()
-        {
-            base.updateGame();
-            for (int i = 0; i < 4; i++)
-            {
-                ChangeDirection(Direction.getDirection(r_PlayersData[i].Button), i);
-            }
-            //foreach (int player in m_PlayersDirectionsFromServer.Keys)
-            //{
-            //    ChangeDirection(m_PlayersDirectionsFromServer[player], player);
-            //}
-        }
+        //protected override void updateGame()
+        //{
+        //    base.updateGame();
+        //    //for (int i = 0; i < 4; i++)
+        //    //{
+        //    //    ChangeDirection(Direction.getDirection(r_PlayersDataArray[i].Button), i);
+        //    //}
+        //    //foreach (int player in m_PlayersDirectionsFromServer.Keys)
+        //    //{
+        //    //    ChangeDirection(m_PlayersDirectionsFromServer[player], player);
+        //    //}
+        //}
 
         protected override Point getPlayerCurrentPointPoint(int i_Player)
         {
@@ -387,6 +387,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             return getPlayerCurrentPointPoint(i_Player) == i_Point;
         }
 
+        private void fixDelay(int i_Player, Point i_Point)
+        {
+
+        }
+
         protected override void ChangeDirection(Direction i_Direction, int i_Player,Point i_Point)
         {
             if (i_Direction != Direction.Stop)
@@ -397,6 +402,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                     {
                         m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
                         m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
+                    }
+                    else
+                    {
+                        fixDelay(i_Player,i_Point);
                     }
                 }
             }
@@ -511,7 +520,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         m_Board[newHeadPoint.m_Column, newHeadPoint.m_Row] = player + 2;
                         // updateFoodToNewPoint(new Point(0, 0));
                     }
+                    //m_PastVersions[player-1].Add(snake);
+                    //if(m_PastVersions[player - 1].Count > 10)
+                    //{
 
+                    //}
                     m_gameObjectsToUpdate.Add(snake);
                     m_SnakeLastDirection[player - 1] = currentDirection;
                     snake.m_Direction = currentDirection;
