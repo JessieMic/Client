@@ -13,6 +13,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
     {
         private int[,] m_Board;
         private List<Direction> m_DirectionsForTail = new List<Direction>();
+        //private List<Ga>
 
         public SnakeObject(ref int[,] i_Board)
         {

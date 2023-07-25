@@ -20,6 +20,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         //private List<SnakePlayer> m_SnakePlayers = new List<SnakePlayer>();
         private Food m_food = new Food();
         private List<Direction> m_SnakeLastDirection = new List<Direction>();
+        
         bool flag = false;
 
         int counter = 0;
@@ -78,7 +79,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             //}
         }
 
-        
+        protected override Point getPlayerCurrentPointPoint(int i_Player)
+        {
+            return m_PlayersSnakes[i_Player-1].getSnakeHead();
+        }
 
         protected override void Draw()
         {
@@ -86,7 +90,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             {
                 m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameObjectsToAdd = new List<GameObject>();
-                //if (m_GameStopwatch.Elapsed.Milliseconds >= 400)
+                if (m_GameStopwatch.Elapsed.Milliseconds >= 400)
                 {
                     OnUpdatesReceived();
                     moveSnakes();
@@ -378,14 +382,22 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             return res;
         }
 
-        protected override void ChangeDirection(Direction i_Direction, int i_Player)
+        bool checkIfPlayerIsSyncWithChangedPoint(int i_Player, Point i_Point)
+        {
+            return getPlayerCurrentPointPoint(i_Player) == i_Point;
+        }
+
+        protected override void ChangeDirection(Direction i_Direction, int i_Player,Point i_Point)
         {
             if (i_Direction != Direction.Stop)
             {
-                if(i_Direction == Direction.Right)//if(canChangeDirection(i_Direction, i_Player))
+                if(canChangeDirection(i_Direction, i_Player))
                 {
-                    m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
-                    m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
+                    if(checkIfPlayerIsSyncWithChangedPoint(i_Player, i_Point))
+                    {
+                        m_PlayersSnakes[i_Player - 1].m_Direction = i_Direction;
+                        m_PlayersSnakes[i_Player - 1].m_IsObjectMoving = true;
+                    }
                 }
             }
             

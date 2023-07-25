@@ -72,7 +72,7 @@ namespace LogicUnit
         private int m_GapInFrames = 0;
         private Stopwatch m_LoopStopwatch = new Stopwatch();
         protected Stopwatch m_GameStopwatch = new Stopwatch();
-        private double k_DesiredFrameTime = 0.32;
+        private double k_DesiredFrameTime = 0.016;
         protected eButton m_LastClickedButton = 0;
         private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
@@ -92,54 +92,31 @@ namespace LogicUnit
                 .Build();
 
             r_ConnectionToServer.On<int, int, int, int>("GameUpdateReceived", (int i_PlayerID, int i_button, int i_X, int i_Y) =>
-                {
-                    //Point point = new Point(i_X, i_Y);
-                    //r_PlayersData[i_PlayerID - 1].Button = i_button;
-                    //r_PlayersData[i_PlayerID - 1].PlayerPointData = point;
-                    ChangeDirection(Direction.getDirection(i_button),i_PlayerID );
+            {
+                //Point point = new Point(i_X, i_Y);
+                //r_PlayersData[i_PlayerID - 1].Button = i_button;
+                //r_PlayersData[i_PlayerID - 1].PlayerPointData = point;
+                ChangeDirection(Direction.getDirection(i_button),i_PlayerID );
 
-                });
+            });
 
             r_ConnectionToServer.On<int[]>("GetPlayersData", (int[] i_PlayersButtons) =>
+            {
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        r_PlayersData[i].Button = i_PlayersButtons[i];
-                    }
-                });
-
-
-            //r_LiteNetClient.Init(m_GameInformation.AmountOfPlayers + 1);
-            //TODO: blocks the server updates
-            //r_LiteNetClient.ReceivedData += OnUpdatesReceived;
-            //r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
-
-
-
-            //r_ConnectionToServer.On("Update", (int[] i_Update) =>
-            //{
-            //    MainThread.BeginInvokeOnMainThread(() =>
-            //    {
-            //        for (int i = 0; i < 2; i++)
-            //        {
-            //            ChangeDirection(Direction.getDirection(i_Update[i]), i + 1);
-            //        }
-
-            //        //gameLoop();
-            //    });
-            //});
-
+                    r_PlayersData[i].Button = i_PlayersButtons[i];
+                }
+            });
 
             Task.Run(() =>
            {
                Application.Current.Dispatcher.Dispatch(async () =>
                {
                    await r_ConnectionToServer.StartAsync();
-                   OnDeleteGameObject(new GameObject());
+                   await r_ConnectionToServer.SendAsync("ResetHub");
+                   OnDeleteGameObject(new GameObject());/////////////////////////////
                });
            });
-            //OnDeleteGameObject(new GameObject());
-            //r_LiteNetClient.PlayerNumber = m_Player.ButtonThatPlayerPicked;
         }
 
         public void InitializeGame()
@@ -169,6 +146,7 @@ namespace LogicUnit
         public void GameLoop()
         {
             m_LoopStopwatch.Start();
+            m_GameStopwatch.Start();
             while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
             {
                 m_LoopStopwatch.Restart();
@@ -177,18 +155,18 @@ namespace LogicUnit
                     updateGame();
                     //while (m_GapInFrames > 0)
                     //{
-                    //    //updateGame();
+                    //    updateGame();
                     //    m_GapInFrames--;
-                    //    Thread.Sleep(k_DesiredFrameTime * 1000);
+                    //    //Thread.Sleep((int)(k_DesiredFrameTime * 1000));
                     //}
 
                     Draw();
-                    //m_GapInFrames = (int)((m_LoopStopwatch.Elapsed.TotalSeconds - k_DesiredFrameTime) / k_DesiredFrameTime);
-                    //if (m_GapInFrames <= 0)
-                    //{
-                    //    Thread.Sleep((int)(k_DesiredFrameTime - m_LoopStopwatch.Elapsed.TotalSeconds));
-                    //}
-                    Thread.Sleep((int)(k_DesiredFrameTime * 1000));
+                    m_GapInFrames = (int)((m_LoopStopwatch.Elapsed.Seconds - k_DesiredFrameTime) / k_DesiredFrameTime);
+                    if (m_GapInFrames <= 0)
+                    {
+                        Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
+                    }
+                    //Thread.Sleep((int)(k_DesiredFrameTime * 1000));
 
                 }
             }
@@ -209,18 +187,31 @@ namespace LogicUnit
                     "UpdatePlayerSelection",
                     m_Player.ButtonThatPlayerPicked,
                     m_CurrentPlayerData.Button,
-                    -1, //X
-                    -1); //Y
+                    m_CurrentPlayerData.PlayerPointData.m_Column, //X
+                    m_CurrentPlayerData.PlayerPointData.m_Row); //Y
                 m_NewButtonPressed = false;
             }
 
-            int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+            int[,] temp = await r_ConnectionToServer.InvokeAsync<int[,]>("GetPlayersData");
 
 
             for (int i = 0; i < 4; i++)
             {
-                r_PlayersData[i].Button = temp[i];
+                if (r_PlayersData[i].Button != temp[i,0])
+                {
+                    r_PlayersData[i].Button = temp[i,0];
+                    m_CurrentPlayerData.PlayerPointData.m_Column = temp[i,1];
+                    m_CurrentPlayerData.PlayerPointData.m_Row) = temp[i,2];
+                    ChangeDirection(
+                        Direction.getDirection(r_PlayersData[i].Button),
+                        i, r_PlayerData.PlayerPointData) ;
+                }
             }
+        }
+
+        protected virtual Point getPlayerCurrentPointPoint(int i_Player)
+        {
+            throw new NotImplementedException();
         }
 
         protected virtual void OnAddScreenObjects()
@@ -300,7 +291,7 @@ namespace LogicUnit
             GameObjectToDelete.Invoke(this, background);
         }
 
-        protected virtual void ChangeDirection(Direction i_Direction, int i_Player)
+        protected virtual void ChangeDirection(Direction i_Direction, int i_Player, Point i_Point)
         {
 
         }
@@ -310,6 +301,7 @@ namespace LogicUnit
             m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
 
             m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
+            m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber)
             //await r_ConnectionToServer.SendAsync(
             //    "UpdatePlayerSelection",
             //    m_Player.ButtonThatPlayerPicked,
@@ -407,7 +399,7 @@ namespace LogicUnit
                 {
                     ChangeDirection(
                         Direction.getDirection(r_PlayersData[i_Player - 1].Button),
-                        i_Player);
+                        i_Player - 1);
                 }
             }
 
