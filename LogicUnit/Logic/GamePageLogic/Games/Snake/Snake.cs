@@ -329,7 +329,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         moveSnakes();
                     }
                 }
-                else if (i_Point == m_PastVersions[i_Player - 1][amountOfSkips].getSnakeHead())
+                else if (amountOfSkips < m_PastVersions[i_Player - 1].Count && i_Point == m_PastVersions[i_Player - 1][amountOfSkips].getSnakeHead())
                 {
                     for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
                     {
