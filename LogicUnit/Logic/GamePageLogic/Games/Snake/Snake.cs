@@ -372,12 +372,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 //}
                // else
                 //{
-                while (i_LoopNumber > m_LoopNumber)
-                {
-                    m_LoopNumber++;
-                    moveSnakes();
-                }
-                   // m_Past.Clear();
+               //////// //while (i_LoopNumber > m_LoopNumber)
+               ////// {
+                /// //   m_LoopNumber++;
+                //////    moveSnakes();
+                ///////}
+                 
                // }
 
                 if (canChangeDirection(i_Direction, i_Player))

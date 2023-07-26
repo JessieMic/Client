@@ -9,7 +9,6 @@ public class InGameHub : Hub
 {
     private static int[] s_PlayersPressedButtons = new int[12];
 
-
     public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
     {
 
@@ -39,5 +38,10 @@ public class InGameHub : Hub
     public void ResetHub()
     {
         s_PlayersPressedButtons = new int[12];
+    }
+
+    public DateTime Ping()
+    {
+        return DateTime.Now;
     }
 }

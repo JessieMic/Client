@@ -78,7 +78,7 @@ namespace LogicUnit
         protected eButton m_LastClickedButton = 0;
         private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
-
+        private int i_AvgPing = 0;
         public int m_LoopNumber = 0;
 
 
@@ -112,7 +112,7 @@ namespace LogicUnit
                 }
             });
 
-            
+
 
             Task.Run(() =>
            {
@@ -151,6 +151,7 @@ namespace LogicUnit
 
         public void GameLoop()
         {
+            //calculateAvgPing();
             m_LoopStopwatch.Start();
             m_GameStopwatch.Start();
             while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
@@ -159,20 +160,24 @@ namespace LogicUnit
                 if (m_GameStatus == eGameStatus.Running)
                 {
                     updateGame();
-                    //while (m_GapInFrames > 0)
-                    //{
-                    //    updateGame();
-                    //    m_GapInFrames--;
-                    //    //Thread.Sleep((int)(k_DesiredFrameTime * 1000));
-                    //}
-
                     Draw();
-                    m_GapInFrames = (int)((m_LoopStopwatch.Elapsed.Seconds - k_DesiredFrameTime) / k_DesiredFrameTime);
-                    if (m_GapInFrames <= 0)
+                    if (k_DesiredFrameTime > m_LoopStopwatch.Elapsed.Seconds)
                     {
                         Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
                     }
                 }
+            }
+        }
+
+        private async void calculateAvgPing()
+        {
+            for(int i = 0; i < 4; i++)
+            {
+                DateTime dateTimeNow = DateTime.Now;
+                await r_ConnectionToServer.InvokeAsync<DateTime>(
+                                     "Ping");
+                i_AvgPing = (DateTime.Now.Millisecond - dateTimeNow.Millisecond) / (i+1);
+                Thread.Sleep(250);
             }
         }
 
@@ -193,8 +198,8 @@ namespace LogicUnit
                     m_CurrentPlayerData.Button,
                     m_LoopNumber,
                     -1);
-                    //m_CurrentPlayerData.PlayerPointData.m_Column, //X
-                    //m_CurrentPlayerData.PlayerPointData.m_Row); //Y
+                //m_CurrentPlayerData.PlayerPointData.m_Column, //X
+                //m_CurrentPlayerData.PlayerPointData.m_Row); //Y
 
                 m_NewButtonPressed = false;
             }
@@ -318,7 +323,7 @@ namespace LogicUnit
             //    point.m_Column, //X
             //    point.m_Row); //Y
             int loopnum = m_LoopNumber;
-            if(m_GameStopwatch.Elapsed.Milliseconds > 150)
+            if (m_GameStopwatch.Elapsed.Milliseconds > 150)
             {
                 loopnum++;
             }

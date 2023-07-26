@@ -107,31 +107,31 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
             {
                 loopLabel.Text = m_Game.m_LoopNumber.ToString();
-            foreach (var screenObject in i_ObjectUpdates)
-            {
-                for (int i = 0; i < screenObject.m_ID.Count; i++)
+                foreach (GameObject screenObject in i_ObjectUpdates)
                 {
-                    if (getObjectTypeFromID(screenObject.m_ID[i]) == eScreenObjectType.Image)
+                    for (int i = 0; i < screenObject.m_ID.Count; i++)
                     {
-                        if (m_GameImages.ContainsKey(screenObject.m_ID[i]))
+                        if (getObjectTypeFromID(screenObject.m_ID[i]) == eScreenObjectType.Image)
                         {
-                            m_GameImages[screenObject.m_ID[i]].Rotation = 0;
-                            m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
-                            m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
-                            m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
-                            m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
-                            //m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
-                            //m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
-                            //m_GameImages[screenObject.m_ID[i]].TranslateTo(
-                            //    screenObject.m_PointsOnScreen[i].m_Column,
-                            //    screenObject.m_PointsOnScreen[i].m_Row,100);
-                                m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
-                            m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                            if (m_GameImages.ContainsKey(screenObject.m_ID[i]))
+                            {
+                                m_GameImages[screenObject.m_ID[i]].Rotation = 0;
+                                m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
+                                m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
+                                m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
+                                m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
+                                //m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
+                                //m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
+                                m_GameImages[screenObject.m_ID[i]].TranslateTo(
+                                    screenObject.m_PointsOnScreen[i].m_Column,
+                                    screenObject.m_PointsOnScreen[i].m_Row, 100);
+                                //m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
+                                //m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
     }
 
     public void deleteObject(object sender, GameObject? i_ObjectToDelete)
