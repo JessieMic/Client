@@ -11,6 +11,7 @@ using Objects.Enums;
 using Objects.Enums.BoardEnum;
 using Point = Objects.Point;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 {
@@ -21,7 +22,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private Food m_food = new Food();
         private List<Direction> m_SnakeLastDirection = new List<Direction>();
         //private List<SnakeObject>[] m_PastVersions = new List<SnakeObject>[4];
-        protected Dictionary<int, List<SnakeObject>> Past = new Dictionary<int, List<SnakeObject>>();
+        protected Dictionary<int, List<SnakeObject>> m_Past = new Dictionary<int, List<SnakeObject>>();
         bool flag = false;
 
         public Snake()
@@ -53,16 +54,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         private List<SnakeObject> cloneSnakes()
         {
-            List<SnakeObject> a = new List<SnakeObject>();
-            foreach(var snake in m_PlayersSnakes)
+            List<SnakeObject> clonedSnakesStates = new List<SnakeObject>();
+            foreach (SnakeObject snake in m_PlayersSnakes)
             {
-                SnakeObject newSnake = new SnakeObject(ref m_Board);
-                newSnake.Copyy(snake);
-                newSnake.m_DirectionsForTail = snake.m_DirectionsForTail;
-                a.Add(newSnake);
+                //clonedSnakesStates.Add(snake.Clone);
             }
 
-            return a;
+            return clonedSnakesStates;
         }
 
         protected override void Draw()
@@ -74,11 +72,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 if (m_GameStopwatch.Elapsed.Milliseconds >= 400)
                 {
                     //OnUpdatesReceived();
-                    m_loopNumber++;
+                    m_LoopNumber++;
                     moveSnakes();
-                    if(!Past.ContainsKey(m_loopNumber))
+                    if(!m_Past.ContainsKey(m_LoopNumber))
                     {
-                        Past.Add(m_loopNumber, cloneSnakes());
+                        m_Past.Add(m_LoopNumber, cloneSnakes());
                     }
                     if (m_GameObjectsToAdd.Count != 0)
                     {
@@ -135,7 +133,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 
         protected override void AddGameObjects()
         {
-            addFoor();
+            //addFoor();
             addFood();
             for (int player = 1; player <= m_GameInformation.AmountOfPlayers; player++)
             {
@@ -367,20 +365,20 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             if(i_Direction != Direction.Stop)
             {
-                //if(i_LoopNumber < m_loopNumber)
+                //if(i_LoopNumber < m_LoopNumber)
                 //{
-                //    m_PlayersSnakes = Past[i_LoopNumber];
-                //    m_loopNumber = i_LoopNumber;
+                   // m_PlayersSnakes = m_Past[i_LoopNumber];
+                   // m_LoopNumber = i_LoopNumber;
                 //}
-                //else
+               // else
                 //{
-                //    while (i_LoopNumber > m_loopNumber)
-                //    {
-                //        m_loopNumber++;
-                //        moveSnakes();
-                //    }
-                //    Past.Clear();
-                //}
+                while (i_LoopNumber > m_LoopNumber)
+                {
+                    m_LoopNumber++;
+                    moveSnakes();
+                }
+                   // m_Past.Clear();
+               // }
 
                 if (canChangeDirection(i_Direction, i_Player))
                 {
@@ -551,12 +549,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                         m_Board[newHeadPoint.m_Column, newHeadPoint.m_Row] = player + 2;
                         // updateFoodToNewPoint(new Point(0, 0));
                     }
-                    //m_PastVersions[player - 1].Add(snake);
-                    //int count = m_PastVersions[player - 1].Count;
-                    //if (count > 10)
-                    //{
-                    //    m_PastVersions[player - 1].RemoveAt(count - 1);
-                    //}
+                    
                     m_gameObjectsToUpdate.Add(snake);
                     m_SnakeLastDirection[player - 1] = currentDirection;
                     snake.m_Direction = currentDirection;
@@ -571,6 +564,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             OnDeleteGameObject(m_PlayersSnakes[i_Player - 1]);
             PlayerLostALife(i_Player);//general ui update
         }
+
     }
 }
 

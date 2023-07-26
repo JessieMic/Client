@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Objects
 {
+    [Serializable]
     public struct Point
     {
         public int m_Column;

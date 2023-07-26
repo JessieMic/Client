@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DTOs;
 using Objects;
@@ -10,6 +12,7 @@ using Point = Objects.Point;
 
 namespace Objects
 {
+    [Serializable]
     public class GameObject 
     {
         public List<Point> m_PointsOnGrid = new List<Point>();
@@ -222,9 +225,4 @@ namespace Objects
             m_PointsOnScreen.RemoveAt(m_PointsOnScreen.Count - 1);
         }
     }
-
-    //public interface IGameObject
-    //{
-    //    IGameObject Clone();
-    //}
 }

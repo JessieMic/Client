@@ -74,12 +74,12 @@ namespace LogicUnit
         protected Stopwatch m_GameStopwatch = new Stopwatch();
         private Stopwatch m_ServerStopwatch = new Stopwatch();
 
-        private double k_DesiredFrameTime = 0.064;
+        private double k_DesiredFrameTime = 0.032;
         protected eButton m_LastClickedButton = 0;
         private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
 
-        public int m_loopNumber = 0;
+        public int m_LoopNumber = 0;
 
 
 
@@ -158,26 +158,22 @@ namespace LogicUnit
                 m_LoopStopwatch.Restart();
                 if (m_GameStatus == eGameStatus.Running)
                 {
-                    //updateGame();
+                    updateGame();
                     //while (m_GapInFrames > 0)
                     //{
                     //    updateGame();
                     //    m_GapInFrames--;
                     //    //Thread.Sleep((int)(k_DesiredFrameTime * 1000));
                     //}
-                    
+
                     Draw();
                     m_GapInFrames = (int)((m_LoopStopwatch.Elapsed.Seconds - k_DesiredFrameTime) / k_DesiredFrameTime);
                     if (m_GapInFrames <= 0)
                     {
                         Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
                     }
-                    //Thread.Sleep((int)(k_DesiredFrameTime * 1000));
-
                 }
             }
-
-             throw new Exception("exit the game loop");
         }
 
         protected virtual void Draw()
@@ -189,14 +185,17 @@ namespace LogicUnit
         {
             if (m_NewButtonPressed)
             {
-                m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
-                
+                //m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
+
                 await r_ConnectionToServer.SendAsync(
                     "UpdatePlayerSelection",
                     m_Player.ButtonThatPlayerPicked,
                     m_CurrentPlayerData.Button,
-                    m_CurrentPlayerData.PlayerPointData.m_Column, //X
-                    m_CurrentPlayerData.PlayerPointData.m_Row); //Y
+                    m_LoopNumber,
+                    -1);
+                    //m_CurrentPlayerData.PlayerPointData.m_Column, //X
+                    //m_CurrentPlayerData.PlayerPointData.m_Row); //Y
+
                 m_NewButtonPressed = false;
             }
 
@@ -318,17 +317,18 @@ namespace LogicUnit
             //    (int)m_Buttons.StringToButton(button.ClassId),
             //    point.m_Column, //X
             //    point.m_Row); //Y
-            int loopnum = m_loopNumber;
+            int loopnum = m_LoopNumber;
             if(m_GameStopwatch.Elapsed.Milliseconds > 150)
             {
                 loopnum++;
             }
-            await r_ConnectionToServer.SendAsync(
-                "UpdatePlayerSelection",
-                m_Player.ButtonThatPlayerPicked,
-                (int)m_Buttons.StringToButton(button.ClassId),
-                loopnum, //X
-                0); //Y
+
+            //await r_ConnectionToServer.SendAsync(
+            //    "UpdatePlayerSelection",
+            //    m_Player.ButtonThatPlayerPicked,
+            //    (int)m_Buttons.StringToButton(button.ClassId),
+            //    loopnum, //X
+            //    0); //Y
 
             //.Button = (int)m_Buttons.StringToButton(button.ClassId);
             //ChangeDirection(Direction.getDirection(button.ClassId), m_Player.ButtonThatPlayerPicked);
