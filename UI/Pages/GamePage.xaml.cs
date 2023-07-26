@@ -120,8 +120,8 @@ public partial class GamePage : ContentPage
                             m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
                             m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
                             m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
-                            m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
-                            m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
+                            //m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
+                            //m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
                             m_GameImages[screenObject.m_ID[i]].TranslateTo(
                                 screenObject.m_PointsOnScreen[i].m_Column,
                                 screenObject.m_PointsOnScreen[i].m_Row,100);

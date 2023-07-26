@@ -57,10 +57,11 @@ public class GameHub : Hub
     public async Task GameIsAboutToStart()
     {
         await Clients.All.SendAsync("StartGame", buttonsThatAreOccupied, screenSizeWidth, screenSizeHeight);
-        buttonsThatAreOccupied[0] = string.Empty;
-        buttonsThatAreOccupied[1] = string.Empty;
-        buttonsThatAreOccupied[2] = string.Empty;
-        buttonsThatAreOccupied[3] = string.Empty;
+    }
+
+    public void ResetHub()
+    {
+        buttonsThatAreOccupied = new string[4];
     }
 
     public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
