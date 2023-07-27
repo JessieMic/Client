@@ -192,7 +192,7 @@ namespace LogicUnit
             {
                 //m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
 
-                await r_ConnectionToServer.SendAsync(
+                var temp = await r_ConnectionToServer.SendAsync<int[]>(
                     "UpdatePlayerSelection",
                     m_Player.ButtonThatPlayerPicked,
                     m_CurrentPlayerData.Button,
@@ -205,7 +205,7 @@ namespace LogicUnit
             }
 
             //get data from the server
-            int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+            //int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
             for (int i = 0; i < 4; i++)
             {
                 if (r_PlayersDataArray[i].Button != temp[i])
