@@ -126,10 +126,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         //    }
         //}
 
-        protected override void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
-        {
-            updateFoodToNewPoint(i_Point);
-        }
 
         protected override void AddGameObjects()
         {
@@ -278,7 +274,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 eBoardObjectSnake.Food.ToString()));
             if (m_Player.ButtonThatPlayerPicked == 1)
             {
-                SendServerObjectUpdate(eButton.ButtonA, 5, 1);
+                //SendServerObjectUpdate(eButton.ButtonA, 5, 1);
             }
         }
 
@@ -305,7 +301,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 point = new Point(-1, -1);
             }
 
-            SendServerObjectUpdate(eButton.ButtonA, point.m_Column, point.m_Row);
+            //SendServerObjectUpdate(eButton.ButtonA, point.m_Column, point.m_Row);
         }
 
         public List<Point> getEmptyPositions()

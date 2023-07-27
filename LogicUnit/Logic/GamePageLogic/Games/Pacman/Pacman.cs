@@ -28,35 +28,35 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             //gameLoop();
         }
 
-        protected override void OBgameLoop() // copied from snake
-        {
-            m_gameObjectsToUpdate = new List<GameObject>(); // -> objects that need to be updated (pacman that moves)
-            m_GameObjectsToAdd = new List<GameObject>(); // -> new objects on screen
-            moveObjects();
-            if (m_GameObjectsToAdd.Count != 0)
-            {
-                OnAddScreenObjects();
-            }
+        //protected override void OBgameLoop() // copied from snake
+        //{
+        //    m_gameObjectsToUpdate = new List<GameObject>(); // -> objects that need to be updated (pacman that moves)
+        //    m_GameObjectsToAdd = new List<GameObject>(); // -> new objects on screen
+        //    moveObjects();
+        //    if (m_GameObjectsToAdd.Count != 0)
+        //    {
+        //        OnAddScreenObjects();
+        //    }
 
-            if (m_gameObjectsToUpdate.Count != 0)
-            {
-                OnUpdateScreenObject();
-            }
+        //    if (m_gameObjectsToUpdate.Count != 0)
+        //    {
+        //        OnUpdateScreenObject();
+        //    }
 
-            //while (m_GameStatus == eGameStatus.Running)
-            //{
-            //    //await Task.Delay(400);
+        //    //while (m_GameStatus == eGameStatus.Running)
+        //    //{
+        //    //    //await Task.Delay(400);
 
-            //    m_Ghost.m_Direction = Direction.Right;
-            //    m_Ghost.MoveSameDirection();
-            //   // await Task.Delay(400);
-            //    m_Ghost.m_Direction = Direction.Down;
-            //    m_Ghost.MoveSameDirection();
-            //    //await Task.Delay(400);
-            //    m_Ghost.MoveToPoint(new Point(1, 1));
+        //    //    m_Ghost.m_Direction = Direction.Right;
+        //    //    m_Ghost.MoveSameDirection();
+        //    //   // await Task.Delay(400);
+        //    //    m_Ghost.m_Direction = Direction.Down;
+        //    //    m_Ghost.MoveSameDirection();
+        //    //    //await Task.Delay(400);
+        //    //    m_Ghost.MoveToPoint(new Point(1, 1));
 
-            //}
-        }
+        //    //}
+        //}
 
         protected override void AddGameObjects()
         {

@@ -211,6 +211,11 @@ public partial class GamePage : ContentPage
         return type;
     }
 
+    void runGame()
+    {
+        m_Game.RunGame();
+    }
+
     void initializeEvents()
     {
         m_Game.AddGameObjectList += addGameObjects;
@@ -218,6 +223,7 @@ public partial class GamePage : ContentPage
         m_Game.GameObjectToDelete += deleteObject;
         m_Game.GameObjectsToHide += hideGameObjects;
         m_Game.GameObjectsToShow += showGameObjects;
+        m_Game.GameStart += runGame;
     }
 }
 
