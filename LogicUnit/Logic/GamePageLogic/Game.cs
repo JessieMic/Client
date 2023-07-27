@@ -215,8 +215,8 @@ namespace LogicUnit
                     m_CurrentPlayerData.Button,
                     m_LoopNumber,
                     -1);
-                //m_CurrentPlayerData.PlayerPointData.m_Column, //X
-                //m_CurrentPlayerData.PlayerPointData.m_Row); //Y
+                //m_CurrentPlayerData.PlayerPointData.Column, //X
+                //m_CurrentPlayerData.PlayerPointData.Row); //Y
 
                 m_NewButtonPressed = false;
             }
@@ -269,8 +269,8 @@ namespace LogicUnit
         {
             bool isPointOnTheBoard = true;
 
-            if (i_Point.m_Row < 0 || i_Point.m_Column < 0 || i_Point.m_Column > m_BoardOurSize.m_Width
-               || i_Point.m_Row > m_BoardOurSize.m_Height)
+            if (i_Point.Row < 0 || i_Point.Column < 0 || i_Point.Column > m_BoardOurSize.m_Width
+               || i_Point.Row > m_BoardOurSize.m_Height)
             {
                 isPointOnTheBoard = false;
             }
@@ -284,8 +284,8 @@ namespace LogicUnit
 
         protected bool isPointOnBoard(Point i_Point)
         {
-            bool isPointOnTheBoard = !(i_Point.m_Row < 0 || i_Point.m_Row >= m_BoardOurSize.m_Height || i_Point.m_Column < 0
-                                       || i_Point.m_Column >= m_BoardOurSize.m_Width);
+            bool isPointOnTheBoard = !(i_Point.Row < 0 || i_Point.Row >= m_BoardOurSize.m_Height || i_Point.Column < 0
+                                       || i_Point.Column >= m_BoardOurSize.m_Width);
 
             return isPointOnTheBoard;
         }
@@ -311,8 +311,8 @@ namespace LogicUnit
             //    "UpdatePlayerSelection",
             //    m_Player.ButtonThatPlayerPicked,
             //    (int)m_Buttons.StringToButton(button.ClassId),
-            //    point.m_Column, //X
-            //    point.m_Row); //Y
+            //    point.Column, //X
+            //    point.Row); //Y
 
             int loopnum = m_LoopNumber;
 
@@ -337,7 +337,7 @@ namespace LogicUnit
             gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
 
             m_GameObjectsToAdd.Add(gameObject);
-            m_Board[i_Point.m_Column, i_Point.m_Row] = i_BoardNumber;
+            m_Board[i_Point.Column, i_Point.Row] = i_BoardNumber;
 
             return gameObject;
         }

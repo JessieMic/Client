@@ -167,15 +167,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         {
             m_SnakeParts[0].PointOnGrid = i_Point;
             m_SnakeParts[0].PointOnScreen = i_Point;
-            m_Board[i_Point.m_Column, i_Point.m_Row] = m_ObjectNumber + 2;
+            m_Board[i_Point.Column, i_Point.Row] = m_ObjectNumber + 2;
         }
 
         public void removeTail()
         {
             Point tail = m_SnakeParts.Last().PointOnGrid;
-            if (m_Board[tail.m_Column, tail.m_Row] == m_ObjectNumber)
+            if (m_Board[tail.Column, tail.Row] == m_ObjectNumber)
             {
-                m_Board[tail.m_Column, tail.m_Row] = 0;
+                m_Board[tail.Column, tail.Row] = 0;
             }
         }
 
@@ -201,7 +201,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             }
             else
             {
-                res = m_Board[i_Point.m_Column, i_Point.m_Row];
+                res = m_Board[i_Point.Column, i_Point.Row];
             }
 
             return res;
@@ -217,7 +217,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
             foreach (var part in m_SnakeParts)
             {
                 Point point = part.PointOnGrid;
-                m_Board[point.m_Column, point.m_Row] = (int)eBoardObjectSnake.Empty;
+                m_Board[point.Column, point.Row] = (int)eBoardObjectSnake.Empty;
             }
         }
     }

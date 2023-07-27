@@ -54,11 +54,11 @@ namespace LogicUnit
 
             if (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].m_Position.Column == eColumnPosition.RightColumn)
             {
-                m_ValueToAdd.m_Column = -m_MinimumLeftColumn * m_GameBoardGridSize; 
+                m_ValueToAdd.Column = -m_MinimumLeftColumn * m_GameBoardGridSize; 
             }
             else
             {
-                m_ValueToAdd.m_Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.m_Width - (m_PlayerGameBoardScreenSize[playerIndex].m_Width * m_GameBoardGridSize));
+                m_ValueToAdd.Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.m_Width - (m_PlayerGameBoardScreenSize[playerIndex].m_Width * m_GameBoardGridSize));
             }
         }
 
@@ -68,12 +68,12 @@ namespace LogicUnit
 
             if (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].m_Position.Row == eRowPosition.LowerRow)
             {
-                m_ValueToAdd.m_Row = -m_MinimumUpperRow * m_GameBoardGridSize; ;
+                m_ValueToAdd.Row = -m_MinimumUpperRow * m_GameBoardGridSize; ;
             }
             else
             {
-                m_ValueToAdd.m_Row += GameSettings.ControllBoardTotalHeight;
-                m_ValueToAdd.m_Row +=
+                m_ValueToAdd.Row += GameSettings.ControllBoardTotalHeight;
+                m_ValueToAdd.Row +=
                     m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.m_Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].m_Height * m_GameBoardGridSize);
             }
         }
@@ -137,7 +137,7 @@ namespace LogicUnit
                     m_TotalScreenOurSize.m_Width += minScreenValue1[0];
                     if(m_Player.ButtonThatPlayerPicked-1 == minScreenValue2[1])
                     {
-                        m_ValueToAdd.m_Column += ((minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize);
+                        m_ValueToAdd.Column += ((minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize);
                     }
                 }
                 else
@@ -145,7 +145,7 @@ namespace LogicUnit
                     m_TotalScreenOurSize.m_Width += minScreenValue2[0];
                     if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue1[1])
                     {
-                        m_ValueToAdd.m_Column += (minScreenValue1[0] - minScreenValue2[0]) *m_GameBoardGridSize;
+                        m_ValueToAdd.Column += (minScreenValue1[0] - minScreenValue2[0]) *m_GameBoardGridSize;
                     }
                 }
             }
@@ -188,7 +188,7 @@ namespace LogicUnit
                     m_TotalScreenOurSize.m_Height += minScreenValue1[0];
                     if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue2[1])
                     {
-                        m_ValueToAdd.m_Row +=
+                        m_ValueToAdd.Row +=
                             (minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize;
                     }
                 }
@@ -197,7 +197,7 @@ namespace LogicUnit
                     m_TotalScreenOurSize.m_Height += minScreenValue2[0];
                     if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue1[1])
                     {
-                        m_ValueToAdd.m_Row +=
+                        m_ValueToAdd.Row +=
                             (minScreenValue1[0] - minScreenValue2[0]) * m_GameBoardGridSize;
                     }
                 }

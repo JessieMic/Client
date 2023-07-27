@@ -67,8 +67,8 @@ namespace LogicUnit
                 m_ScreenMapping.m_TotalScreenOurSize.m_Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             Point p = m_ScreenMapping.m_ValueToAdd;
-            p.m_Column -= 5;
-            p.m_Row -= 5;
+            p.Column -= 5;
+            p.Row -= 5;
             actualOurSize.m_Height += 10;
             actualOurSize.m_Width += 10;
             background.Initialize(eScreenObjectType.Image, 0, "boarder.png", new Point(0, 0), actualOurSize.m_Height,p);
@@ -83,8 +83,8 @@ namespace LogicUnit
                 m_ScreenMapping.m_TotalScreenOurSize.m_Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             Point p = m_ScreenMapping.m_ValueToAdd;
-            p.m_Column -= 2;
-            p.m_Row -= 2;
+            p.Column -= 2;
+            p.Row -= 2;
             actualOurSize.m_Height += 5;
             actualOurSize.m_Width += 5;
             background.Initialize(eScreenObjectType.Image, 0, "boarder2.png", new Point(0, 0), actualOurSize.m_Height, p);

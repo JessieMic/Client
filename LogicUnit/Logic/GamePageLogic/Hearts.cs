@@ -50,11 +50,11 @@ namespace LogicUnit.Logic.GamePageLogic
                 if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
                     newHeart.m_Rotatation[0] = 180;
-                    a.m_Column -= i * 10;
+                    a.Column -= i * 10;
                 }
                 else
                 {
-                    a.m_Column += i * 10;
+                    a.Column += i * 10;
                 }
 
                 newHeart.m_PointsOnScreen[0] = a;
@@ -86,8 +86,8 @@ namespace LogicUnit.Logic.GamePageLogic
             }
             else
             {
-                values.m_Column = GameSettings.m_SpacingAroundButtons;
-                values.m_Row = m_ClientScreenOurSize.m_Height * GameSettings.m_GameBoardGridSize + GameSettings.m_SpacingAroundButtons;
+                values.Column = GameSettings.m_SpacingAroundButtons;
+                values.Row = m_ClientScreenOurSize.m_Height * GameSettings.m_GameBoardGridSize + GameSettings.m_SpacingAroundButtons;
             }
 
             return values;
