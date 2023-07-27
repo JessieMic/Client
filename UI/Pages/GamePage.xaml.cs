@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.Maui.Controls.Shapes;
 using GradientStop = Microsoft.Maui.Controls.GradientStop;
 using LogicUnit;
@@ -6,6 +7,9 @@ using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
 using Image = Microsoft.Maui.Controls.Image;
+using System.Runtime.Versioning;
+using System.Threading;
+using System.Threading.Tasks;
 namespace UI.Pages;
 
 public partial class GamePage : ContentPage
@@ -14,15 +18,22 @@ public partial class GamePage : ContentPage
     private GameInformation m_GameInformation = GameInformation.Instance;
     private GameLibrary m_GameLibrary = new GameLibrary();
     private Game m_Game;
-    private Dictionary<int,Image> m_GameImages = new Dictionary<int,Image>();
+    private Dictionary<int, Image> m_GameImages = new Dictionary<int, Image>();
     //private Dictionary<int,Button> m_gameButtons = new Dictionary<int, Button>();
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
 
     public GamePage()
     {
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
+        CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
         InitializeComponent();
+        CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+        CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
+        var cultureInfo = CultureInfo.GetCultureInfo("en-US");
+        
         initializePage();
-        m_Game.RunGame();
+
     }
 
     private void initializePage()
@@ -43,17 +54,17 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
         {
             int i = 1;
-        foreach (var gameObject in i_GameObjectsToAdd)
-        {
-            if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+            foreach (var gameObject in i_GameObjectsToAdd)
             {
-                addButton(gameObject);
+                if (gameObject.m_ScreenObjectType == eScreenObjectType.Button)
+                {
+                    addButton(gameObject);
+                }
+                else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
+                {
+                    addImage(gameObject);
+                }
             }
-            else// if (screenObject.m_ScreenObjectType == eScreenObjectType.Image)
-            {
-                addImage(gameObject);
-            }
-        }
         });
     }
 
@@ -74,7 +85,7 @@ public partial class GamePage : ContentPage
             image.HeightRequest = i_GameObjectToAdd.m_OurSize.m_Height;
             if (i_GameObjectToAdd.m_ImageSources[0] == "snakebackground.png")
             {
-                
+
                 image.Aspect = Aspect.AspectFill;
             }
             else
@@ -105,47 +116,52 @@ public partial class GamePage : ContentPage
     private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
-        {
-            foreach (var screenObject in i_ObjectUpdates)
             {
-                for(int i = 0; i < screenObject.m_ID.Count; i++)
+                loopLabel.Text = m_Game.m_LoopNumber.ToString();
+                foreach (GameObject screenObject in i_ObjectUpdates)
                 {
-                    if(getObjectTypeFromID(screenObject.m_ID[i]) == eScreenObjectType.Image)
+                    for (int i = 0; i < screenObject.m_ID.Count; i++)
                     {
-                        if(m_GameImages.ContainsKey(screenObject.m_ID[i]))
+                        if (getObjectTypeFromID(screenObject.m_ID[i]) == eScreenObjectType.Image)
                         {
-                            m_GameImages[screenObject.m_ID[i]].Rotation = 0;
-                            m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
-                            m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
-                            m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
-                            m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
-                            m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
-                            m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
-                            m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
-                            m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                            if (m_GameImages.ContainsKey(screenObject.m_ID[i]))
+                            {
+                                m_GameImages[screenObject.m_ID[i]].Rotation = 0;
+                                m_GameImages[screenObject.m_ID[i]].ScaleX = 1;
+                                m_GameImages[screenObject.m_ID[i]].ScaleY = 1;
+                                m_GameImages[screenObject.m_ID[i]].Source = screenObject.m_ImageSources[i];
+                                m_GameImages[screenObject.m_ID[i]].Rotation = screenObject.m_Rotatation[i];
+                                //m_GameImages[screenObject.m_ID[i]].ScaleX = screenObject.m_ScaleX[i];
+                                //m_GameImages[screenObject.m_ID[i]].ScaleY = screenObject.m_ScaleY[i];
+                                m_GameImages[screenObject.m_ID[i]].TranslateTo(
+                                    screenObject.m_PointsOnScreen[i].m_Column,
+                                    screenObject.m_PointsOnScreen[i].m_Row, 100);
+                                //m_GameImages[screenObject.m_ID[i]].TranslationX = screenObject.m_PointsOnScreen[i].m_Column;
+                                //m_GameImages[screenObject.m_ID[i]].TranslationY = screenObject.m_PointsOnScreen[i].m_Row;
+                            }
                         }
                     }
                 }
-            }
-        });
+            });
     }
 
-    public void deleteObject(object sender, GameObject i_ObjectToDelete)
+    public void deleteObject(object sender, GameObject? i_ObjectToDelete)
     {
+        m_Game.RunGame();
 
-        for (int i = 0; i < i_ObjectToDelete.m_ID.Count; i++)
-        {
-            if(i_ObjectToDelete.m_Fade)
-            {
-                m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
-            }
-            else
-            {
-                m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 100, null);
-            }
-            //gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
-            //m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
-        }
+        //for (int i = 0; i < i_ObjectToDelete.m_ID.Count; i++)
+        //{
+        //    if(i_ObjectToDelete.m_Fade)
+        //    {
+        //        m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 700, null);
+        //    }
+        //    else
+        //    {
+        //        m_GameImages[i_ObjectToDelete.m_ID[i]].FadeTo(0, 100, null);
+        //    }
+        //    //gridLayout.Remove(m_GameImages[i_ObjectToDelete.m_ID[i]]);
+        //    //m_GameImages.Remove(i_ObjectToDelete.m_ID[i]);
+        //}
     }
 
     private void hideGameObjects(object sender, List<int> i_IDlist)
@@ -154,7 +170,7 @@ public partial class GamePage : ContentPage
         {
             foreach (var ID in i_IDlist)
             {
-                if(getObjectTypeFromID(ID) == eScreenObjectType.Image)
+                if (getObjectTypeFromID(ID) == eScreenObjectType.Image)
                 {
                     m_GameImages[ID].IsVisible = false;
                 }
@@ -165,7 +181,7 @@ public partial class GamePage : ContentPage
                 }
             }
 
-            if(m_Game.m_GameStatus != eGameStatus.Restarted || m_Game.m_GameStatus != eGameStatus.Ended)
+            if (m_Game.m_GameStatus != eGameStatus.Restarted || m_Game.m_GameStatus != eGameStatus.Ended)
             {
                 //m_GameImages.Clear();
                 //m_gameButtons.Clear();
@@ -199,7 +215,7 @@ public partial class GamePage : ContentPage
     {
         eScreenObjectType type = eScreenObjectType.Image;
 
-        if(m_GameButtonsImages.ContainsKey(ID))
+        if (m_GameButtonsImages.ContainsKey(ID))
         {
             type = eScreenObjectType.Button;
         }
@@ -211,7 +227,7 @@ public partial class GamePage : ContentPage
         m_Game.AddGameObjectList += addGameObjects;
         m_Game.GameObjectsUpdate += gameObjectsUpdate;
         m_Game.GameObjectToDelete += deleteObject;
-        m_Game.GameObjectsToHide +=hideGameObjects;
+        m_Game.GameObjectsToHide += hideGameObjects;
         m_Game.GameObjectsToShow += showGameObjects;
     }
 }

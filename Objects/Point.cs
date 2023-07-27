@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Objects
 {
+    [Serializable]
     public struct Point
     {
         public int m_Column;
@@ -27,6 +28,11 @@ namespace Objects
             m_Row = i_Row;
 
             return this;
+        }
+
+        public Point(Point p)
+        {
+            new Point(p.m_Column, p.m_Row);
         }
 
         public Point Move(Direction i_Direction)

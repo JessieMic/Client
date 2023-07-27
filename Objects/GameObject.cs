@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using DTOs;
 using Objects;
@@ -10,7 +12,8 @@ using Point = Objects.Point;
 
 namespace Objects
 {
-    public class GameObject
+    [Serializable]
+    public class GameObject 
     {
         public List<Point> m_PointsOnGrid = new List<Point>();
         public List<Point> m_PointsOnScreen = new List<Point>();
@@ -38,6 +41,11 @@ namespace Objects
             m_ScaleY.Add(1);
         }
 
+        //public void Clone()
+        //{
+
+        //}
+
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
         {
             m_ObjectNumber = i_ObjectNumber;
@@ -49,11 +57,6 @@ namespace Objects
             m_PointsOnScreen.Add(point);
             m_ImageSources.Add(i_Png);
             m_ID.Add(GameSettings.getID());
-        }
-
-        public void w(int i )
-        {
-            m_PointsOnScreen[0] =new Point(5,0);
         }
 
         public void SetImageDirection(int i_Index, Direction i_Direction)
@@ -131,6 +134,30 @@ namespace Objects
             m_Rotatation = i_GameObject.m_Rotatation;
             m_ScaleX = i_GameObject.m_ScaleX;
             m_ScaleY = i_GameObject.m_ScaleY;
+
+        }
+        public void Copyy(GameObject i_GameObject)
+        {
+            m_ObjectNumber = i_GameObject.m_ObjectNumber;
+            m_ScreenObjectType = i_GameObject.m_ScreenObjectType;
+            m_GameBoardGridSize = i_GameObject.m_GameBoardGridSize;
+            m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
+            m_OurSize = i_GameObject.m_OurSize;
+            m_Fade = i_GameObject.m_Fade;
+            m_ID = i_GameObject.m_ID;
+            m_Rotatation = i_GameObject.m_Rotatation;
+
+            m_ScaleX = i_GameObject.m_ScaleX;
+            m_ScaleY = i_GameObject.m_ScaleY;
+
+            for (int i = 0; i < i_GameObject.m_ID.Count; i++)
+            {
+                m_PointsOnGrid.Add(new Point(i_GameObject.m_PointsOnGrid[i].m_Column, i_GameObject.m_PointsOnGrid[i].m_Row));
+                m_PointsOnScreen.Add(new Point(i_GameObject.m_PointsOnScreen[i].m_Column, i_GameObject.m_PointsOnScreen[i].m_Row));
+                m_ImageSources.Add(new string(i_GameObject.m_ImageSources[i]));
+                //m_ID.Add(i_GameObject.m_ID[i]);
+                //m_Rotatation.Add(new double(i_GameObject.m_Rotatation));
+            }
         }
 
         public void CombineGameObjects(GameObject i_GameObject)

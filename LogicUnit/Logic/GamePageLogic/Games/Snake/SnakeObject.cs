@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Objects;
 using Objects.Enums.BoardEnum;
@@ -9,11 +11,16 @@ using Point = Objects.Point;
 
 namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 {
-    public class SnakeObject : GameObject
+    [Serializable]
+    public class SnakeObject : GameObject 
     {
         private int[,] m_Board;
-        private List<Direction> m_DirectionsForTail = new List<Direction>();
-
+        public List<Direction> m_DirectionsForTail = new List<Direction>();
+        //private List<Ga>
+        //public SnakeObject()
+        //{
+            
+        //}
         public SnakeObject(ref int[,] i_Board)
         {
             m_Board = i_Board;
@@ -193,6 +200,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 m_Board[point.m_Column, point.m_Row] = (int)eBoardObjectSnake.Empty;
             }
         }
+
+        //public SnakeObject Clone()
+        //{
+        //    string json = JsonSerializer.Serialize(this);
+        //    return JsonSerializer.Deserialize<SnakeObject>(json);
+        //}
     }
 }
 

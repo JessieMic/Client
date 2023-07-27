@@ -28,7 +28,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             //gameLoop();
         }
 
-        protected override void gameLoop() // copied from snake
+        protected override void OBgameLoop() // copied from snake
         {
             m_gameObjectsToUpdate = new List<GameObject>(); // -> objects that need to be updated (pacman that moves)
             m_GameObjectsToAdd = new List<GameObject>(); // -> new objects on screen
@@ -170,7 +170,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             }
         }
 
-        protected override void ChangeDirection(Direction i_Direction, int i_Player)
+        protected override void ChangeDirection(Direction i_Direction, int i_Player, Point i_Point)
         {
             m_AllPlayers[i_Player - 1].m_Direction = i_Direction;
         }

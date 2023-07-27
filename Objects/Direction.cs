@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Objects.Enums;
 namespace Objects
 {
+    [Serializable]
     public class Direction
     {
         public int m_ColumnOffset { get; }
@@ -70,8 +71,6 @@ namespace Objects
                 return Direction.Left;
             }
         }
-
-
 
         public Direction OppositeDirection()
         {
