@@ -81,7 +81,15 @@ namespace LogicUnit
         private int i_AvgPing = 0;
         public int m_LoopNumber = 0;
 
-
+        /*TODO:
+         * create different thread for server updates
+         * the server will update an array named ServerInput that is a global variable
+         * add method Update(int deltaTime) to all GameObject. meaning we will be time driven
+         * this method will read the ServerInput and update the game accordingly.
+         *
+         *
+         *
+         */
 
         public Game()
         {
@@ -192,7 +200,7 @@ namespace LogicUnit
             {
                 //m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
 
-                var temp = await r_ConnectionToServer.SendAsync<int[]>(
+                 await r_ConnectionToServer.SendAsync(
                     "UpdatePlayerSelection",
                     m_Player.ButtonThatPlayerPicked,
                     m_CurrentPlayerData.Button,
@@ -205,7 +213,7 @@ namespace LogicUnit
             }
 
             //get data from the server
-            //int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+            int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
             for (int i = 0; i < 4; i++)
             {
                 if (r_PlayersDataArray[i].Button != temp[i])
