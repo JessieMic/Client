@@ -31,7 +31,7 @@ namespace LogicUnit
         public event EventHandler<GameObject> GameObjectToDelete;
         public event EventHandler<List<int>> GameObjectsToHide;
         public event EventHandler<List<int>> GameObjectsToShow;
-        public event PositionChangedEventHandler PositionChanged;
+       // public event PositionChangedEventHandler PositionChanged;
         public Notify GameStart;
 
         //basic game info
@@ -196,8 +196,8 @@ namespace LogicUnit
                 ////if (m_GapInFrames < 0)
                 ////{
                 Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-
-                m_LastElapsedTime = m_GameStopwatch.Elapsed.Seconds;
+                m_GameStopwatch.Stop();
+                m_LastElapsedTime = 0.07;//m_GameStopwatch.Elapsed;
 
                 ////}
             }
@@ -212,14 +212,13 @@ namespace LogicUnit
             while (m_ConnectedToServer)
             {
                 int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
-                lock (m_PlayersDataArray)
+               
+                for (int i = 0; i < 4; i++)
                 {
-                    for (int i = 0; i < 4; i++)
-                    {
-                        m_PlayersDataArray[i].Button = temp[i];
-                        m_PlayersDataArray[i].PlayerPointData = new Point(temp[i + 4], temp[i + 8]);
-                    }
+                    m_PlayersDataArray[i].Button = temp[i];
+                    m_PlayersDataArray[i].PlayerPointData = new Point(temp[i + 4], temp[i + 8]);
                 }
+                
             }
         }
 
@@ -276,14 +275,12 @@ namespace LogicUnit
         private async void GetServerUpdate()
         {
             //get data from the server
-            lock (m_PlayersDataArray)
+            for (int i = 1; i <= 1; i++)
             {
-                for (int i = 1; i <= 1; i++)
-                {
                     ChangeDirection(
-                        Direction.getDirection(m_PlayersDataArray[i].Button),
+                        Direction.getDirection(m_PlayersDataArray[i-1].Button),
                         i, 1);
-                }
+                    
             }
         }
 
@@ -442,11 +439,11 @@ namespace LogicUnit
 
         protected virtual void OnPositionChanged()
         {
-            if (PositionChanged != null)
-            {
-                PositionChanged(this);
+            //if (PositionChanged != null)
+            //{
+            //    PositionChanged(this);
 
-            }
+            //}
         }
 
         protected void OnDeleteGameObject(GameObject i_GameObject)
