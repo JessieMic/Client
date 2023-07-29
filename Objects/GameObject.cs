@@ -11,7 +11,7 @@ using Point = Objects.Point;
 
 namespace Objects
 {
-    public class GameObject
+    public class GameObject 
     {
         //public Point PointOnGrid { get; set; }
         public Point PointOnScreen { get; set; }

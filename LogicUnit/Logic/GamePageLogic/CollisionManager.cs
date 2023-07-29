@@ -14,7 +14,7 @@ namespace LogicUnit.Logic.GamePageLogic
             if(!this.m_Collidables.Contains(i_Collidable))
             {
                 this.m_Collidables.Add(i_Collidable);
-                i_Collidable.PositionChanged += collidable_PositionChanged;
+                //i_Collidable.PositionChanged += collidable_PositionChanged;
                 i_Collidable.Disposed += collidable_Disposed;
             }
         }
@@ -44,7 +44,7 @@ namespace LogicUnit.Logic.GamePageLogic
         private void collidable_Disposed(object sender, EventArgs e)
         {
             ICollidable collidable = sender as ICollidable;
-            collidable.PositionChanged -= collidable_PositionChanged;
+            //collidable.PositionChanged -= collidable_PositionChanged;
             collidable.Disposed -= collidable_Disposed;
             m_Collidables.Remove(collidable);
         }

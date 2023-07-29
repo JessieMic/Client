@@ -31,12 +31,13 @@ namespace LogicUnit
         public event EventHandler<GameObject> GameObjectToDelete;
         public event EventHandler<List<int>> GameObjectsToHide;
         public event EventHandler<List<int>> GameObjectsToShow;
+        public event PositionChangedEventHandler PositionChanged;
         public Notify GameStart;
 
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
         protected Player m_Player = Player.Instance;
-        protected PlayerData[] r_PlayersDataArray = new PlayerData[4]; //TODO replace with 4
+        protected PlayerData[] m_PlayersDataArray = new PlayerData[4]; //TODO replace with 4
         protected PlayerData m_CurrentPlayerData;
         private LinkedList<PlayerData> moveBuffer = new LinkedList<PlayerData>();
 
@@ -74,15 +75,20 @@ namespace LogicUnit
         private Stopwatch m_LoopStopwatch = new Stopwatch();
         protected Stopwatch m_GameStopwatch = new Stopwatch();
         private Stopwatch m_ServerStopwatch = new Stopwatch();
+        private double m_LastElapsedTime;
+
 
         private double k_DesiredFrameTime = 0.032;
         protected eButton m_LastClickedButton = 0;
         private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
         private int i_AvgPing = 0;
-        public int m_LoopNumber = 0;
+        public double m_LoopNumber = 0;
         public List<GameObject> m_MoveableGameObjects = new List<GameObject>();
-        private const double J_DesiredFrameTime = 1 / 15;
+        private const double J_DesiredFrameTime = 0.067;
+
+        private bool m_ConnectedToServer = true;    //TODO
+
         /*TODO:
          * create different thread for server updates
          * the server will update an array named ServerInput that is a global variable
@@ -97,7 +103,7 @@ namespace LogicUnit
         {
             for (int i = 0; i < 4; i++)
             {
-                r_PlayersDataArray[i] = new(i);
+                m_PlayersDataArray[i] = new(i);
             }
 
             r_ConnectionToServer = new HubConnectionBuilder()
@@ -108,8 +114,8 @@ namespace LogicUnit
             {
                 //moveBuffer(new PlayerData(i_PlayerID)).
                 //Point point = new Point(i_X, i_Y);
-                //r_PlayersDataArray[i_PlayerID - 1].Button = i_button;
-                //r_PlayersDataArray[i_PlayerID - 1].PlayerPointData = point;
+                //m_PlayersDataArray[i_PlayerID - 1].Button = i_button;
+                //m_PlayersDataArray[i_PlayerID - 1].PlayerPointData = point;
                 //ChangeDirection(Direction.getDirection(i_button),i_PlayerID, new Point(i_X, i_Y));
                 ChangeDirection(Direction.getDirection(i_button), i_PlayerID, i_X);
             });
@@ -118,7 +124,7 @@ namespace LogicUnit
             {
                 for (int i = 0; i < 4; i++)
                 {
-                    r_PlayersDataArray[i].Button = i_PlayersButtons[i];
+                    m_PlayersDataArray[i].Button = i_PlayersButtons[i];
                 }
             });
 
@@ -128,6 +134,7 @@ namespace LogicUnit
                {
                    await r_ConnectionToServer.StartAsync();
                    await r_ConnectionToServer.SendAsync("ResetHub");
+                   m_ConnectedToServer = true;
                    OnGameStart();
                });
            });
@@ -171,8 +178,8 @@ namespace LogicUnit
             m_GameStopwatch.Start();
             while (m_GameStatus == eGameStatus.Running) //(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
             {
-                m_GameStopwatch.Start();
-                m_gameObjectsToUpdate = new List<GameObject>(); 
+                m_GameStopwatch.Restart();
+                m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameObjectsToAdd = new List<GameObject>();
                 updateGame();
 
@@ -183,13 +190,36 @@ namespace LogicUnit
                 //}
 
                 Draw();
-                Thread.Sleep(70);
+                //Thread.Sleep(70);
                 //m_GapInFrames =(int)((m_GameStopwatch.Elapsed.Seconds - J_DesiredFrameTime) / J_DesiredFrameTime);
 
-                //if (m_GapInFrames < 0)
-                //{
-                //    Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-                //}
+                ////if (m_GapInFrames < 0)
+                ////{
+                Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
+
+                m_LastElapsedTime = m_GameStopwatch.Elapsed.Seconds;
+
+                ////}
+            }
+            if (m_GameStatus == eGameStatus.Ended)
+            {
+                m_ConnectedToServer = false;
+            }
+        }
+
+        private async void serverUpdateLoop()
+        {
+            while (m_ConnectedToServer)
+            {
+                int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+                lock (m_PlayersDataArray)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        m_PlayersDataArray[i].Button = temp[i];
+                        m_PlayersDataArray[i].PlayerPointData = new Point(temp[i + 4], temp[i + 8]);
+                    }
+                }
             }
         }
 
@@ -197,7 +227,9 @@ namespace LogicUnit
         {
             SendServerUpdate();
             GetServerUpdate();
-            updatePosition(m_GameStopwatch.Elapsed.Seconds);
+            m_LoopNumber = m_LastElapsedTime;
+            updatePosition(m_LastElapsedTime);
+
         }
 
         //private async void calculateAvgPing()
@@ -228,12 +260,12 @@ namespace LogicUnit
             {
                 //m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
 
-                 await r_ConnectionToServer.SendAsync(
-                    "UpdatePlayerSelection",
-                    m_Player.ButtonThatPlayerPicked,
-                    m_CurrentPlayerData.Button,
-                    m_LoopNumber,
-                    -1);
+                await r_ConnectionToServer.SendAsync(
+                   "UpdatePlayerSelection",
+                   m_Player.ButtonThatPlayerPicked,
+                   m_CurrentPlayerData.Button,
+                   m_LoopNumber,
+                   -1);
                 //m_CurrentPlayerData.PlayerPointData.Column, //X
                 //m_CurrentPlayerData.PlayerPointData.Row); //Y
 
@@ -244,15 +276,12 @@ namespace LogicUnit
         private async void GetServerUpdate()
         {
             //get data from the server
-            int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
-            for (int i = 0; i < 4; i++)
+            lock (m_PlayersDataArray)
             {
-                if (r_PlayersDataArray[i].Button != temp[i])
+                for (int i = 1; i <= 1; i++)
                 {
-                    r_PlayersDataArray[i].Button = temp[i];
-                    r_PlayersDataArray[i].PlayerPointData = new Point(temp[i + 4], temp[i + 8]);
                     ChangeDirection(
-                        Direction.getDirection(r_PlayersDataArray[i].Button),
+                        Direction.getDirection(m_PlayersDataArray[i].Button),
                         i, 1);
                 }
             }
@@ -319,7 +348,7 @@ namespace LogicUnit
 
         protected virtual void updatePosition(double i_TimeElapsed)
         {
-            foreach(var gameObject in m_MoveableGameObjects)
+            foreach (var gameObject in m_MoveableGameObjects)
             {
                 gameObject.Update(i_TimeElapsed);
             }
@@ -345,7 +374,7 @@ namespace LogicUnit
             //    point.Column, //X
             //    point.Row); //Y
 
-            int loopnum = m_LoopNumber;
+             //loopnum = m_LoopNumber;
 
             //await r_ConnectionToServer.SendAsync(
             //    "UpdatePlayerSelection",
@@ -389,9 +418,13 @@ namespace LogicUnit
 
         public void RunGame()
         {
-            Thread newThread = new(GameLoop) { Name = "SnakeLoop" };
+            Thread serverUpdateThread = new(serverUpdateLoop);
+            Thread newThread = new(GameLoop);
+            serverUpdateThread.Start();
             newThread.Start();
+
         }
+
         protected virtual void OnAddScreenObjects()
         {
             AddGameObjectList.Invoke(this, m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
@@ -406,6 +439,16 @@ namespace LogicUnit
         {
             GameObjectsToShow.Invoke(this, i_GameObjectsIDToShow);
         }
+
+        protected virtual void OnPositionChanged()
+        {
+            if (PositionChanged != null)
+            {
+                PositionChanged(this);
+
+            }
+        }
+
         protected void OnDeleteGameObject(GameObject i_GameObject)
         {
             GameObjectToDelete.Invoke(this, i_GameObject);
@@ -419,16 +462,16 @@ namespace LogicUnit
         //protected virtual void getUpdate(int i_Player)
         //{
         //    eGameStatus returnStatus;
-        //    m_GameStatus = m_Buttons.GetGameStatue(r_PlayersDataArray[i_Player - 1].Button, m_GameStatus);
+        //    m_GameStatus = m_Buttons.GetGameStatue(m_PlayersDataArray[i_Player - 1].Button, m_GameStatus);
 
 
         //    //if (m_GameStatus == eGameStatus.Running)
         //    //{
-        //    //    if (r_PlayersDataArray[i_Player - 1].Button <= 4)
+        //    //    if (m_PlayersDataArray[i_Player - 1].Button <= 4)
         //    //    {
         //    //        ChangeDirection(
-        //    //            Direction.getDirection(r_PlayersDataArray[i_Player - 1].Button),
-        //    //            i_Player - 1, r_PlayersDataArray[i].PlayerPointData);
+        //    //            Direction.getDirection(m_PlayersDataArray[i_Player - 1].Button),
+        //    //            i_Player - 1, m_PlayersDataArray[i].PlayerPointData);
         //    //    }
         //    //}
 
