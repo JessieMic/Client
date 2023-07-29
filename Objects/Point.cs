@@ -9,20 +9,20 @@ namespace Objects
     [Serializable]
     public struct Point
     {
-        public int Column { get; set; }
-        public int Row { get; set; }
+        public double Column { get; set; }
+        public double Row { get; set; }
 
         public Point()
         {
         }
 
-        public Point(int i_Column, int i_Row)
+        public Point(double i_Column, double i_Row)
         {
             Column = i_Column;
             Row = i_Row;
         }
 
-        public Point SetAndGetPoint(int i_Column, int i_Row)
+        public Point SetAndGetPoint(double i_Column, double i_Row)
         {
             Column = i_Column;
             Row = i_Row;

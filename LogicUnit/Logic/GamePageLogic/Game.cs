@@ -75,7 +75,7 @@ namespace LogicUnit
         private Stopwatch m_LoopStopwatch = new Stopwatch();
         protected Stopwatch m_GameStopwatch = new Stopwatch();
         private Stopwatch m_ServerStopwatch = new Stopwatch();
-        private double m_LastElapsedTime;
+        private int m_LastElapsedTime;
 
 
         private double k_DesiredFrameTime = 0.032;
@@ -154,25 +154,6 @@ namespace LogicUnit
             SetGameScreen();
         }
 
-        //public void GameLoop()
-        //{
-        //    m_LoopStopwatch.Start();
-        //    m_GameStopwatch.Start();
-        //    while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
-        //    {
-        //        m_LoopStopwatch.Restart();
-        //        if (m_GameStatus == eGameStatus.Running)
-        //        {
-        //            updateGame();
-        //            //Draw();
-        //            if (k_DesiredFrameTime > m_LoopStopwatch.Elapsed.Seconds)
-        //            {
-        //                Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-        //            }
-        //        }
-        //    }
-        //}
-
         public void GameLoop()
         {
             m_GameStopwatch.Start();
@@ -183,23 +164,12 @@ namespace LogicUnit
                 m_GameObjectsToAdd = new List<GameObject>();
                 updateGame();
 
-                //while( m_GapInFrames > 0)
-                //{
-                //    updateGame();
-                //    m_GapInFrames--;
-                //}
-
                 Draw();
-                //Thread.Sleep(70);
-                //m_GapInFrames =(int)((m_GameStopwatch.Elapsed.Seconds - J_DesiredFrameTime) / J_DesiredFrameTime);
 
-                ////if (m_GapInFrames < 0)
-                ////{
                 Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-                m_GameStopwatch.Stop();
-                m_LastElapsedTime = 0.07;//m_GameStopwatch.Elapsed;
+                //m_GameStopwatch.Stop();
+                m_LastElapsedTime = (int) m_GameStopwatch.Elapsed.TotalMilliseconds;
 
-                ////}
             }
             if (m_GameStatus == eGameStatus.Ended)
             {
@@ -277,10 +247,7 @@ namespace LogicUnit
             //get data from the server
             for (int i = 1; i <= 1; i++)
             {
-                    ChangeDirection(
-                        Direction.getDirection(m_PlayersDataArray[i-1].Button),
-                        i, 1);
-                    
+                ChangeDirection(Direction.getDirection(m_PlayersDataArray[i - 1].Button), i, 1);
             }
         }
 
@@ -394,7 +361,7 @@ namespace LogicUnit
             gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, true, m_ScreenMapping.m_ValueToAdd);
 
             m_GameObjectsToAdd.Add(gameObject);
-            m_Board[i_Point.Column, i_Point.Row] = i_BoardNumber;
+            m_Board[(int)i_Point.Column, (int)i_Point.Row] = i_BoardNumber;
 
             return gameObject;
         }

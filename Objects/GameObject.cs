@@ -35,7 +35,7 @@ namespace Objects
         public SizeDTO m_Size = GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; } 
 
-        public int Velocity { get; set; } = 1;
+        public int Velocity { get; set; } = 120;
 
         private Rect m_Bounds = new Rect();
 
@@ -161,8 +161,8 @@ namespace Objects
         private void updatePosition(double i_TimeElapsed)
         {
             Point newPoint = PointOnScreen;
-            newPoint.Column += (int)((Direction.ColumnOffset * Velocity) * i_TimeElapsed);
-            newPoint.Row += (int)((Direction.RowOffset * Velocity) * i_TimeElapsed);
+            newPoint.Column += ((Direction.ColumnOffset * Velocity) * i_TimeElapsed/1000);
+            newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed/1000);
             PointOnScreen = newPoint;
         }
 
