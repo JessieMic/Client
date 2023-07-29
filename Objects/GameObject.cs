@@ -33,9 +33,9 @@ namespace Objects
         public eButton ButtonType { get; set; }
         public string Text { get; set; }
         public SizeDTO m_OurSize = GameSettings.m_MovementButtonOurSize;
-        public int ID { get; set; }
+        public int ID { get; set; } 
 
-        public int Velocity { get; set; } = 150;
+        public int Velocity { get; set; } = 1;
 
         private Rect m_Bounds = new Rect();
 
@@ -160,8 +160,10 @@ namespace Objects
 
         private void updatePosition(double i_TimeElapsed)
         {
-            PointOnScreen = new Point((int)((Direction.ColumnOffset * Velocity) * i_TimeElapsed),
-                (int)((Direction.RowOffset * Velocity) * i_TimeElapsed));
+            Point newPoint = PointOnScreen;
+            newPoint.Column += (int)((Direction.ColumnOffset * Velocity) * i_TimeElapsed);
+            newPoint.Row += (int)((Direction.RowOffset * Velocity) * i_TimeElapsed);
+            PointOnScreen = newPoint;
         }
 
         public void MoveToPointInGrided(Point i_Point)

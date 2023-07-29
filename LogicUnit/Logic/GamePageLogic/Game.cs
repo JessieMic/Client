@@ -197,7 +197,7 @@ namespace LogicUnit
         {
             SendServerUpdate();
             GetServerUpdate();
-            updatePosition(m_GameStopwatch.Elapsed.TotalSeconds);
+            updatePosition(m_GameStopwatch.Elapsed.Seconds);
         }
 
         //private async void calculateAvgPing()
