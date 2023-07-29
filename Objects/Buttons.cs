@@ -86,7 +86,7 @@ namespace Objects
             else
             {
                 values.Column = GameSettings.m_SpacingAroundButtons;
-                values.Row = m_ClientScreenOurSize.m_Height*GameSettings.m_GameBoardGridSize+GameSettings.m_SpacingAroundButtons;
+                values.Row = m_ClientScreenOurSize.Height*GameSettings.m_GameBoardGridSize+GameSettings.m_SpacingAroundButtons;
             }
 
             return values;
@@ -192,34 +192,34 @@ namespace Objects
                 }
                 else if (i_Type == eButton.PauseMenu)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2, 0);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 2, 0);
                 }
             }
             else
             {
                 if (i_Type == eButton.Up)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2, 0);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 2, 0);
                 }
                 else if (i_Type == eButton.Down)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2, 2);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 2, 2);
                 }
                 else if (i_Type == eButton.Right)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 1, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 1, 1);
                 }
                 else if(i_Type == eButton.Left)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 3, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 3, 1);
                 }
                 else if (i_Type == eButton.ButtonA)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 6, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 6, 1);
                 }
                 else if (i_Type == eButton.ButtonB)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 8, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 8, 1);
                 }
                 else if (i_Type == eButton.PauseMenu)
                 {

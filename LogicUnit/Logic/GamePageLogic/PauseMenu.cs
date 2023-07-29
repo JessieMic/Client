@@ -21,7 +21,7 @@ namespace LogicUnit.Logic.GamePageLogic
             Point menuPoint = getPauseMenuBackgroundPoint();
 
             pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", menuPoint, false, new Point(0, 0));
-            pauseMenu.m_OurSize = GameSettings.m_PauseMenuOurSize;
+            pauseMenu.m_Size = GameSettings.m_PauseMenuOurSize;
             m_PauseMenuIDList.Add(pauseMenu.ID);
             o_GameObejectsToAdd.Add(pauseMenu);
             o_GameObejectsToAdd.AddRange(GetButtons(i_Buttons, menuPoint));
@@ -44,8 +44,8 @@ namespace LogicUnit.Logic.GamePageLogic
             SizeDTO screenSize = m_gameInformation.m_ClientScreenDimension.m_OurSize;
 
             return new Point(
-                (screenSize.m_Width / 2) - 3 * GameSettings.m_GameBoardGridSize,
-                (int)((screenSize.m_Height / 2) - 2.5 * GameSettings.m_GameBoardGridSize));
+                (screenSize.Width / 2) - 3 * GameSettings.m_GameBoardGridSize,
+                (int)((screenSize.Height / 2) - 2.5 * GameSettings.m_GameBoardGridSize));
         }
     }
 }

@@ -74,9 +74,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             Point point;
             Food food = new Food();
 
-            for (int col = 0; col < m_BoardOurSize.m_Width; col++)
+            for (int col = 0; col < m_BoardOurSize.Width; col++)
             {
-                for (int row = 0; row < m_BoardOurSize.m_Height; row++)
+                for (int row = 0; row < m_BoardOurSize.Height; row++)
                 {
                     if (m_Board[col, row] == 0)
                     {
@@ -98,12 +98,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
             if (playerCol == eColumnPosition.RightColumn)
             {
-                point.Column = m_BoardOurSize.m_Width - 2;
+                point.Column = m_BoardOurSize.Width - 2;
             }
 
             if (playerRow == eRowPosition.LowerRow)
             {
-                point.Row = m_BoardOurSize.m_Height - 2;
+                point.Row = m_BoardOurSize.Height - 2;
             }
 
             GameObject gameObject = addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player, "body");

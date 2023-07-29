@@ -143,7 +143,7 @@ namespace LogicUnit
         public void InitializeGame()
         {
             m_BoardOurSize = m_ScreenMapping.m_TotalScreenOurSize;
-            m_Board = new int[m_BoardOurSize.m_Width, m_BoardOurSize.m_Height];
+            m_Board = new int[m_BoardOurSize.Width, m_BoardOurSize.Height];
             m_CurrentPlayerData = new PlayerData(m_Player.ButtonThatPlayerPicked);
             m_CurrentPlayerData.Button = -1;
 
@@ -320,8 +320,8 @@ namespace LogicUnit
         {
             bool isPointOnTheBoard = true;
 
-            if (i_Point.Row < 0 || i_Point.Column < 0 || i_Point.Column > m_BoardOurSize.m_Width
-               || i_Point.Row > m_BoardOurSize.m_Height)
+            if (i_Point.Row < 0 || i_Point.Column < 0 || i_Point.Column > m_BoardOurSize.Width
+               || i_Point.Row > m_BoardOurSize.Height)
             {
                 isPointOnTheBoard = false;
             }
@@ -335,8 +335,8 @@ namespace LogicUnit
 
         protected bool isPointOnBoard(Point i_Point)
         {
-            bool isPointOnTheBoard = !(i_Point.Row < 0 || i_Point.Row >= m_BoardOurSize.m_Height || i_Point.Column < 0
-                                       || i_Point.Column >= m_BoardOurSize.m_Width);
+            bool isPointOnTheBoard = !(i_Point.Row < 0 || i_Point.Row >= m_BoardOurSize.Height || i_Point.Column < 0
+                                       || i_Point.Column >= m_BoardOurSize.Width);
 
             return isPointOnTheBoard;
         }

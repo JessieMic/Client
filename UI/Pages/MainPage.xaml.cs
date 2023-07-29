@@ -20,8 +20,8 @@ namespace UI
         {
 
             base.OnSizeAllocated(i_Width, i_Height);
-            m_GameInformation.m_ClientScreenDimension.m_OurSize.m_Height = (int)i_Height;
-            m_GameInformation.m_ClientScreenDimension.m_OurSize.m_Width = (int)i_Width;
+            m_GameInformation.m_ClientScreenDimension.m_OurSize.Height = (int)i_Height;
+            m_GameInformation.m_ClientScreenDimension.m_OurSize.Width = (int)i_Width;
            // m_pageLogic.SetPlayerScreenSize((int)i_Width, (int)i_Height);
         }
 

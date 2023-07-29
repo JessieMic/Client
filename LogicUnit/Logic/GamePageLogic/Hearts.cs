@@ -43,7 +43,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 GameObject newHeart = new GameObject();
                 newHeart.Initialize(eScreenObjectType.Image, 0, "heart.png",
                     getHeartPoint(i), true, getValuesToAdd());
-                newHeart.m_OurSize = GameSettings.m_HeartSize;
+                newHeart.m_Size = GameSettings.m_HeartSize;
 
                 Point a = newHeart.PointOnScreen;
 
@@ -69,7 +69,7 @@ namespace LogicUnit.Logic.GamePageLogic
 
             if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                heartPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2 - heartNumber, 2);
+                heartPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 2 - heartNumber, 2);
             }
 
             return heartPoint;
@@ -87,7 +87,7 @@ namespace LogicUnit.Logic.GamePageLogic
             else
             {
                 values.Column = GameSettings.m_SpacingAroundButtons;
-                values.Row = m_ClientScreenOurSize.m_Height * GameSettings.m_GameBoardGridSize + GameSettings.m_SpacingAroundButtons;
+                values.Row = m_ClientScreenOurSize.Height * GameSettings.m_GameBoardGridSize + GameSettings.m_SpacingAroundButtons;
             }
 
             return values;

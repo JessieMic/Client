@@ -184,7 +184,7 @@ namespace LogicUnit
                 "TryPickAScreenSpot",
                 m_Player.Name,
                 i_TextOnButton,
-                m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Width, m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Height);
+                m_GameInformation.m_ClientScreenDimension.SizeDTO.Width, m_GameInformation.m_ClientScreenDimension.SizeDTO.Height);
         }
 
         public async Task TryToDeselectScreenSpot(string i_TextOnButton)

@@ -32,7 +32,7 @@ namespace Objects
         public Direction Direction { get; set; } = Direction.Stop;
         public eButton ButtonType { get; set; }
         public string Text { get; set; }
-        public SizeDTO m_OurSize = GameSettings.m_MovementButtonOurSize;
+        public SizeDTO m_Size = GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; } 
 
         public int Velocity { get; set; } = 1;
@@ -98,7 +98,7 @@ namespace Objects
             }
         }
 
-        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, bool i_IsGrided, SizeDTO i_OurSize, Point i_ValuesToAdd)
+        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, bool i_IsGrided, SizeDTO i_Size, Point i_ValuesToAdd)
         {
             ButtonType = i_ButtonType;
             ScreenObjectType = eScreenObjectType.Button;
@@ -107,7 +107,7 @@ namespace Objects
             PointOnScreen=point;
             ImageSource=i_Png;
             ID=GameSettings.getID();
-            m_OurSize = i_OurSize;
+            m_Size = i_Size;
         }
 
         //public void set(GameObject i_GameObject)
@@ -119,7 +119,7 @@ namespace Objects
         //    ScreenObjectType = i_GameObject.ScreenObjectType;
         //    m_GameBoardGridSize = i_GameObject.m_GameBoardGridSize;
         //    m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
-        //    m_OurSize = i_GameObject.m_OurSize;
+        //    m_Size = i_GameObject.m_Size;
         //    ID = i_GameObject.ID;
         //    m_Fade = i_GameObject.m_Fade;
         //    m_Rotatation = i_GameObject.m_Rotatation;
@@ -165,6 +165,16 @@ namespace Objects
             newPoint.Row += (int)((Direction.RowOffset * Velocity) * i_TimeElapsed);
             PointOnScreen = newPoint;
         }
+
+        public Rect Rect
+        {
+            get
+            {
+                return new Rect(PointOnScreen.Row,PointOnScreen.Column,
+                m_Size.Width,m_Size.Height);
+            }
+        }
+    
 
         public void MoveToPointInGrided(Point i_Point)
         {

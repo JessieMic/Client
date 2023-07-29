@@ -158,14 +158,14 @@
 //            }
 //            else
 //            {
-//                point.Column = m_BoardOurSize.m_Width - 4;
-//                until = m_BoardOurSize.m_Width - 1;
+//                point.Column = m_BoardOurSize.Width - 4;
+//                until = m_BoardOurSize.Width - 1;
 //                inc = 1;
 //            }
 
 //            if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Row == eRowPosition.LowerRow)
 //            {
-//                point.Row = m_BoardOurSize.m_Height - 2;
+//                point.Row = m_BoardOurSize.Height - 2;
 //            }
 
 //            int i = 0;
@@ -217,14 +217,14 @@
 //        //    }
 //        //    else
 //        //    {
-//        //        point.Column = m_BoardOurSize.m_Width - 4;
-//        //        until = m_BoardOurSize.m_Width - 1;
+//        //        point.Column = m_BoardOurSize.Width - 4;
+//        //        until = m_BoardOurSize.Width - 1;
 //        //        inc = 1;
 //        //    }
 
 //        //    if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Row == eRowPosition.LowerRow)
 //        //    {
-//        //        point.Row = m_BoardOurSize.m_Height - 2;
+//        //        point.Row = m_BoardOurSize.Height - 2;
 //        //    }
 
 //        //    int i = 0;
@@ -308,9 +308,9 @@
 //        {
 //            List<Point> res = new List<Point>();
 
-//            for (int col = 0; col < m_BoardOurSize.m_Width; col++)
+//            for (int col = 0; col < m_BoardOurSize.Width; col++)
 //            {
-//                for (int row = 0; row < m_BoardOurSize.m_Height; row++)
+//                for (int row = 0; row < m_BoardOurSize.Height; row++)
 //                {
 //                    if (m_Board[col, row] == 0)
 //                    {
@@ -390,9 +390,9 @@
 //            Point point;
 
 
-//            for (int col = 0; col < m_BoardOurSize.m_Width; col++)
+//            for (int col = 0; col < m_BoardOurSize.Width; col++)
 //            {
-//                for (int row = 0; row < m_BoardOurSize.m_Height; row++)
+//                for (int row = 0; row < m_BoardOurSize.Height; row++)
 //                {
 //                    if (m_Board[col, row] == 0)
 //                    {

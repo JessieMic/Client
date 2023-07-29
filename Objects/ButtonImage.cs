@@ -34,10 +34,10 @@ namespace Objects
             m_Button.ClassId = i_GameObject.ButtonType.ToString();
             m_Button.ZIndex = -1;
             m_Button.Rotation = i_GameObject.Rotatation;
-            if (i_GameObject.m_OurSize.m_Width != 0)
+            if (i_GameObject.m_Size.Width != 0)
             {
-                m_Button.WidthRequest = i_GameObject.m_OurSize.m_Width;
-                m_Button.HeightRequest = i_GameObject.m_OurSize.m_Height;
+                m_Button.WidthRequest = i_GameObject.m_Size.Width;
+                m_Button.HeightRequest = i_GameObject.m_Size.Height;
             }
 
             //Text = i_GameObject.Text;
