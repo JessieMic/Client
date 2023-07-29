@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Objects
 {
     [Serializable]
-    public class Point
+    public struct Point
     {
         public int Column { get; set; }
         public int Row { get; set; }

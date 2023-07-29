@@ -29,7 +29,7 @@ namespace Objects
                     button,
                     generatePngString(button),
                     getButtonPoint(button),
-                    GameSettings.m_GameBoardGridSize,
+                    true,
                     m_MovementButtonOurSize,
                     getValuesToAdd());
 
@@ -103,7 +103,7 @@ namespace Objects
                     button,
                     "pause_menu_option_button.png",
                     getPauseMenuButtonPoint(button,i_MenuPoint),
-                    1,
+                    true,
                     GameSettings.m_PauseMenuButtonOurSize, new Point(0, 0));
                 newButton.Text = button.ToString();
 

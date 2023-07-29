@@ -56,7 +56,8 @@ namespace LogicUnit
             SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenOurSize.m_Width * m_ScreenMapping.m_GameBoardGridSize,
                 m_ScreenMapping.m_TotalScreenOurSize.m_Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
-            background.Initialize(eScreenObjectType.Image, 0, "snakebackground.png", new Point(0, 0), actualOurSize.m_Height, m_ScreenMapping.m_ValueToAdd);
+            background.GameBoardGridSize = actualOurSize.m_Height;
+            background.Initialize(eScreenObjectType.Image, 0, "snakebackground.png", new Point(0, 0),true, m_ScreenMapping.m_ValueToAdd);
             background.m_OurSize = actualOurSize;
             m_GameObjectsToAdd.Add(background);
         }
@@ -71,7 +72,8 @@ namespace LogicUnit
             p.Row -= 5;
             actualOurSize.m_Height += 10;
             actualOurSize.m_Width += 10;
-            background.Initialize(eScreenObjectType.Image, 0, "boarder.png", new Point(0, 0), actualOurSize.m_Height,p);
+            background.GameBoardGridSize = actualOurSize.m_Height;
+            background.Initialize(eScreenObjectType.Image, 0, "boarder.png", new Point(0, 0), true,p);
             background.m_OurSize = actualOurSize;
             m_GameObjectsToAdd.Add(background);
             setb();
@@ -87,7 +89,8 @@ namespace LogicUnit
             p.Row -= 2;
             actualOurSize.m_Height += 5;
             actualOurSize.m_Width += 5;
-            background.Initialize(eScreenObjectType.Image, 0, "boarder2.png", new Point(0, 0), actualOurSize.m_Height, p);
+            background.GameBoardGridSize = actualOurSize.m_Height;
+            background.Initialize(eScreenObjectType.Image, 0, "boarder2.png", new Point(0, 0), true, p);
             background.m_OurSize = actualOurSize;
             m_GameObjectsToAdd.Add(background);
         }
@@ -100,11 +103,11 @@ namespace LogicUnit
             if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 point.SetAndGetPoint(0, 0);
-                UIBackground.SetImageDirection(0,Direction.Left);
+                UIBackground.SetImageDirection(Direction.Left);
             }
             SizeDTO actualOurSize = new SizeDTO(m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Width+5,
                 GameSettings.m_UIBackgroundHeight);
-            UIBackground.Initialize(eScreenObjectType.Image, 0, "uibackground.png", point, GameSettings.m_GameBoardGridSize, new Point(0,0));
+            UIBackground.Initialize(eScreenObjectType.Image, 0, "uibackground.png", point, true, new Point(0,0));
             UIBackground.m_OurSize = actualOurSize;
             m_GameObjectsToAdd.Add(UIBackground);
         }

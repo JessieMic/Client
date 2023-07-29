@@ -17,9 +17,8 @@ namespace Objects
         private Player m_Player = Player.Instance;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<ScreenDimension> m_ScreenInfoOfAllPlayers = new List<ScreenDimension>();
+        public Point PointValuesToAddToScreen { get; set; } = new Point();
         public string[] m_NamesOfAllPlayers;
-
-
 
         private static readonly object s_InstanceLock = new object();
 

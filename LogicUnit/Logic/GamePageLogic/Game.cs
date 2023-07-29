@@ -81,7 +81,8 @@ namespace LogicUnit
         public bool m_NewButtonPressed = false;
         private int i_AvgPing = 0;
         public int m_LoopNumber = 0;
-
+        public List<GameObject> m_MoveableGameObjects = new List<GameObject>();
+        private const double J_DesiredFrameTime = 1 / 15;
         /*TODO:
          * create different thread for server updates
          * the server will update an array named ServerInput that is a global variable
@@ -146,29 +147,8 @@ namespace LogicUnit
             SetGameScreen();
         }
 
-        public void GameLoop()
-        {
-            //calculateAvgPing();
-            m_LoopStopwatch.Start();
-            m_GameStopwatch.Start();
-            while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
-            {
-                m_LoopStopwatch.Restart();
-                if (m_GameStatus == eGameStatus.Running)
-                {
-                    updateGame();
-                    Draw();
-                    if (k_DesiredFrameTime > m_LoopStopwatch.Elapsed.Seconds)
-                    {
-                        Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-                    }
-                }
-            }
-        }
-
         //public void GameLoop()
         //{
-        //    //calculateAvgPing();
         //    m_LoopStopwatch.Start();
         //    m_GameStopwatch.Start();
         //    while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
@@ -177,7 +157,7 @@ namespace LogicUnit
         //        if (m_GameStatus == eGameStatus.Running)
         //        {
         //            updateGame();
-        //            Draw();
+        //            //Draw();
         //            if (k_DesiredFrameTime > m_LoopStopwatch.Elapsed.Seconds)
         //            {
         //                Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
@@ -185,25 +165,64 @@ namespace LogicUnit
         //        }
         //    }
         //}
-        
-        private async void calculateAvgPing()
+
+        public void GameLoop()
         {
-            for(int i = 0; i < 4; i++)
+            m_GameStopwatch.Start();
+            while (m_GameStatus == eGameStatus.Running) //(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
             {
-                DateTime dateTimeNow = DateTime.Now;
-                await r_ConnectionToServer.InvokeAsync<DateTime>(
-                                     "Ping");
-                i_AvgPing = (DateTime.Now.Millisecond - dateTimeNow.Millisecond) / (i+1);
-                Thread.Sleep(250);
+                m_GameStopwatch.Start();
+                m_gameObjectsToUpdate = new List<GameObject>(); 
+                m_GameObjectsToAdd = new List<GameObject>();
+                updateGame();
+
+                //while( m_GapInFrames > 0)
+                //{
+                //    updateGame();
+                //    m_GapInFrames--;
+                //}
+
+                Draw();
+                Thread.Sleep(70);
+                //m_GapInFrames =(int)((m_GameStopwatch.Elapsed.Seconds - J_DesiredFrameTime) / J_DesiredFrameTime);
+
+                //if (m_GapInFrames < 0)
+                //{
+                //    Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
+                //}
             }
         }
 
-        protected virtual void Draw()
+        private void updateGame()
         {
-            throw new NotImplementedException();
+            SendServerUpdate();
+            GetServerUpdate();
+            updatePosition(m_GameStopwatch.Elapsed.TotalSeconds);
         }
 
-        protected virtual async void updateGame()
+        //private async void calculateAvgPing()
+        //{
+        //    for(int i = 0; i < 4; i++)
+        //    {
+        //        DateTime dateTimeNow = DateTime.Now;
+        //        await r_ConnectionToServer.InvokeAsync<DateTime>(
+        //                             "Ping");
+        //        i_AvgPing = (DateTime.Now.Millisecond - dateTimeNow.Millisecond) / (i+1);
+        //        Thread.Sleep(250);
+        //    }
+        //}
+
+        protected virtual void Draw()
+        {
+            if (m_GameObjectsToAdd.Count != 0)
+            {
+                OnAddScreenObjects();
+            }
+
+            OnUpdateScreenObject();
+        }
+
+        private async void SendServerUpdate()
         {
             if (m_NewButtonPressed)
             {
@@ -220,7 +239,10 @@ namespace LogicUnit
 
                 m_NewButtonPressed = false;
             }
+        }
 
+        private async void GetServerUpdate()
+        {
             //get data from the server
             int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
             for (int i = 0; i < 4; i++)
@@ -290,10 +312,19 @@ namespace LogicUnit
             return isPointOnTheBoard;
         }
 
-        protected virtual void ChangeDirection(Direction i_Direction, int i_Player, int i_LoopNumber)
+        protected virtual void ChangeDirection(Direction i_Direction, int i_GameObject, int i_LoopNumber)
         {
-
+            m_MoveableGameObjects[i_GameObject - 1].Direction = i_Direction;
         }
+
+        protected virtual void updatePosition(double i_TimeElapsed)
+        {
+            foreach(var gameObject in m_MoveableGameObjects)
+            {
+                gameObject.Update(i_TimeElapsed);
+            }
+        }
+
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player, Point i_Point)
         {
 
@@ -329,12 +360,12 @@ namespace LogicUnit
             //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
         }
 
-        protected GameObject addGameBoardObject_(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
+        protected GameObject addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
         {
             string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
             GameObject gameObject = new GameObject();
 
-            gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, m_ScreenMapping.m_GameBoardGridSize, m_ScreenMapping.m_ValueToAdd);
+            gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, true, m_ScreenMapping.m_ValueToAdd);
 
             m_GameObjectsToAdd.Add(gameObject);
             m_Board[i_Point.Column, i_Point.Row] = i_BoardNumber;
@@ -356,9 +387,10 @@ namespace LogicUnit
             return png.ToLower();
         }
 
-        public virtual void RunGame()
+        public void RunGame()
         {
-
+            Thread newThread = new(GameLoop) { Name = "SnakeLoop" };
+            newThread.Start();
         }
         protected virtual void OnAddScreenObjects()
         {

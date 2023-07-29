@@ -36,6 +36,18 @@ namespace Objects
             //    screenObject.PointOnScreen.Row, 100);
         }
 
+        public void Update(GameObject i_GameObject)
+        {
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
+            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            if (m_Source != i_GameObject.ImageSource)
+            {
+               // m_Image.Source = i_GameObject.ImageSource;
+            }
+            //m_Image.ZIndex = -1;
+            m_Image.Rotation = i_GameObject.Rotatation;
+        }
+
         public Microsoft.Maui.Controls.Image GetImage()
         {
             return m_Image;

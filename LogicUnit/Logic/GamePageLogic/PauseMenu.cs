@@ -20,9 +20,9 @@ namespace LogicUnit.Logic.GamePageLogic
             GameObject pauseMenu = new GameObject();
             Point menuPoint = getPauseMenuBackgroundPoint();
 
-            pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", menuPoint, 1, new Point(0, 0));
+            pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", menuPoint, false, new Point(0, 0));
             pauseMenu.m_OurSize = GameSettings.m_PauseMenuOurSize;
-            m_PauseMenuIDList.Add(pauseMenu.m_ID[0]);
+            m_PauseMenuIDList.Add(pauseMenu.ID);
             o_GameObejectsToAdd.Add(pauseMenu);
             o_GameObejectsToAdd.AddRange(GetButtons(i_Buttons, menuPoint));
         }
@@ -33,7 +33,7 @@ namespace LogicUnit.Logic.GamePageLogic
 
             foreach(var menuButton in menuButtons)
             {
-                m_PauseMenuIDList.Add(menuButton.m_ID[0]);
+                m_PauseMenuIDList.Add(menuButton.ID);
             }
 
             return menuButtons;

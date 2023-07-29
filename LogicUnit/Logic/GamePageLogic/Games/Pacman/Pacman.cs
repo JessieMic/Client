@@ -19,6 +19,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
         }
 
+
+        protected virtual void ChangeDirection(Direction i_Direction, int i_Player, int i_LoopNumber)
+        {
+            //m_Pacman.ChangePosition();
+        }
+
         //protected override void OBgameLoop() // copied from snake
         //{
         //    m_gameObjectsToUpdate = new List<GameObject>(); // -> objects that need to be updated (pacman that moves)
@@ -51,10 +57,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         protected override void AddGameObjects()
         {
-            
+            m_Pacman = new PacmanObject();
+            m_GameObjectsToAdd.Add(m_Pacman);
+            m_MoveableGameObjects.Add(m_Pacman);
             for (int i = 1; i < m_GameInformation.AmountOfPlayers; i++)
             {
-                addPlayerObjects(i);
+                //addPlayerObjects(i);
             }
 
             //addFood();
@@ -73,7 +81,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     if (m_Board[col, row] == 0)
                     {
                         //point = new Point(col,row);
-                        //food.set(addGameBoardObject_(eScreenObjectType.Object, point, 1,
+                        //food.set(addGameBoardObject(eScreenObjectType.Object, point, 1,
                         //    (int)eBoardObjectPacman.Food, eBoardObjectPacman.Food.ToString()));
                         ////m_Food.Add(food);
                         //m_Food.Add(point, food);
@@ -98,7 +106,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 point.Row = m_BoardOurSize.m_Height - 2;
             }
 
-            GameObject gameObject = addGameBoardObject_(eScreenObjectType.Player, point, i_Player, i_Player, "body");
+            GameObject gameObject = addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player, "body");
             gameObject.FadeWhenObjectIsRemoved();
 
             if (i_Player % 2 == 1)
@@ -106,6 +114,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 PacmanObject pacman = new PacmanObject();
                 m_GameObjectsToAdd.Add(pacman);
                 m_AllPlayers.Add(pacman);
+                m_MoveableGameObjects.Add(pacman);
             }
             else
             {

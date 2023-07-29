@@ -80,13 +80,13 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
         {
             loopLabel.Text = m_Game.m_LoopNumber.ToString();
-            foreach (GameObject screenObject in i_ObjectUpdates)
+            foreach (GameObject screenObject in m_Game.m_MoveableGameObjects)
             { 
                 if (getObjectTypeFromID(screenObject.ID) == eScreenObjectType.Image)
                 {
                     if (m_GameImages.ContainsKey(screenObject.ID))
                     {
-                        m_GameImages[screenObject.ID].SetImage(screenObject);
+                        m_GameImages[screenObject.ID].Update(screenObject);
                     }
                 }
             }

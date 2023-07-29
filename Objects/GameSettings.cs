@@ -19,6 +19,7 @@ namespace Objects
         public static SizeDTO m_PauseMenuButtonOurSize = new SizeDTO(m_GameBoardGridSize*5, m_GameBoardGridSize);
         public const int ControllBoardTotalHeight = m_GameBoardGridSize * 3 + 2 * m_SpacingAroundButtons;
         public static SizeDTO UIBackgroundSize = new SizeDTO(3000, ControllBoardTotalHeight);
+        
 
         public static int getID()
         {

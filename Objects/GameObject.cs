@@ -24,8 +24,8 @@ namespace Objects
         public string ImageSource { get; set; }
         public int ObjectNumber { get; set; }
         public eScreenObjectType ScreenObjectType { get; set; }
-        private int GameBoardGridSize { get; set; }
-
+        public int GameBoardGridSize { get; set; } = GameSettings.m_GameBoardGridSize;
+        protected GameInformation m_GameInformation = GameInformation.Instance;
         private Point m_ValuesToAdd;
         //protected int m_Velocity { get; set; } = 1;
         public bool IsObjectMoving { get; set; } = false;
@@ -35,20 +35,20 @@ namespace Objects
         public SizeDTO m_OurSize = GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; }
 
-        public int Velocity { get; set; } 
+        public int Velocity { get; set; } = 150;
 
         private Rect m_Bounds = new Rect();
 
         public bool Fade { get; set; } = false;
 
-        public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, int i_GameBoardGridSize, Point i_ValuesToAdd)
+        public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, bool i_IsGrid, Point i_ValuesToAdd)
         {
             ObjectNumber = i_ObjectNumber;
             ScreenObjectType = i_ScreenObjectType;
-            GameBoardGridSize = i_GameBoardGridSize;
             m_ValuesToAdd = i_ValuesToAdd;
             //PointOnGrid=i_Point;
-            Point point = getScreenPoint(i_Point);
+            Point point = getScreenPoint(i_Point, i_IsGrid);
+            PointOnScreen = point;
             ImageSource=i_Png;
             ID=GameSettings.getID();
             m_Bounds = new Rect(
@@ -98,14 +98,12 @@ namespace Objects
             }
         }
 
-        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, int i_GameBoardGridSize, SizeDTO i_OurSize, Point i_ValuesToAdd)
+        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, bool i_IsGrided, SizeDTO i_OurSize, Point i_ValuesToAdd)
         {
             ButtonType = i_ButtonType;
             ScreenObjectType = eScreenObjectType.Button;
-            GameBoardGridSize = i_GameBoardGridSize;
             m_ValuesToAdd = i_ValuesToAdd;
-            //PointOnGrid=i_Point;
-            Point point = getScreenPoint(i_Point);
+            Point point = getScreenPoint(i_Point,i_IsGrided);
             PointOnScreen=point;
             ImageSource=i_Png;
             ID=GameSettings.getID();
@@ -134,13 +132,19 @@ namespace Objects
             Fade = true;
         }
 
-        private Point getScreenPoint(Point i_Point)
+        private Point getScreenPoint(Point i_Point,bool i_IsGrided)
         {
             Point point = new Point();
-            point = i_Point;
+            
+            if(!i_IsGrided)
+            {
+                GameBoardGridSize = 1;
+            }
 
+            point = i_Point;
             point.Column = point.Column * GameBoardGridSize + m_ValuesToAdd.Column;
             point.Row = point.Row * GameBoardGridSize + m_ValuesToAdd.Row;
+
             return point;
         }
 
@@ -149,16 +153,21 @@ namespace Objects
         //    return PointOnGrid.Move(Direction);
         //}
 
-        public void Move(float i_TimeElapsed)
+        public void Update(double i_TimeElapsed)
         {
-            PointOnScreen.Column += (int)((Direction.ColumnOffset * Velocity) * i_TimeElapsed);
-            PointOnScreen.Row += (int)((Direction.RowOffset * Velocity) * i_TimeElapsed);
+            updatePosition(i_TimeElapsed);
         }
 
-        public void MoveToPoint(Point i_Point)
+        private void updatePosition(double i_TimeElapsed)
+        {
+            PointOnScreen = new Point((int)((Direction.ColumnOffset * Velocity) * i_TimeElapsed),
+                (int)((Direction.RowOffset * Velocity) * i_TimeElapsed));
+        }
+
+        public void MoveToPointInGrided(Point i_Point)
         {
             //PointOnGrid = i_Point;
-            Point point = getScreenPoint(i_Point);
+            Point point = getScreenPoint(i_Point,true);
             PointOnScreen = point;
         }
     }

@@ -46,6 +46,7 @@ namespace LogicUnit
         {
             calculateWidthScreenValuesToAdd();
             calculateHeightScreenValuesToAdd();
+            m_GameInformation.PointValuesToAddToScreen = m_ValueToAdd;
         }
 
         private void calculateWidthScreenValuesToAdd()
