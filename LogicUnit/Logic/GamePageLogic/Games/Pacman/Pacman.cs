@@ -9,7 +9,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
     public class Pacman : Game
     {
         private PacmanObject m_Pacman;
-        private List<GameObject> m_AllPlayers = new List<GameObject>();
+        private List<GameObject> m_Ghosts = new List<GameObject>();
 
         public Pacman()
         {
@@ -59,7 +59,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             m_Pacman = new PacmanObject();
             m_GameObjectsToAdd.Add(m_Pacman);
-            m_MoveableGameObjects.Add(m_Pacman);
+            m_Ghosts.Add(new GhostObject());
+            m_GameObjectsToAdd.Add(m_Ghosts[0]);
+            m_GameObjectsToAdd.Add(new Boarder(new Point(5,1)));
+            m_GameObjectsToAdd.Add(new Boarder(new Point(5, 3)));
             for (int i = 1; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 //addPlayerObjects(i);
@@ -74,9 +77,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             Point point;
             Food food = new Food();
 
-            for (int col = 0; col < m_BoardOurSize.Width; col++)
+            for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
             {
-                for (int row = 0; row < m_BoardOurSize.Height; row++)
+                for (int row = 0; row < m_BoardSizeByGrid.Height; row++)
                 {
                     if (m_Board[col, row] == 0)
                     {
@@ -98,12 +101,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
             if (playerCol == eColumnPosition.RightColumn)
             {
-                point.Column = m_BoardOurSize.Width - 2;
+                point.Column = m_BoardSizeByGrid.Width - 2;
             }
 
             if (playerRow == eRowPosition.LowerRow)
             {
-                point.Row = m_BoardOurSize.Height - 2;
+                point.Row = m_BoardSizeByGrid.Height - 2;
             }
 
             GameObject gameObject = addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player, "body");
@@ -111,10 +114,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
             if (i_Player % 2 == 1)
             {
-                PacmanObject pacman = new PacmanObject();
-                m_GameObjectsToAdd.Add(pacman);
-                m_AllPlayers.Add(pacman);
-                m_MoveableGameObjects.Add(pacman);
+                //PacmanObject pacman = new PacmanObject();
+                //m_GameObjectsToAdd.Add(pacman);
+                //m_AllPlayers.Add(pacman);
+                //m_MoveableGameObjects.Add(pacman);
             }
             else
             {
@@ -175,7 +178,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
             //OnDeleteGameObject(m_PacmanPlayers[i_Player - 1]);
-            OnDeleteGameObject(m_AllPlayers[i_Player - 1]);
+            //OnDeleteGameObject(m_AllPlayers[i_Player - 1]);
             PlayerLostALife(i_Player);
         }
 

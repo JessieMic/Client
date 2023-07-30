@@ -53,19 +53,24 @@ namespace LogicUnit
         protected void setGameBackground()
         {
             setBoarder();
-            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenOurSize.Width * m_ScreenMapping.m_GameBoardGridSize,
-                m_ScreenMapping.m_TotalScreenOurSize.Height * m_ScreenMapping.m_GameBoardGridSize);
+            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
+                m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             background.GameBoardGridSize = actualOurSize.Height;
             background.Initialize(eScreenObjectType.Image, 0, "snakebackground.png", new Point(0, 0),true, m_ScreenMapping.m_ValueToAdd);
             background.m_Size = actualOurSize;
             m_GameObjectsToAdd.Add(background);
+            m_GameInformation.BackgroundRect = new Rect(
+                background.PointOnScreen.Column,
+                background.PointOnScreen.Row,
+                actualOurSize.Width,
+                actualOurSize.Height);
         }
 
         void setBoarder()
         {
-            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenOurSize.Width * m_ScreenMapping.m_GameBoardGridSize,
-                m_ScreenMapping.m_TotalScreenOurSize.Height * m_ScreenMapping.m_GameBoardGridSize);
+            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
+                m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             Point p = m_ScreenMapping.m_ValueToAdd;
             p.Column -= 5;
@@ -81,8 +86,8 @@ namespace LogicUnit
 
         void setb()
         {
-            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenOurSize.Width * m_ScreenMapping.m_GameBoardGridSize,
-                m_ScreenMapping.m_TotalScreenOurSize.Height * m_ScreenMapping.m_GameBoardGridSize);
+            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
+                m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             Point p = m_ScreenMapping.m_ValueToAdd;
             p.Column -= 2;

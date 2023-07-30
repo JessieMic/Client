@@ -11,7 +11,7 @@ using Point = Objects.Point;
 
 namespace Objects
 {
-    public class GameObject 
+    public class GameObject : ICollidable
     {
         //public Point PointOnGrid { get; set; }
         public Point PointOnScreen { get; set; }
@@ -19,6 +19,8 @@ namespace Objects
         public int Rotatation { get; set; } = 0;
 
         public int ScaleX { get; set; } = 1;
+
+        public virtual bool IsCollisionDetectionEnabled { get; }
 
         public int ScaleY { get; set; } = 1;
         public string ImageSource { get; set; }
@@ -33,11 +35,11 @@ namespace Objects
         public eButton ButtonType { get; set; }
         public string Text { get; set; }
         public SizeDTO m_Size = GameSettings.m_MovementButtonOurSize;
-        public int ID { get; set; } 
+        public int ID { get; set; }
 
-        public int Velocity { get; set; } = 120;
+        public int Velocity { get; set; } = 120; //120;
 
-        private Rect m_Bounds = new Rect();
+        //private Rect m_Bounds = new Rect();
 
         public bool Fade { get; set; } = false;
 
@@ -51,11 +53,12 @@ namespace Objects
             PointOnScreen = point;
             ImageSource=i_Png;
             ID=GameSettings.getID();
-            m_Bounds = new Rect(
-                point.Column,
-                point.Row,
-                GameSettings.m_GameBoardGridSize,
-                GameSettings.m_GameBoardGridSize);
+            //m_Bounds = new Rect(
+            //    point.Column,
+            //    point.Row,
+            //    GameSettings.m_GameBoardGridSize,
+            //    GameSettings.m_GameBoardGridSize);
+            
         }
 
         public void SetImageDirection(Direction i_Direction)
@@ -132,6 +135,74 @@ namespace Objects
             Fade = true;
         }
 
+        protected void isPointOnBoard(ref Point i_Point)
+        {
+            if(i_Point.Column < m_ValuesToAdd.Column)
+            {
+                i_Point.Column = m_ValuesToAdd.Column;
+            }
+            if(i_Point.Row < m_ValuesToAdd.Row)
+            {
+                i_Point.Row  = m_ValuesToAdd.Row;
+            }
+            if(i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width)
+            {
+                i_Point.Row = m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width;
+            }
+            if(i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height)
+            {
+                i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height;
+            }
+        }
+
+        //protected void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeDTO i_SizeOfSolid)
+        //{
+        //    Point newPoint = new Point();
+        //    if (i_Solid.Bounds.Right > Bounds.Left)//solid on the left
+        //    {
+        //        newPoint.Column = i_Solid.Bounds.
+        //    }
+        //    else if (i_Solid.Bounds.Left < Bounds.Right)
+        //    {
+        //        newPoint.Column = i_SolidRect.Left - m_Size.Width;
+        //    }
+
+        //    PointOnScreen = newPoint;
+        //}
+        protected void collidedWithSolid(Rect i_SolidRect)//(Point i_PointOfSolid,SizeDTO i_SizeOfSolid)
+        {
+            Point newPoint = PointOnScreen;
+            if (Direction == Direction.Left)//solid on the left
+            {
+                newPoint.Column =  (int)(newPoint.Column / GameBoardGridSize) * GameBoardGridSize + m_ValuesToAdd.Column;
+            }
+            else if (Direction == Direction.Right) //solid on the right
+            {
+                newPoint.Column = (int)(newPoint.Column / GameBoardGridSize)* GameBoardGridSize + m_ValuesToAdd.Column;
+                //  + i_SolidRect.X
+                ///  - Bounds.Width; //4 * 45 + m_ValuesToAdd.Column; //;i_SolidRect.X - Bounds.Width + 7;
+            }
+            //Direction = Direction.Stop;
+            PointOnScreen = newPoint;
+        }
+
+        //protected void isPointOnBoard(ref Point i_Point)
+        //{
+        //    bool isPointOnTheBoard = true;
+        //    if ((i_Point.Column < m_ValuesToAdd.Column) || (i_Point.Row < m_ValuesToAdd.Row))
+        //    {
+        //        isPointOnTheBoard = false;
+        //    }
+        //    else if ((i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row) ||
+        //             (i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column))
+        //    {
+        //        isPointOnTheBoard = false;
+        //    }
+
+        //    //eturn isPointOnTheBoard;
+        //}
+
+
         private Point getScreenPoint(Point i_Point,bool i_IsGrided)
         {
             Point point = new Point();
@@ -153,9 +224,25 @@ namespace Objects
         //    return PointOnGrid.Move(Direction);
         //}
 
-        public void Update(double i_TimeElapsed)
+        public virtual void Update(double i_TimeElapsed)
         {
             updatePosition(i_TimeElapsed);
+        }
+
+        public virtual bool CheckCollision(ICollidable i_Source)
+        {
+            bool collided = false;
+            if(i_Source != null)
+            {
+                collided = i_Source.Bounds.IntersectsWith(this.Bounds);
+            }
+
+            return collided;
+        }
+
+        public virtual void Collided(ICollidable i_Collidable)
+        {
+
         }
 
         private void updatePosition(double i_TimeElapsed)
@@ -163,10 +250,12 @@ namespace Objects
             Point newPoint = PointOnScreen;
             newPoint.Column += ((Direction.ColumnOffset * Velocity) * i_TimeElapsed/1000);
             newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed/1000);
+
+            isPointOnBoard(ref newPoint);
             PointOnScreen = newPoint;
         }
 
-        public Rect Rect
+        public Rect Bounds
         {
             get
             {

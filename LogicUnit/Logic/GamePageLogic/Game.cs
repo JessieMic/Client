@@ -31,7 +31,6 @@ namespace LogicUnit
         public event EventHandler<GameObject> GameObjectToDelete;
         public event EventHandler<List<int>> GameObjectsToHide;
         public event EventHandler<List<int>> GameObjectsToShow;
-       // public event PositionChangedEventHandler PositionChanged;
         public Notify GameStart;
 
         //basic game info
@@ -43,7 +42,7 @@ namespace LogicUnit
 
         //Screen info 
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
-        protected SizeDTO m_BoardOurSize = new SizeDTO();
+        protected SizeDTO m_BoardSizeByGrid = new SizeDTO();
 
         //Need to initialize each different game
         protected string m_GameName;
@@ -62,7 +61,6 @@ namespace LogicUnit
         protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
         protected Dictionary<int, Direction> m_PlayersDirectionsFromServer = new Dictionary<int, Direction>();
 
-
         //List for Ui changes
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
@@ -77,16 +75,14 @@ namespace LogicUnit
         private Stopwatch m_ServerStopwatch = new Stopwatch();
         private int m_LastElapsedTime;
 
-
-        private double k_DesiredFrameTime = 0.032;
         protected eButton m_LastClickedButton = 0;
         private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
         private int i_AvgPing = 0;
         public double m_LoopNumber = 0;
-        public List<GameObject> m_MoveableGameObjects = new List<GameObject>();
-        private const double J_DesiredFrameTime = 0.067;
-
+        public GameObject[] m_MoveableGameObjects;
+        private const double J_DesiredFrameTime = 0.032;//0.067;
+        private readonly CollisionManager m_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
 
         /*TODO:
@@ -106,6 +102,7 @@ namespace LogicUnit
                 m_PlayersDataArray[i] = new(i);
             }
 
+            m_MoveableGameObjects = new GameObject[m_GameInformation.AmountOfPlayers];
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_InGameHubAddress)
                 .Build();
@@ -142,8 +139,8 @@ namespace LogicUnit
 
         public void InitializeGame()
         {
-            m_BoardOurSize = m_ScreenMapping.m_TotalScreenOurSize;
-            m_Board = new int[m_BoardOurSize.Width, m_BoardOurSize.Height];
+            m_BoardSizeByGrid= m_ScreenMapping.m_TotalScreenGridSize;
+            m_Board = new int[m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height];
             m_CurrentPlayerData = new PlayerData(m_Player.ButtonThatPlayerPicked);
             m_CurrentPlayerData.Button = -1;
 
@@ -167,7 +164,6 @@ namespace LogicUnit
                 Draw();
 
                 Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-                //m_GameStopwatch.Stop();
                 m_LastElapsedTime = (int) m_GameStopwatch.Elapsed.TotalMilliseconds;
 
             }
@@ -185,7 +181,15 @@ namespace LogicUnit
                
                 for (int i = 0; i < 4; i++)
                 {
-                    m_PlayersDataArray[i].Button = temp[i];
+                    //if(m_PlayersDataArray[i].Button != temp[i])
+                    //{
+                    //    m_PlayersDataArray[i].IsNewButton = true;
+                        m_PlayersDataArray[i].Button = temp[i];
+                    //}
+                    //else
+                    //{
+                    //    m_PlayersDataArray[i].IsNewButton = false;
+                    //}
                     m_PlayersDataArray[i].PlayerPointData = new Point(temp[i + 4], temp[i + 8]);
                 }
                 
@@ -245,9 +249,12 @@ namespace LogicUnit
         private async void GetServerUpdate()
         {
             //get data from the server
-            for (int i = 1; i <= 1; i++)
+            for (int i = 1; i <= 2; i++)
             {
-                ChangeDirection(Direction.getDirection(m_PlayersDataArray[i - 1].Button), i, 1);
+                //if(m_PlayersDataArray[i - 1].IsNewButton)
+                {
+                    ChangeDirection(Direction.getDirection(m_PlayersDataArray[i - 1].Button), i, 1);
+                }
             }
         }
 
@@ -284,8 +291,8 @@ namespace LogicUnit
         {
             bool isPointOnTheBoard = true;
 
-            if (i_Point.Row < 0 || i_Point.Column < 0 || i_Point.Column > m_BoardOurSize.Width
-               || i_Point.Row > m_BoardOurSize.Height)
+            if (i_Point.Row < 0 || i_Point.Column < 0 || i_Point.Column > m_BoardSizeByGrid.Width
+               || i_Point.Row > m_BoardSizeByGrid.Height)
             {
                 isPointOnTheBoard = false;
             }
@@ -299,8 +306,8 @@ namespace LogicUnit
 
         protected bool isPointOnBoard(Point i_Point)
         {
-            bool isPointOnTheBoard = !(i_Point.Row < 0 || i_Point.Row >= m_BoardOurSize.Height || i_Point.Column < 0
-                                       || i_Point.Column >= m_BoardOurSize.Width);
+            bool isPointOnTheBoard = !(i_Point.Row < 0 || i_Point.Row >= m_BoardSizeByGrid.Height || i_Point.Column < 0
+                                       || i_Point.Column >= m_BoardSizeByGrid.Width);
 
             return isPointOnTheBoard;
         }
@@ -315,6 +322,11 @@ namespace LogicUnit
             foreach (var gameObject in m_MoveableGameObjects)
             {
                 gameObject.Update(i_TimeElapsed);
+            }
+
+            foreach (var gameObject in m_MoveableGameObjects)
+            {
+                m_CollisionManager.FindCollisions(gameObject);
             }
         }
 
@@ -391,6 +403,17 @@ namespace LogicUnit
 
         protected virtual void OnAddScreenObjects()
         {
+            foreach(var newObject in m_GameObjectsToAdd)
+            {
+                if(newObject.IsCollisionDetectionEnabled)
+                {
+                    m_CollisionManager.AddObjectToMonitor(newObject);
+                    if(newObject.ScreenObjectType == eScreenObjectType.Player)
+                    {
+                        m_MoveableGameObjects[newObject.ObjectNumber-1] = newObject;
+                    }
+                }
+            }
             AddGameObjectList.Invoke(this, m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
         }
 
@@ -402,15 +425,6 @@ namespace LogicUnit
         protected virtual void OnShowGameObjects(List<int> i_GameObjectsIDToShow)
         {
             GameObjectsToShow.Invoke(this, i_GameObjectsIDToShow);
-        }
-
-        protected virtual void OnPositionChanged()
-        {
-            //if (PositionChanged != null)
-            //{
-            //    PositionChanged(this);
-
-            //}
         }
 
         protected void OnDeleteGameObject(GameObject i_GameObject)
