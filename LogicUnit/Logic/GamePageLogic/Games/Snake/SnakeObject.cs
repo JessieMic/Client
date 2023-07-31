@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Objects;
 using Objects.Enums.BoardEnum;
@@ -9,15 +11,19 @@ using Point = Objects.Point;
 
 namespace LogicUnit.Logic.GamePageLogic.Games.Snake
 {
-    public class SnakeObject : GameObject
+    [Serializable]
+    public class SnakeObject : GameObject 
     {
         private int[,] m_Board;
-        private List<Direction> m_DirectionsForTail = new List<Direction>();
-
+        public List<Direction> m_DirectionsForTail = new List<Direction>();
+        //private List<Ga>
+        //public SnakeObject()
+        //{
+            
+        //}
         public SnakeObject(ref int[,] i_Board)
         {
             m_Board = i_Board;
-           // m_DirectionsForTail.Add(Direction.Right);
         }
 
         public void Eat(GameObject i, Direction i_LastDirection, Direction i_CurrentDirection)
@@ -36,9 +42,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 m_ImageSources[1] = "snakeplayer"+ m_ObjectNumber.ToString() +"body.png";
                 SetImageDirection(1, i_CurrentDirection);
             }
-            
-           // m_DirectionsForTail.Add(i_LastDirection);
-           // m_DirectionsForTail.Add(i_CurrentDirection);
         }
 
         public void Move(Point i_NewPoint, Direction i_LastDirection,Direction i_CurrentDirection)
@@ -109,8 +112,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         private void copyNextImageDirection(int i_Index)
         {
             m_Rotatation[i_Index] = m_Rotatation[i_Index - 1];
-            m_ScaleX[i_Index] = m_ScaleX[i_Index];
-            m_ScaleY[i_Index] = m_ScaleY[i_Index];
         }
 
         private Direction getDirectionOfTurnPart()
@@ -151,13 +152,16 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
         public void addHead(Point i_Point)
         {
             AddPointTop(i_Point);
-            //m_Board[i_Point.m_Column, i_Point.m_Row] = i_Player + 2;
+            m_Board[i_Point.m_Column, i_Point.m_Row] = m_ObjectNumber + 2;
         }
 
         public void removeTail()
         {
             Point tail = getSnakeTail();
-            m_Board[tail.m_Column, tail.m_Row] = 0;
+            if(m_Board[tail.m_Column, tail.m_Row] == m_ObjectNumber + 2)
+            {
+                m_Board[tail.m_Column, tail.m_Row] = 0;
+            }
             PopPoint();
         }
 
@@ -196,6 +200,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Snake
                 m_Board[point.m_Column, point.m_Row] = (int)eBoardObjectSnake.Empty;
             }
         }
+
+        //public SnakeObject Clone()
+        //{
+        //    string json = JsonSerializer.Serialize(this);
+        //    return JsonSerializer.Deserialize<SnakeObject>(json);
+        //}
     }
 }
 

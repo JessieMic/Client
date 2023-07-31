@@ -19,17 +19,17 @@ namespace LogicUnit
             setGameButtons();
             setGameBackground();
             setHearts();
-            //setPauseMenu();
+            setPauseMenu();
             AddGameObjects();
             OnAddScreenObjects();
-            //OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
+            OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
         }
 
         protected abstract void AddGameObjects();
 
         protected void setPauseMenu()
         {
-           m_PauseMenu.GetPauseMenu(m_ScreenMapping,m_Buttons,ref m_GameObjectsToAdd);
+           m_PauseMenu.GetPauseMenu(m_Buttons,ref m_GameObjectsToAdd);
         }
 
 

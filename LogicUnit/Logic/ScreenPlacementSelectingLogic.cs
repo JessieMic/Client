@@ -110,6 +110,7 @@ namespace LogicUnit
                 Application.Current.Dispatcher.Dispatch(async () =>
                 {
                     await r_ConnectionToServer.StartAsync();
+                    await r_ConnectionToServer.SendAsync("ResetHub");
                 });
             });
         }

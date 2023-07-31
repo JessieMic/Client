@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Objects.Enums;
 
 namespace Objects
 {
@@ -10,6 +11,26 @@ namespace Objects
     {
         public Microsoft.Maui.Controls.Image m_Image = new Microsoft.Maui.Controls.Image();
         protected string m_Source;
+
+        public void SetImage(GameObject i_GameObject)
+        {
+            m_Image.TranslationX = i_GameObject.m_PointsOnScreen[0].m_Column;
+            m_Image.TranslationY = i_GameObject.m_PointsOnScreen[0].m_Row;
+            m_Image.Aspect = Aspect.AspectFill;
+            m_Image.Source = i_GameObject.m_ImageSources[0];
+            m_Image.ClassId = i_GameObject.m_ImageSources[0];
+            m_Image.ZIndex = -1;
+            m_Image.Rotation = i_GameObject.m_Rotatation[0];
+            if (i_GameObject.m_OurSize.m_Width != 0)
+            {
+                m_Image.WidthRequest = i_GameObject.m_OurSize.m_Width;
+                m_Image.HeightRequest = i_GameObject.m_OurSize.m_Height;
+                if (i_GameObject.m_ImageSources[0] != "snakebackground.png")
+                {
+                    m_Image.Aspect = Aspect.Fill;
+                }
+            }
+        }
 
         public Microsoft.Maui.Controls.Image GetImage()
         {

@@ -4,10 +4,24 @@
              x:Class="UI.Pages.ScreenPlacementSelectingPage"
              Shell.NavBarIsVisible="false"
              Title="">
-    <Grid x:Name="gridLayout"
-          RowDefinitions="*,Auto,Auto,*"
-          ColumnDefinitions="*,Auto,Auto,*"
-          >
+
+    <Grid x:Name="AbsolutLayout"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    >
+        <Image
+            x:Name="UIbackground"
+            Aspect="Fill"
+            Source="uibackground.png"
+        />
+
+        <Grid x:Name="gridLayout"
+              RowDefinitions="*,Auto,Auto,*"
+              ColumnDefinitions="*,Auto,Auto,*"
+        >
+        </Grid>
     </Grid>
+
+  
     
 </ContentPage>

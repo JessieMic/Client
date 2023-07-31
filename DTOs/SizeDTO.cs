@@ -1,5 +1,6 @@
 ﻿namespace DTOs
 {
+    [Serializable]
     public struct SizeDTO
     {
         public int m_Width = 0;

@@ -39,13 +39,14 @@ public partial class ScreenPlacementSelectingPage : ContentPage
             }
             else
             {
-            m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(false);
-            //m_PlacementButtons[i_VisualUpdate.spot].FontSize = 13;
+                m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(false);
             }
     }
 
     async Task initializePage()
     {
+        UIbackground.TranslationY = UIbackground.HeightRequest = GameSettings.UIBackgroundSize.m_Height;
+        UIbackground.WidthRequest = m_GameInformation.m_ClientScreenDimension.m_OurSize.m_Width;
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;
         m_pageLogic.ReceivedPlayerAmount += initializeButtons;
         m_pageLogic.GameIsStarting += startGame;

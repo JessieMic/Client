@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Objects.Enums;
 namespace Objects
 {
+    [Serializable]
     public class Direction
     {
         public int m_ColumnOffset { get; }
@@ -46,6 +47,7 @@ namespace Objects
                 return Direction.Left;
             }
         }
+
         public static Direction getDirection(int i_Button)
         {
             if(i_Button == (int)eButton.Stop)
@@ -73,6 +75,17 @@ namespace Objects
         public Direction OppositeDirection()
         {
             return new Direction(-m_ColumnOffset, -m_RowOffset);
+        }
+        public bool IsOppositeDirection(Direction i_Direction)
+        {
+            bool result = false;
+
+            if(m_ColumnOffset == -i_Direction.m_ColumnOffset && m_RowOffset == -i_Direction.m_RowOffset)
+            {
+                result = true;
+            }
+
+            return result;
         }
 
         public override bool Equals(object obj)

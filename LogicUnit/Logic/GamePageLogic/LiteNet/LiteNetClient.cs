@@ -53,7 +53,7 @@ namespace LogicUnit.Logic.GamePageLogic.LiteNet
         {
             //r_Logger = i_Logger;
             r_NetManager.Start();
-            r_NetManager.Connect("192.168.68.122", 5555, "myKey");//("127.0.0.1", 5555, "myKey");
+            r_NetManager.Connect("127.0.0.1", 5555, "myKey");//("127.0.0.1", 5555, "myKey");
             sr_Listener.NetworkReceiveEvent += OnReceive;
         }
 
@@ -70,70 +70,113 @@ namespace LogicUnit.Logic.GamePageLogic.LiteNet
         }
 
 
-        public void Send(int i_PlayerNumber, int i_Button)
+        //public void Send(int i_PlayerNumber, int i_Button)
+        //{
+        //    NetDataWriter writer = new NetDataWriter();
+
+        //    writer.Put(i_PlayerNumber);
+        //    writer.Put(i_Button);
+        //    Task.Run(() =>
+        //        {
+        //            r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
+        //        });
+        //    r_Logger.LogInformation($"Sent {i_Button} to {i_PlayerNumber}");
+        //}
+
+        public void Send(int i_PlayerNumber, int i_Button, int i_X, int i_Y)
         {
             NetDataWriter writer = new NetDataWriter();
 
             writer.Put(i_PlayerNumber);
             writer.Put(i_Button);
-            Task.Run(() =>
-                {
-                    r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
-                });
+            writer.Put(i_X);
+            writer.Put(i_Y);
+
+            r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
             r_Logger.LogInformation($"Sent {i_Button} to {i_PlayerNumber}");
         }
 
-        public void SendPoint(int i_Column, int i_Row, int i_Object)
-        {
-            NetDataWriter writer = new NetDataWriter();
+        //public void SendPoint(int i_Column, int i_Row, int i_Object)
+        //{
+        //    NetDataWriter writer = new NetDataWriter();
 
-            writer.Put(i_Column);
-            writer.Put(i_Row);
-            writer.Put(i_Object);
-            Task.Run(() =>
-                {
-                    r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
-                });
-            r_Logger.LogInformation($"Sent point({i_Column},{i_Row}) for {i_Object}");
-        }
+        //    writer.Put(i_Column);
+        //    writer.Put(i_Row);
+        //    writer.Put(i_Object);
+        //    Task.Run(() =>
+        //        {
+        //            r_NetManager.FirstPeer.Send(writer, DeliveryMethod.Unreliable);
+        //        });
+        //    r_Logger.LogInformation($"Sent point({i_Column},{i_Row}) for {i_Object}");
+        //}
 
-        private void OnReceivePoint(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
-        {
-            int column;
-            int row;
-            int objectNumber;
-            r_Logger.LogInformation("Received point data");
+        //private void OnReceivePoint(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
+        //{
+        //    int column;
+        //    int row;
+        //    int objectNumber;
+        //    r_Logger.LogInformation("Received point data");
 
-            column = i_Reader.GetInt();
-            row = i_Reader.GetInt();
-            objectNumber = i_Reader.GetInt();
+        //    column = i_Reader.GetInt();
+        //    row = i_Reader.GetInt();
+        //    objectNumber = i_Reader.GetInt();
 
-            r_Logger.LogInformation($"Got point({column},{row}) for {objectNumber}");
+        //    r_Logger.LogInformation($"Got point({column},{row}) for {objectNumber}");
 
-            m_ObjectData.set(column, row, objectNumber);
+        //    m_ObjectData.set(column, row, objectNumber);
 
-            ReceivedPoint?.Invoke();
-            i_Reader.Recycle();
-        }
+        //    ReceivedPoint?.Invoke();
+        //    i_Reader.Recycle();
+        //}
+
+        //private void OnReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
+        //{
+        //    int playerNumber;
+        //    int button;
+        //    r_Logger.LogInformation("Received data");
+        //    foreach (KeyValuePair<int, PlayerData> t in PlayersData)
+        //    {
+        //        if(i_Reader.AvailableBytes > 0)
+        //        {
+        //            playerNumber = i_Reader.GetInt();
+        //            button = i_Reader.GetInt();
+        //            r_Logger.LogInformation($"Player number: {playerNumber}, Button: {button}");
+        //            if(playerNumber > 0 && playerNumber <= PlayersData.Count)
+        //            {
+        //                PlayersData[playerNumber].Button = button;
+        //            }
+        //        }
+        //    }
+        //    ReceivedData?.Invoke();
+        //    i_Reader.Recycle();
+        //}
 
         private void OnReceive(NetPeer i_Peer, NetPacketReader i_Reader, byte i_Channel, DeliveryMethod i_Deliverymethod)
         {
             int playerNumber;
             int button;
+            int x, y;
             r_Logger.LogInformation("Received data");
             foreach (KeyValuePair<int, PlayerData> t in PlayersData)
             {
-                if(i_Reader.AvailableBytes > 0)
+                if (i_Reader.AvailableBytes > 0)
                 {
                     playerNumber = i_Reader.GetInt();
                     button = i_Reader.GetInt();
+                    x = i_Reader.GetInt();
+                    y = i_Reader.GetInt();
+
+                    //if(x != -1 && )
+                    r_Logger.LogInformation($"X: {x}, Y: {y}");
                     r_Logger.LogInformation($"Player number: {playerNumber}, Button: {button}");
-                    if(playerNumber > 0 && playerNumber <= PlayersData.Count)
+                    if (playerNumber > 0 && playerNumber <= PlayersData.Count)
                     {
                         PlayersData[playerNumber].Button = button;
+                        PlayersData[playerNumber].PlayerPointData = new Objects.Point(x, y);
                     }
                 }
             }
+
             ReceivedData?.Invoke();
             i_Reader.Recycle();
         }
