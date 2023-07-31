@@ -48,6 +48,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
 	  <None Remove="Resources\Fonts\DePixelHalbfett.ttf" />
 	  <None Remove="Resources\Images\boarder.png" />
 	  <None Remove="Resources\Images\boarder1.png" />
@@ -67,6 +68,7 @@
 	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snake\snakebackground.png" />
 	  <None Remove="Resources\Images\snake\snakeobject1food.png" />
+	  <None Remove="Resources\Images\snake_img_new.png" />
 	  <None Remove="Resources\Images\snake\snakeplayer1body.png" />
 	  <None Remove="Resources\Images\snake\snakeplayer1head.png" />
 	  <None Remove="Resources\Images\snake\snakeplayer1tail.png" />
@@ -105,6 +107,7 @@
 	  <MauiImage Include="Resources\Images\lobby\player_name_placeholder.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\remove_btn.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\snake_img.PNG" />
+	  <MauiImage Include="Resources\Images\lobby\snake_img_new.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanobject1food.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <MauiImage Include="Resources\Images\pacman\pacmanplayer2body.png" />
@@ -146,6 +149,9 @@
 	  </Compile>
 	  <Compile Update="Pages\LobbyPages\PlayerCardHost.xaml.cs">
 	    <DependentUpon>PlayerCardHost.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\LobbyPages\MessagePopUp.xaml.cs">
+	    <DependentUpon>MessagePopUp.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="Pages\ScreenPlacementSelectingPage.xaml.cs">
 	    <DependentUpon>%(Filename)</DependentUpon>
@@ -189,7 +195,7 @@
 	  <MauiXaml Update="Pages\LobbyPages\PlayerCardHost.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\RemovedByHostPopUp.xaml">
+	  <MauiXaml Update="Pages\LobbyPages\MessagePopUp.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\ScreenPlacementSelectingPage.xaml">

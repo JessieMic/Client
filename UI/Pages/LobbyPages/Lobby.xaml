@@ -6,7 +6,7 @@
              NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="false">
 
-    <Grid x:Name="grid" Margin="2" RowSpacing="5">
+    <Grid x:Name="gridLayout" Margin="2" RowSpacing="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="15*"/>
             <RowDefinition Height="17.5*"/>
@@ -25,7 +25,7 @@
         </Grid.ColumnDefinitions>
         
         <!--REMOVE LATER-->
-        <Border/>
+        <!--<Border/>
         <Border Grid.Row="1"/>
         <Border Grid.Row="2"/>
         <Border Grid.Row="3"/>
@@ -73,42 +73,77 @@
         <Border Grid.Row="3" Grid.Column="6"/>
         <Border Grid.Row="4" Grid.Column="6"/>
         <Border Grid.Row="5" Grid.Column="6"/>
-        <Border Grid.Row="6" Grid.Column="6"/>
+        <Border Grid.Row="6" Grid.Column="6"/>-->
         <!--REMOVE LATER-->
         
-        <Image
+        <!--<Image
             Source="leave_btn.PNG"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="StartAndExpand"/>
+            HorizontalOptions="StartAndExpand"/>-->
 
         <Image
             Source="code_placeholder.PNG"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="EndAndExpand"
-            Grid.Column="5"/>
+            HorizontalOptions="CenterAndExpand"
+            Grid.Column="5"
+            ZIndex="1"
+            x:Name="CodePlaceholder"/>
+
+        <Label
+            x:Name="CodeLabel"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Grid.Column="5"
+            ZIndex="2"/>
 
         <Image
             Source="player_name_placeholder.PNG"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="StartAndExpand"
+            HorizontalOptions="CenterAndExpand"
             Grid.Row="1"
-            Grid.Column="1"/>
+            Grid.Column="1"
+            x:Name="PlayerPlaceholder"/>
         <Image
             Source="player_name_placeholder.PNG"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="StartAndExpand"
+            HorizontalOptions="CenterAndExpand"
             Grid.Row="2"
             Grid.Column="1"/>
         <Image
             Source="player_name_placeholder.PNG"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="StartAndExpand"
+            HorizontalOptions="CenterAndExpand"
             Grid.Row="3"
             Grid.Column="1"/>
         <Image
             Source="player_name_placeholder.PNG"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="StartAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Grid.Row="4"
+            Grid.Column="1"/>
+
+        <Label
+            x:Name="Player1NameLabel"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Grid.Row="1"
+            Grid.Column="1"/>
+        <Label
+            x:Name="Player2NameLabel"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Grid.Row="2"
+            Grid.Column="1"/>
+        <Label
+            x:Name="Player3NameLabel"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
+            Grid.Row="3"
+            Grid.Column="1"/>
+        <Label
+            x:Name="Player4NameLabel"
+            VerticalOptions="CenterAndExpand"
+            HorizontalOptions="CenterAndExpand"
             Grid.Row="4"
             Grid.Column="1"/>
 
@@ -121,12 +156,12 @@
             HorizontalOptions="CenterAndExpand"
             ZIndex="1"/>
 
-        <Image
+        <!--<Image
             Source="lobby_ready_btn.PNG"
             Grid.Row="5"
             Grid.Column="5"
             VerticalOptions="CenterAndExpand"
-            HorizontalOptions="EndAndExpand"/>
+            HorizontalOptions="EndAndExpand"/>-->
 
     </Grid>
 

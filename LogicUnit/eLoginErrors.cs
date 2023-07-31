@@ -16,7 +16,13 @@ namespace LogicUnit
         Ok,
 
         [Description("Code not found.")]
-        CodeNotFound
+        CodeNotFound,
+
+        [Description("Server Error.\nPlease try again.")]
+        ServerError,
+
+        [Description("You can't join room, the room is full.")]
+        FullRoom
     }
 
     public static class EnumHelper
