@@ -87,7 +87,7 @@ namespace LogicUnit.Logic.GamePageLogic
             else
             {
                 values.Column = GameSettings.m_SpacingAroundButtons;
-                values.Row = m_ClientScreenOurSize.Height * GameSettings.m_GameBoardGridSize + GameSettings.m_SpacingAroundButtons;
+                values.Row = m_ClientScreenOurSize.Height * GameSettings.GameGridSize + GameSettings.m_SpacingAroundButtons;
             }
 
             return values;

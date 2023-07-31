@@ -17,7 +17,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public PacmanObject()
         {
             ObjectNumber = 1;
-            this.Initialize(eScreenObjectType.Player,1, "boarder.png", new Point(1,1),true,
+            this.Initialize(eScreenObjectType.Player,1, "boarder.png", new Point(5,5),true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
@@ -39,8 +39,32 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             }
             else if (i_Collidable is Boarder)
             {
-                collidedWithSolid(i_Collidable.Bounds);
+                collidedWithSolid(i_Collidable);
+                Direction = RequestedDirection;
             }
+            else if(i_Collidable is Passage)
+            {
+                if(RequestedDirection == i_Collidable.Direction)
+                {
+                    if (i_Collidable.Bounds.Contains(Bounds.Location))//!Bounds.Contains(i_Collidable.Bounds.Center))//i_Collidable.Bounds.Contains(Bounds.Center)) ;
+                    {
+                        Point p = PointOnScreen;
+                        if (i_Collidable.Direction == Direction.Right || i_Collidable.Direction == Direction.Left)
+                        {
+                            p.Row = i_Collidable.PointOnScreen.Row;
+                        }
+                        else
+                        {
+                            p.Column = i_Collidable.PointOnScreen.Column;
+
+                        }
+
+                        PointOnScreen = p;
+                        Direction = RequestedDirection;
+                    }
+                }
+            }
+            
         }
 
     }

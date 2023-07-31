@@ -44,8 +44,8 @@ namespace LogicUnit.Logic.GamePageLogic
             SizeDTO screenSize = m_gameInformation.m_ClientScreenDimension.m_OurSize;
 
             return new Point(
-                (screenSize.Width / 2) - 3 * GameSettings.m_GameBoardGridSize,
-                (int)((screenSize.Height / 2) - 2.5 * GameSettings.m_GameBoardGridSize));
+                (screenSize.Width / 2) - 3 * GameSettings.GameGridSize,
+                (int)((screenSize.Height / 2) - 2.5 * GameSettings.GameGridSize));
         }
     }
 }

@@ -22,7 +22,7 @@ namespace LogicUnit
         private int m_MinimumUpperRow;
         public List<SizeDTO> m_PlayerGameBoardScreenSize = new List<SizeDTO>();
         public SizeDTO m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
-        public int m_GameBoardGridSize = GameSettings.m_GameBoardGridSize;
+        public int m_GameBoardGridSize = GameSettings.GameGridSize;
         public int m_SpacingAroundButtons = GameSettings.m_SpacingAroundButtons;
 
         public ScreenMapping()

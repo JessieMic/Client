@@ -20,10 +20,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
-        public override void Update(double i_TimeElapsed)
-        {
-            base.Update(i_TimeElapsed);
-        }
+        //public override void Update(double i_TimeElapsed)
+        //{
+        //    base.Update(i_TimeElapsed);
+        //}
 
         public override void Collided(ICollidable i_Collidable)
         {

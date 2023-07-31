@@ -9,15 +9,15 @@ namespace Objects
 {
     public static class GameSettings
     {
-        public const int m_GameBoardGridSize = 45;
-        public static SizeDTO m_MovementButtonOurSize = new SizeDTO(m_GameBoardGridSize, m_GameBoardGridSize);
+        public const int GameGridSize = 45;
+        public static SizeDTO m_MovementButtonOurSize = new SizeDTO(GameGridSize, GameGridSize);
         public const int m_SpacingAroundButtons = 10;
-        public const int m_UIBackgroundHeight = m_GameBoardGridSize * 3;
+        public const int m_UIBackgroundHeight = GameGridSize * 3;
         public static int m_ID = 0;
-        public static SizeDTO m_HeartSize = new SizeDTO((int)(m_GameBoardGridSize * 1.2), (int)(m_GameBoardGridSize*1.2));
-        public static SizeDTO m_PauseMenuOurSize = new SizeDTO(m_GameBoardGridSize*6, m_GameBoardGridSize*5);
-        public static SizeDTO m_PauseMenuButtonOurSize = new SizeDTO(m_GameBoardGridSize*5, m_GameBoardGridSize);
-        public const int ControllBoardTotalHeight = m_GameBoardGridSize * 3 + 2 * m_SpacingAroundButtons;
+        public static SizeDTO m_HeartSize = new SizeDTO((int)(GameGridSize * 1.2), (int)(GameGridSize*1.2));
+        public static SizeDTO m_PauseMenuOurSize = new SizeDTO(GameGridSize*6, GameGridSize*5);
+        public static SizeDTO m_PauseMenuButtonOurSize = new SizeDTO(GameGridSize*5, GameGridSize);
+        public const int ControllBoardTotalHeight = GameGridSize * 3 + 2 * m_SpacingAroundButtons;
         public static SizeDTO UIBackgroundSize = new SizeDTO(3000, ControllBoardTotalHeight);
         
 

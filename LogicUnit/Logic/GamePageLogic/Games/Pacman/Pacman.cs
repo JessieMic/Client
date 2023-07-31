@@ -13,7 +13,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public Pacman()
         {
-            m_GameName = "Pacman"; // was Snake
+            m_GameName = "Pacman";
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1; // was 3
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
@@ -25,44 +25,16 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             //m_Pacman.ChangePosition();
         }
 
-        //protected override void OBgameLoop() // copied from snake
-        //{
-        //    m_gameObjectsToUpdate = new List<GameObject>(); // -> objects that need to be updated (pacman that moves)
-        //    m_GameObjectsToAdd = new List<GameObject>(); // -> new objects on screen
-        //    moveObjects();
-        //    if (m_GameObjectsToAdd.Count != 0)
-        //    {
-        //        OnAddScreenObjects();
-        //    }
-
-        //    if (m_gameObjectsToUpdate.Count != 0)
-        //    {
-        //        OnUpdateScreenObject();
-        //    }
-
-        //    //while (m_GameStatus == eGameStatus.Running)
-        //    //{
-        //    //    //await Task.Delay(400);
-
-        //    //    m_Ghost.m_Direction = Direction.Right;
-        //    //    m_Ghost.MoveSameDirection();
-        //    //   // await Task.Delay(400);
-        //    //    m_Ghost.m_Direction = Direction.Down;
-        //    //    m_Ghost.MoveSameDirection();
-        //    //    //await Task.Delay(400);
-        //    //    m_Ghost.MoveToPoint(new Point(1, 1));
-
-        //    //}
-        //}
-
         protected override void AddGameObjects()
         {
             m_Pacman = new PacmanObject();
             m_GameObjectsToAdd.Add(m_Pacman);
             m_Ghosts.Add(new GhostObject());
             m_GameObjectsToAdd.Add(m_Ghosts[0]);
-            m_GameObjectsToAdd.Add(new Boarder(new Point(5,1)));
-            m_GameObjectsToAdd.Add(new Boarder(new Point(5, 3)));
+            m_GameObjectsToAdd.Add(new Boarder(new Point(1,1)));
+            m_GameObjectsToAdd.Add(new Boarder(new Point(1, 3)));
+            m_GameObjectsToAdd.Add(new Passage(new Point(0, 2)));
+            //m_CollisionManager.AddObjectToMonitor(new Passage(new Point(4, 3)));
             for (int i = 1; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 //addPlayerObjects(i);

@@ -27,7 +27,7 @@ namespace Objects
             {
                 if (i_Collidable != target)////////
                 {
-                    if (target.CheckCollision(i_Collidable))
+                    if (i_Collidable.CheckCollision(target))
                     {
                         collidedComponents.Add(target);
                     }

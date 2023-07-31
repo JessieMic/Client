@@ -26,20 +26,19 @@ namespace Objects
         public string ImageSource { get; set; }
         public int ObjectNumber { get; set; }
         public eScreenObjectType ScreenObjectType { get; set; }
-        public int GameBoardGridSize { get; set; } = GameSettings.m_GameBoardGridSize;
+        public int GameBoardGridSize { get; set; } = GameSettings.GameGridSize;
         protected GameInformation m_GameInformation = GameInformation.Instance;
         private Point m_ValuesToAdd;
         //protected int m_Velocity { get; set; } = 1;
         public bool IsObjectMoving { get; set; } = false;
         public Direction Direction { get; set; } = Direction.Stop;
+        public Direction RequestedDirection { get; set; } = Direction.Stop;
         public eButton ButtonType { get; set; }
         public string Text { get; set; }
         public SizeDTO m_Size = GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; }
 
         public int Velocity { get; set; } = 120; //120;
-
-        //private Rect m_Bounds = new Rect();
 
         public bool Fade { get; set; } = false;
 
@@ -48,17 +47,10 @@ namespace Objects
             ObjectNumber = i_ObjectNumber;
             ScreenObjectType = i_ScreenObjectType;
             m_ValuesToAdd = i_ValuesToAdd;
-            //PointOnGrid=i_Point;
             Point point = getScreenPoint(i_Point, i_IsGrid);
             PointOnScreen = point;
             ImageSource=i_Png;
             ID=GameSettings.getID();
-            //m_Bounds = new Rect(
-            //    point.Column,
-            //    point.Row,
-            //    GameSettings.m_GameBoardGridSize,
-            //    GameSettings.m_GameBoardGridSize);
-            
         }
 
         public void SetImageDirection(Direction i_Direction)
@@ -113,97 +105,71 @@ namespace Objects
             m_Size = i_Size;
         }
 
-        //public void set(GameObject i_GameObject)
-        //{
-        //    m_PointsOnGrid = i_GameObject.m_PointsOnGrid;
-        //    PointOnScreen = i_GameObject.PointOnScreen;
-        //    m_ImageSources = i_GameObject.m_ImageSources;
-        //    m_ObjectNumber = i_GameObject.m_ObjectNumber;
-        //    ScreenObjectType = i_GameObject.ScreenObjectType;
-        //    m_GameBoardGridSize = i_GameObject.m_GameBoardGridSize;
-        //    m_ValuesToAdd = i_GameObject.m_ValuesToAdd;
-        //    m_Size = i_GameObject.m_Size;
-        //    ID = i_GameObject.ID;
-        //    m_Fade = i_GameObject.m_Fade;
-        //    m_Rotatation = i_GameObject.m_Rotatation;
-        //    m_ScaleX = i_GameObject.m_ScaleX;
-        //    m_ScaleY = i_GameObject.m_ScaleY;
-        //}
-
-        public void FadeWhenObjectIsRemoved()
+        public void RequestDirection(Direction i_Direction)
         {
-            Fade = true;
+            if(Direction == Direction.Stop)
+            {
+                Direction = i_Direction;
+            }
+            else
+            {
+                RequestedDirection = i_Direction;
+            }
         }
 
         protected void isPointOnBoard(ref Point i_Point)
         {
+            bool collided = true;
             if(i_Point.Column < m_ValuesToAdd.Column)
             {
                 i_Point.Column = m_ValuesToAdd.Column;
             }
-            if(i_Point.Row < m_ValuesToAdd.Row)
+            else if(i_Point.Row < m_ValuesToAdd.Row)
             {
                 i_Point.Row  = m_ValuesToAdd.Row;
             }
-            if(i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width)
+            else if(i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width)
             {
                 i_Point.Row = m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width;
             }
-            if(i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height)
+            else if(i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height)
             {
                 i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height;
             }
+            else
+            {
+                collided = false;
+            }
+
+            if(collided)
+            {
+                Direction = RequestedDirection;
+            }
         }
 
-        //protected void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeDTO i_SizeOfSolid)
-        //{
-        //    Point newPoint = new Point();
-        //    if (i_Solid.Bounds.Right > Bounds.Left)//solid on the left
-        //    {
-        //        newPoint.Column = i_Solid.Bounds.
-        //    }
-        //    else if (i_Solid.Bounds.Left < Bounds.Right)
-        //    {
-        //        newPoint.Column = i_SolidRect.Left - m_Size.Width;
-        //    }
-
-        //    PointOnScreen = newPoint;
-        //}
-        protected void collidedWithSolid(Rect i_SolidRect)//(Point i_PointOfSolid,SizeDTO i_SizeOfSolid)
+        protected void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeDTO i_SizeOfSolid)
         {
             Point newPoint = PointOnScreen;
             if (Direction == Direction.Left)//solid on the left
             {
-                newPoint.Column =  (int)(newPoint.Column / GameBoardGridSize) * GameBoardGridSize + m_ValuesToAdd.Column;
+                newPoint.Column = i_Solid.PointOnScreen.Column + i_Solid.Bounds.Width; 
             }
             else if (Direction == Direction.Right) //solid on the right
             {
-                newPoint.Column = (int)(newPoint.Column / GameBoardGridSize)* GameBoardGridSize + m_ValuesToAdd.Column;
-                //  + i_SolidRect.X
-                ///  - Bounds.Width; //4 * 45 + m_ValuesToAdd.Column; //;i_SolidRect.X - Bounds.Width + 7;
+                newPoint.Column = i_Solid.PointOnScreen.Column - m_Size.Width;
             }
-            //Direction = Direction.Stop;
+            else if(Direction == Direction.Up)
+            {
+                newPoint.Row = i_Solid.PointOnScreen.Row + i_Solid.Bounds.Height;
+            }
+            else //direction is down
+            {
+                newPoint.Row = i_Solid.PointOnScreen.Row - m_Size.Height;
+            }
             PointOnScreen = newPoint;
         }
 
-        //protected void isPointOnBoard(ref Point i_Point)
-        //{
-        //    bool isPointOnTheBoard = true;
-        //    if ((i_Point.Column < m_ValuesToAdd.Column) || (i_Point.Row < m_ValuesToAdd.Row))
-        //    {
-        //        isPointOnTheBoard = false;
-        //    }
-        //    else if ((i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row) ||
-        //             (i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column))
-        //    {
-        //        isPointOnTheBoard = false;
-        //    }
-
-        //    //eturn isPointOnTheBoard;
-        //}
-
-
-        private Point getScreenPoint(Point i_Point,bool i_IsGrided)
+        protected Point getScreenPoint(Point i_Point,bool i_IsGrided)
         {
             Point point = new Point();
             
@@ -218,11 +184,6 @@ namespace Objects
 
             return point;
         }
-
-        //public Point GetOneMoveAhead()
-        //{
-        //    return PointOnGrid.Move(Direction);
-        //}
 
         public virtual void Update(double i_TimeElapsed)
         {
@@ -259,7 +220,7 @@ namespace Objects
         {
             get
             {
-                return new Rect(PointOnScreen.Row,PointOnScreen.Column,
+                return new Rect(PointOnScreen.Column, PointOnScreen.Row,
                 m_Size.Width,m_Size.Height);
             }
         }
@@ -267,9 +228,60 @@ namespace Objects
 
         public void MoveToPointInGrided(Point i_Point)
         {
-            //PointOnGrid = i_Point;
             Point point = getScreenPoint(i_Point,true);
             PointOnScreen = point;
         }
+        public void FadeWhenObjectIsRemoved()
+        {
+            Fade = true;
+        }
     }
 }
+
+//protected void isPointOnBoard(ref Point i_Point)
+//{
+//    bool isPointOnTheBoard = true;
+//    if ((i_Point.Column < m_ValuesToAdd.Column) || (i_Point.Row < m_ValuesToAdd.Row))
+//    {
+//        isPointOnTheBoard = false;
+//    }
+//    else if ((i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row) ||
+//             (i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column))
+//    {
+//        isPointOnTheBoard = false;
+//    }
+
+//    //eturn isPointOnTheBoard;
+//}
+
+//protected void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeDTO i_SizeOfSolid)
+//{
+//    Point newPoint = new Point();
+//    if (i_Solid.Bounds.Right > Bounds.Left)//solid on the left
+//    {
+//        newPoint.Column = i_Solid.Bounds.
+//    }
+//    else if (i_Solid.Bounds.Left < Bounds.Right)
+//    {
+//        newPoint.Column = i_SolidRect.Left - m_Size.Width;
+//    }
+
+//    PointOnScreen = newPoint;
+//}
+//Point newPoint = PointOnScreen;
+//if (Direction == Direction.Left)//solid on the left
+//{
+//    newPoint.Column =
+//        i_Solid.PointOnScreen.Column
+//        + i_Solid.Bounds
+//            .Width; //(int)(newPoint.Column / GameBoardGridSize) * GameBoardGridSize + m_ValuesToAdd.Column;
+//}
+//else if (Direction == Direction.Right) //solid on the right
+//{
+//    newPoint.Column = i_Solid.PointOnScreen.Column
+//                      - m_Size.Width; //(int)(newPoint.Column / GameBoardGridSize)* GameBoardGridSize + m_ValuesToAdd.Column;
+//    //  + i_SolidRect.X
+//    ///  - Bounds.Width; //4 * 45 + m_ValuesToAdd.Column; //;i_SolidRect.X - Bounds.Width + 7;
+//}
+////Direction = Direction.Stop;
+//PointOnScreen = newPoint;

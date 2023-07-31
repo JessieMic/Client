@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Point = Objects.Point;
 
 namespace Objects
 {
@@ -14,10 +15,9 @@ namespace Objects
         public Rect Bounds { get; }
 
         bool IsCollisionDetectionEnabled { get; }
-
-        // List<ICollidable> CollideList;// = new List<ICollidable>();
-        //public bool Visible { get; }
+        public Point PointOnScreen { get;}
         bool CheckCollision(ICollidable i_Source);
+        public Direction Direction { get; set; }
         void Collided(ICollidable i_Collidable);
     }
 }

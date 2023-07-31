@@ -86,7 +86,7 @@ namespace Objects
             else
             {
                 values.Column = GameSettings.m_SpacingAroundButtons;
-                values.Row = m_ClientScreenOurSize.Height*GameSettings.m_GameBoardGridSize+GameSettings.m_SpacingAroundButtons;
+                values.Row = m_ClientScreenOurSize.Height*GameSettings.GameGridSize+GameSettings.m_SpacingAroundButtons;
             }
 
             return values;
@@ -232,36 +232,36 @@ namespace Objects
         private Point getPauseMenuButtonPoint(eButton i_Type, Point i_MenuPoint)
         {
             Point returnPoint = new Point(1, 1);
-            int colum = (int)(i_MenuPoint.Column + GameSettings.m_GameBoardGridSize * 0.5);
+            int colum = (int)(i_MenuPoint.Column + GameSettings.GameGridSize * 0.5);
 
             if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 if (i_Type == eButton.Resume)
                 {
-                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.m_GameBoardGridSize * 3.5));
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.GameGridSize * 3.5));
                 }
                 else if (i_Type == eButton.Restart)
                 {
-                    returnPoint.SetAndGetPoint(colum, i_MenuPoint.Row + GameSettings.m_GameBoardGridSize * 2);
+                    returnPoint.SetAndGetPoint(colum, i_MenuPoint.Row + GameSettings.GameGridSize * 2);
                 }
                 else if (i_Type == eButton.Exit)
                 {
-                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.m_GameBoardGridSize * 0.5));
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.GameGridSize * 0.5));
                 }
             }
             else
             {
                 if (i_Type == eButton.Resume)
                 {
-                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.m_GameBoardGridSize*0.5));
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.GameGridSize*0.5));
                 }
                 else if (i_Type == eButton.Restart)
                 {
-                    returnPoint.SetAndGetPoint(colum, i_MenuPoint.Row + GameSettings.m_GameBoardGridSize * 2);
+                    returnPoint.SetAndGetPoint(colum, i_MenuPoint.Row + GameSettings.GameGridSize * 2);
                 }
                 else if (i_Type == eButton.Exit)
                 {
-                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.m_GameBoardGridSize * 3.5));
+                    returnPoint.SetAndGetPoint(colum, (int)(i_MenuPoint.Row + GameSettings.GameGridSize * 3.5));
                 }
             }
             return returnPoint;

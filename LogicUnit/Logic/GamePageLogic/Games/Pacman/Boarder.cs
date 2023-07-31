@@ -15,7 +15,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public Boarder(Point i_Point)
         {
             ObjectNumber = 2;
-            this.Initialize(eScreenObjectType.Player, 2, "pacman_boarder.png", i_Point, true,
+            this.Initialize(eScreenObjectType.Image, 2, "pacman_boarder.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
     }

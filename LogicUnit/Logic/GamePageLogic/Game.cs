@@ -81,8 +81,8 @@ namespace LogicUnit
         private int i_AvgPing = 0;
         public double m_LoopNumber = 0;
         public GameObject[] m_MoveableGameObjects;
-        private const double J_DesiredFrameTime = 0.032;//0.067;
-        private readonly CollisionManager m_CollisionManager = new CollisionManager();
+        private const double J_DesiredFrameTime = 0.067;
+        protected readonly CollisionManager m_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
 
         /*TODO:
@@ -304,17 +304,9 @@ namespace LogicUnit
             return isPointOnTheBoard;
         }
 
-        protected bool isPointOnBoard(Point i_Point)
-        {
-            bool isPointOnTheBoard = !(i_Point.Row < 0 || i_Point.Row >= m_BoardSizeByGrid.Height || i_Point.Column < 0
-                                       || i_Point.Column >= m_BoardSizeByGrid.Width);
-
-            return isPointOnTheBoard;
-        }
-
         protected virtual void ChangeDirection(Direction i_Direction, int i_GameObject, int i_LoopNumber)
         {
-            m_MoveableGameObjects[i_GameObject - 1].Direction = i_Direction;
+            m_MoveableGameObjects[i_GameObject - 1].RequestDirection(i_Direction);
         }
 
         protected virtual void updatePosition(double i_TimeElapsed)
