@@ -19,6 +19,25 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
         }
 
+        void createBoard()
+        {
+            PacmanBoardFactory a = new PacmanBoardFactory();
+            int[,] grid = a.m_grid;
+            for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
+            {
+                for (int row = 0; row < m_BoardSizeByGrid.Height; row++)
+                {
+                    if (grid[col, row] == 1)
+                    {
+                        m_GameObjectsToAdd.Add(new Boarder(new Point(col, row)));
+                    }
+                    else if(grid[col, row] == 2)
+                    {
+                        m_GameObjectsToAdd.Add(new Passage(new Point(col, row)));
+                    }
+                }
+            }
+        }
 
         protected virtual void ChangeDirection(Direction i_Direction, int i_Player, int i_LoopNumber)
         {
@@ -27,20 +46,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         protected override void AddGameObjects()
         {
+            createBoard();
             m_Pacman = new PacmanObject();
             m_GameObjectsToAdd.Add(m_Pacman);
-            m_Ghosts.Add(new GhostObject());
-            m_GameObjectsToAdd.Add(m_Ghosts[0]);
-            m_GameObjectsToAdd.Add(new Boarder(new Point(1,1)));
-            m_GameObjectsToAdd.Add(new Boarder(new Point(1, 3)));
-            m_GameObjectsToAdd.Add(new Passage(new Point(0, 2)));
+            //m_Ghosts.Add(new GhostObject());
+            //m_GameObjectsToAdd.Add(m_Ghosts[0]);
+            //m_GameObjectsToAdd.Add(new Boarder(new Point(1,1)));
+            //m_GameObjectsToAdd.Add(new Boarder(new Point(1, 3)));
+            //m_GameObjectsToAdd.Add(new Passage(new Point(0, 2)));
             //m_CollisionManager.AddObjectToMonitor(new Passage(new Point(4, 3)));
-            for (int i = 1; i < m_GameInformation.AmountOfPlayers; i++)
-            {
-                //addPlayerObjects(i);
-            }
-
-            //addFood();
         }
 
         private void addFood()

@@ -17,7 +17,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public PacmanObject()
         {
             ObjectNumber = 1;
-            this.Initialize(eScreenObjectType.Player,1, "boarder.png", new Point(5,5),true,
+            this.Initialize(eScreenObjectType.Player,1, "boarder.png", new Point(0,0),true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 

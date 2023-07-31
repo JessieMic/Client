@@ -18,7 +18,7 @@ namespace Objects
             //point.Row += 20;
             //point.Column += 15;
             ObjectNumber = 2;
-            this.Initialize(eScreenObjectType.Image, 2, "pac7man_boarder.png", i_Point, true,
+            this.Initialize(eScreenObjectType.Image, 2, "heart.png", i_Point, true,
                 point);
             Direction = Direction.Right;
             //this.m_Size.Height = 10;

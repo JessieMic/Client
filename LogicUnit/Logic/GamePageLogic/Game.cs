@@ -102,7 +102,7 @@ namespace LogicUnit
                 m_PlayersDataArray[i] = new(i);
             }
 
-            m_MoveableGameObjects = new GameObject[m_GameInformation.AmountOfPlayers];
+            m_MoveableGameObjects = new GameObject[1];//[m_GameInformation.AmountOfPlayers];
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_InGameHubAddress)
                 .Build();
@@ -249,7 +249,7 @@ namespace LogicUnit
         private async void GetServerUpdate()
         {
             //get data from the server
-            for (int i = 1; i <= 2; i++)
+            for (int i = 1; i <= 1; i++)
             {
                 //if(m_PlayersDataArray[i - 1].IsNewButton)
                 {
