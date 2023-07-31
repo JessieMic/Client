@@ -1,4 +1,5 @@
 using CommunityToolkit.Maui.Views;
+using Objects;
 using UI.Pages.LobbyPages.Utils;
 
 namespace UI.Pages.LobbyPages;
@@ -11,7 +12,8 @@ public partial class GamesPopUp : Popup
 	{
 		InitializeComponent();
         m_FuncForGameChosen = i_Action;
-
+        addButton("OK", OnOkClicked, 2, 2);
+        addButton("Cancel", OnCancelClicked, 2, 0);
     }
 
 	public void AddGameToComponent(GameCard i_Card)
@@ -40,5 +42,19 @@ public partial class GamesPopUp : Popup
     public void OnCancelClicked(object sender, EventArgs e)
     {
         Close();
+    }
+
+    private void addButton(string i_Text, EventHandler i_ClickEvent, int i_Row, int i_Col)
+    {
+        ButtonImage btn = new ButtonImage();
+        btn.Text = i_Text;
+        btn.Source = "lobby_ready_btn.PNG";
+        btn.GetButton().Clicked += i_ClickEvent;
+        btn.HorizontalOptions = LayoutOptions.CenterAndExpand;
+        btn.VerticalOptions = LayoutOptions.CenterAndExpand;
+        btn.GetButton().HorizontalOptions = LayoutOptions.FillAndExpand;
+        btn.GetButton().VerticalOptions = LayoutOptions.FillAndExpand;
+        gridLayout.Add(btn.GetImage(), i_Col, i_Row);
+        gridLayout.Add(btn.GetButton(), i_Col, i_Row);
     }
 }

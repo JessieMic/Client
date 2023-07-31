@@ -10,13 +10,14 @@ namespace UI.Pages.LobbyPages.Utils
     {
         private string m_PicUrl;
         private string m_Name;
-        private string m_Details = "some game details...";
-        private string m_Instructions = "some game instructions...";
+        private string m_Details;
+        private string m_Instructions;
 
-        public Game(string i_Url, string i_Name)
+        public Game(string i_Url, string i_Name, string i_Instructions)
         {
             m_PicUrl = i_Url;
             m_Name = i_Name;
+            m_Instructions = i_Instructions;
         }
 
         public string GetPicUrl()
@@ -37,6 +38,11 @@ namespace UI.Pages.LobbyPages.Utils
         public string GetInstructions()
         {
             return m_Instructions;
+        }
+
+        public void SetInstructions(string i_Instructions)
+        {
+            m_Instructions = i_Instructions;
         }
     }
 }

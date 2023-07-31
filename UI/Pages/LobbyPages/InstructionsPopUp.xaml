@@ -5,17 +5,25 @@
        x:Class="UI.Pages.LobbyPages.InstructionsPopUp"
        CanBeDismissedByTappingOutsideOfPopup="False"
        Color="White">
-    <Grid>
+    <Grid Padding="10" x:Name="gridLayout">
         <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="75*"/>
+            <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
 
         <VerticalStackLayout
             Spacing="10"
             VerticalOptions="Center" 
             HorizontalOptions="Center"
-            Grid.Row="0">
+            Grid.Row="1"
+            Grid.Column="0"
+            Grid.ColumnSpan="3">
             
             <Label 
                 x:Name="HeaderLabel"
@@ -27,17 +35,19 @@
             <Label
                 x:Name="InstructionsLabel"
                 VerticalOptions="Center"
-                HorizontalOptions="Center"/>
+                HorizontalOptions="Center"
+                FontAutoScalingEnabled="True"
+                FontSize="Caption"/>
             
         </VerticalStackLayout>
 
-        <Button
+        <!--<Button
             Text="Close"
             x:Name="CloseBtn"
             VerticalOptions="Center"
             HorizontalOptions="Start"
             Grid.Row="1"
-            Clicked="OnCloseBtnClicked"/>
+            Clicked="OnCloseBtnClicked"/>-->
         
     </Grid>
 </mct:Popup>

@@ -9,13 +9,17 @@ namespace LogicUnit
     // All the code in this file is included in all platforms.
     public class LogicManager
     {
+        private const int k_MinNameLength = 2;
+        private const int k_MaxNameLength = 10;
+        private const int k_UpdateTimerInterval = 500;
+
         private readonly Connection r_Connection;
         private Uri m_Uri;
         private HttpClient m_HttpClient = new HttpClient();
         private RoomData m_RoomData;
         //private Action<List<string>> m_AddPlayersToScreen;
         private Func<List<string>, bool> m_AddPlayersToScreen;
-        private Action<List<string>> m_RemovePlayersByHost;
+        private Func<List<string>, bool> m_RemovePlayersByHost;
         private Action<string> m_ChosenGameAction;
         ///////////////
         private GameInformation m_GameInformation = GameInformation.Instance;
@@ -23,14 +27,17 @@ namespace LogicUnit
         private Timer m_TimerForPlayersUpdate;
         private List<string> m_OldPlayersList = new List<string>();
         private string? m_LastChosenGame = null;
+        private Action m_HostLeftAction;
+        private Action m_ServerErrorAction;
 
         public LogicManager()
         {
             r_Connection = new Connection();
 
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
-            m_GameInformation.AmountOfPlayers = 2;
-            m_Player.Name = DateTime.Now.ToString();
+            //m_GameInformation.AmountOfPlayers = 2;
+            m_GameInformation.AmountOfPlayers = 0;
+            //m_Player.Name = DateTime.Now.ToString();
             //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
         }
 
@@ -44,15 +51,21 @@ namespace LogicUnit
             if (checkIfValidUsername(i_HostName))
             {
                 StringContent stringContent = new StringContent($"\"{i_HostName}\"", Encoding.UTF8, "application/json");
+                HttpResponseMessage response;
 
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CreateNewRoom}");
-                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
-                string s = await response.Content.ReadAsStringAsync();
-                m_RoomData = (RoomData)JsonSerializer.Deserialize(s, typeof(RoomData));
-                m_Player.Name = i_HostName;
-                m_Player.RoomCode = m_RoomData.roomCode;
-
-                //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
+                try
+                {
+                    response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+                    string s = await response.Content.ReadAsStringAsync();
+                    m_RoomData = JsonSerializer.Deserialize<RoomData>(s);
+                    m_Player.Name = i_HostName;
+                    m_Player.RoomCode = m_RoomData.roomCode;
+                }
+                catch(Exception e)
+                {
+                    return eLoginErrors.ServerError;
+                }
 
                 return eLoginErrors.Ok;
             }
@@ -67,12 +80,23 @@ namespace LogicUnit
             if (i_Code.Length > 0)
             {
                 StringContent stringContent = new StringContent($"\"{i_Code}\"", Encoding.UTF8, "application/json");
-
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_JoinRoom}");
-                HttpResponseMessage response = await m_HttpClient.PutAsync(m_Uri, stringContent);
-                if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+
+                try
                 {
-                    return eLoginErrors.CodeNotFound;
+                    HttpResponseMessage response = await m_HttpClient.PutAsync(m_Uri, stringContent);
+                    if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        return eLoginErrors.CodeNotFound;
+                    }
+                    else if(response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                    {
+                        return eLoginErrors.FullRoom;
+                    }
+                }
+                catch(Exception e)
+                {
+                    return eLoginErrors.ServerError;
                 }
 
                 return eLoginErrors.Ok;
@@ -95,17 +119,25 @@ namespace LogicUnit
                 Encoding.UTF8, "application/json");
 
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_AddPlayer}");
-                HttpResponseMessage response = await m_HttpClient.PutAsync(m_Uri, stringContent);
-                if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+
+                try
                 {
-                    return eLoginErrors.NameTaken;
+                    HttpResponseMessage response = await m_HttpClient.PutAsync(m_Uri, stringContent);
+                    if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+                    {
+                        return eLoginErrors.NameTaken;
+                    }
+
+                    m_Player.Name = i_UserName;
+                    m_Player.RoomCode = i_Code;
+                    //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
+                    m_GameInformation.AmountOfPlayers++;
+                    return eLoginErrors.Ok;
                 }
-
-                m_Player.Name = i_UserName;
-                m_Player.RoomCode = i_Code;
-                //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
-
-                return eLoginErrors.Ok;
+                catch(Exception e)
+                {
+                    return eLoginErrors.ServerError;
+                }
             }
             else
             {
@@ -116,8 +148,9 @@ namespace LogicUnit
         private void updateClient(object stateInfo)
         {
             getPlayers();
-            getPlayersToRemove();
+            //getPlayersToRemove();
             getChosenGame();
+            getIfHostLeft();
         }
 
         private async void getChosenGame()
@@ -125,23 +158,30 @@ namespace LogicUnit
             StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_UpdateGame}");
-            HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
-            string strResponse = await response.Content.ReadAsStringAsync();
-
-            if (strResponse.Length != 0 && strResponse != m_LastChosenGame)
+            try
             {
-                if (strResponse == "Snake")
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+                string strResponse = await response.Content.ReadAsStringAsync();
+
+                if (strResponse.Length != 0 && strResponse != m_LastChosenGame)
                 {
-                    m_GameInformation.NameOfGame = eGames.Snake;
+                    if (strResponse == "Snake")
+                    {
+                        m_GameInformation.NameOfGame = eGames.Snake;
+                    }
+                    else if (strResponse == "Pacman")
+                    {
+                        m_GameInformation.NameOfGame = eGames.Pacman;
+                    }
+                    // TODO: add more games when created
+
+                    m_LastChosenGame = strResponse;
+                    m_ChosenGameAction.Invoke(strResponse);
                 }
-                else if (strResponse == "Pacman")
-                {
-                    m_GameInformation.NameOfGame = eGames.Pacman;
-                }
-                // TODO: add more games when created
-                
-                m_LastChosenGame = strResponse;
-                m_ChosenGameAction.Invoke(strResponse);
+            }
+            catch (Exception e)
+            {
+                m_ServerErrorAction.Invoke();
             }
         }
 
@@ -155,7 +195,15 @@ namespace LogicUnit
             Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_GameChosen}");
-            HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+            }
+            catch(Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
         }
 
         private async void getPlayers()
@@ -163,25 +211,27 @@ namespace LogicUnit
             StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_UpdatePlayers}");
-            HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
 
-            string strResponse = await response.Content.ReadAsStringAsync();
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+
+                string strResponse = await response.Content.ReadAsStringAsync();
 #nullable enable
-            List<string>? newPlayersList = JsonSerializer.Deserialize<List<string>>(strResponse);
+                List<string>? newPlayersList = JsonSerializer.Deserialize<List<string>>(strResponse);
 #nullable disable
 
-            if (m_Player.Name == "Name1")
-            {
-
-            }
-
-            if (newPlayersList != null && !newPlayersList.SequenceEqual(m_OldPlayersList)) // checks if the element in the lists are equal
-            {
-                bool succeed = m_AddPlayersToScreen.Invoke(newPlayersList);
-                if (succeed)
+                if (newPlayersList != null && !newPlayersList.SequenceEqual(m_OldPlayersList)) // checks if the element in the lists are equal
                 {
-                    m_OldPlayersList = newPlayersList;
+                    bool succeed = m_AddPlayersToScreen.Invoke(newPlayersList);
+                    if (succeed)
+                        m_OldPlayersList = newPlayersList;
+                    m_GameInformation.AmountOfPlayers = newPlayersList.Count;
                 }
+            }
+            catch(Exception e)
+            {
+                m_ServerErrorAction.Invoke();
             }
         }
 
@@ -193,14 +243,29 @@ namespace LogicUnit
             HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
 
             string strResponse = await response.Content.ReadAsStringAsync();
-#nullable enable
-            List<string>? playersToRemove = JsonSerializer.Deserialize<List<string>>(strResponse);
-#nullable disable
-            if (playersToRemove.Count > 0)
+            if (strResponse != null && strResponse.Length > 0)
             {
-                if (playersToRemove != null)
+#nullable enable
+                List<string>? playersToRemove = JsonSerializer.Deserialize<List<string>>(strResponse);
+#nullable disable
+
+                bool succeed = false;
+
+                if (playersToRemove.Count > 0)
                 {
-                    m_RemovePlayersByHost.Invoke(playersToRemove);
+                    if (playersToRemove != null)
+                    {
+                        while (!succeed)
+                        {
+                            if (playersToRemove.Contains(m_Player.Name))
+                            {
+                                StopUpdatesRefresher();
+                                succeed = m_RemovePlayersByHost.Invoke(playersToRemove);
+                            }
+                        }
+
+                        //m_GameInformation.AmountOfPlayers -= playersToRemove.Count;
+                    }
                 }
             }
         }
@@ -215,9 +280,17 @@ namespace LogicUnit
             Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_RemovePlayerByHost}");
-            HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
 
-            return eLoginErrors.Ok;
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+
+                return eLoginErrors.Ok;
+            }
+            catch (Exception e)
+            {
+                return eLoginErrors.ServerError;
+            }
         }
 
         public async void PlayerLeft()
@@ -232,12 +305,58 @@ namespace LogicUnit
             Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_PlayerLeft}");
-            HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+            }
+            catch (Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
+        }
+
+        public async void HostLeft()
+        {
+            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_HostLeft}");
+            
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+            }
+            catch (Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
+        }
+
+        private async void getIfHostLeft()
+        {
+            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CheckHostLeft}");
+
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+
+                string strResponse = await response.Content.ReadAsStringAsync();
+                bool hostLeft = JsonSerializer.Deserialize<bool>(strResponse);
+
+                if (hostLeft)
+                {
+                    m_HostLeftAction.Invoke();
+                }
+            }
+            catch(Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
         }
 
         private bool checkIfValidUsername(string i_UserName)
         {
-            if (i_UserName.Length < 2)
+            if (i_UserName.Length < k_MinNameLength || i_UserName.Length > k_MaxNameLength)
             {
                 return false;
             }
@@ -258,20 +377,35 @@ namespace LogicUnit
             m_AddPlayersToScreen = i_Action;
         }
 
-        public void SetPlayersToRemoveAction(Action<List<string>> i_Action)
+        public void SetPlayersToRemoveAction(Func<List<string>, bool> i_Action)
         {
             m_RemovePlayersByHost = i_Action;
         }
 
+        public void SetHostLeftAction(Action i_Action)
+        {
+            m_HostLeftAction = i_Action;
+        }
+
         public void StartUpdatesRefresher()
         {
-            m_TimerForPlayersUpdate = new Timer(updateClient, null, 0, 500);
+            m_TimerForPlayersUpdate = new Timer(updateClient, null, 0, k_UpdateTimerInterval);
             //updateClient(null);
         }
 
         public void SetChosenGameAction(Action<string> i_Action)
         {
             m_ChosenGameAction = i_Action;
+        }
+
+        public void SetServerErrorAction(Action i_Action)
+        {
+            m_ServerErrorAction = i_Action;
+        }
+
+        public void StopUpdatesRefresher()
+        {
+            m_TimerForPlayersUpdate.Dispose();
         }
     }
 }
