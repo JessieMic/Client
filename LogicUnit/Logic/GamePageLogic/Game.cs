@@ -79,12 +79,13 @@ namespace LogicUnit
         private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
         private int i_AvgPing = 0;
-        public double m_LoopNumber = 0;
+        public int m_LoopNumber = 0;
         public GameObject[] m_MoveableGameObjects;
         private const double J_DesiredFrameTime = 0.067;
         protected readonly CollisionManager m_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
-
+        private int sent = 0;
+        private int recived = 0;
         /*TODO:
          * create different thread for server updates
          * the server will update an array named ServerInput that is a global variable
@@ -165,6 +166,7 @@ namespace LogicUnit
 
                 Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
                 m_LastElapsedTime = (int) m_GameStopwatch.Elapsed.TotalMilliseconds;
+                m_LoopNumber++;
 
             }
             if (m_GameStatus == eGameStatus.Ended)
@@ -190,7 +192,14 @@ namespace LogicUnit
                     //{
                     //    m_PlayersDataArray[i].IsNewButton = false;
                     //}
-                    m_PlayersDataArray[i].PlayerPointData = new Point(temp[i + 4], temp[i + 8]);
+                    Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
+                    if (m_PlayersDataArray[i].PlayerPointData != pointRecived)
+                    {
+                        System.Diagnostics.Debug.WriteLine("r " + pointRecived.Column + " " + pointRecived.Row);
+                        m_MoveableGameObjects[i].PointOnScreen = pointRecived;
+                        m_PlayersDataArray[i].PlayerPointData = pointRecived;
+                    }
+                   
                 }
                 
             }
@@ -200,7 +209,7 @@ namespace LogicUnit
         {
             SendServerUpdate();
             GetServerUpdate();
-            m_LoopNumber = m_LastElapsedTime;
+            //m_LoopNumber = m_LastElapsedTime;
             updatePosition(m_LastElapsedTime);
 
         }
@@ -231,17 +240,16 @@ namespace LogicUnit
         {
             if (m_NewButtonPressed)
             {
-                //m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
-
+                Point playerPosition = m_MoveableGameObjects[m_Player.ButtonThatPlayerPicked - 1].PointOnScreen;//getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
+                
+                System.Diagnostics.Debug.WriteLine("s "+ playerPosition.Column + " "+ playerPosition.Row);
+                sent = m_LoopNumber;
                 await r_ConnectionToServer.SendAsync(
                    "UpdatePlayerSelection",
                    m_Player.ButtonThatPlayerPicked,
                    m_CurrentPlayerData.Button,
-                   m_LoopNumber,
-                   -1);
-                //m_CurrentPlayerData.PlayerPointData.Column, //X
-                //m_CurrentPlayerData.PlayerPointData.Row); //Y
-
+                   playerPosition.Column,playerPosition.Row);
+                
                 m_NewButtonPressed = false;
             }
         }
@@ -331,7 +339,7 @@ namespace LogicUnit
         {
             Button button = sender as Button;
             m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
-
+            
             m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
             //Point point = m_CurrentPlayerData.PlayerPointData = getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
 
