@@ -11,7 +11,9 @@ namespace Objects
     public interface ICollidable
     {
         //event PositionChangedEventHandler PositionChanged;
-        //event EventHandler<EventArgs> Disposed;
+        public event EventHandler<EventArgs> Disposed;
+
+        public event EventHandler<EventArgs> UpdateGameObject;
         public Rect Bounds { get; }
 
         bool IsCollisionDetectionEnabled { get; }

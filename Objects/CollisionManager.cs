@@ -15,7 +15,7 @@ namespace Objects
             {
                 this.m_Collidables.Add(i_Collidable);
                 ////i_Collidable.PositionChanged += collidable_PositionChanged;
-                //i_Collidable.Disposed += collidable_Disposed;
+                i_Collidable.Disposed += collidable_Disposed;
             }
         }
 
@@ -65,10 +65,10 @@ namespace Objects
 
         private void collidable_Disposed(object sender, EventArgs e)
         {
-            //ICollidable collidable = sender as ICollidable;
-            ////collidable.PositionChanged -= collidable_PositionChanged;
-            //collidable.Disposed -= collidable_Disposed;
-            //m_Collidables.Remove(collidable);
+            ICollidable collidable = sender as ICollidable;
+            //collidable.PositionChanged -= collidable_PositionChanged;
+            collidable.Disposed -= collidable_Disposed;
+            m_Collidables.Remove(collidable);
         }
 
     }

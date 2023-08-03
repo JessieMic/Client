@@ -57,7 +57,7 @@ namespace LogicUnit
                 m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             background.GameBoardGridSize = actualOurSize.Height;
-            background.Initialize(eScreenObjectType.Image, 0, "snakebackground.png", new Point(0, 0),true, m_ScreenMapping.m_ValueToAdd);
+            background.Initialize(eScreenObjectType.Image, 0, m_GameName +"background.png", new Point(0, 0),true, m_ScreenMapping.m_ValueToAdd);
             background.m_Size = actualOurSize;
             m_GameObjectsToAdd.Add(background);
             m_GameInformation.BackgroundRect = new Rect(

@@ -44,30 +44,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 collidedWithSolid(i_Collidable);
                 Direction = RequestedDirection;
             }
-            else if(i_Collidable is Passage)
-            {
-                i++;
-                if (m_WantToTurn)//RequestedDirection == i_Collidable.Direction)
-                {
-                    if (i_Collidable.Bounds.Contains(Bounds.Location))//!Bounds.Contains(i_Collidable.Bounds.Center))//i_Collidable.Bounds.Contains(Bounds.Center)) ;
-                    {
-                        Point p = PointOnScreen;
-                        if (i_Collidable.Direction == Direction.Right || i_Collidable.Direction == Direction.Left)
-                        {
-                            p.Row = i_Collidable.PointOnScreen.Row;
-                        }
-                        else
-                        {
-                            p.Column = i_Collidable.PointOnScreen.Column;
-
-                        }
-
-                        PointOnScreen = p;
-                        Direction = RequestedDirection;
-                    }
-                }
-            }
-            
         }
 
     }

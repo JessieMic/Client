@@ -12,11 +12,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
     public class Food : GameObject
     {
         public override bool IsCollisionDetectionEnabled => true;
-        public Food()
+        public Food(Point i_Point)
         {
-            ObjectNumber = 2;
-            this.Initialize(eScreenObjectType.Player, 2, "boarder.png", new Point(3, 5), true,
+            ObjectNumber = 1;
+            this.Initialize(eScreenObjectType.Image, 1, "pacmanfood.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
+            m_Size.Height = m_Size.Width = GameSettings.GameGridSize/5;
+            centerObjectInGrid();
         }
 
         public override void Update(double i_TimeElapsed)
@@ -26,10 +28,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public override void Collided(ICollidable i_Collidable)
         {
-            if (i_Collidable is PacmanObject)
-            {
-                Rotatation += 20;
-            }
+            OnDisposed();
         }
     }
 }

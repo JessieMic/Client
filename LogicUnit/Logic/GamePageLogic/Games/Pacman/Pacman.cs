@@ -14,7 +14,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public Pacman()
         {
-            m_GameName = "Pacman";
+            m_GameName = "pacman";
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1; // was 3
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
@@ -31,9 +31,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     {
                         m_GameObjectsToAdd.Add(new Boarder(new Point(col, row)));
                     }
-                    else if(grid[col, row] == 2)
+                    else if (grid[col, row] == 0)
                     {
-                        m_GameObjectsToAdd.Add(new Passage(new Point(col, row)));
+                        m_GameObjectsToAdd.Add(new Food(new Point(col, row)));
                     }
                 }
             }
@@ -62,7 +62,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             int i = 0;
             Point point;
-            Food food = new Food();
+            //Food food = new Food();
 
             for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
             {
@@ -96,8 +96,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 point.Row = m_BoardSizeByGrid.Height - 2;
             }
 
-            GameObject gameObject = addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player, "body");
-            gameObject.FadeWhenObjectIsRemoved();
+            //GameObject gameObject = addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player, "body");
+           // gameObject.FadeWhenObjectIsRemoved();
 
             if (i_Player % 2 == 1)
             {

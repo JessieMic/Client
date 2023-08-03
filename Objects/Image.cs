@@ -14,6 +14,7 @@ namespace Objects
 
         public void SetImage(GameObject i_GameObject)
         {
+            m_Image.IsAnimationPlaying = true;
             m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
             m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
             m_Image.Aspect = Aspect.AspectFill;
@@ -21,6 +22,7 @@ namespace Objects
             m_Image.ClassId = i_GameObject.ImageSource;
             m_Image.ZIndex = -1;
             m_Image.Rotation = i_GameObject.Rotatation;
+            m_Image.IsVisible = i_GameObject.IsVisable;
             if (i_GameObject.m_Size.Width != 0)
             {
                 m_Image.WidthRequest = i_GameObject.m_Size.Width;
@@ -40,6 +42,7 @@ namespace Objects
         {
             m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
             m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Image.IsVisible = i_GameObject.IsVisable;
             if (m_Source != i_GameObject.ImageSource)
             {
                // m_Image.Source = i_GameObject.ImageSource;

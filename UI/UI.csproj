@@ -88,10 +88,13 @@
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
+	  <None Remove="Resources\Images\pacmanbackground.png" />
+	  <None Remove="Resources\Images\pacmanfood.png" />
 	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <None Remove="Resources\Images\pacman_boarder.png" />
+	  <None Remove="Resources\Images\pacman_cherry.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\pause_menu_option_button.png" />

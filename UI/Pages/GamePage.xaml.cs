@@ -75,23 +75,34 @@ public partial class GamePage : ContentPage
         m_GameButtonsImages.Add(i_ButtonToAdd.ID, buttonImage);
     }
 
-    private void gameObjectsUpdate(object sender, List<GameObject> i_ObjectUpdates)
+    private void gameObjectUpdate(object sender, GameObject i_ObjectUpdates)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
         {
             loopLabel.Text = m_Game.m_LoopNumber.ToString();
-            foreach (GameObject screenObject in m_Game.m_PlayerObjects)
-            { 
-                if (getObjectTypeFromID(screenObject.ID) == eScreenObjectType.Image)
+            //foreach (GameObject screenObject in m_Game.m_PlayerObjects)
+            //{
+                if (getObjectTypeFromID(i_ObjectUpdates.ID) == eScreenObjectType.Image)
                 {
-                    if (m_GameImages.ContainsKey(screenObject.ID))
+                    if (m_GameImages.ContainsKey(i_ObjectUpdates.ID))
                     {
-                        m_GameImages[screenObject.ID].Update(screenObject);
+                        m_GameImages[i_ObjectUpdates.ID].Update(i_ObjectUpdates);
                     }
                 }
-            }
+            //}
+            //foreach (GameObject screenObject in m_Game.m_PlayerObjects)
+            //{ 
+            //    if (getObjectTypeFromID(screenObject.ID) == eScreenObjectType.Image)
+            //    {
+            //        if (m_GameImages.ContainsKey(screenObject.ID))
+            //        {
+            //            m_GameImages[screenObject.ID].Update(screenObject);
+            //        }
+            //    }
+            //}
         });
     }
+    
 
     public void deleteObject(object sender, GameObject? i_ObjectToDelete)
     {
@@ -171,7 +182,7 @@ public partial class GamePage : ContentPage
     void initializeEvents()
     {
         m_Game.AddGameObjectList += addGameObjects;
-        m_Game.GameObjectsUpdate += gameObjectsUpdate;
+        m_Game.GameObjectUpdate += gameObjectUpdate;
         m_Game.GameObjectToDelete += deleteObject;
         m_Game.GameObjectsToHide += hideGameObjects;
         m_Game.GameObjectsToShow += showGameObjects;

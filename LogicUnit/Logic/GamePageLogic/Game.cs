@@ -21,13 +21,12 @@ namespace LogicUnit
     public abstract partial class Game
     {
         private List<string> m_PlayerMovementsLogs = new List<string>();
-
         private readonly HubConnection r_ConnectionToServer;
         //protected readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
-        public event EventHandler<List<GameObject>> GameObjectsUpdate;
+        public event EventHandler<GameObject> GameObjectUpdate;
         public event EventHandler<GameObject> GameObjectToDelete;
         public event EventHandler<List<int>> GameObjectsToHide;
         public event EventHandler<List<int>> GameObjectsToShow;
@@ -175,6 +174,8 @@ namespace LogicUnit
             }
         }
 
+
+
         private async void serverUpdateLoop()
         {
             while (m_ConnectedToServer)
@@ -237,7 +238,11 @@ namespace LogicUnit
                 OnAddScreenObjects();
             }
 
-            OnUpdateScreenObject();
+            foreach(var player in m_PlayerObjects)
+            {
+                player.Draw();
+            }
+            //OnUpdateScreenObject();
         }
 
         private async void SendServerUpdate()
@@ -371,31 +376,15 @@ namespace LogicUnit
             //notifyGameObjectUpdate(eScreenObjectType.Player, m_Player.ButtonThatPlayerPicked, Direction.getDirection(button.ClassId), new Point());
         }
 
-        protected GameObject addGameBoardObject(eScreenObjectType i_Type, Point i_Point, int i_ObjectNumber, int i_BoardNumber, string i_Version)
+        //private void OnUpdateGameObject()
+        //{
+            
+        //}
+
+        private void OnUpdateScreenObject(object sender, EventArgs e)
         {
-            string png = generatePngString(i_Type, i_ObjectNumber, i_Version);
-            GameObject gameObject = new GameObject();
-
-            gameObject.Initialize(i_Type, i_ObjectNumber, png, i_Point, true, m_ScreenMapping.m_ValueToAdd);
-
-            m_GameObjectsToAdd.Add(gameObject);
-            m_Board[(int)i_Point.Column, (int)i_Point.Row] = i_BoardNumber;
-
-            return gameObject;
-        }
-
-        protected void OnUpdateScreenObject()
-        {
-            GameObjectsUpdate.Invoke(this, m_gameObjectsToUpdate);
-        }
-
-        protected string generatePngString(eScreenObjectType i_Type, int i_ObjectNumber, string i_Version)
-        {
-            string png;
-
-            png = m_GameName + i_Type.ToString() + i_ObjectNumber + i_Version + ".png";
-
-            return png.ToLower();
+            GameObject i= sender as GameObject;
+            GameObjectUpdate.Invoke(this,i);
         }
 
         public void RunGame()
@@ -419,6 +408,8 @@ namespace LogicUnit
                         m_PlayerObjects[newObject.ObjectNumber-1] = newObject;
                     }
                 }
+
+                newObject.UpdateGameObject += OnUpdateScreenObject;
             }
             AddGameObjectList.Invoke(this, m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
         }
