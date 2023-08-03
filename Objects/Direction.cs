@@ -43,7 +43,7 @@ namespace Objects
                 return Direction.Right;
             }
             else
-            {
+            {   
                 return Direction.Left;
             }
         }

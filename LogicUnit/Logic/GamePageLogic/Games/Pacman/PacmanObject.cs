@@ -15,10 +15,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public override bool IsCollisionDetectionEnabled => true;
 
         private int i = 0;
-        public PacmanObject()
+        public PacmanObject(int ob, int[,] i_Board)
         {
-            ObjectNumber = 1;
-            this.Initialize(eScreenObjectType.Player,1, "pacman.gif", new Point(0,0),true,
+            m_Board = i_Board;
+            ObjectNumber = ob;
+            this.Initialize(eScreenObjectType.Player,ob, "pacman.gif", new Point(0,0),true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
@@ -46,7 +47,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             else if(i_Collidable is Passage)
             {
                 i++;
-                if(RequestedDirection == i_Collidable.Direction)
+                if (m_WantToTurn)//RequestedDirection == i_Collidable.Direction)
                 {
                     if (i_Collidable.Bounds.Contains(Bounds.Location))//!Bounds.Contains(i_Collidable.Bounds.Center))//i_Collidable.Bounds.Contains(Bounds.Center)) ;
                     {

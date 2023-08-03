@@ -43,6 +43,8 @@ namespace Objects
 
         public bool Fade { get; set; } = false;
 
+        protected int[,] m_Board;
+        protected bool m_WantToTurn = false;
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, bool i_IsGrid, Point i_ValuesToAdd)
         {
             ObjectNumber = i_ObjectNumber;
@@ -112,10 +114,101 @@ namespace Objects
             {
                 Direction = i_Direction;
             }
-            else
+            else if(Direction != i_Direction) 
             {
                 RequestedDirection = i_Direction;
+                if(checkIfCanChangeDirection(i_Direction))
+                {
+                    checkIfWantToTurn(i_Direction);
+                    Direction = i_Direction;
+
+                }
             }
+        }
+
+        void checkIfWantToTurn(Direction i_Direction)
+        {
+            int x = Direction.ColumnOffset + i_Direction.ColumnOffset;
+            int y = Direction.RowOffset + i_Direction.RowOffset;
+
+            if(x != 0 && y != 0)
+            {
+                m_WantToTurn = true;
+            }
+        }
+
+        bool checkIfCanChangeDirection(Direction i_Direction)
+        {
+            bool canChange = false;
+            Point point = getPointOnGrid();
+
+            if(point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
+            {
+                if (m_Board[(int)point.Column+i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
+                {
+                    canChange = true;
+                }
+            }
+
+            //if (Direction == Direction.Down)
+            //{
+            //    if(i_Direction == Direction.Up)
+            //    {
+            //        if (point.Row != 0)
+            //        {
+            //            if (m_Board[(int)point.Column, (int)point.Row - 1] != 1)
+            //            {
+            //                canChange = true;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        if (m_Board[(int)point.Column + i_Direction.ColumnOffset, (int)point.Row - 1] != 1)
+            //        {
+            //            canChange = true;
+            //        }
+            //    }
+               
+            //}
+            //else if (Direction == Direction.Up && i_Direction == Direction.Down)
+            //{
+            //    if (m_Board[(int)point.Column, (int)point.Row + 1] != 1)
+            //    {
+            //        canChange = true;
+            //    }
+            //}
+            //else if (Direction == Direction.Right && i_Direction == Direction.Left)
+            //{
+            //    if(point.Column != 0)
+            //    {
+            //        if (m_Board[(int)point.Column -1, (int)point.Row] != 1)
+            //        {
+            //            canChange = true;
+            //        }
+            //    }
+            //}
+            //else if (Direction == Direction.Left && i_Direction == Direction.Right)
+            //{
+            //    if (m_Board[(int)point.Column+1, (int)point.Row] != 1)
+            //    {
+            //        canChange = true;
+            //    }
+            //}
+            return canChange;
+        }
+
+        Point getPointOnGrid()
+        {
+            double temp;
+            Point point = GetCurrentPointOnScreen();
+
+            temp = point.Row / GameSettings.GameGridSize;
+            point.Row = (int)Math.Round(temp);
+            temp = point.Column / GameSettings.GameGridSize;
+            point.Column = (int)Math.Round(temp);
+
+            return point;
         }
 
         protected void isPointOnBoard(ref Point i_Point)
@@ -210,12 +303,20 @@ namespace Objects
 
         private void updatePosition(double i_TimeElapsed)
         {
-            Point newPoint = PointOnScreen;
-            newPoint.Column += ((Direction.ColumnOffset * Velocity) * i_TimeElapsed/1000);
-            newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed/1000);
+            if(m_WantToTurn)
+            {
+                PointOnScreen= getScreenPoint(getPointOnGrid(), true);
+                m_WantToTurn = false;
+            }
+            else
+            {
+                Point newPoint = PointOnScreen;
+                newPoint.Column += ((Direction.ColumnOffset * Velocity) * i_TimeElapsed / 1000);
+                newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed / 1000);
 
-            isPointOnBoard(ref newPoint);
-            PointOnScreen = newPoint;
+                isPointOnBoard(ref newPoint);
+                PointOnScreen = newPoint;
+            }
         }
 
         public Point GetCurrentPointOnScreen()//without add values

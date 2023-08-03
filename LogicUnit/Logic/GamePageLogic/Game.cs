@@ -103,7 +103,7 @@ namespace LogicUnit
                 m_PlayersDataArray[i] = new(i);
             }
 
-            m_PlayerObjects = new GameObject[1];//[m_GameInformation.AmountOfPlayers];
+            m_PlayerObjects = new GameObject[1];//[m_GameInformation.AmountOfPlayers];// new GameObject[2];//
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_InGameHubAddress)
                 .Build();
@@ -260,7 +260,7 @@ namespace LogicUnit
             }
         }
 
-        private async void GetServerUpdate()
+        private void GetServerUpdate()
         {
             //get data from the server
             for (int i = 1; i <= 1; i++)

@@ -10,6 +10,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
     {
         private PacmanObject m_Pacman;
         private List<GameObject> m_Ghosts = new List<GameObject>();
+        PacmanBoardFactory a = new PacmanBoardFactory();
 
         public Pacman()
         {
@@ -21,7 +22,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         void createBoard()
         {
-            PacmanBoardFactory a = new PacmanBoardFactory();
             int[,] grid = a.m_grid;
             for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
             {
@@ -47,8 +47,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         protected override void AddGameObjects()
         {
             createBoard();
-            m_Pacman = new PacmanObject();
+            m_Pacman = new PacmanObject(1, a.m_grid);
             m_GameObjectsToAdd.Add(m_Pacman);
+           // m_GameObjectsToAdd.Add(new PacmanObject(2, a.m_grid));
             //m_Ghosts.Add(new GhostObject());
             //m_GameObjectsToAdd.Add(m_Ghosts[0]);
             //m_GameObjectsToAdd.Add(new Boarder(new Point(1,1)));
