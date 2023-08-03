@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
@@ -80,7 +80,7 @@ namespace LogicUnit
         public bool m_NewButtonPressed = false;
         private int i_AvgPing = 0;
         public int m_LoopNumber = 0;
-        public GameObject[] m_MoveableGameObjects;
+        public GameObject[] m_PlayerObjects;
         private const double J_DesiredFrameTime = 0.067;
         protected readonly CollisionManager m_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
@@ -103,7 +103,7 @@ namespace LogicUnit
                 m_PlayersDataArray[i] = new(i);
             }
 
-            m_MoveableGameObjects = new GameObject[1];//[m_GameInformation.AmountOfPlayers];
+            m_PlayerObjects = new GameObject[1];//[m_GameInformation.AmountOfPlayers];
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_InGameHubAddress)
                 .Build();
@@ -180,7 +180,8 @@ namespace LogicUnit
             while (m_ConnectedToServer)
             {
                 int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
-               
+
+                //System.Diagnostics.Debug.WriteLine("r " + temp[0]);
                 for (int i = 0; i < 4; i++)
                 {
                     //if(m_PlayersDataArray[i].Button != temp[i])
@@ -192,18 +193,21 @@ namespace LogicUnit
                     //{
                     //    m_PlayersDataArray[i].IsNewButton = false;
                     //}
-                    Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
-                    if (m_PlayersDataArray[i].PlayerPointData != pointRecived)
-                    {
-                        System.Diagnostics.Debug.WriteLine("r " + pointRecived.Column + " " + pointRecived.Row);
-                        m_MoveableGameObjects[i].PointOnScreen = pointRecived;
-                        m_PlayersDataArray[i].PlayerPointData = pointRecived;
-                    }
-                   
+
+                    //Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
+                    //if (m_PlayersDataArray[i].PlayerPointData != pointRecived)
+                    //{
+                    //    //System.Diagnostics.Debug.WriteLine("r " + pointRecived.Column + " " + pointRecived.Row);
+                    //    m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
+                    //    //m_PlayerObjects[i].PointOnScreen = pointRecived;
+                    //    m_PlayersDataArray[i].PlayerPointData = pointRecived;
+                    //}
+
                 }
                 
             }
         }
+      
 
         private void updateGame()
         {
@@ -238,17 +242,19 @@ namespace LogicUnit
 
         private async void SendServerUpdate()
         {
+            //System.Diagnostics.Debug.WriteLine("s" + m_CurrentPlayerData.Button);
             if (m_NewButtonPressed)
             {
-                Point playerPosition = m_MoveableGameObjects[m_Player.ButtonThatPlayerPicked - 1].PointOnScreen;//getPlayerCurrentPointPoint(m_CurrentPlayerData.PlayerNumber);
-                
-                System.Diagnostics.Debug.WriteLine("s "+ playerPosition.Column + " "+ playerPosition.Row);
-                sent = m_LoopNumber;
+                Point playerPosition = m_PlayerObjects[m_Player.ButtonThatPlayerPicked - 1]
+                    .GetCurrentPointOnScreen();
+
+                //System.Diagnostics.Debug.WriteLine("s"+m_CurrentPlayerData.Button);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
+               // sent = m_LoopNumber;
                 await r_ConnectionToServer.SendAsync(
                    "UpdatePlayerSelection",
                    m_Player.ButtonThatPlayerPicked,
                    m_CurrentPlayerData.Button,
-                   playerPosition.Column,playerPosition.Row);
+                   (int)playerPosition.Column,(int)playerPosition.Row);
                 
                 m_NewButtonPressed = false;
             }
@@ -314,17 +320,17 @@ namespace LogicUnit
 
         protected virtual void ChangeDirection(Direction i_Direction, int i_GameObject, int i_LoopNumber)
         {
-            m_MoveableGameObjects[i_GameObject - 1].RequestDirection(i_Direction);
+            m_PlayerObjects[i_GameObject - 1].RequestDirection(i_Direction);
         }
 
         protected virtual void updatePosition(double i_TimeElapsed)
         {
-            foreach (var gameObject in m_MoveableGameObjects)
+            foreach (var gameObject in m_PlayerObjects)
             {
                 gameObject.Update(i_TimeElapsed);
             }
 
-            foreach (var gameObject in m_MoveableGameObjects)
+            foreach (var gameObject in m_PlayerObjects)
             {
                 m_CollisionManager.FindCollisions(gameObject);
             }
@@ -335,7 +341,7 @@ namespace LogicUnit
 
         }
 
-        public async void OnButtonClicked(object sender, EventArgs e)
+        public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
             m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
@@ -410,7 +416,7 @@ namespace LogicUnit
                     m_CollisionManager.AddObjectToMonitor(newObject);
                     if(newObject.ScreenObjectType == eScreenObjectType.Player)
                     {
-                        m_MoveableGameObjects[newObject.ObjectNumber-1] = newObject;
+                        m_PlayerObjects[newObject.ObjectNumber-1] = newObject;
                     }
                 }
             }

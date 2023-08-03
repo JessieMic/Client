@@ -103,7 +103,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 //PacmanObject pacman = new PacmanObject();
                 //m_GameObjectsToAdd.Add(pacman);
                 //m_AllPlayers.Add(pacman);
-                //m_MoveableGameObjects.Add(pacman);
+                //m_PlayerObjects.Add(pacman);
             }
             else
             {

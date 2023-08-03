@@ -13,6 +13,7 @@ namespace Objects
 {
     public class GameObject : ICollidable
     {
+        public bool Turn { get; set; }
         //public Point PointOnGrid { get; set; }
         public Point PointOnScreen { get; set; }
 
@@ -143,6 +144,7 @@ namespace Objects
 
             if(collided)
             {
+                Turn = true;
                 Direction = RequestedDirection;
             }
         }
@@ -214,6 +216,24 @@ namespace Objects
 
             isPointOnBoard(ref newPoint);
             PointOnScreen = newPoint;
+        }
+
+        public Point GetCurrentPointOnScreen()//without add values
+        {
+            Point value = PointOnScreen;
+
+            value.Row -= m_ValuesToAdd.Row;
+            value.Column -= m_ValuesToAdd.Column;
+          
+            return value;
+        }
+
+        public void UpdatePointOnScreen(Point i_Point)
+        {
+            i_Point.Row += m_ValuesToAdd.Row;
+            i_Point.Column += m_ValuesToAdd.Column;
+            PointOnScreen = i_Point;
+            //updatePosition(85);
         }
 
         public Rect Bounds
