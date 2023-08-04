@@ -16,6 +16,13 @@ namespace UI
             m_LogicManager = new LogicManager();
         }
 
+        protected override void OnNavigatedTo(NavigatedToEventArgs args)
+        {
+            base.OnNavigatedTo(args);
+
+            addComponents();
+        }
+
         protected override void OnSizeAllocated(double i_Width, double i_Height)
         {
 
@@ -44,6 +51,31 @@ namespace UI
         private async void OnSkipClicked(object sender, EventArgs e)
         {
             await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
+        }
+
+        private void addComponents()
+        {
+            //ButtonImage skipBtn, createRoomBtn, joinRoomBtn;
+            createButtonImage("SKIP:)", OnSkipClicked, 1, 1);
+            createButtonImage("Create a Room", OnCreateRoomClicked, 1, 2);
+            createButtonImage("Join a Room", OnJoinRoomClicked, 1, 3);
+        }
+
+        private void createButtonImage(string i_Text, EventHandler m_ClickEvent, int i_Row, int i_Col)
+        {
+            ButtonImage btn = new ButtonImage();
+            //btn.GetButton().WidthRequest = 1000;
+            //btn.GetImage().WidthRequest = 1000;
+            btn.HorizontalOptions = LayoutOptions.CenterAndExpand;
+            btn.VerticalOptions = LayoutOptions.CenterAndExpand;
+            btn.GetButton().VerticalOptions = LayoutOptions.FillAndExpand;
+            btn.GetButton().HorizontalOptions = LayoutOptions.FillAndExpand;
+
+            btn.Text = i_Text;
+            btn.Source = "entrance_btn.PNG";
+            btn.GetButton().Clicked += m_ClickEvent;
+            buttonComponent.Add(btn.GetImage(), i_Row, i_Col);
+            buttonComponent.Add(btn.GetButton(), i_Row, i_Col);
         }
     }
 }

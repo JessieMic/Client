@@ -1,4 +1,5 @@
-﻿using UI.Pages;
+﻿using System.Globalization;
+using UI.Pages;
 using UI.Pages.LobbyPages;
 
 namespace UI
@@ -7,6 +8,10 @@ namespace UI
     {
         public AppShell()
         {
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
+            var cultureInfo = CultureInfo.GetCultureInfo("en-US");
+            CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-GB");
             InitializeComponent();
             Routing.RegisterRoute(nameof(EnterNamePage), typeof(EnterNamePage));
             Routing.RegisterRoute(nameof(EnterRoomCodePage), typeof(EnterRoomCodePage));

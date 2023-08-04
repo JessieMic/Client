@@ -5,12 +5,22 @@
              NavigationPage.HasNavigationBar="False">
 
     <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+        <Grid x:Name="buttonComponent" RowSpacing="25">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="20*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="25*"/>
+            </Grid.ColumnDefinitions>
+        </Grid>
 
-            <Button
+            <!--<Button
                 x:Name="SkipBtn"
                 Text="SKIP:)"
                 HorizontalOptions="Center"
@@ -28,9 +38,7 @@
                 Text="Join a Room"
                 HorizontalOptions="Center"
                 Clicked="OnJoinRoomClicked"
-                />
-
-        </VerticalStackLayout>
+                />-->
     </ScrollView>
 
 </ContentPage>

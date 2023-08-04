@@ -1,12 +1,18 @@
-﻿namespace UI
+﻿using System.Globalization;
+
+namespace UI
 {
     public partial class App : Application
     {
         public App()
         {
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
             InitializeComponent();
 
             MainPage = new AppShell();
+            CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
         }
 
 

@@ -2,30 +2,38 @@
 <mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
-       x:Class="UI.Pages.LobbyPages.RemovedByHostPopUp"
+       x:Class="UI.Pages.LobbyPages.MessagePopUp"
        CanBeDismissedByTappingOutsideOfPopup="False"
        Color="White">
     
-    <Grid>
+    <Grid Padding="10" x:Name="gridLayout">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
 
         <Label
-            Text="You were removed by the host."
+            x:Name="MessageLabel"
+            Text=""
             VerticalOptions="Center"
             HorizontalOptions="Center"
             FontSize="Medium"
             FontAttributes="Bold"
-            Grid.Row="0"/>
+            Grid.Row="0"
+            Grid.Column="1"
+            HorizontalTextAlignment="Center"/>
 
-        <Button
+        <!--<Button
             Text="OK"
             x:Name="OKBtn"
             VerticalOptions="Center"
-            HorizontalOptions="Start"
+            HorizontalOptions="End"
             Grid.Row="1"
-            Clicked="OnOKBtnClicked"/>
+            Clicked="OnOKBtnClicked"/>-->
     </Grid>
 </mct:Popup>

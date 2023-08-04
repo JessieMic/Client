@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.Maui.Controls.Shapes;
 using GradientStop = Microsoft.Maui.Controls.GradientStop;
 using LogicUnit;
@@ -6,6 +7,10 @@ using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
 using Image = Objects.Image;
+using Image = Microsoft.Maui.Controls.Image;
+using System.Runtime.Versioning;
+using System.Threading;
+using System.Threading.Tasks;
 namespace UI.Pages;
 
 public partial class GamePage : ContentPage
@@ -19,7 +24,14 @@ public partial class GamePage : ContentPage
 
     public GamePage()
     {
+        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
+        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
+        CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
         InitializeComponent();
+        CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
+        CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
+        var cultureInfo = CultureInfo.GetCultureInfo("en-US");
+        
         initializePage();
 
     }

@@ -5,35 +5,36 @@
            x:Class="UI.Pages.LobbyPages.GamesPopUp"
            CanBeDismissedByTappingOutsideOfPopup="False"
            Color="White">
-    <Grid>
+    <Grid RowSpacing="5" ColumnSpacing="5" Padding="10" x:Name="gridLayout">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="60*"/>
+            <RowDefinition Height="20*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
 
-        <FlexLayout
-        Grid.Row="1"
-        Grid.Column="1"
-        x:Name="GamesComponent"/>
+        <HorizontalStackLayout
+            Grid.Row="1"
+            Grid.Column="1"
+            Spacing="15"
+            x:Name="GamesComponent"/>
 
-        <Button
+        <!--<Button
             Text="OK"
             x:Name="OkButton"
             Grid.Row="2"
             Grid.Column="2"
-            Clicked="OnOkClicked"/>
+            Clicked="OnOkClicked"/>-->
 
-        <Button
+        <!--<Button
             Text="Cancel"
             x:Name="CancelButton"
             Grid.Row="2"
             Grid.Column="0"
-            Clicked="OnCancelClicked"/>
+            Clicked="OnCancelClicked"/>-->
     </Grid>
 </mct:Popup>

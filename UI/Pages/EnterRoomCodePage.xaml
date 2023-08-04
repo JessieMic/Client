@@ -5,7 +5,40 @@
              NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="false">
 
-    <Grid RowDefinitions=".50*,.20*,.30*"
+    <Grid x:Name="objectsComponent" RowSpacing="25" Margin="25">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="20*"/>
+            <RowDefinition Height="30*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="20*"/>
+            <ColumnDefinition Width="60*"/>
+            <ColumnDefinition Width="20*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackLayout Grid.Column="1" Grid.Row="1"
+                     VerticalOptions="Center">
+
+            <Entry Placeholder="Enter Code"
+                   x:Name="Entry"
+                   MaxLength="10"
+                   Text="Code"
+                   VerticalOptions="Center"
+                   FontSize="30"
+                   ReturnType="Next">
+            </Entry>
+
+            <Label Text =""
+                   TextColor="Maroon"
+                   x:Name="ErrorLabel"
+                   LineBreakMode="WordWrap">
+            </Label>
+        </StackLayout>
+    </Grid>
+
+    <!--<Grid RowDefinitions=".50*,.20*,.30*"
           ColumnDefinitions=".40*,*,.40*"
           Padding="50">
 
@@ -19,8 +52,8 @@
                    VerticalOptions="Center"
                    FontSize="30"
                    ReturnType="Next">
-                <!--TextChanged="OnEntryTextChanged"
-               Completed="OnEntryCompleted"-->
+                --><!--TextChanged="OnEntryTextChanged"
+               Completed="OnEntryCompleted"--><!--
             </Entry>
 
             <Label Text =""
@@ -39,5 +72,5 @@
                 VerticalOptions="Start">
         </Button>
 
-    </Grid>
+    </Grid>-->
 </ContentPage>
