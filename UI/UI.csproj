@@ -95,6 +95,8 @@
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <None Remove="Resources\Images\pacman_boarder.png" />
 	  <None Remove="Resources\Images\pacman_cherry.png" />
+	  <None Remove="Resources\Images\pacman_ghost_2.png" />
+	  <None Remove="Resources\Images\pacman_ghost_2c.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\pause_menu_option_button.png" />

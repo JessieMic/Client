@@ -184,8 +184,6 @@ public partial class GamePage : ContentPage
         m_Game.AddGameObjectList += addGameObjects;
         m_Game.GameObjectUpdate += gameObjectUpdate;
         m_Game.GameObjectToDelete += deleteObject;
-        m_Game.GameObjectsToHide += hideGameObjects;
-        m_Game.GameObjectsToShow += showGameObjects;
         m_Game.GameStart += runGame;
     }
 }

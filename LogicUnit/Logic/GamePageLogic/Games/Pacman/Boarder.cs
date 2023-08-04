@@ -11,9 +11,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
     public class Boarder : GameObject
     {
-        public override bool IsCollisionDetectionEnabled => true;
         public Boarder(Point i_Point)
         {
+            IsCollisionDetectionEnabled = true;
             ObjectNumber = 2;
             this.Initialize(eScreenObjectType.Image, 2, "pacman_boarder.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);

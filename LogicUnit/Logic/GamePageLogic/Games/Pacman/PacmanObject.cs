@@ -10,21 +10,51 @@ using Point = Objects.Point;
 
 namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
-    public class PacmanObject : GameObject
+    public class PacmanObject : GameObject, IPacmanGamePlayer
     {
-        public override bool IsCollisionDetectionEnabled => true;
-
-        private int i = 0;
-        public PacmanObject(int ob, int[,] i_Board)
+        public Notify AteBerry;
+        public double m_CherryTimeStart;
+        public int AmountOfLives { get; set; } = 2;
+        public bool IsHunting { get; set; } = false;
+        public double m_DeathAnimationStart;
+        private bool m_IsDyingAnimationOn = false;
+        private bool m_IsCherryTime = false;
+        public PacmanObject(int[,] i_Board)
         {
             m_Board = i_Board;
-            ObjectNumber = ob;
-            this.Initialize(eScreenObjectType.Player,ob, "pacman.gif", new Point(0,0),true,
+            IsCollisionDetectionEnabled = true;
+            this.Initialize(eScreenObjectType.Player,1, "pacman.gif", new Point(0,0),true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
         public override void Update(double i_TimeElapsed)
         {
+            if (m_IsDyingAnimationOn)
+            {
+                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
+
+                if (timePassed < 1600)
+                {
+                    IsVisable = !IsVisable;
+                }
+                else
+                {
+                    IsVisable = true;
+                    m_IsDyingAnimationOn = false;
+                    IsObjectMoving = true;
+                }
+            }
+
+            if (m_IsCherryTime)
+            {
+                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
+
+                if (timePassed > 7000)
+                {
+                    m_IsCherryTime = false;
+                    IsHunting = false;
+                }
+            }
             base.Update(i_TimeElapsed);
         }
 
@@ -32,7 +62,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             if(i_Collidable is GhostObject)
             {
-                //reset
+                if(!IsHunting)//Got eaten
+                {
+                    IsObjectMoving = false;
+                    m_IsDyingAnimationOn = true;
+                    OnGotHit();
+                }
             }
             else if (i_Collidable is Food)
             {
@@ -44,7 +79,24 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 collidedWithSolid(i_Collidable);
                 Direction = RequestedDirection;
             }
+            else if(i_Collidable is Cherry)
+            {
+                i_Collidable.Collided(this);
+                AteBerry.Invoke();
+            }
         }
 
+        public void ResetPosition(double i_DeathStartTime)
+        {
+            m_DeathAnimationStart = i_DeathStartTime;
+            resetToStartupPoint();
+        }
+
+        public void InitiateCherryTime(double i_BerryStartTime)
+        {
+            m_IsCherryTime = true;
+            IsHunting = true;
+            m_CherryTimeStart = i_BerryStartTime;
+        }
     }
 }

@@ -8,21 +8,21 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
     public class Pacman : Game
     {
-        private PacmanObject m_Pacman;
-        private List<GameObject> m_Ghosts = new List<GameObject>();
-        PacmanBoardFactory a = new PacmanBoardFactory();
+
+        private IPacmanGamePlayer[] m_PacmanPlayers;
+        PacmanBoardFactory m_PacmanBoard = new PacmanBoardFactory();
 
         public Pacman()
         {
             m_GameName = "pacman";
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1; // was 3
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
+            m_PacmanPlayers = new IPacmanGamePlayer[m_GameInformation.AmountOfPlayers];
         }
 
         void createBoard()
         {
-            int[,] grid = a.m_grid;
+            int[,] grid = m_PacmanBoard.m_grid;
             for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
             {
                 for (int row = 0; row < m_BoardSizeByGrid.Height; row++)
@@ -35,161 +35,66 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     {
                         m_GameObjectsToAdd.Add(new Food(new Point(col, row)));
                     }
-                }
-            }
-        }
-
-        protected virtual void ChangeDirection(Direction i_Direction, int i_Player, int i_LoopNumber)
-        {
-            //m_Pacman.ChangePosition();
-        }
-
-        protected override void AddGameObjects()
-        {
-            createBoard();
-            m_Pacman = new PacmanObject(1, a.m_grid);
-            m_GameObjectsToAdd.Add(m_Pacman);
-           // m_GameObjectsToAdd.Add(new PacmanObject(2, a.m_grid));
-            //m_Ghosts.Add(new GhostObject());
-            //m_GameObjectsToAdd.Add(m_Ghosts[0]);
-            //m_GameObjectsToAdd.Add(new Boarder(new Point(1,1)));
-            //m_GameObjectsToAdd.Add(new Boarder(new Point(1, 3)));
-            //m_GameObjectsToAdd.Add(new Passage(new Point(0, 2)));
-            //m_CollisionManager.AddObjectToMonitor(new Passage(new Point(4, 3)));
-        }
-
-        private void addFood()
-        {
-            int i = 0;
-            Point point;
-            //Food food = new Food();
-
-            for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
-            {
-                for (int row = 0; row < m_BoardSizeByGrid.Height; row++)
-                {
-                    if (m_Board[col, row] == 0)
+                    else if (grid[col, row] == 2)
                     {
-                        //point = new Point(col,row);
-                        //food.set(addGameBoardObject(eScreenObjectType.Object, point, 1,
-                        //    (int)eBoardObjectPacman.Food, eBoardObjectPacman.Food.ToString()));
-                        ////m_Food.Add(food);
-                        //m_Food.Add(point, food);
+                        m_GameObjectsToAdd.Add(new Cherry(new Point(col, row)));
                     }
                 }
             }
         }
 
-        private void addPlayerObjects(int i_Player)
+        private void pacmanAteCherry()
         {
-            Point point = new Point(1, 1);
-            eColumnPosition playerCol = m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Column;
-            eRowPosition playerRow = m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].m_Position.Row;
-
-            if (playerCol == eColumnPosition.RightColumn)
+            foreach(var player in m_PacmanPlayers)
             {
-                point.Column = m_BoardSizeByGrid.Width - 2;
+                double currentTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+                player.InitiateCherryTime(currentTime);
             }
+        }
 
-            if (playerRow == eRowPosition.LowerRow)
+        protected override void AddGameObjects()
+        {
+            createBoard();
+            addPlayerObjects();
+        }
+
+        private void addPlayerObjects()
+        {
+            PacmanObject player1 = new PacmanObject(m_PacmanBoard.m_grid);
+            m_PacmanPlayers[0]=player1;
+            m_GameObjectsToAdd.Add(player1);
+            player1.AteBerry += pacmanAteCherry;
+
+            for (int i = 2; i <= m_GameInformation.AmountOfPlayers; i++)
             {
-                point.Row = m_BoardSizeByGrid.Height - 2;
+                GhostObject newGhost = new GhostObject(
+                    i,
+                    m_BoardSizeByGrid.Width,
+                    m_BoardSizeByGrid.Height,
+                    m_PacmanBoard.m_grid);
+
+                m_GameObjectsToAdd.Add(newGhost);
+                m_PacmanPlayers[i-1] = newGhost;
             }
+        }
 
-            //GameObject gameObject = addGameBoardObject(eScreenObjectType.Player, point, i_Player, i_Player, "body");
-           // gameObject.FadeWhenObjectIsRemoved();
-
-            if (i_Player % 2 == 1)
+        protected override void PlayerLostALife(object sender, int i_Player)
+        {
+            double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            
+            if(i_Player==1)//Pacman got hit so we reset all positions
             {
-                //PacmanObject pacman = new PacmanObject();
-                //m_GameObjectsToAdd.Add(pacman);
-                //m_AllPlayers.Add(pacman);
-                //m_PlayerObjects.Add(pacman);
+                
+                foreach(var player in m_PacmanPlayers)
+                {
+                    player.ResetPosition(startTimeOfDeathAnimation);
+                }
             }
             else
             {
-                //GhostObject ghost = new GhostObject(ref m_Board);
-                //ghost.set(gameObject);
-                ////m_GhostPlayers.Add(ghost);
-                //m_AllPlayers.Add(ghost);
+                m_PacmanPlayers[i_Player-1].ResetPosition(startTimeOfDeathAnimation);
             }
+            base.PlayerLostALife(sender,i_Player);
         }
-
-        private void moveObjects()
-        {
-            //int pacmanNum = 1;
-
-            //foreach (var player in m_AllPlayers)
-            //{
-            //    if (player is PacmanObject)
-            //    {
-            //        PacmanObject pacman = player as PacmanObject;
-            //        if (m_Hearts.m_AmountOfLivesPlayerHas[pacmanNum - 1] > 0 && pacman.m_Direction != Direction.Stop)
-            //        {
-            //            Point newPoint = pacman.GetOneMoveAhead();
-            //            int hit = pacman.WhatPacmanWillHit(newPoint, isPointOnBoard(newPoint));
-
-            //            if (hit == (int)eBoardObjectPacman.OutOfBounds)
-            //            {
-            //                //stop pacman
-            //            }
-            //            else if (hit == (int)eBoardObjectPacman.Empty) // normal move
-            //            {
-            //                pacman.Move(newPoint);
-            //            }
-            //            else if (hit == (int)eBoardObjectPacman.Food)
-            //            {
-            //                //pacman.Move(newPoint);
-            //                //removeFood(newPoint);
-            //                //score++
-            //            }
-            //            else if (hit == (int)eBoardObjectPacman.Ghost1 || hit == (int)eBoardObjectPacman.Ghost2)
-            //            {
-            //                pacmanGotHit(pacmanNum);
-            //            }
-
-            //            m_gameObjectsToUpdate.Add(pacman);
-            //        }
-            //    }
-
-            //    pacmanNum++;
-            //}
-        }
-
-        protected override void ChangeDirection(Direction i_Direction, int i_Player, Point i_Point)
-        {
-            //m_AllPlayers[i_Player - 1].m_Direction = i_Direction;
-        }
-
-        private void pacmanGotHit(int i_Player)
-        {
-            m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
-            //OnDeleteGameObject(m_PacmanPlayers[i_Player - 1]);
-            //OnDeleteGameObject(m_AllPlayers[i_Player - 1]);
-            PlayerLostALife(i_Player);
-        }
-
-        private void removeFood(Point i_Point)
-        {
-            //if (m_Food[i_Point] != null)
-            //{
-            //    Food food = m_Food[i_Point];
-
-            //    food.PopPoint();
-            //    OnDeleteGameObject(m_Food[i_Point]);
-            //}
-
-        }
-
-        //protected override void ChangeGameObject(int i_ObjectNumber, Direction i_Direction, Point i_Point)
-        //{
-        //    removeFoodFromPoint(i_Point);
-        //}
-
-        //private void removeFoodFromPoint(Point i_Point)
-        //{
-        //    Food foodToRemove = m_Food[i_Point];
-        //    foodToRemove.PopPoint();
-        //}
     }
 }

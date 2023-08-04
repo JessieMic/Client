@@ -22,7 +22,6 @@ namespace LogicUnit
             setPauseMenu();
             AddGameObjects();
             OnAddScreenObjects();
-            OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
         }
 
         protected abstract void AddGameObjects();

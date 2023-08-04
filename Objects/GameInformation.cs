@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,7 @@ namespace Objects
         public SizeDTO GameBoardSizeByPixel { get; set; }
         private static readonly object s_InstanceLock = new object();
         public Rect BackgroundRect { get; set; }
+        public Stopwatch RealWorldStopwatch { get; set; }
         public static GameInformation Instance
         {
             get

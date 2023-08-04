@@ -43,9 +43,9 @@ namespace Objects
             m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
             m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
             m_Image.IsVisible = i_GameObject.IsVisable;
-            if (m_Source != i_GameObject.ImageSource)
+            if (m_Image.ClassId != i_GameObject.ImageSource)
             {
-               // m_Image.Source = i_GameObject.ImageSource;
+                m_Image.Source = m_Image.ClassId = i_GameObject.ImageSource;
             }
             //m_Image.ZIndex = -1;
             m_Image.Rotation = i_GameObject.Rotatation;

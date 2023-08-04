@@ -15,11 +15,9 @@ namespace Objects
 
         public event EventHandler<EventArgs> UpdateGameObject;
         public Rect Bounds { get; }
-
-        bool IsCollisionDetectionEnabled { get; }
+        public bool IsCollisionDetectionEnabled { get; set; }
         public Point PointOnScreen { get;}
         bool CheckCollision(ICollidable i_Source);
-        public Direction Direction { get; set; }
         void Collided(ICollidable i_Collidable);
     }
 }

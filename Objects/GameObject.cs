@@ -13,18 +13,16 @@ namespace Objects
 {
     public class GameObject : ICollidable
     {
-        public bool Turn { get; set; }
-        //public Point PointOnGrid { get; set; }
-        public Point PointOnScreen { get; set; }
-        public event EventHandler<EventArgs> Disposed;
-        public bool IsVisable { get; set; } = true;
         public event EventHandler<EventArgs> UpdateGameObject;
+        public event EventHandler<EventArgs> Disposed;
+        public event EventHandler<int> PlayerGotHit;
+        public bool Turn { get; set; }
+        public Point PointOnScreen { get; set; }
+        public bool IsVisable { get; set; } = true;
         public int Rotatation { get; set; } = 0;
-
         public int ScaleX { get; set; } = 1;
-
-        public virtual bool IsCollisionDetectionEnabled { get; }
-
+        private Point m_StartupPoint;
+        public bool IsCollisionDetectionEnabled { get; set; }
         public int ScaleY { get; set; } = 1;
         public string ImageSource { get; set; }
         public int ObjectNumber { get; set; }
@@ -32,28 +30,25 @@ namespace Objects
         public int GameBoardGridSize { get; set; } = GameSettings.GameGridSize;
         protected GameInformation m_GameInformation = GameInformation.Instance;
         private Point m_ValuesToAdd;
-        //protected int m_Velocity { get; set; } = 1;
-        public bool IsObjectMoving { get; set; } = false;
+        public bool IsObjectMoving { get; set; } = true;
         public Direction Direction { get; set; } = Direction.Stop;
         public Direction RequestedDirection { get; set; } = Direction.Stop;
         public eButton ButtonType { get; set; }
         public string Text { get; set; }
         public SizeDTO m_Size = GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; }
-
-        public int Velocity { get; set; } = 120; //120;
-
+        public int Velocity { get; set; } = 105;
         public bool Fade { get; set; } = false;
-
         protected int[,] m_Board;
         protected bool m_WantToTurn = false;
+
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, bool i_IsGrid, Point i_ValuesToAdd)
         {
             ObjectNumber = i_ObjectNumber;
             ScreenObjectType = i_ScreenObjectType;
             m_ValuesToAdd = i_ValuesToAdd;
             Point point = getScreenPoint(i_Point, i_IsGrid);
-            PointOnScreen = point;
+            PointOnScreen =m_StartupPoint= point;
             ImageSource=i_Png;
             ID=GameSettings.getID();
         }
@@ -112,27 +107,32 @@ namespace Objects
 
         public void Draw()
         {
-            if(IsVisable == true)
-            {
-                UpdateGameObject.Invoke(this, null);
-            }
+            UpdateGameObject.Invoke(this, null);
         }
 
         public void RequestDirection(Direction i_Direction)
         {
-            if(Direction == Direction.Stop)
+            if(IsObjectMoving)
             {
-                Direction = i_Direction;
-            }
-            else if(Direction != i_Direction) 
-            {
-                RequestedDirection = i_Direction;
-                if(checkIfCanChangeDirection(i_Direction))
+                if (Direction == Direction.Stop)
                 {
-                    checkIfWantToTurn(i_Direction);
                     Direction = i_Direction;
                 }
+                else if (Direction != i_Direction)
+                {
+                    RequestedDirection = i_Direction;
+                    if (checkIfCanChangeDirection(i_Direction))
+                    {
+                        checkIfWantToTurn(i_Direction);
+                        Direction = i_Direction;
+                    }
+                }
             }
+        }
+
+        protected void OnGotHit()
+        {
+            PlayerGotHit.Invoke(this,ObjectNumber);
         }
 
         void checkIfWantToTurn(Direction i_Direction)
@@ -146,8 +146,16 @@ namespace Objects
             }
         }
 
+        protected void resetToStartupPoint()
+        {
+            IsObjectMoving = false;
+            PointOnScreen = m_StartupPoint;
+            Direction= RequestedDirection = Direction.Stop;
+        }
+
         protected virtual void OnDisposed()
         {
+            IsCollisionDetectionEnabled = false;
             Disposed.Invoke(this,null);
             IsVisable = false;
             UpdateGameObject.Invoke(this,null);

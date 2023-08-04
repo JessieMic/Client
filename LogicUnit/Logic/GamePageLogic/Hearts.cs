@@ -125,9 +125,16 @@ namespace LogicUnit.Logic.GamePageLogic
 
         private void removeAHeart()
         {
-            int lastHeartIndex = m_HeartsOnScreen.Count - 1;
-            m_HeartToRemove = m_HeartsOnScreen[lastHeartIndex];
-            m_HeartsOnScreen.RemoveAt(lastHeartIndex);
+            try
+            {
+                int lastHeartIndex = m_HeartsOnScreen.Count - 1;
+                m_HeartToRemove = m_HeartsOnScreen[lastHeartIndex];
+                m_HeartsOnScreen.RemoveAt(lastHeartIndex);
+            }
+            catch
+            {
+                System.Diagnostics.Debug.WriteLine("HeartBug");
+            }
         }
     }
 }
