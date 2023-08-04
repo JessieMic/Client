@@ -14,8 +14,8 @@ namespace Objects
 
         public ScreenDimension(int i_ScreenWidth,int i_ScreenHeight, Position i_Position)
         {
-            m_OurSize.m_Width = i_ScreenWidth;
-            m_OurSize.m_Height = i_ScreenHeight;
+            m_OurSize.Width = i_ScreenWidth;
+            m_OurSize.Height = i_ScreenHeight;
             m_Position = i_Position;
         }
 

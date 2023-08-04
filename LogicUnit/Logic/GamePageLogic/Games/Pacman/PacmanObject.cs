@@ -5,56 +5,98 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Objects.Enums;
 using Point = Objects.Point;
 
 namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
-    public class PacmanObject : GameObject
+    public class PacmanObject : GameObject, IPacmanGamePlayer
     {
-        private int[,] m_Board;
-
-        public PacmanObject(ref int[,] i_Board)
+        public Notify AteBerry;
+        public double m_CherryTimeStart;
+        public int AmountOfLives { get; set; } = 2;
+        public bool IsHunting { get; set; } = false;
+        public double m_DeathAnimationStart;
+        private bool m_IsDyingAnimationOn = false;
+        private bool m_IsCherryTime = false;
+        public PacmanObject(int[,] i_Board)
         {
             m_Board = i_Board;
+            IsCollisionDetectionEnabled = true;
+            this.Initialize(eScreenObjectType.Player,1, "pacman.gif", new Point(0,0),true,
+                m_GameInformation.PointValuesToAddToScreen);
         }
 
-        public Point GetOneMoveAhead()
+        public override void Update(double i_TimeElapsed)
         {
-            Point newPoint = getPacmanPoint().Move(m_Direction);
-
-            return newPoint;
-        }
-
-        private Point getPacmanPoint()
-        {
-            return m_PointsOnGrid.First();
-        }
-
-        public int WhatPacmanWillHit(Point i_Point, bool i_IsPointInsideBoard)
-        {
-            int res;
-            Point newHeadPoint = getPacmanPoint().Move(m_Direction);
-
-            if (!i_IsPointInsideBoard)
+            if (m_IsDyingAnimationOn)
             {
-                res = (int)eBoardObjectPacman.OutOfBounds;
-            }
-            else
-            {
-                res = m_Board[i_Point.m_Column, i_Point.m_Row];
+                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
+
+                if (timePassed < 1600)
+                {
+                    IsVisable = !IsVisable;
+                }
+                else
+                {
+                    IsVisable = true;
+                    m_IsDyingAnimationOn = false;
+                    IsObjectMoving = true;
+                }
             }
 
-            return res;
+            if (m_IsCherryTime)
+            {
+                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
+
+                if (timePassed > 7000)
+                {
+                    m_IsCherryTime = false;
+                    IsHunting = false;
+                }
+            }
+            base.Update(i_TimeElapsed);
         }
 
-        public void Move(Point i_NewPoint)
+        public override void Collided(ICollidable i_Collidable)
         {
-            AddPointTop(i_NewPoint);
+            if(i_Collidable is GhostObject)
+            {
+                if(!IsHunting)//Got eaten
+                {
+                    IsObjectMoving = false;
+                    m_IsDyingAnimationOn = true;
+                    OnGotHit();
+                }
+            }
+            else if (i_Collidable is Food)
+            {
+                i_Collidable.Collided(this);
+                //points up
+            }
+            else if (i_Collidable is Boarder)
+            {
+                collidedWithSolid(i_Collidable);
+                Direction = RequestedDirection;
+            }
+            else if(i_Collidable is Cherry)
+            {
+                i_Collidable.Collided(this);
+                AteBerry.Invoke();
+            }
+        }
 
-            Point currPoint = getPacmanPoint();
+        public void ResetPosition(double i_DeathStartTime)
+        {
+            m_DeathAnimationStart = i_DeathStartTime;
+            resetToStartupPoint();
+        }
 
-            m_Board[currPoint.m_Column, currPoint.m_Row] = 0;
-            PopPoint();
+        public void InitiateCherryTime(double i_BerryStartTime)
+        {
+            m_IsCherryTime = true;
+            IsHunting = true;
+            m_CherryTimeStart = i_BerryStartTime;
         }
     }
 }

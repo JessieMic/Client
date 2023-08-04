@@ -30,6 +30,38 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
+	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
@@ -57,9 +89,15 @@
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
+	  <None Remove="Resources\Images\pacmanbackground.png" />
+	  <None Remove="Resources\Images\pacmanfood.png" />
 	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
+	  <None Remove="Resources\Images\pacman_boarder.png" />
+	  <None Remove="Resources\Images\pacman_cherry.png" />
+	  <None Remove="Resources\Images\pacman_ghost_2.png" />
+	  <None Remove="Resources\Images\pacman_ghost_2c.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\pause_menu_option_button.png" />

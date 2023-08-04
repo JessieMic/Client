@@ -14,22 +14,41 @@ namespace Objects
 
         public void SetImage(GameObject i_GameObject)
         {
-            m_Image.TranslationX = i_GameObject.m_PointsOnScreen[0].m_Column;
-            m_Image.TranslationY = i_GameObject.m_PointsOnScreen[0].m_Row;
+            m_Image.IsAnimationPlaying = true;
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
+            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
             m_Image.Aspect = Aspect.AspectFill;
-            m_Image.Source = i_GameObject.m_ImageSources[0];
-            m_Image.ClassId = i_GameObject.m_ImageSources[0];
+            m_Image.Source = i_GameObject.ImageSource;
+            m_Image.ClassId = i_GameObject.ImageSource;
             m_Image.ZIndex = -1;
-            m_Image.Rotation = i_GameObject.m_Rotatation[0];
-            if (i_GameObject.m_OurSize.m_Width != 0)
+            m_Image.Rotation = i_GameObject.Rotatation;
+            m_Image.IsVisible = i_GameObject.IsVisable;
+            if (i_GameObject.m_Size.Width != 0)
             {
-                m_Image.WidthRequest = i_GameObject.m_OurSize.m_Width;
-                m_Image.HeightRequest = i_GameObject.m_OurSize.m_Height;
-                if (i_GameObject.m_ImageSources[0] != "snakebackground.png")
+                m_Image.WidthRequest = i_GameObject.m_Size.Width;
+                m_Image.HeightRequest = i_GameObject.m_Size.Height;
+                if (i_GameObject.ImageSource != "snakebackground.png")
                 {
                     m_Image.Aspect = Aspect.Fill;
                 }
             }
+
+            //m_GameImages[screenObject.ID].TranslateTo(
+            //    screenObject.PointOnScreen.Column,
+            //    screenObject.PointOnScreen.Row, 100);
+        }
+
+        public void Update(GameObject i_GameObject)
+        {
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
+            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Image.IsVisible = i_GameObject.IsVisable;
+            if (m_Image.ClassId != i_GameObject.ImageSource)
+            {
+                m_Image.Source = m_Image.ClassId = i_GameObject.ImageSource;
+            }
+            //m_Image.ZIndex = -1;
+            m_Image.Rotation = i_GameObject.Rotatation;
         }
 
         public Microsoft.Maui.Controls.Image GetImage()
@@ -132,6 +151,11 @@ namespace Objects
             {
                 m_Image.VerticalOptions = value;
             }
+        }
+
+        public void FadeTo(int i_Opacity, uint i_Length)
+        {
+            m_Image.FadeTo(i_Opacity, i_Length, null);
         }
     }
 }

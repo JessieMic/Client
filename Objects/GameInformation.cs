@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,12 +18,12 @@ namespace Objects
         private Player m_Player = Player.Instance;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<ScreenDimension> m_ScreenInfoOfAllPlayers = new List<ScreenDimension>();
+        public Point PointValuesToAddToScreen { get; set; } = new Point();
         public string[] m_NamesOfAllPlayers;
-
-
-
+        public SizeDTO GameBoardSizeByPixel { get; set; }
         private static readonly object s_InstanceLock = new object();
-
+        public Rect BackgroundRect { get; set; }
+        public Stopwatch RealWorldStopwatch { get; set; }
         public static GameInformation Instance
         {
             get

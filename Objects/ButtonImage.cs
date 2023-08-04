@@ -29,18 +29,18 @@ namespace Objects
         {
             SetImage(i_GameObject);
 
-            m_Button.TranslationX = i_GameObject.m_PointsOnScreen[0].m_Column;
-            m_Button.TranslationY = i_GameObject.m_PointsOnScreen[0].m_Row;
-            m_Button.ClassId = i_GameObject.m_ButtonType.ToString();
+            m_Button.TranslationX = i_GameObject.PointOnScreen.Column;
+            m_Button.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Button.ClassId = i_GameObject.ButtonType.ToString();
             m_Button.ZIndex = -1;
-            m_Button.Rotation = i_GameObject.m_Rotatation[0];
-            if (i_GameObject.m_OurSize.m_Width != 0)
+            m_Button.Rotation = i_GameObject.Rotatation;
+            if (i_GameObject.m_Size.Width != 0)
             {
-                m_Button.WidthRequest = i_GameObject.m_OurSize.m_Width;
-                m_Button.HeightRequest = i_GameObject.m_OurSize.m_Height;
+                m_Button.WidthRequest = i_GameObject.m_Size.Width;
+                m_Button.HeightRequest = i_GameObject.m_Size.Height;
             }
 
-            Text = i_GameObject.m_text;
+            //Text = i_GameObject.Text;
         }
 
         public void IsButtonPressed(bool i_IsButtonPressed)

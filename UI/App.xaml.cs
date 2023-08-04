@@ -15,6 +15,7 @@ namespace UI
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
         }
 
+
         protected override Window CreateWindow(IActivationState activationState)
         {
             var window = base.CreateWindow(activationState);
