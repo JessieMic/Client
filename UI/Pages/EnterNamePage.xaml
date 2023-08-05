@@ -33,7 +33,8 @@
             <Label Text =""
                    TextColor="Maroon"
                    x:Name="ErrorLabel"
-                   LineBreakMode="WordWrap">
+                   LineBreakMode="WordWrap"
+                   FontSize="Caption">
             </Label>
         </StackLayout>
     </Grid>

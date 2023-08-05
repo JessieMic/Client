@@ -29,6 +29,7 @@ namespace LogicUnit
         private string? m_LastChosenGame = null;
         private Action m_HostLeftAction;
         private Action m_ServerErrorAction;
+        private Action m_GoToNextPage;
 
         public LogicManager()
         {
@@ -158,6 +159,7 @@ namespace LogicUnit
             //getPlayersToRemove();
             getChosenGame();
             getIfHostLeft();
+            checkIfNeedToGoToNextPage();
         }
 
         private async void getChosenGame()
@@ -361,6 +363,50 @@ namespace LogicUnit
             }
         }
 
+        public int GetAmountOfPlayers()
+        {
+            return m_GameInformation.AmountOfPlayers;
+        }
+
+        public async void UpdateServerToMoveToNextPage()
+        {
+            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_UpdateGoToNextPage}");
+
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+            }
+            catch (Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
+        }
+
+        private async void checkIfNeedToGoToNextPage()
+        {
+            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CheckIfGoToNextPage}");
+
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+
+                string strResponse = await response.Content.ReadAsStringAsync();
+                bool goToNextPage = JsonSerializer.Deserialize<bool>(strResponse);
+
+                if (goToNextPage)
+                {
+                    m_GoToNextPage.Invoke();
+                }
+            }
+            catch (Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
+
+        }
+
         private bool checkIfValidUsername(string i_UserName)
         {
             if (i_UserName.Length < k_MinNameLength || i_UserName.Length > k_MaxNameLength)
@@ -408,6 +454,11 @@ namespace LogicUnit
         public void SetServerErrorAction(Action i_Action)
         {
             m_ServerErrorAction = i_Action;
+        }
+
+        public void SetGoToNextPageAction(Action i_Action)
+        {
+            m_GoToNextPage = i_Action;
         }
 
         public void StopUpdatesRefresher()

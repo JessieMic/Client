@@ -4,50 +4,57 @@
        xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
        x:Class="UI.Pages.LobbyPages.InstructionsPopUp"
        CanBeDismissedByTappingOutsideOfPopup="False"
-       Color="White">
-    <Grid Padding="10" x:Name="gridLayout">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="75*"/>
-            <RowDefinition Height="20*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20*"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="20*"/>
-        </Grid.ColumnDefinitions>
+       Color="Transparent">
+    <Border Stroke="#4e0066" StrokeThickness="5" BackgroundColor="#b07ebf">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="30"/>
+        </Border.StrokeShape>
+        <Grid Padding="10" x:Name="gridLayout">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="75*"/>
+                <RowDefinition Height="20*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
 
-        <VerticalStackLayout
+            <VerticalStackLayout
             Spacing="10"
             VerticalOptions="Center" 
             HorizontalOptions="Center"
             Grid.Row="1"
             Grid.Column="0"
             Grid.ColumnSpan="3">
-            
-            <Label 
+
+                <Label 
                 x:Name="HeaderLabel"
                 VerticalOptions="Center" 
                 HorizontalOptions="Center"
                 FontSize="Medium"
-                FontAttributes="Bold"/>
-            
-            <Label
+                FontAttributes="Bold"
+                TextColor="{DynamicResource PaloozaTextColor}"/>
+
+                <Label
                 x:Name="InstructionsLabel"
                 VerticalOptions="Center"
                 HorizontalOptions="Center"
                 FontAutoScalingEnabled="True"
-                FontSize="Caption"/>
-            
-        </VerticalStackLayout>
+                FontSize="Caption"
+                TextColor="{DynamicResource PaloozaTextColor}"/>
 
-        <!--<Button
+            </VerticalStackLayout>
+
+            <!--<Button
             Text="Close"
             x:Name="CloseBtn"
             VerticalOptions="Center"
             HorizontalOptions="Start"
             Grid.Row="1"
             Clicked="OnCloseBtnClicked"/>-->
-        
-    </Grid>
+
+        </Grid>
+    </Border>
 </mct:Popup>
