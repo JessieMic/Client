@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,12 +18,12 @@ namespace Objects
         private Player m_Player = Player.Instance;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<ScreenDimension> m_ScreenInfoOfAllPlayers = new List<ScreenDimension>();
+        public Point PointValuesToAddToScreen { get; set; } = new Point();
         public string[] m_NamesOfAllPlayers;
-
-
-
+        public SizeDTO GameBoardSizeByPixel { get; set; }
         private static readonly object s_InstanceLock = new object();
-
+        public Rect BackgroundRect { get; set; }
+        public Stopwatch RealWorldStopwatch { get; set; }
         public static GameInformation Instance
         {
             get
@@ -38,6 +39,20 @@ namespace Objects
             }
         }
 
+        public bool IsPointIsOnBoardPixels(Point i_Point)
+        {
+            bool isPointOnTheBoard = false;
+
+            if (i_Point.Row >= 0 && i_Point.Column >= 0 && i_Point.Column < m_ClientScreenDimension.ScreenSizeInPixels.Width
+                && i_Point.Row < m_ClientScreenDimension.ScreenSizeInPixels.Height)
+            {
+                isPointOnTheBoard = true;
+            }
+            
+            return isPointOnTheBoard;
+        }
+
+
         public void SetScreenInfo(string[] i_NamesOfPlayers, int[] i_ScreenSizeWidth, int[] i_ScreenSizeHeight)
         {
             m_NamesOfAllPlayers = i_NamesOfPlayers;
@@ -47,7 +62,7 @@ namespace Objects
                 m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(i_ScreenSizeWidth[i], i_ScreenSizeHeight[i], new Position(m_AmountOfPlayers, i + 1)));
             }
 
-            m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[m_Player.ButtonThatPlayerPicked-1].Position;
+            m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[m_Player.PlayerNumber-1].Position;
         }
 
         public List<ScreenDimension> ScreenInfoOfAllPlayers

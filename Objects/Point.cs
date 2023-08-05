@@ -9,45 +9,45 @@ namespace Objects
     [Serializable]
     public struct Point
     {
-        public int m_Column;
-        public int m_Row;
+        public double Column { get; set; }
+        public double Row { get; set; }
 
         public Point()
         {
         }
 
-        public Point(int i_Column, int i_Row)
+        public Point(double i_Column, double i_Row)
         {
-            m_Column = i_Column;
-            m_Row = i_Row;
+            Column = i_Column;
+            Row = i_Row;
         }
 
-        public Point SetAndGetPoint(int i_Column, int i_Row)
+        public Point SetAndGetPoint(double i_Column, double i_Row)
         {
-            m_Column = i_Column;
-            m_Row = i_Row;
+            Column = i_Column;
+            Row = i_Row;
 
             return this;
         }
 
         public Point(Point p)
         {
-            new Point(p.m_Column, p.m_Row);
+            new Point(p.Column, p.Row);
         }
 
         public Point Move(Direction i_Direction)
         {
-            return new Point(m_Column + i_Direction.m_ColumnOffset, m_Row+i_Direction.m_RowOffset);
+            return new Point(Column + i_Direction.ColumnOffset, Row+i_Direction.RowOffset);
         }
 
         public static bool operator ==(Point i_P1, Point i_P2)
         {
-            return i_P1.m_Column == i_P2.m_Column && i_P1.m_Row == i_P2.m_Row;
+            return i_P1.Column == i_P2.Column && i_P1.Row == i_P2.Row;
         }
 
         public static bool operator !=(Point i_P1, Point i_P2)
         {
-            return i_P1.m_Column != i_P2.m_Column || i_P1.m_Row != i_P2.m_Row;
+            return i_P1.Column != i_P2.Column || i_P1.Row != i_P2.Row;
         }
 
     }

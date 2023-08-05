@@ -45,8 +45,8 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     async Task initializePage()
     {
-        UIbackground.TranslationY = UIbackground.HeightRequest = GameSettings.UIBackgroundSize.m_Height;
-        UIbackground.WidthRequest = m_GameInformation.m_ClientScreenDimension.m_OurSize.m_Width;
+        UIbackground.TranslationY = UIbackground.HeightRequest = GameSettings.UIBackgroundSize.Height;
+        UIbackground.WidthRequest = m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width;
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;
         m_pageLogic.ReceivedPlayerAmount += initializeButtons;
         m_pageLogic.GameIsStarting += startGame;
@@ -71,7 +71,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                 {
                     for (int i = 0; i < m_pageLogic.AmountOfPlayers; i++)
                     {
-                        int a = ((m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Height) / 12) / 3;
+                        int a = ((m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height) / 12) / 3;
 
                         ButtonImage buttonImage = new ButtonImage();
                         Position position = new Position(m_pageLogic.AmountOfPlayers, i + 1);

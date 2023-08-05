@@ -23,7 +23,6 @@ namespace LogicUnit
                     newGame = new Pacman();
                     break;
                 case eGames.Snake:
-                    newGame = new Snake();
                     break;
             }
 

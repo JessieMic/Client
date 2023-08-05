@@ -14,14 +14,15 @@ namespace LogicUnit
     {
         private GameInformation m_GameInformation = GameInformation.Instance;
         public Player m_Player = Player.Instance;
-        public SizeDTO m_TotalScreenOurSize = new SizeDTO();
+        public SizeDTO m_TotalScreenGridSize = new SizeDTO();
+        public SizeDTO m_TotalScreenPixelSize = new SizeDTO();
         public Point m_ValueToAdd; //Values that each Player adds to game objects so the would be in the right place
         public SizeDTO m_Boundaries;//Boundaries in case of an uneven amount of players
         private int m_MinimumLeftColumn;
         private int m_MinimumUpperRow;
         public List<SizeDTO> m_PlayerGameBoardScreenSize = new List<SizeDTO>();
         public SizeDTO m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
-        public int m_GameBoardGridSize = GameSettings.m_GameBoardGridSize;
+        public int m_GameBoardGridSize = GameSettings.GameGridSize;
         public int m_SpacingAroundButtons = GameSettings.m_SpacingAroundButtons;
 
         public ScreenMapping()
@@ -36,8 +37,8 @@ namespace LogicUnit
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 SizeDTO maxScreenOurSize = new SizeDTO();
-                maxScreenOurSize.m_Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeDTO.m_Height - GameSettings.ControllBoardTotalHeight) / m_GameBoardGridSize);
-                maxScreenOurSize.m_Width = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeDTO.m_Width) / m_GameBoardGridSize);
+                maxScreenOurSize.Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsDto.Height - GameSettings.ControllBoardTotalHeight) / m_GameBoardGridSize);
+                maxScreenOurSize.Width = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsDto.Width) / m_GameBoardGridSize);
                 m_PlayerGameBoardScreenSize.Add(maxScreenOurSize);
             }
         }
@@ -46,35 +47,36 @@ namespace LogicUnit
         {
             calculateWidthScreenValuesToAdd();
             calculateHeightScreenValuesToAdd();
+            m_GameInformation.PointValuesToAddToScreen = m_ValueToAdd;
         }
 
         private void calculateWidthScreenValuesToAdd()
         {
-            int playerIndex = m_Player.ButtonThatPlayerPicked - 1;
+            int playerIndex = m_Player.PlayerNumber - 1;
 
             if (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].m_Position.Column == eColumnPosition.RightColumn)
             {
-                m_ValueToAdd.m_Column = -m_MinimumLeftColumn * m_GameBoardGridSize; 
+                m_ValueToAdd.Column = -m_MinimumLeftColumn * m_GameBoardGridSize; 
             }
             else
             {
-                m_ValueToAdd.m_Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.m_Width - (m_PlayerGameBoardScreenSize[playerIndex].m_Width * m_GameBoardGridSize));
+                m_ValueToAdd.Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsDto.Width - (m_PlayerGameBoardScreenSize[playerIndex].Width * m_GameBoardGridSize));
             }
         }
 
         private void calculateHeightScreenValuesToAdd()
         {
-            int playerIndex = m_Player.ButtonThatPlayerPicked - 1;
+            int playerIndex = m_Player.PlayerNumber - 1;
 
             if (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].m_Position.Row == eRowPosition.LowerRow)
             {
-                m_ValueToAdd.m_Row = -m_MinimumUpperRow * m_GameBoardGridSize; ;
+                m_ValueToAdd.Row = -m_MinimumUpperRow * m_GameBoardGridSize; ;
             }
             else
             {
-                m_ValueToAdd.m_Row += GameSettings.ControllBoardTotalHeight;
-                m_ValueToAdd.m_Row +=
-                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.m_Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].m_Height * m_GameBoardGridSize);
+                m_ValueToAdd.Row += GameSettings.ControllBoardTotalHeight;
+                m_ValueToAdd.Row +=
+                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsDto.Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].Height * m_GameBoardGridSize);
             }
         }
 
@@ -82,19 +84,22 @@ namespace LogicUnit
         {
             calculateTotalWidthScreenSize();
             calculateTotalHeightScreenSize();
+            m_TotalScreenPixelSize.Width = m_TotalScreenGridSize.Width * m_GameBoardGridSize;
+            m_TotalScreenPixelSize.Height = m_TotalScreenGridSize.Height * m_GameBoardGridSize;
+            m_GameInformation.GameBoardSizeByPixel = m_TotalScreenPixelSize;
         }
 
         private void calculateTotalHeightScreenSize()
         {
             getMinHeightByRowPosition(eRowPosition.UpperRow);
-            m_MinimumUpperRow = m_TotalScreenOurSize.m_Height;
+            m_MinimumUpperRow = m_TotalScreenGridSize.Height;
             getMinHeightByRowPosition(eRowPosition.LowerRow);
         }
 
         private void calculateTotalWidthScreenSize()
         {
             getMinWidthByColumnPosition(eColumnPosition.LeftColumn);
-            m_MinimumLeftColumn = m_TotalScreenOurSize.m_Width;
+            m_MinimumLeftColumn = m_TotalScreenGridSize.Width;
 
             if (m_GameInformation.AmountOfPlayers > 2)
             {
@@ -114,12 +119,12 @@ namespace LogicUnit
                 {
                     if (minScreenValue1[0] == 0)
                     {
-                        minScreenValue1[0] = m_PlayerGameBoardScreenSize[i].m_Width;
+                        minScreenValue1[0] = m_PlayerGameBoardScreenSize[i].Width;
                         minScreenValue1[1] = i;
                     }
                     else
                     {
-                        minScreenValue2[0]= m_PlayerGameBoardScreenSize[i].m_Width;
+                        minScreenValue2[0]= m_PlayerGameBoardScreenSize[i].Width;
                         minScreenValue2[1] = i;
                     }
                 }
@@ -127,25 +132,25 @@ namespace LogicUnit
 
             if (minScreenValue2[0] == 0)
             {
-                m_Boundaries.m_Width = m_TotalScreenOurSize.m_Width;
-                m_TotalScreenOurSize.m_Width += minScreenValue1[0];
+                m_Boundaries.Width = m_TotalScreenGridSize.Width;
+                m_TotalScreenGridSize.Width += minScreenValue1[0];
             }
             else
             {
                 if(minScreenValue1[0] < minScreenValue2[0])
                 {
-                    m_TotalScreenOurSize.m_Width += minScreenValue1[0];
-                    if(m_Player.ButtonThatPlayerPicked-1 == minScreenValue2[1])
+                    m_TotalScreenGridSize.Width += minScreenValue1[0];
+                    if(m_Player.PlayerNumber-1 == minScreenValue2[1])
                     {
-                        m_ValueToAdd.m_Column += ((minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize);
+                        m_ValueToAdd.Column += ((minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize);
                     }
                 }
                 else
                 {
-                    m_TotalScreenOurSize.m_Width += minScreenValue2[0];
-                    if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue1[1])
+                    m_TotalScreenGridSize.Width += minScreenValue2[0];
+                    if (m_Player.PlayerNumber - 1 == minScreenValue1[1])
                     {
-                        m_ValueToAdd.m_Column += (minScreenValue1[0] - minScreenValue2[0]) *m_GameBoardGridSize;
+                        m_ValueToAdd.Column += (minScreenValue1[0] - minScreenValue2[0]) *m_GameBoardGridSize;
                     }
                 }
             }
@@ -162,12 +167,12 @@ namespace LogicUnit
                 {
                     if (minScreenValue1[0] == 0)
                     {
-                        minScreenValue1[0] = m_PlayerGameBoardScreenSize[i].m_Height;
+                        minScreenValue1[0] = m_PlayerGameBoardScreenSize[i].Height;
                         minScreenValue1[1] = i;
                     }
                     else if (minScreenValue2[0] == 0)
                     {
-                        minScreenValue2[0] = m_PlayerGameBoardScreenSize[i].m_Height;
+                        minScreenValue2[0] = m_PlayerGameBoardScreenSize[i].Height;
                         minScreenValue2[1] = i;
                     }
                 }
@@ -175,29 +180,29 @@ namespace LogicUnit
 
             if (minScreenValue2[0] == 0)
             {
-                if (m_GameInformation.AmountOfPlayers == 3 && m_TotalScreenOurSize.m_Height != 0)
+                if (m_GameInformation.AmountOfPlayers == 3 && m_TotalScreenGridSize.Height != 0)
                 {
-                    m_Boundaries.m_Height = m_TotalScreenOurSize.m_Height;
+                    m_Boundaries.Height = m_TotalScreenGridSize.Height;
                 }
-                m_TotalScreenOurSize.m_Height += minScreenValue1[0];
+                m_TotalScreenGridSize.Height += minScreenValue1[0];
             }
             else
             {
                 if (minScreenValue1[0] < minScreenValue2[0])
                 {
-                    m_TotalScreenOurSize.m_Height += minScreenValue1[0];
-                    if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue2[1])
+                    m_TotalScreenGridSize.Height += minScreenValue1[0];
+                    if (m_Player.PlayerNumber - 1 == minScreenValue2[1])
                     {
-                        m_ValueToAdd.m_Row +=
+                        m_ValueToAdd.Row +=
                             (minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize;
                     }
                 }
                 else
                 {
-                    m_TotalScreenOurSize.m_Height += minScreenValue2[0];
-                    if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue1[1])
+                    m_TotalScreenGridSize.Height += minScreenValue2[0];
+                    if (m_Player.PlayerNumber - 1 == minScreenValue1[1])
                     {
-                        m_ValueToAdd.m_Row +=
+                        m_ValueToAdd.Row +=
                             (minScreenValue1[0] - minScreenValue2[0]) * m_GameBoardGridSize;
                     }
                 }

@@ -9,13 +9,13 @@ namespace Objects
 {
     public struct ScreenDimension
     {
-        public SizeDTO m_OurSize = new SizeDTO();
+        public SizeDTO ScreenSizeInPixels = new SizeDTO();
         public Position m_Position = new Position();
 
         public ScreenDimension(int i_ScreenWidth,int i_ScreenHeight, Position i_Position)
         {
-            m_OurSize.m_Width = i_ScreenWidth;
-            m_OurSize.m_Height = i_ScreenHeight;
+            ScreenSizeInPixels.Width = i_ScreenWidth;
+            ScreenSizeInPixels.Height = i_ScreenHeight;
             m_Position = i_Position;
         }
 
@@ -27,12 +27,12 @@ namespace Objects
             }
         }
 
-        public SizeDTO SizeDTO
+        public SizeDTO SizeInPixelsDto
         {
-            get { return m_OurSize; }
+            get { return ScreenSizeInPixels; }
             set
             {
-                m_OurSize = value;
+                ScreenSizeInPixels = value;
             }
         }
 

@@ -42,22 +42,22 @@ namespace LogicUnit.Logic.GamePageLogic
             {
                 GameObject newHeart = new GameObject();
                 newHeart.Initialize(eScreenObjectType.Image, 0, "heart.png",
-                    getHeartPoint(i), GameSettings.m_GameBoardGridSize, getValuesToAdd());
-                newHeart.m_OurSize = GameSettings.m_HeartSize;
+                    getHeartPoint(i), true, getValuesToAdd());
+                newHeart.m_Size = GameSettings.m_HeartSize;
 
-                Point a = newHeart.m_PointsOnScreen[0];
+                Point a = newHeart.PointOnScreen;
 
                 if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
-                    newHeart.m_Rotatation[0] = 180;
-                    a.m_Column -= i * 10;
+                    newHeart.Rotatation = 180;
+                    a.Column -= i * 10;
                 }
                 else
                 {
-                    a.m_Column += i * 10;
+                    a.Column += i * 10;
                 }
 
-                newHeart.m_PointsOnScreen[0] = a;
+                newHeart.PointOnScreen = a;
                 o_GameObjectsToAdd.Add(newHeart);
                 m_HeartsOnScreen.Add(newHeart);
             }
@@ -69,7 +69,7 @@ namespace LogicUnit.Logic.GamePageLogic
 
             if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
-                heartPoint.SetAndGetPoint(m_ClientScreenOurSize.m_Width - 2 - heartNumber, 2);
+                heartPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 2 - heartNumber, 2);
             }
 
             return heartPoint;
@@ -86,8 +86,8 @@ namespace LogicUnit.Logic.GamePageLogic
             }
             else
             {
-                values.m_Column = GameSettings.m_SpacingAroundButtons;
-                values.m_Row = m_ClientScreenOurSize.m_Height * GameSettings.m_GameBoardGridSize + GameSettings.m_SpacingAroundButtons;
+                values.Column = GameSettings.m_SpacingAroundButtons;
+                values.Row = m_ClientScreenOurSize.Height * GameSettings.GameGridSize + GameSettings.m_SpacingAroundButtons;
             }
 
             return values;
@@ -125,9 +125,16 @@ namespace LogicUnit.Logic.GamePageLogic
 
         private void removeAHeart()
         {
-            int lastHeartIndex = m_HeartsOnScreen.Count - 1;
-            m_HeartToRemove = m_HeartsOnScreen[lastHeartIndex];
-            m_HeartsOnScreen.RemoveAt(lastHeartIndex);
+            try
+            {
+                int lastHeartIndex = m_HeartsOnScreen.Count - 1;
+                m_HeartToRemove = m_HeartsOnScreen[lastHeartIndex];
+                m_HeartsOnScreen.RemoveAt(lastHeartIndex);
+            }
+            catch
+            {
+                System.Diagnostics.Debug.WriteLine("HeartBug");
+            }
         }
     }
 }

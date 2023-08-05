@@ -63,7 +63,7 @@ namespace LogicUnit
 
                     if (m_Player.Name == i_NameOfPlayerThatDeselected) //(Name.Equals(nameOfPlayerThatDeselected))
                     {
-                        m_Player.ButtonThatPlayerPicked = 0;
+                        m_Player.PlayerNumber = 0;
                         m_Player.DidPlayerPickAPlacement = false;
                     }
 
@@ -94,7 +94,7 @@ namespace LogicUnit
 
                                 if (m_Player.Name == i_NameOfPlayerThatGotASpot)
                                 {
-                                    m_Player.ButtonThatPlayerPicked = 1 + i_Spot;
+                                    m_Player.PlayerNumber = 1 + i_Spot;
                                     m_Player.DidPlayerPickAPlacement = true;
                                 }
 
@@ -146,7 +146,7 @@ namespace LogicUnit
         {
             bool result = false;
 
-            if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers && m_Player.ButtonThatPlayerPicked == 1)
+            if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers && m_Player.PlayerNumber == 1)
             {
                 result = true;
             }
@@ -156,7 +156,7 @@ namespace LogicUnit
 
         public void SetPlayerScreenSize(int i_Width, int i_Height)
         {
-            m_GameInformation.m_ClientScreenDimension.SizeDTO = new SizeDTO(i_Width, i_Height);
+            m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto = new SizeDTO(i_Width, i_Height);
         }
 
         public async void OnButtonClicked(object sender, EventArgs e)
@@ -184,13 +184,13 @@ namespace LogicUnit
                 "TryPickAScreenSpot",
                 m_Player.Name,
                 i_TextOnButton,
-                m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Width, m_GameInformation.m_ClientScreenDimension.SizeDTO.m_Height);
+                m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height);
         }
 
         public async Task TryToDeselectScreenSpot(string i_TextOnButton)
         {
             await r_ConnectionToServer.InvokeCoreAsync("TryToDeselectScreenSpot", args: new[]
-                {m_Player.Name,m_Player.ButtonThatPlayerPicked.ToString(),i_TextOnButton});
+                {m_Player.Name,m_Player.PlayerNumber.ToString(),i_TextOnButton});
         }
     }
 }

@@ -9,8 +9,8 @@ namespace Objects
     [Serializable]
     public class Direction
     {
-        public int m_ColumnOffset { get; }
-        public int m_RowOffset { get; }
+        public int ColumnOffset { get; }
+        public int RowOffset { get; }
 
         public readonly static Direction Left = new Direction(-1, 0);
         public readonly static Direction Right = new Direction(1, 0);
@@ -19,8 +19,8 @@ namespace Objects
         public readonly static Direction Stop = new Direction(0, 0);
         private Direction(int i_Column, int i_Row)
         {
-           m_ColumnOffset = i_Column;
-           m_RowOffset = i_Row;
+           ColumnOffset = i_Column;
+           RowOffset = i_Row;
         }
 
         public static Direction getDirection(string i_Button)
@@ -43,7 +43,7 @@ namespace Objects
                 return Direction.Right;
             }
             else
-            {
+            {   
                 return Direction.Left;
             }
         }
@@ -74,13 +74,13 @@ namespace Objects
 
         public Direction OppositeDirection()
         {
-            return new Direction(-m_ColumnOffset, -m_RowOffset);
+            return new Direction(-ColumnOffset, -RowOffset);
         }
         public bool IsOppositeDirection(Direction i_Direction)
         {
             bool result = false;
 
-            if(m_ColumnOffset == -i_Direction.m_ColumnOffset && m_RowOffset == -i_Direction.m_RowOffset)
+            if(ColumnOffset == -i_Direction.ColumnOffset && RowOffset == -i_Direction.RowOffset)
             {
                 result = true;
             }
@@ -90,13 +90,13 @@ namespace Objects
 
         public override bool Equals(object obj)
         {
-            return obj is Direction direction && m_ColumnOffset == direction.m_ColumnOffset
-                                              && m_RowOffset == direction.m_RowOffset;
+            return obj is Direction direction && ColumnOffset == direction.ColumnOffset
+                                              && RowOffset == direction.RowOffset;
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(m_ColumnOffset, m_RowOffset);
+            return HashCode.Combine(ColumnOffset, RowOffset);
         }
     }
 }

@@ -14,4 +14,5 @@ public class PlayerData
     public Objects.Point PlayerPointData { get; set; }
     public int PlayerNumber { get; init; }
     public int Button { get; set; }
+    public bool IsNewButton { get; set; }
 }
