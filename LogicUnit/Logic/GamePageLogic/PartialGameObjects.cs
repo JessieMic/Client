@@ -35,8 +35,8 @@ namespace LogicUnit
         protected void setHearts()
         {
             m_Hearts.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
-            m_Hearts.m_ClientScreenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1];
-            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder,m_Player.ButtonThatPlayerPicked);
+            m_Hearts.m_ClientScreenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.PlayerNumber - 1];
+            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder,m_Player.PlayerNumber);
             m_Hearts.getHearts(ref m_GameObjectsToAdd);
         }
 
@@ -44,7 +44,7 @@ namespace LogicUnit
         {
             m_Buttons.m_MovementButtonOurSize = m_ScreenMapping.m_MovementButtonOurSize;
             m_Buttons.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
-            m_Buttons.m_ClientScreenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked-1];
+            m_Buttons.m_ClientScreenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.PlayerNumber-1];
 
             m_Buttons.GetGameButtons(ref m_GameObjectsToAdd);
         }
@@ -102,14 +102,14 @@ namespace LogicUnit
         {
             Point point = new Point(
                 0,
-                m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.ButtonThatPlayerPicked - 1].Height + 1);
+                m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.PlayerNumber - 1].Height + 1);
             GameObject UIBackground = new GameObject();
             if (m_GameInformation.m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 point.SetAndGetPoint(0, 0);
                 UIBackground.SetImageDirection(Direction.Left);
             }
-            SizeDTO actualOurSize = new SizeDTO(m_GameInformation.m_ClientScreenDimension.SizeDTO.Width+5,
+            SizeDTO actualOurSize = new SizeDTO(m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width+5,
                 GameSettings.m_UIBackgroundHeight);
             UIBackground.Initialize(eScreenObjectType.Image, 0, "uibackground.png", point, true, new Point(0,0));
             UIBackground.m_Size = actualOurSize;

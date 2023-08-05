@@ -37,8 +37,8 @@ namespace LogicUnit
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 SizeDTO maxScreenOurSize = new SizeDTO();
-                maxScreenOurSize.Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeDTO.Height - GameSettings.ControllBoardTotalHeight) / m_GameBoardGridSize);
-                maxScreenOurSize.Width = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeDTO.Width) / m_GameBoardGridSize);
+                maxScreenOurSize.Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsDto.Height - GameSettings.ControllBoardTotalHeight) / m_GameBoardGridSize);
+                maxScreenOurSize.Width = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsDto.Width) / m_GameBoardGridSize);
                 m_PlayerGameBoardScreenSize.Add(maxScreenOurSize);
             }
         }
@@ -52,7 +52,7 @@ namespace LogicUnit
 
         private void calculateWidthScreenValuesToAdd()
         {
-            int playerIndex = m_Player.ButtonThatPlayerPicked - 1;
+            int playerIndex = m_Player.PlayerNumber - 1;
 
             if (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].m_Position.Column == eColumnPosition.RightColumn)
             {
@@ -60,13 +60,13 @@ namespace LogicUnit
             }
             else
             {
-                m_ValueToAdd.Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.Width - (m_PlayerGameBoardScreenSize[playerIndex].Width * m_GameBoardGridSize));
+                m_ValueToAdd.Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsDto.Width - (m_PlayerGameBoardScreenSize[playerIndex].Width * m_GameBoardGridSize));
             }
         }
 
         private void calculateHeightScreenValuesToAdd()
         {
-            int playerIndex = m_Player.ButtonThatPlayerPicked - 1;
+            int playerIndex = m_Player.PlayerNumber - 1;
 
             if (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].m_Position.Row == eRowPosition.LowerRow)
             {
@@ -76,7 +76,7 @@ namespace LogicUnit
             {
                 m_ValueToAdd.Row += GameSettings.ControllBoardTotalHeight;
                 m_ValueToAdd.Row +=
-                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeDTO.Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].Height * m_GameBoardGridSize);
+                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsDto.Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].Height * m_GameBoardGridSize);
             }
         }
 
@@ -140,7 +140,7 @@ namespace LogicUnit
                 if(minScreenValue1[0] < minScreenValue2[0])
                 {
                     m_TotalScreenGridSize.Width += minScreenValue1[0];
-                    if(m_Player.ButtonThatPlayerPicked-1 == minScreenValue2[1])
+                    if(m_Player.PlayerNumber-1 == minScreenValue2[1])
                     {
                         m_ValueToAdd.Column += ((minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize);
                     }
@@ -148,7 +148,7 @@ namespace LogicUnit
                 else
                 {
                     m_TotalScreenGridSize.Width += minScreenValue2[0];
-                    if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue1[1])
+                    if (m_Player.PlayerNumber - 1 == minScreenValue1[1])
                     {
                         m_ValueToAdd.Column += (minScreenValue1[0] - minScreenValue2[0]) *m_GameBoardGridSize;
                     }
@@ -191,7 +191,7 @@ namespace LogicUnit
                 if (minScreenValue1[0] < minScreenValue2[0])
                 {
                     m_TotalScreenGridSize.Height += minScreenValue1[0];
-                    if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue2[1])
+                    if (m_Player.PlayerNumber - 1 == minScreenValue2[1])
                     {
                         m_ValueToAdd.Row +=
                             (minScreenValue2[0] - minScreenValue1[0]) * m_GameBoardGridSize;
@@ -200,7 +200,7 @@ namespace LogicUnit
                 else
                 {
                     m_TotalScreenGridSize.Height += minScreenValue2[0];
-                    if (m_Player.ButtonThatPlayerPicked - 1 == minScreenValue1[1])
+                    if (m_Player.PlayerNumber - 1 == minScreenValue1[1])
                     {
                         m_ValueToAdd.Row +=
                             (minScreenValue1[0] - minScreenValue2[0]) * m_GameBoardGridSize;

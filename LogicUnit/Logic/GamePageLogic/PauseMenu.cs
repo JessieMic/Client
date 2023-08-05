@@ -41,7 +41,7 @@ namespace LogicUnit.Logic.GamePageLogic
 
         private Point getPauseMenuBackgroundPoint()
         {
-            SizeDTO screenSize = m_gameInformation.m_ClientScreenDimension.m_OurSize;
+            SizeDTO screenSize = m_gameInformation.m_ClientScreenDimension.ScreenSizeInPixels;
 
             return new Point(
                 (screenSize.Width / 2) - 3 * GameSettings.GameGridSize,

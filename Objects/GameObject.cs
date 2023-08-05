@@ -16,6 +16,7 @@ namespace Objects
         public event EventHandler<EventArgs> UpdateGameObject;
         public event EventHandler<EventArgs> Disposed;
         public event EventHandler<int> PlayerGotHit;
+        public event EventHandler<Point> UpdatePosition;
         //public bool Turn { get; set; }
         public Point PointOnScreen { get; set; }
         public bool IsVisable { get; set; } = true;
@@ -165,6 +166,13 @@ namespace Objects
             if(x != 0 && y != 0)
             {
                 m_WantToTurn = true;
+                Point PointUpdate = getPointOnGrid();
+                //check if we are on our side
+                PointOnScreen = getScreenPoint(PointUpdate,true);
+                if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+                {
+                    UpdatePosition.Invoke(this,PointUpdate);
+                }
             }
         }
 
@@ -232,7 +240,7 @@ namespace Objects
             }
         }
 
-        protected void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeDTO i_SizeOfSolid)
+        protected void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsDto i_SizeOfSolid)
         {
             Point newPoint = PointOnScreen;
             if (Direction == Direction.Left)//solid on the left
@@ -305,7 +313,6 @@ namespace Objects
         {
             if(m_WantToTurn)
             {
-                PointOnScreen= getScreenPoint(getPointOnGrid(), true);
                 m_WantToTurn = false;
             }
             else
@@ -331,10 +338,16 @@ namespace Objects
 
         public void UpdatePointOnScreen(Point i_Point)
         {
-            i_Point.Row += m_ValuesToAdd.Row;
-            i_Point.Column += m_ValuesToAdd.Column;
-            PointOnScreen = i_Point;
-            //updatePosition(85);
+            Point p = getScreenPoint(i_Point, true);
+            if(!m_GameInformation.IsPointIsOnBoardPixels(p))
+            {
+                PointOnScreen = p;
+            }
+
+            //i_Point.Row += m_ValuesToAdd.Row;
+                //i_Point.Column += m_ValuesToAdd.Column;
+                //PointOnScreen = i_Point;
+                ////updatePosition(85);
         }
 
         public Rect Bounds
@@ -350,10 +363,6 @@ namespace Objects
         {
             Point point = getScreenPoint(i_Point,true);
             PointOnScreen = point;
-        }
-        public void FadeWhenObjectIsRemoved()
-        {
-            Fade = true;
         }
     }
 }
