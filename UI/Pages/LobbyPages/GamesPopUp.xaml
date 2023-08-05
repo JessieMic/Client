@@ -4,37 +4,42 @@
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
            x:Class="UI.Pages.LobbyPages.GamesPopUp"
            CanBeDismissedByTappingOutsideOfPopup="False"
-           Color="White">
-    <Grid RowSpacing="5" ColumnSpacing="5" Padding="10" x:Name="gridLayout">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20*"/>
-            <RowDefinition Height="60*"/>
-            <RowDefinition Height="20*"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20*"/>
-            <ColumnDefinition Width="60*"/>
-            <ColumnDefinition Width="20*"/>
-        </Grid.ColumnDefinitions>
+           Color="Transparent">
+    <Border Stroke="#4e0066" StrokeThickness="5" BackgroundColor="#b07ebf">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="30"/>
+        </Border.StrokeShape>
+        <Grid RowSpacing="5" ColumnSpacing="5" Padding="10" x:Name="gridLayout">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="60*"/>
+                <RowDefinition Height="20*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="60*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
 
-        <HorizontalStackLayout
+            <HorizontalStackLayout
             Grid.Row="1"
             Grid.Column="1"
             Spacing="15"
             x:Name="GamesComponent"/>
 
-        <!--<Button
+            <!--<Button
             Text="OK"
             x:Name="OkButton"
             Grid.Row="2"
             Grid.Column="2"
             Clicked="OnOkClicked"/>-->
 
-        <!--<Button
+            <!--<Button
             Text="Cancel"
             x:Name="CancelButton"
             Grid.Row="2"
             Grid.Column="0"
             Clicked="OnCancelClicked"/>-->
-    </Grid>
+        </Grid>
+    </Border>
 </mct:Popup>

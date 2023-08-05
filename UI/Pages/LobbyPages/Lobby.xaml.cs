@@ -51,8 +51,6 @@ public partial class Lobby : ContentPage
         designLabelsText();
 
         CodeLabel.Text = m_Code;
-        addImageButton("Ready", Oncontinue, 5, 5, "lobby_ready_btn.PNG",
-            LayoutOptions.CenterAndExpand, LayoutOptions.CenterAndExpand);
         addImageButton("", OnLeaveClicked, 0, 0, "leave_btn.PNG",
             LayoutOptions.CenterAndExpand, LayoutOptions.StartAndExpand);
         m_PlayersNamesLabels[0].Text = m_PlayerName;
@@ -61,6 +59,8 @@ public partial class Lobby : ContentPage
         {
             ButtonImage pickGameBtn = addImageButton("Pick a Game", OnChooseGameClicked, 3, 4, "pick_a_game_btn.PNG",
                 LayoutOptions.CenterAndExpand, LayoutOptions.CenterAndExpand);
+            addImageButton("Start", OnStartClicked, 5, 5, "lobby_ready_btn.PNG",
+            LayoutOptions.CenterAndExpand, LayoutOptions.CenterAndExpand);
             gridLayout.SetColumnSpan(pickGameBtn.GetImage(), 2);
             gridLayout.SetColumnSpan(pickGameBtn.GetButton(), 2);
         }
@@ -83,6 +83,7 @@ public partial class Lobby : ContentPage
         m_LogicManager.SetChosenGameAction(ShowChosenGame);
         m_LogicManager.SetHostLeftAction(hostLeft);
         m_LogicManager.SetServerErrorAction(handleServerError);
+        m_LogicManager.SetGoToNextPageAction(goToNextPage);
         m_LogicManager.StartUpdatesRefresher();
 
         m_IsPageinitialized = true;
@@ -134,9 +135,40 @@ public partial class Lobby : ContentPage
         m_LogicManager.UpdateChosenGame(i_ChosenGame.GetName(), m_Code);
     }
 
-    public async void Oncontinue(object sender, EventArgs e)
+    public void OnStartClicked(object sender, EventArgs e)
     {
-        await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
+        int amountOfPlayers = m_LogicManager.GetAmountOfPlayers();
+
+        if (m_IsGameChosen)
+        {
+            if (amountOfPlayers == 1)
+            {
+                MessagePopUp messagePopUp = new MessagePopUp(Utils.Messages.k_WaitForPlayers);
+                this.ShowPopup(messagePopUp);
+            }
+            else
+            {
+                YesNoPopUp yesNoPopUp = new YesNoPopUp($"There are {amountOfPlayers} players in the room." +
+                    $"{Environment.NewLine}Are you sure you want to continue?", updateServerToMoveToNextPage);
+                this.ShowPopup(yesNoPopUp);
+            }
+        }
+        else
+        {
+            MessagePopUp messagePopUp = new MessagePopUp(Utils.Messages.k_MustChooseGame);
+            this.ShowPopup(messagePopUp);
+        }
+    }
+
+    private void updateServerToMoveToNextPage()
+    {
+        m_LogicManager.UpdateServerToMoveToNextPage();
+    }
+
+    private void goToNextPage()
+    {
+        m_LogicManager.StopUpdatesRefresher();
+        Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage)));
     }
 
     private void OnLeaveClicked(object sender, EventArgs e)

@@ -13,7 +13,8 @@
         <Label
             x:Name="GameNameLabel"
             VerticalOptions="Center"
-            HorizontalOptions="Center"/>
+            HorizontalOptions="Center"
+            TextColor="{DynamicResource PaloozaTextColor}"/>
     </VerticalStackLayout>
 
 </ContentView>
