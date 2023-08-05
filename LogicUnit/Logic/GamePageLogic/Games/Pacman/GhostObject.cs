@@ -23,6 +23,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public GhostObject(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
+            m_CanRotateToAllDirections = false;
+            m_FlipsWhenMoved = true;
             IsCollisionDetectionEnabled = true;
             m_Board = i_Board;
             this.Initialize(eScreenObjectType.Player, i_playerNumber, "pacman_ghost_"+i_playerNumber+".png", getPointOnGrid(i_X,  i_Y), true,
@@ -112,7 +114,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             else if(i_Collidable is Boarder)
             {
                 collidedWithSolid(i_Collidable);
-                Direction = RequestedDirection;
             }
         }
         public void ResetPosition(double i_DeathStartTime)

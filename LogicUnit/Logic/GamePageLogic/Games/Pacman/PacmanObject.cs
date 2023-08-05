@@ -77,7 +77,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             else if (i_Collidable is Boarder)
             {
                 collidedWithSolid(i_Collidable);
-                Direction = RequestedDirection;
             }
             else if(i_Collidable is Cherry)
             {

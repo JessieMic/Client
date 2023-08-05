@@ -16,7 +16,7 @@ namespace Objects
         public event EventHandler<EventArgs> UpdateGameObject;
         public event EventHandler<EventArgs> Disposed;
         public event EventHandler<int> PlayerGotHit;
-        public bool Turn { get; set; }
+        //public bool Turn { get; set; }
         public Point PointOnScreen { get; set; }
         public bool IsVisable { get; set; } = true;
         public int Rotatation { get; set; } = 0;
@@ -37,10 +37,12 @@ namespace Objects
         public string Text { get; set; }
         public SizeDTO m_Size = GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; }
-        public int Velocity { get; set; } = 105;
+        public int Velocity { get; set; } = 90;
         public bool Fade { get; set; } = false;
         protected int[,] m_Board;
         protected bool m_WantToTurn = false;
+        protected bool m_CanRotateToAllDirections = true;
+        protected bool m_FlipsWhenMoved = false;
 
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, bool i_IsGrid, Point i_ValuesToAdd)
         {
@@ -55,42 +57,61 @@ namespace Objects
 
         public void SetImageDirection(Direction i_Direction)
         {
-            if (i_Direction == Direction.Up)
+            
+            if(m_CanRotateToAllDirections)
             {
-                Rotatation = 270;
+                if (i_Direction == Direction.Up)
+                {
+                    Rotatation = 270;
+                    ScaleX = 1;
+                }
+                else if (i_Direction == Direction.Down)
+                {
+                    Rotatation = 90;
+                    ScaleX = 1;
+                }
             }
-            else if (i_Direction == Direction.Down)
+
+            if (i_Direction == Direction.Left)
             {
-                Rotatation = 90;
+                if(m_FlipsWhenMoved)
+                {
+                    ScaleX = -1;
+                    Rotatation = 0;
+                }
+                else
+                {
+                    Rotatation = 180;
+                    ScaleX = 1;
+                }
             }
-            else if (i_Direction == Direction.Left)
+            else if (i_Direction == Direction.Right)
             {
-                Rotatation = 180;
-            }
-            else
-            {
+                ScaleX = 1;
                 Rotatation = 0;
             }
         }
 
-        public void FlipImage(int i_Index, eImageScale i_Scale)
+        public void FlipImage(Direction i_Direction)
         {
-            if (i_Scale == eImageScale.FlipX)
-            {
-                ScaleX = -1;
-            }
-            else if (i_Scale == eImageScale.FlipY)
-            {
-                ScaleY = -1;
-            }
-            if (i_Scale == eImageScale.OriginalX)
-            {
-                ScaleX = 1;
-            }
-            else
-            {
-                ScaleY= 1;
-            }
+            //if (i_Direction == Direction.Left)
+            //{
+            //    ScaleX = -1;
+            //}
+            //else if (i_Scale == eImageScale.FlipY)
+            //{
+            //    ScaleY = -1;
+            //    Rotatation = 0;
+            //}
+            //if (i_Scale == eImageScale.OriginalX)
+            //{
+            //    ScaleX = 1;
+            //}
+            //else
+            //{
+            //    ScaleY= 1;
+            //    Rotatation = 0;
+            //}
         }
 
         public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, bool i_IsGrided, SizeDTO i_Size, Point i_ValuesToAdd)
@@ -127,6 +148,7 @@ namespace Objects
                         Direction = i_Direction;
                     }
                 }
+                SetImageDirection(Direction);
             }
         }
 
@@ -192,7 +214,6 @@ namespace Objects
 
         protected void isPointOnBoard(ref Point i_Point)
         {
-            bool collided = true;
             if(i_Point.Column < m_ValuesToAdd.Column)
             {
                 i_Point.Column = m_ValuesToAdd.Column;
@@ -208,16 +229,6 @@ namespace Objects
             else if(i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height)
             {
                 i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height;
-            }
-            else
-            {
-                collided = false;
-            }
-
-            if(collided)
-            {
-                Turn = true;
-                Direction = RequestedDirection;
             }
         }
 
@@ -334,8 +345,7 @@ namespace Objects
                 m_Size.Width,m_Size.Height);
             }
         }
-    
-
+        
         public void MoveToPointInGrided(Point i_Point)
         {
             Point point = getScreenPoint(i_Point,true);

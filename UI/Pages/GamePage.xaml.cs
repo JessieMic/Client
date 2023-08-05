@@ -91,26 +91,13 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
         {
             loopLabel.Text = m_Game.m_LoopNumber.ToString();
-            //foreach (GameObject screenObject in m_Game.m_PlayerObjects)
-            //{
-                if (getObjectTypeFromID(i_ObjectUpdates.ID) == eScreenObjectType.Image)
+            if (getObjectTypeFromID(i_ObjectUpdates.ID) == eScreenObjectType.Image)
+            {
+                if (m_GameImages.ContainsKey(i_ObjectUpdates.ID))
                 {
-                    if (m_GameImages.ContainsKey(i_ObjectUpdates.ID))
-                    {
-                        m_GameImages[i_ObjectUpdates.ID].Update(i_ObjectUpdates);
-                    }
+                    m_GameImages[i_ObjectUpdates.ID].Update(i_ObjectUpdates);
                 }
-            //}
-            //foreach (GameObject screenObject in m_Game.m_PlayerObjects)
-            //{ 
-            //    if (getObjectTypeFromID(screenObject.ID) == eScreenObjectType.Image)
-            //    {
-            //        if (m_GameImages.ContainsKey(screenObject.ID))
-            //        {
-            //            m_GameImages[screenObject.ID].Update(screenObject);
-            //        }
-            //    }
-            //}
+            }
         });
     }
     
