@@ -7,20 +7,20 @@
 //namespace Objects
 //{
 
-//    public struct SizeDTO
+//    public struct SizeInPixelsDto
 //    {
 //        public int Width = 0;
 //        public int Height = 0;
 
-//        public SizeDTO() { }
+//        public SizeInPixelsDto() { }
 
-//        public SizeDTO(int i_Width, int i_Height)
+//        public SizeInPixelsDto(int i_Width, int i_Height)
 //        {
 //            Width = i_Width;
 //            Height = i_Height;
 //        }
 
-//        public SizeDTO SetAndGetSize(int i_Width, int i_Height)
+//        public SizeInPixelsDto SetAndGetSize(int i_Width, int i_Height)
 //        {
 //            Width = i_Width;
 //            Height = i_Height;
@@ -34,12 +34,12 @@
 //            Height = i_Height;
 //        }
 
-//        public static bool operator ==(SizeDTO i_P1, SizeDTO i_P2)
+//        public static bool operator ==(SizeInPixelsDto i_P1, SizeInPixelsDto i_P2)
 //        {
 //            return i_P1.Width == i_P2.Width && i_P1.Height == i_P2.Height;
 //        }
 
-//        public static bool operator !=(SizeDTO i_P1, SizeDTO i_P2)
+//        public static bool operator !=(SizeInPixelsDto i_P1, SizeInPixelsDto i_P2)
 //        {
 //            return i_P1.Width != i_P2.Width || i_P1.Height != i_P2.Height;
 //        }

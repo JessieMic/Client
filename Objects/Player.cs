@@ -14,7 +14,7 @@ namespace Objects
         private static Player m_Instance = null;
         private bool m_DidPlayerPickAPlacement;
         private string m_Name;
-        private int m_ButtonThatPlayerPicked;
+        public int PlayerNumber { get; set; }
         private PlayerType m_PlayerType;
         private string m_RoomCade;
 
@@ -61,18 +61,6 @@ namespace Objects
             set
             {
                 m_Name = value;
-            }
-        }
-
-        public int ButtonThatPlayerPicked
-        {
-            get
-            {
-                return m_ButtonThatPlayerPicked;
-            }
-            set
-            {
-                m_ButtonThatPlayerPicked = value;
             }
         }
 

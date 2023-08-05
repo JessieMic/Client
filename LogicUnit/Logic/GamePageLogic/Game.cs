@@ -111,7 +111,7 @@ namespace LogicUnit
         {
             m_BoardSizeByGrid= m_ScreenMapping.m_TotalScreenGridSize;
             m_Board = new int[m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height];
-            m_CurrentPlayerData = new PlayerData(m_Player.ButtonThatPlayerPicked);
+            m_CurrentPlayerData = new PlayerData(m_Player.PlayerNumber);
             m_CurrentPlayerData.Button = -1;
 
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
@@ -163,25 +163,20 @@ namespace LogicUnit
                 //System.Diagnostics.Debug.WriteLine("r " + temp[0]);
                 for (int i = 0; i < 4; i++)
                 {
-                    //if(m_PlayersDataArray[i].Button != temp[i])
+                    //if(temp[i] == -1)
                     //{
-                    //    m_PlayersDataArray[i].IsNewButton = true;
-                        m_PlayersDataArray[i].Button = temp[i];
+                    Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
+                    if (m_PlayersDataArray[i].PlayerPointData != pointRecived)
+                    {
+                        //System.Diagnostics.Debug.WriteLine("r " + pointRecived.Column + " " + pointRecived.Row);
+                        m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
+                        m_PlayersDataArray[i].PlayerPointData = pointRecived;
+                    }
                     //}
                     //else
                     //{
-                    //    m_PlayersDataArray[i].IsNewButton = false;
-                    //}
-
-                    //Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
-                    //if (m_PlayersDataArray[i].PlayerPointData != pointRecived)
-                    //{
-                    //    //System.Diagnostics.Debug.WriteLine("r " + pointRecived.Column + " " + pointRecived.Row);
-                    //    m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
-                    //    //m_PlayerObjects[i].PointOnScreen = pointRecived;
-                    //    m_PlayersDataArray[i].PlayerPointData = pointRecived;
-                    //}
-
+                        m_PlayersDataArray[i].Button = temp[i];
+                   //}
                 }
             }
         }
@@ -205,14 +200,14 @@ namespace LogicUnit
             //System.Diagnostics.Debug.WriteLine("s" + m_CurrentPlayerData.Button);
             if (m_NewButtonPressed)
             {
-                Point playerPosition = m_PlayerObjects[m_Player.ButtonThatPlayerPicked - 1]
+                Point playerPosition = m_PlayerObjects[m_Player.PlayerNumber - 1]
                     .GetCurrentPointOnScreen();
 
                 //System.Diagnostics.Debug.WriteLine("s"+m_CurrentPlayerData.Button);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
                // sent = m_LoopNumber;
                 await r_ConnectionToServer.SendAsync(
                    "UpdatePlayerSelection",
-                   m_Player.ButtonThatPlayerPicked,
+                   m_Player.PlayerNumber,
                    m_CurrentPlayerData.Button,
                    (int)playerPosition.Column,(int)playerPosition.Row);
                 
@@ -272,6 +267,21 @@ namespace LogicUnit
                 }
             }
         }
+        public void UpdateClientsAboutPosition(object sender, Point i_Point)
+        {
+            GameObject a = sender as GameObject;
+            SendServerPositionUpdate(a.ObjectNumber, i_Point);
+        }
+
+        private async void SendServerPositionUpdate(int i_Player,Point i_Point)
+        {
+            System.Diagnostics.Debug.WriteLine("s"+m_Player.PlayerNumber);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
+            await r_ConnectionToServer.SendAsync(
+                "UpdatePlayerSelection",i_Player
+                ,
+                -1,
+                (int)i_Point.Column, (int)i_Point.Row);
+        }
 
         public void OnButtonClicked(object sender, EventArgs e)
         {
@@ -293,7 +303,6 @@ namespace LogicUnit
             Thread newThread = new(GameLoop);
             serverUpdateThread.Start();
             newThread.Start();
-
         }
 
         protected virtual void OnAddScreenObjects()
@@ -307,6 +316,7 @@ namespace LogicUnit
                     {
                         m_PlayerObjects[newObject.ObjectNumber-1] = newObject;
                         newObject.PlayerGotHit += PlayerLostALife;
+                        newObject.UpdatePosition += UpdateClientsAboutPosition;
                     }
                 }
 
