@@ -86,6 +86,7 @@
 	  <None Remove="Resources\Images\boarder1.png" />
 	  <None Remove="Resources\Images\boarder2.png" />
 	  <None Remove="Resources\Images\floor.png" />
+	  <None Remove="Resources\Images\giphy.gif" />
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
