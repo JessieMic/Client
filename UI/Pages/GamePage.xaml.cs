@@ -7,7 +7,6 @@ using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
 using Image = Objects.Image;
-using Image = Microsoft.Maui.Controls.Image;
 using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
