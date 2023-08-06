@@ -16,9 +16,12 @@ public class InGameHub : Hub
         {
             s_PlayersPressedButtons[i_PlayerID] = i_button;
         }
-        s_PlayersPressedButtons[i_PlayerID + 4] = i_X;
-        s_PlayersPressedButtons[i_PlayerID + 8] = i_Y;
 
+        if(i_X != -1)
+        {
+            s_PlayersPressedButtons[i_PlayerID + 4] = i_X;
+            s_PlayersPressedButtons[i_PlayerID + 8] = i_Y;
+        }
         //await Clients.All.SendAsync("GameUpdateReceived", i_PlayerID, i_button, i_X, i_Y);
     }
 

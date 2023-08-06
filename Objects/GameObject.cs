@@ -162,6 +162,7 @@ namespace Objects
         {
             int x = Direction.ColumnOffset + i_Direction.ColumnOffset;
             int y = Direction.RowOffset + i_Direction.RowOffset;
+            int k=m_GameInformation.m_Player.PlayerNumber;
 
             if(x != 0 && y != 0)
             {

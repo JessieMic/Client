@@ -79,9 +79,10 @@ namespace LogicUnit
         private const double J_DesiredFrameTime = 0.067;
         protected readonly CollisionManager m_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
+        static readonly object m_lock = new object();
         //private int sent = 0;
         //private int recived = 0;
-        
+
         public Game()
         {
             for (int i = 0; i < 4; i++)
@@ -160,23 +161,31 @@ namespace LogicUnit
             {
                 int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
 
-                //System.Diagnostics.Debug.WriteLine("r " + temp[0]);
-                for (int i = 0; i < 4; i++)
+                lock (m_lock)
                 {
-                    //if(temp[i] == -1)
-                    //{
-                    Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
-                    if (m_PlayersDataArray[i].PlayerPointData != pointRecived)
+                    //System.Diagnostics.Debug.WriteLine("r " + temp[0]);
+                    for (int i = 0; i < 4; i++)
                     {
-                        //System.Diagnostics.Debug.WriteLine("r " + pointRecived.Column + " " + pointRecived.Row);
-                        m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
-                        m_PlayersDataArray[i].PlayerPointData = pointRecived;
-                    }
-                    //}
-                    //else
-                    //{
+                        Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
+                        if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
+                        {
+                            if(m_Player.PlayerNumber == 1)
+                            {
+                                System.Diagnostics.Debug.WriteLine("1r " + pointRecived.Column + " " + pointRecived.Row);
+                                System.Diagnostics.Debug.WriteLine("__1r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine("2r " + pointRecived.Column + " " + pointRecived.Row);
+                                System.Diagnostics.Debug.WriteLine("__2r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
+                            }
+                               
+                            m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
+                            m_PlayersDataArray[i].PlayerPointData = pointRecived;
+                        }
+
                         m_PlayersDataArray[i].Button = temp[i];
-                   //}
+                    }
                 }
             }
         }
@@ -207,9 +216,9 @@ namespace LogicUnit
                // sent = m_LoopNumber;
                 await r_ConnectionToServer.SendAsync(
                    "UpdatePlayerSelection",
-                   m_Player.PlayerNumber,
+                   m_Player.PlayerNumber-1,
                    m_CurrentPlayerData.Button,
-                   (int)playerPosition.Column,(int)playerPosition.Row);
+                   0,0);
                 
                 m_NewButtonPressed = false;
             }
@@ -275,9 +284,9 @@ namespace LogicUnit
 
         private async void SendServerPositionUpdate(int i_Player,Point i_Point)
         {
-            System.Diagnostics.Debug.WriteLine("s"+m_Player.PlayerNumber);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
+            System.Diagnostics.Debug.WriteLine("s "+m_Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
             await r_ConnectionToServer.SendAsync(
-                "UpdatePlayerSelection",i_Player
+                "UpdatePlayerSelection", i_Player-1
                 ,
                 -1,
                 (int)i_Point.Column, (int)i_Point.Row);
