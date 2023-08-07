@@ -206,16 +206,16 @@ namespace LogicUnit
                     Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
                     if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
                     {
-                        //if (m_Player.PlayerNumber == 1)
-                        //{
-                        //    System.Diagnostics.Debug.WriteLine("1r " + pointRecived.Column + " " + pointRecived.Row);
+                        if (m_Player.PlayerNumber == 1)
+                        {
+                            System.Diagnostics.Debug.WriteLine("1r " + pointRecived.Column + " " + pointRecived.Row);
                         //    System.Diagnostics.Debug.WriteLine("__1r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
-                        //}
-                        //else
-                        //{
-                        //    System.Diagnostics.Debug.WriteLine("2r " + pointRecived.Column + " " + pointRecived.Row);
+                        }
+                        else
+                        {
+                            System.Diagnostics.Debug.WriteLine("2r " + pointRecived.Column + " " + pointRecived.Row);
                         //    System.Diagnostics.Debug.WriteLine("__2r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
-                        //}
+                        }
 
                         m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
                         m_PlayersDataArray[i].PlayerPointData = pointRecived;
