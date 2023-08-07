@@ -80,9 +80,9 @@ namespace LogicUnit
         protected readonly CollisionManager m_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
         static readonly object m_lock = new object();
-        //private int sent = 0;
+        private volatile int sent = 0;
         //private int recived = 0;
-        private int d = 0;
+        private  int d = 0;
 
         public Game()
         {
@@ -125,27 +125,28 @@ namespace LogicUnit
 
         public void GameLoop()
         {
-            m_GameInformation.RealWorldStopwatch = new Stopwatch();
-            m_GameInformation.RealWorldStopwatch.Start();
-            m_GameStopwatch.Start();
-            while (m_GameStatus == eGameStatus.Running) //(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
-            {
-                m_GameStopwatch.Restart();
-                m_gameObjectsToUpdate = new List<GameObject>();
-                m_GameObjectsToAdd = new List<GameObject>();
-                updateGame();
+              m_GameInformation.RealWorldStopwatch = new Stopwatch();
+                m_GameInformation.RealWorldStopwatch.Start();
+                m_GameStopwatch.Start();
+                while (m_GameStatus == eGameStatus.Running) //(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
+                {
+                    m_GameStopwatch.Restart();
+                    m_gameObjectsToUpdate = new List<GameObject>();
+                    m_GameObjectsToAdd = new List<GameObject>();
+                    updateGame();
 
-                Draw();
+                    Draw();
 
-                Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-                m_LastElapsedTime = (int) m_GameStopwatch.Elapsed.TotalMilliseconds;
-                m_LoopNumber++;
+                    Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
+                    m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
+                    m_LoopNumber++;
 
-            }
-            if (m_GameStatus == eGameStatus.Ended)
-            {
-                m_ConnectedToServer = false;
-            }
+                }
+                if (m_GameStatus == eGameStatus.Ended)
+                {
+                    m_ConnectedToServer = false;
+                }
+            
         }
         private void updateGame()
         {
@@ -296,7 +297,10 @@ namespace LogicUnit
 
         private async void SendServerPositionUpdate(int i_Player,Point i_Point)
         {
-            System.Diagnostics.Debug.WriteLine("s "+m_Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
+            Thread t = Thread.CurrentThread;
+            
+            System.Diagnostics.Debug.WriteLine("s " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId() + " " + i_Point.Row);
+            //System.Diagnostics.Debug.WriteLine("s "+m_Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
             await r_ConnectionToServer.SendAsync(
                 "UpdatePlayerSelection", i_Player-1
                 ,
@@ -308,7 +312,7 @@ namespace LogicUnit
         {
             Button button = sender as Button;
             m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
-            
+            sent = 8;
             m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
         }
 

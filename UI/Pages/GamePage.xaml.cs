@@ -20,7 +20,8 @@ public partial class GamePage : ContentPage
     private Game m_Game;
     private Dictionary<int, Image> m_GameImages = new Dictionary<int, Image>();
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
-
+    private volatile static int g = 0;
+    static readonly object m_lock = new object();
     public GamePage()
     {
         CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
@@ -174,7 +175,24 @@ public partial class GamePage : ContentPage
 
     void runGame()
     {
-        m_Game.RunGame();
+        lock(m_lock)
+        {
+            if(g == 0)
+            {
+                if(m_GameInformation.m_Player.PlayerNumber == 1)
+                {
+                    int h = 0;
+                }
+                g++;
+               
+            }
+            else
+            {
+                m_Game.RunGame();
+            }
+          
+        }
+       
     }
 
     void initializeEvents()
