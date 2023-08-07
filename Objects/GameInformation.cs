@@ -15,7 +15,7 @@ namespace Objects
         private static GameInformation m_Instance = null;
         public eGames m_NameOfGame;
         private int m_AmountOfPlayers;
-        private Player m_Player = Player.Instance;
+        public Player m_Player = Player.Instance;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<ScreenDimension> m_ScreenInfoOfAllPlayers = new List<ScreenDimension>();
         public Point PointValuesToAddToScreen { get; set; } = new Point();
