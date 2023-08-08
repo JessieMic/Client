@@ -33,7 +33,29 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         Point getPointOnGrid(int i_X, int i_Y)
         {
-            Point point = new Point(0, i_Y-1);
+            //Point point = new Point(0, i_Y-1);
+            Point point;
+            int numOfPlayers = m_GameInformation.AmountOfPlayers;
+
+            if (ObjectNumber == 4)
+            {
+                point = new Point(i_X - 1, i_Y - 1);
+            }
+            else if (ObjectNumber == 3)
+            {
+                point = new Point(0, i_Y - 1);
+            }
+            else // ObjectNumber == 2
+            {
+                if (numOfPlayers == 2)
+                {
+                    point = new Point(0, i_Y - 1);
+                }
+                else // numOfPlayers == 3 || numOfPlayers == 4
+                {
+                    point = new Point(i_X - 1, 0);
+                }
+            }
 
             return point;
         }

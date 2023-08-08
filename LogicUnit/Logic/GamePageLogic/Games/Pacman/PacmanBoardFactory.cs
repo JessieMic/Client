@@ -54,5 +54,25 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {0,1,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0,0,1,0,1,1,0} ,
         {0,1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,0,1,1,0} ,
             };
+
+        public int[,] BuildBoardMatrix(int m_Width, int m_Height)
+        {
+            int[,] mat = new int[m_Height, m_Width];
+
+            for (int r = 0; r < m_Height; r++)
+            {
+                for (int c = 0; c < m_Width; c++)
+                {
+                    mat[r, c] = m_grid[r, c];
+
+                    if ((r == 0 || c == 0 || r == m_Height - 1 || c == m_Width - 1) && m_grid[r, c] == 1)
+                    {
+                        mat[r, c] = 0;
+                    }
+                }
+            }
+
+            return mat;
+        }
     }
 }
