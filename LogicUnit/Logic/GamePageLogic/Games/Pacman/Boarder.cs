@@ -15,7 +15,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             IsCollisionDetectionEnabled = true;
             ObjectNumber = 2;
-            this.Initialize(eScreenObjectType.Image, 2, "pacman_boarder.png", i_Point, true,
+            this.Initialize(eScreenObjectType.Image, 2, "pacman_boarder .png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
     }
