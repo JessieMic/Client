@@ -84,7 +84,7 @@ namespace LogicUnit
         //private int recived = 0;
         private  int d = 0;
         private int[] temp = new int[12];
-        protected Queue<int> a = new Queue<int>();
+        protected Queue<Vector2> a = new Queue<Vector2>();
 
         public Game()
         {
@@ -100,8 +100,8 @@ namespace LogicUnit
 
             r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
                 {
-                    SpecialUpdateReceived(1, i_Player);
-                    //a.Enqueue(i_Player);
+                    //SpecialUpdateReceived(1, i_Player);
+                    a.Enqueue(new Vector2(i_WhatHappened,i_Player));
                 });
 
             Task.Run(() =>
@@ -132,29 +132,29 @@ namespace LogicUnit
 
         public void GameLoop()
         {
-              m_GameInformation.RealWorldStopwatch = new Stopwatch();
-                m_GameInformation.RealWorldStopwatch.Start();
-                m_GameStopwatch.Start();
-                while (m_GameStatus == eGameStatus.Running) //(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
-                {
-                    m_GameStopwatch.Restart();
-                    m_gameObjectsToUpdate = new List<GameObject>();
-                    m_GameObjectsToAdd = new List<GameObject>();
-                    updateGame();
+            m_GameInformation.RealWorldStopwatch = new Stopwatch();
+            m_GameInformation.RealWorldStopwatch.Start();
+            m_GameStopwatch.Start();
+            while (m_GameStatus == eGameStatus.Running) //(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
+            {
+                m_GameStopwatch.Restart();
+                m_gameObjectsToUpdate = new List<GameObject>();
+                m_GameObjectsToAdd = new List<GameObject>();
+                updateGame();
 
-                    Draw();
+                Draw();
 
-                    Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
-                    m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
-                    m_LoopNumber++;
+                Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
+                m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
+                //m_LoopNumber++;
 
-                }
-                if (m_GameStatus == eGameStatus.Ended)
-                {
-                    m_ConnectedToServer = false;
-                }
-            
+            }
+            if (m_GameStatus == eGameStatus.Ended)
+            {
+                m_ConnectedToServer = false;
+            }
         }
+
         private void updateGame()
         {
             SendServerUpdate();
@@ -172,12 +172,26 @@ namespace LogicUnit
             //Thread t = Thread.CurrentThread;
             //System.Diagnostics.Debug.WriteLine(m_Player.PlayerNumber+"wwwwww " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
             //GetServerUpdate();
-            //m_LoopNumber = m_LastElapsedTime;
+            m_LoopNumber = m_LastElapsedTime;
 
             updatePosition(m_LastElapsedTime);
+            if (a.Count != 0)
+            {
+                Thread t = Thread.CurrentThread;
+                System.Diagnostics.Debug.WriteLine($"(EVENT) - Player num- {m_GameInformation.m_Player.PlayerNumber}Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
+                Vector2 e = a.Dequeue();
+                SpecialUpdateReceived((int)e.X,(int)e.Y);
+            }
         }
 
-
+        protected void stopMovement(int i_Player)
+        {
+            if(i_Player == m_Player.PlayerNumber)
+            {
+                m_NewButtonPressed = true;
+                m_CurrentPlayerData.Button = 0;
+            }
+        }
         void updatePosition()
         {
             for (int i = 0; i < 4; i++)
@@ -262,16 +276,15 @@ namespace LogicUnit
             }
             //System.Diagnostics.Debug.WriteLine("change finish " + d);
         }
-        protected async void SendSpecialServerUpdate(int i_WhatHappened, int i_Player)
+        protected async void SendSpecialServerUpdate(object sender, int i_eventNumber)
         {
             //System.Diagnostics.Debug.WriteLine("s" + m_Player.PlayerNumber);
-
+            GameObject gameObject = sender as GameObject;
             System.Diagnostics.Debug.WriteLine("HIT " + m_Player.PlayerNumber);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
-            // sent = m_LoopNumber;
-           r_ConnectionToServer.SendAsync(
+            r_ConnectionToServer.SendAsync(
                 "SpecialUpdate",
-                i_WhatHappened,
-                i_Player);
+                i_eventNumber,gameObject.ObjectNumber
+                );
         }
         protected virtual void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
         {
@@ -297,7 +310,7 @@ namespace LogicUnit
                 }
                 else //Game has ended 
                 {
-                    m_scoreBoard.ShowScoreBoard();
+                   // m_scoreBoard.ShowScoreBoard();
                 }
             }
         }
@@ -373,8 +386,12 @@ namespace LogicUnit
                     if(newObject.ScreenObjectType == eScreenObjectType.Player)
                     {
                         m_PlayerObjects[newObject.ObjectNumber-1] = newObject;
-                        newObject.PlayerGotHit += PlayerLostALife;
+                        newObject.SpecialEvent += SendSpecialServerUpdate;
                         newObject.UpdatePosition += UpdateClientsAboutPosition;
+                    }
+                    else 
+                    {
+                        newObject.SpecialEvent += SendSpecialServerUpdate;
                     }
                 }
 

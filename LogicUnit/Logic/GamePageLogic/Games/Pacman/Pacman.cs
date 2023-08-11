@@ -11,6 +11,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         private IPacmanGamePlayer[] m_PacmanPlayers;
         PacmanBoardFactory m_PacmanBoard = new PacmanBoardFactory();
+        private int m_FoodCounterForPlayerScreen = 0;
+        private int m_AmountOfScreenThatHaveNoFood = 0;
 
         public Pacman()
         {
@@ -33,7 +35,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     }
                     else if (m_Board[col, row] == 0)
                     {
-                        m_GameObjectsToAdd.Add(new Food(new Point(col, row)));
+                        m_GameObjectsToAdd.Add(new Food(new Point(col, row),ref m_FoodCounterForPlayerScreen));
                     }
                     else if (m_Board[col, row] == 2)
                     {
@@ -43,53 +45,53 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             }
         }
 
-        protected override void PlayerLostALife(object sender, int i_Player)
-        {
-            SendSpecialServerUpdate(1, i_Player);
-            //double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-
-            //if (i_Player == 1)//Pacman got hit so we reset all positions
-            //{
-
-            //    foreach (var player in m_PacmanPlayers)
-            //    {
-            //        player.ResetPosition(startTimeOfDeathAnimation);
-            //    }
-            //}
-            //else
-            //{
-            //    m_PacmanPlayers[i_Player - 1].ResetPosition(startTimeOfDeathAnimation);
-            //}
-            //base.PlayerLostALife(sender, i_Player);
-        }
-
         protected override void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
         {
-            double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-            if (i_WhatHappened == 1)
+            if (i_WhatHappened == (int)ePacmanSpecialEvents.GotHit)
             {
-                if (i_Player == 1)
-                {
-                    foreach (var player in m_PacmanPlayers)
-                    {
-                        player.ResetPosition(startTimeOfDeathAnimation);
-                    }
-                }
-                else
-                {
-                    m_PacmanPlayers[i_Player - 1].AmountOfLives--;
-                   m_PacmanPlayers[i_Player - 1].ResetPosition(startTimeOfDeathAnimation);
-                }
-                base.PlayerLostALife(null, i_Player);
+                PlayerGothit(i_Player);
             }
+            else if(i_WhatHappened == (int)ePacmanSpecialEvents.AteCherry)
+            {
+                pacmanAteCherry();
+            }
+            else
+            {
+                m_FoodCounterForPlayerScreen++;
+                System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {m_GameInformation.m_Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
+                if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
+                {
+                    m_GameStatus = eGameStatus.Ended;
+                }
+            }
+        }
+
+        private void PlayerGothit(int i_Player)
+        {
+            double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            if (i_Player == 1)
+            {
+                stopMovement(m_Player.PlayerNumber);
+                foreach (var player in m_PacmanPlayers)
+                {
+                    player.ResetPosition(startTimeOfDeathAnimation);
+                }
+            }
+            else
+            {
+                m_PacmanPlayers[i_Player - 1].AmountOfLives--;
+                m_PacmanPlayers[i_Player - 1].ResetPosition(startTimeOfDeathAnimation);
+                stopMovement(i_Player);
+            }
+            base.PlayerLostALife(null, i_Player);
         }
 
         private void pacmanAteCherry()
         {
-            foreach(var player in m_PacmanPlayers)
+            double startTimeOfCherryTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            foreach (var player in m_PacmanPlayers)
             {
-                double currentTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-                player.InitiateCherryTime(currentTime);
+                player.InitiateCherryTime(startTimeOfCherryTime);
             }
         }
 
@@ -104,7 +106,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             PacmanObject player1 = new PacmanObject(m_Board);
             m_PacmanPlayers[0]=player1;
             m_GameObjectsToAdd.Add(player1);
-            player1.AteBerry += pacmanAteCherry;
 
             for (int i = 2; i <= m_GameInformation.AmountOfPlayers; i++)
             {

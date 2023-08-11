@@ -24,6 +24,7 @@ namespace Objects
         private static readonly object s_InstanceLock = new object();
         public Rect BackgroundRect { get; set; }
         public Stopwatch RealWorldStopwatch { get; set; }
+        public int m_food = 0;
         public static GameInformation Instance
         {
             get
@@ -50,6 +51,14 @@ namespace Objects
             }
             
             return isPointOnTheBoard;
+        }
+
+        public bool IsPointIsOnBoardGrided(Point i_Point)
+        {
+            i_Point.Row *= GameSettings.GameGridSize + PointValuesToAddToScreen.Row;
+            i_Point.Column *= GameSettings.GameGridSize + PointValuesToAddToScreen.Column;
+
+            return IsPointIsOnBoardPixels(i_Point);
         }
 
 
