@@ -86,10 +86,12 @@
 	  <None Remove="Resources\Images\boarder1.png" />
 	  <None Remove="Resources\Images\boarder2.png" />
 	  <None Remove="Resources\Images\floor.png" />
-	  <None Remove="Resources\Images\giphy.gif" />
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
+	  <None Remove="Resources\Images\pacman1.png" />
+	  <None Remove="Resources\Images\pacman2.png" />
+	  <None Remove="Resources\Images\pacman3.png" />
 	  <None Remove="Resources\Images\pacmanbackground.png" />
 	  <None Remove="Resources\Images\pacmanfood.png" />
 	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />

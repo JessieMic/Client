@@ -15,7 +15,7 @@ namespace Objects
     {
         public event EventHandler<EventArgs> UpdateGameObject;
         public event EventHandler<EventArgs> Disposed;
-        public event EventHandler<int> PlayerGotHit;
+        public event EventHandler<int> SpecialEvent;
         public event EventHandler<Point> UpdatePosition;
         //public bool Turn { get; set; }
         public Point PointOnScreen { get; set; }
@@ -153,9 +153,9 @@ namespace Objects
             }
         }
 
-        protected void OnGotHit()
+        protected void OnSpecialEvent(int eventNumber)
         {
-            PlayerGotHit.Invoke(this,ObjectNumber);
+            SpecialEvent.Invoke(this, eventNumber);
         }
 
         void checkIfWantToTurn(Direction i_Direction)

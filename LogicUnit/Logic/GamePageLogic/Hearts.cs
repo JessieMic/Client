@@ -110,8 +110,9 @@ namespace LogicUnit.Logic.GamePageLogic
             {
                 m_AmountOfPlayersThatAreAlive--;
 
-                if (m_AmountOfPlayersThatAreAlive > 1)//Player lost but game is still running
+                if(m_AmountOfPlayersThatAreAlive <= 1 || i_Player == 1) //Player lost but game is still running
                 {
+                    returnStatus = eGameStatus.Ended;
                     //returnStatus = eGameStatus.Lost;
                 }
                 else//only one player is alive so the game has ended 

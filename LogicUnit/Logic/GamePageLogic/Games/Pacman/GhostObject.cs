@@ -40,50 +40,53 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public override void Update(double i_TimeElapsed)
         {
-            if (m_IsDyingAnimationOn)
+            if(AmountOfLives != 0)
             {
-                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
-
-                if (timePassed < 1600)
+                if (m_IsDyingAnimationOn)
                 {
-                    IsVisable = !IsVisable;
-                }
-                else
-                {
-                    IsVisable = true;
-                    m_IsDyingAnimationOn = false;
-                    IsObjectMoving = true;
-                }
-            }
+                    double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
 
-            if (m_IsCherryTime)
-            {
-                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
-
-                if (timePassed > 4500 && timePassed < 7000)
-                {
-                    if (m_Blink % 5 == 0)
+                    if (timePassed < 1600)
                     {
-                        if (ImageSource == "pacman_ghost_2c.png")
-                        {
-                            ImageSource = "pacman_ghost_2.png";
-                        }
-                        else
-                        {
-                            ImageSource = "pacman_ghost_2c.png";
-                        }
+                        IsVisable = !IsVisable;
                     }
-                    m_Blink++;
+                    else
+                    {
+                        IsVisable = true;
+                        m_IsDyingAnimationOn = false;
+                        IsObjectMoving = true;
+                    }
                 }
-                else if (timePassed > 7000)
-                {
-                    ImageSource = "pacman_ghost_2.png";
-                    m_IsCherryTime = false;
-                    IsHunting = true;
-                }
-            }
 
-            base.Update(i_TimeElapsed);
+                if (m_IsCherryTime)
+                {
+                    double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
+
+                    if (timePassed > 4500 && timePassed < 7000)
+                    {
+                        if (m_Blink % 5 == 0)
+                        {
+                            if (ImageSource == "pacman_ghost_2c.png")
+                            {
+                                ImageSource = "pacman_ghost_2.png";
+                            }
+                            else
+                            {
+                                ImageSource = "pacman_ghost_2c.png";
+                            }
+                        }
+                        m_Blink++;
+                    }
+                    else if (timePassed > 7000)
+                    {
+                        ImageSource = "pacman_ghost_2.png";
+                        m_IsCherryTime = false;
+                        IsHunting = true;
+                    }
+                }
+
+                base.Update(i_TimeElapsed);
+            }
         }
 
         public override void Collided(ICollidable i_Collidable)
@@ -101,16 +104,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     //IsVisable = false;
                     //IsHunting = true;
                     //m_IsDyingAnimationOn = true;
-                    IsObjectMoving = false;
+                    
                     //AmountOfLives--;
-                    if (AmountOfLives == 0 && IsCollisionDetectionEnabled)
-                    {
-                        
-                        OnDisposed();
-                    }
+                    
                     if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen) && IsObjectMoving)
                     {
-                         OnGotHit();
+                        IsObjectMoving = false;
+                        OnSpecialEvent((int)ePacmanSpecialEvents.GotHit);
                     }
                 }
             }

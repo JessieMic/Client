@@ -22,25 +22,46 @@ public partial class GamePage : ContentPage
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
     private volatile static int g = 0;
     static readonly object m_lock = new object();
+    private volatile static int firstThread = 0;
     public GamePage()
     {
+       
         lock (m_lock)
         {
             if (g == 0)
             {
+                Thread j = Thread.CurrentThread;
                 if (m_GameInformation.m_Player.PlayerNumber == 1)
                 {
-                    int h = 0;
+                    System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
                 }
                 g++;
-
+                firstThread = j.ManagedThreadId;
             }
             else
             {
+                Thread v = Thread.CurrentThread;
+                g++;
+                System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- { v.ManagedThreadId }processor Id-{Thread.GetCurrentProcessorId()}");
                 InitializeComponent();
                 initializePage();
             }
         }
+        //Thread t = Thread.CurrentThread;
+        //if (firstThread == t.ManagedThreadId)
+        //{
+        //    Thread.Sleep(5000);
+        //    if(g != 2)
+        //    {
+        //        System.Diagnostics.Debug.WriteLine($"THREAD FAILLLL - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
+        //        InitializeComponent();
+        //        initializePage();
+        //    }
+        //    else
+        //    {
+        //        System.Diagnostics.Debug.WriteLine($"Died ---");
+        //    }
+        //}
     }
 
     private void initializePage()
@@ -99,7 +120,7 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
         {
             loopLabel.Text = m_Game.m_LoopNumber.ToString();
-            if (getObjectTypeFromID(i_ObjectUpdates.ID) == eScreenObjectType.Image)
+            if (getObjectTypeFromID(i_ObjectUpdates.ID) == eScreenObjectType.Image || i_ObjectUpdates.ScreenObjectType == eScreenObjectType.Player)
             {
                 if (m_GameImages.ContainsKey(i_ObjectUpdates.ID))
                 {
