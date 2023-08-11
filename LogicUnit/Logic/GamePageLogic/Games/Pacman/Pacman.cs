@@ -22,24 +22,65 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         void createBoard()
         {
-            int[,] grid = m_PacmanBoard.m_grid;
+            m_Board = m_PacmanBoard.BuildBoardMatrix(m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height);
             for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
             {
                 for (int row = 0; row < m_BoardSizeByGrid.Height; row++)
                 {
-                    if (grid[col, row] == 1)
+                    if (m_Board[col, row] == 1)
                     {
                         m_GameObjectsToAdd.Add(new Boarder(new Point(col, row)));
                     }
-                    else if (grid[col, row] == 0)
+                    else if (m_Board[col, row] == 0)
                     {
                         m_GameObjectsToAdd.Add(new Food(new Point(col, row)));
                     }
-                    else if (grid[col, row] == 2)
+                    else if (m_Board[col, row] == 2)
                     {
                         m_GameObjectsToAdd.Add(new Cherry(new Point(col, row)));
                     }
                 }
+            }
+        }
+
+        protected override void PlayerLostALife(object sender, int i_Player)
+        {
+            SendSpecialServerUpdate(1, i_Player);
+            //double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+
+            //if (i_Player == 1)//Pacman got hit so we reset all positions
+            //{
+
+            //    foreach (var player in m_PacmanPlayers)
+            //    {
+            //        player.ResetPosition(startTimeOfDeathAnimation);
+            //    }
+            //}
+            //else
+            //{
+            //    m_PacmanPlayers[i_Player - 1].ResetPosition(startTimeOfDeathAnimation);
+            //}
+            //base.PlayerLostALife(sender, i_Player);
+        }
+
+        protected override void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
+        {
+            double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            if (i_WhatHappened == 1)
+            {
+                if (i_Player == 1)
+                {
+                    foreach (var player in m_PacmanPlayers)
+                    {
+                        player.ResetPosition(startTimeOfDeathAnimation);
+                    }
+                }
+                else
+                {
+                    m_PacmanPlayers[i_Player - 1].AmountOfLives--;
+                   m_PacmanPlayers[i_Player - 1].ResetPosition(startTimeOfDeathAnimation);
+                }
+                base.PlayerLostALife(null, i_Player);
             }
         }
 
@@ -60,7 +101,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         private void addPlayerObjects()
         {
-            PacmanObject player1 = new PacmanObject(m_PacmanBoard.m_grid);
+            PacmanObject player1 = new PacmanObject(m_Board);
             m_PacmanPlayers[0]=player1;
             m_GameObjectsToAdd.Add(player1);
             player1.AteBerry += pacmanAteCherry;
@@ -71,30 +112,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     i,
                     m_BoardSizeByGrid.Width,
                     m_BoardSizeByGrid.Height,
-                    m_PacmanBoard.m_grid);
+                    m_Board);
 
                 m_GameObjectsToAdd.Add(newGhost);
                 m_PacmanPlayers[i-1] = newGhost;
             }
-        }
-
-        protected override void PlayerLostALife(object sender, int i_Player)
-        {
-            double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-            
-            if(i_Player==1)//Pacman got hit so we reset all positions
-            {
-                
-                foreach(var player in m_PacmanPlayers)
-                {
-                    player.ResetPosition(startTimeOfDeathAnimation);
-                }
-            }
-            else
-            {
-                m_PacmanPlayers[i_Player-1].ResetPosition(startTimeOfDeathAnimation);
-            }
-            base.PlayerLostALife(sender,i_Player);
         }
     }
 }

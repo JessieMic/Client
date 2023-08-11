@@ -166,17 +166,12 @@ namespace Objects
             
             if(x != 0 && y != 0)
             {
-               
                 m_WantToTurn = true;
                 Point PointUpdate = getPointOnGrid();
                 //check if we are on our side
                 PointOnScreen = getScreenPoint(PointUpdate,true);
                 if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
                 {
-                    if (m_GameInformation.m_Player.PlayerNumber == 1)
-                    {
-                        int g = 0;
-                    }
                     UpdatePosition.Invoke(this,PointUpdate);
                 }
             }

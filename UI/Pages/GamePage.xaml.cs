@@ -24,16 +24,23 @@ public partial class GamePage : ContentPage
     static readonly object m_lock = new object();
     public GamePage()
     {
-        CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.GetCultureInfo("en-US");
-        CultureInfo.DefaultThreadCurrentCulture = CultureInfo.GetCultureInfo("en-US");
-        CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
-        InitializeComponent();
-        CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture("en-US");
-        CultureInfo.CurrentUICulture = CultureInfo.CreateSpecificCulture("en-US");
-        var cultureInfo = CultureInfo.GetCultureInfo("en-US");
-        
-        initializePage();
+        lock (m_lock)
+        {
+            if (g == 0)
+            {
+                if (m_GameInformation.m_Player.PlayerNumber == 1)
+                {
+                    int h = 0;
+                }
+                g++;
 
+            }
+            else
+            {
+                InitializeComponent();
+                initializePage();
+            }
+        }
     }
 
     private void initializePage()
@@ -175,24 +182,23 @@ public partial class GamePage : ContentPage
 
     void runGame()
     {
-        lock(m_lock)
-        {
-            if(g == 0)
-            {
-                if(m_GameInformation.m_Player.PlayerNumber == 1)
-                {
-                    int h = 0;
-                }
-                g++;
+        //lock(m_lock)
+        //{
+        //    if(g == 0)
+        //    {
+        //        if(m_GameInformation.m_Player.PlayerNumber == 1)
+        //        {
+        //            int h = 0;
+        //        }
+        //        g++;
                
-            }
-            else
-            {
+        //    }
+        //    else
+        //    {
                 m_Game.RunGame();
-            }
+           // }
           
-        }
-       
+       // }
     }
 
     void initializeEvents()

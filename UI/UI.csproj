@@ -95,6 +95,7 @@
 	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
+	  <None Remove="Resources\Images\pacman_boarder .png" />
 	  <None Remove="Resources\Images\pacman_boarder.png" />
 	  <None Remove="Resources\Images\pacman_cherry.png" />
 	  <None Remove="Resources\Images\pacman_ghost_2.png" />

@@ -19,11 +19,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public double m_DeathAnimationStart;
         private bool m_IsDyingAnimationOn = false;
         private bool m_IsCherryTime = false;
+        static readonly object m_lock = new object();
         public PacmanObject(int[,] i_Board)
         {
             m_Board = i_Board;
             IsCollisionDetectionEnabled = true;
-            this.Initialize(eScreenObjectType.Player,1, "pacman.gif", new Point(0,0),true,
+            this.Initialize(eScreenObjectType.Player, 1, "pacman.gif", new Point(0, 0), true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
@@ -41,7 +42,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 {
                     IsVisable = true;
                     m_IsDyingAnimationOn = false;
-                    IsObjectMoving = true;
+                     IsObjectMoving = true;
                 }
             }
 
@@ -60,33 +61,40 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public override void Collided(ICollidable i_Collidable)
         {
-            if(i_Collidable is GhostObject)
-            {
-                if(!IsHunting)//Got eaten
+            if (i_Collidable is GhostObject)
                 {
-                    IsObjectMoving = false;
-                    m_IsDyingAnimationOn = true;
-                    OnGotHit();
+                    if (!IsHunting && IsObjectMoving)//Got eaten
+                    {
+                        IsObjectMoving = false;
+                        //m_IsDyingAnimationOn = true;
+                        if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+                        {
+                            Thread t = Thread.CurrentThread;
+                            System.Diagnostics.Debug.WriteLine(m_GameInformation.m_Player.PlayerNumber+" AAAAAA " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
+                            OnGotHit();
+                        }
+                    }
                 }
-            }
-            else if (i_Collidable is Food)
-            {
-                i_Collidable.Collided(this);
-                //points up
-            }
-            else if (i_Collidable is Boarder)
-            {
-                collidedWithSolid(i_Collidable);
-            }
-            else if(i_Collidable is Cherry)
-            {
-                i_Collidable.Collided(this);
-                AteBerry.Invoke();
-            }
+                else if (i_Collidable is Food)
+                {
+                    i_Collidable.Collided(this);
+                    //points up
+                }
+                else if (i_Collidable is Boarder)
+                {
+                    collidedWithSolid(i_Collidable);
+                }
+                else if (i_Collidable is Cherry)
+                {
+                    i_Collidable.Collided(this);
+                    AteBerry.Invoke();
+                }
         }
 
         public void ResetPosition(double i_DeathStartTime)
         {
+            IsObjectMoving = false;
+            m_IsDyingAnimationOn = true;
             m_DeathAnimationStart = i_DeathStartTime;
             resetToStartupPoint();
         }

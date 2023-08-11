@@ -83,6 +83,8 @@ namespace LogicUnit
         private volatile int sent = 0;
         //private int recived = 0;
         private  int d = 0;
+        private int[] temp = new int[12];
+        protected Queue<int> a = new Queue<int>();
 
         public Game()
         {
@@ -90,12 +92,17 @@ namespace LogicUnit
             {
                 m_PlayersDataArray[i] = new(i);
             }
-
+            
             m_PlayerObjects = new GameObject[m_GameInformation.AmountOfPlayers];// new GameObject[2];//
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_InGameHubAddress)
                 .Build();
 
+            r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
+                {
+                    SpecialUpdateReceived(1, i_Player);
+                    //a.Enqueue(i_Player);
+                });
 
             Task.Run(() =>
            {
@@ -151,15 +158,45 @@ namespace LogicUnit
         private void updateGame()
         {
             SendServerUpdate();
+            //lock(m_lock)
+            //{
+            //    if (a.Count != 0)
+            //    {
+            //        Thread t = Thread.CurrentThread;
+            //        System.Diagnostics.Debug.WriteLine("wwwwww " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
+            //        SpecialUpdateReceived(1, a.Dequeue());
+            //    }
+            //}
+            updatePosition();
             changeDirectons();
-            GetServerUpdate();
+            //Thread t = Thread.CurrentThread;
+            //System.Diagnostics.Debug.WriteLine(m_Player.PlayerNumber+"wwwwww " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
+            //GetServerUpdate();
             //m_LoopNumber = m_LastElapsedTime;
-            
+
             updatePosition(m_LastElapsedTime);
         }
 
-        
-        
+
+        void updatePosition()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
+                if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
+                {
+                    if (m_Player.PlayerNumber == 1)
+                    {
+                        System.Diagnostics.Debug.WriteLine("1r " + pointRecived.Column + " " + pointRecived.Row); 
+                        System.Diagnostics.Debug.WriteLine("__1r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
+                    }
+
+                    m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
+                    m_PlayersDataArray[i].PlayerPointData = pointRecived;
+                }
+                m_PlayersDataArray[i].Button = temp[i];
+            }
+        }
 
         protected virtual void Draw()
         {
@@ -184,11 +221,19 @@ namespace LogicUnit
 
                 //System.Diagnostics.Debug.WriteLine("s"+m_CurrentPlayerData.Button);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
                // sent = m_LoopNumber;
-                await r_ConnectionToServer.SendAsync(
+                 r_ConnectionToServer.SendAsync(
                    "UpdatePlayerSelection",
                    m_Player.PlayerNumber-1,
                    m_CurrentPlayerData.Button,
                    0,0);
+                // if(a.Count != 0)
+                // {
+                //     r_ConnectionToServer.SendAsync(
+                //         "UpdatePlayerSelection",
+                //         3,
+                //         m_CurrentPlayerData.Button,
+                //         a.Dequeue(), 0);
+                //}
                 
                 m_NewButtonPressed = false;
             }
@@ -196,35 +241,16 @@ namespace LogicUnit
 
         private async void GetServerUpdate()
         {
-            if (m_ConnectedToServer)
+            while (m_ConnectedToServer)
             {
-                int[] temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
-
-                //System.Diagnostics.Debug.WriteLine("r " + temp[0]);
+                temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
                 for (int i = 0; i < 4; i++)
                 {
-                    Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
-                    if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
-                    {
-                        if (m_Player.PlayerNumber == 1)
-                        {
-                            System.Diagnostics.Debug.WriteLine("1r " + pointRecived.Column + " " + pointRecived.Row);
-                        //    System.Diagnostics.Debug.WriteLine("__1r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine("2r " + pointRecived.Column + " " + pointRecived.Row);
-                        //    System.Diagnostics.Debug.WriteLine("__2r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
-                        }
-
-                        m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
-                        m_PlayersDataArray[i].PlayerPointData = pointRecived;
-                    }
-
                     m_PlayersDataArray[i].Button = temp[i];
-                    //d++;
-                    //System.Diagnostics.Debug.WriteLine("server finis " + d);
                 }
+                // m_PlayersDataArray[0].Button = temp[0];
+                //m_PlayersDataArray[1].Button = temp[1];
+                //System.Diagnostics.Debug.WriteLine("r " + temp[0]);
             }
         }
 
@@ -236,11 +262,26 @@ namespace LogicUnit
             }
             //System.Diagnostics.Debug.WriteLine("change finish " + d);
         }
+        protected async void SendSpecialServerUpdate(int i_WhatHappened, int i_Player)
+        {
+            //System.Diagnostics.Debug.WriteLine("s" + m_Player.PlayerNumber);
+
+            System.Diagnostics.Debug.WriteLine("HIT " + m_Player.PlayerNumber);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
+            // sent = m_LoopNumber;
+           r_ConnectionToServer.SendAsync(
+                "SpecialUpdate",
+                i_WhatHappened,
+                i_Player);
+        }
+        protected virtual void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
+        {
+
+        }
 
         protected virtual void PlayerLostALife(object sender, int i_Player)
         {
             m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
-
+            System.Diagnostics.Debug.WriteLine("GOT " + m_Player.PlayerNumber);
             if (m_Hearts.m_HeartToRemove != null)
             {
                 OnDeleteGameObject(m_Hearts.m_HeartToRemove);
@@ -263,14 +304,6 @@ namespace LogicUnit
 
         private void ChangeDirection(Direction i_Direction, int i_GameObject, int i_LoopNumber)
         {
-            //if(m_Player.PlayerNumber == 1 && i_Direction == Direction.Right)
-            //{
-            //    int g = 0;
-            //}
-            //else if(i_Direction == Direction.Right)
-            //{
-            //    int g = 0;
-            //}
             m_PlayerObjects[i_GameObject - 1].RequestDirection(i_Direction);
         }
 
@@ -299,7 +332,7 @@ namespace LogicUnit
         {
             Thread t = Thread.CurrentThread;
             
-            System.Diagnostics.Debug.WriteLine("s " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId() + " " + i_Point.Row);
+            System.Diagnostics.Debug.WriteLine("hIT" + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId() + " " + i_Point.Row);
             //System.Diagnostics.Debug.WriteLine("s "+m_Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
             await r_ConnectionToServer.SendAsync(
                 "UpdatePlayerSelection", i_Player-1
@@ -311,8 +344,8 @@ namespace LogicUnit
         public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
+
             m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
-            sent = 8;
             m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
         }
 
@@ -324,9 +357,9 @@ namespace LogicUnit
 
         public void RunGame()
         {
-            //Thread serverUpdateThread = new(serverUpdateLoop);
+            Thread serverUpdateThread = new(GetServerUpdate);//(serverUpdateLoop);
             Thread newThread = new(GameLoop);
-            //serverUpdateThread.Start();
+            serverUpdateThread.Start();
             newThread.Start();
         }
 

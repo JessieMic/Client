@@ -57,17 +57,17 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public int[,] BuildBoardMatrix(int m_Width, int m_Height)
         {
-            int[,] mat = new int[m_Height, m_Width];
+            int[,] mat = new int[m_Width,m_Height];
 
             for (int r = 0; r < m_Height; r++)
             {
                 for (int c = 0; c < m_Width; c++)
                 {
-                    mat[r, c] = m_grid[r, c];
+                    mat[c,r] = m_grid[r, c];
 
                     if ((r == 0 || c == 0 || r == m_Height - 1 || c == m_Width - 1) && m_grid[r, c] == 1)
                     {
-                        mat[r, c] = 0;
+                        mat[c,r ] = 0;
                     }
                 }
             }
