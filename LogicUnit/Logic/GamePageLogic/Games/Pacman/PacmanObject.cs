@@ -23,30 +23,30 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             m_Board = i_Board;
             IsCollisionDetectionEnabled = true;
-            this.Initialize(eScreenObjectType.Player, 1, "pacman1.png", new Point(0, 0), true,
+            this.Initialize(eScreenObjectType.Player, 1, "pp.png", new Point(0, 0), true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
         public override void Update(double i_TimeElapsed)
         {
-            if(m_Pic == 0)
-            {
-                ImageSource = "pacman1.png";
-            }
-            else if(m_Pic == 3 || m_Pic == 9)
-            {
-                ImageSource = "pacman2.png";
-            }
-            else if(m_Pic == 6)
-            {
-                ImageSource = "pacman3.png";
-            }
-            else if(m_Pic > 11)
-            {
-                m_Pic = -1;
-            }
+            //if (m_Pic == 0)
+            //{
+            //    ImageSource = "pacman1.png";
+            //}
+            //else if (m_Pic == 3 || m_Pic == 9)
+            //{
+            //    ImageSource = "pacman2.png";
+            //}
+            //else if (m_Pic == 6)
+            //{
+            //    ImageSource = "pacman3.png";
+            //}
+            //else if (m_Pic > 11)
+            //{
+            //    m_Pic = -1;
+            //}
 
-            m_Pic++;
+            //m_Pic++;
             if (m_IsDyingAnimationOn)
             {
                 double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
@@ -59,7 +59,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 {
                     IsVisable = true;
                     m_IsDyingAnimationOn = false;
-                     IsObjectMoving = true;
+                    IsObjectMoving = true;
                 }
             }
 
@@ -86,7 +86,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
                     {
                         Thread t = Thread.CurrentThread;
-                        System.Diagnostics.Debug.WriteLine(m_GameInformation.m_Player.PlayerNumber+" AAAAAA " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
+                        System.Diagnostics.Debug.WriteLine(m_GameInformation.m_Player.PlayerNumber + " AAAAAA " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
                         OnSpecialEvent((int)ePacmanSpecialEvents.GotHit);
                     }
                     else

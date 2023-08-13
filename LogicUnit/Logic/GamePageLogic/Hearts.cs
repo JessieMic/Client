@@ -24,7 +24,7 @@ namespace LogicUnit.Logic.GamePageLogic
         public List<GameObject> m_HeartsOnScreen = new List<GameObject>();
         public GameObject m_HeartToRemove = null;
 
-        public void setHearts(int i_AmountOfPlayers,ref eGameStatus o_Status, ref List<string> o_LoseList, int i_ClientNumber)
+        public void setHearts(int i_AmountOfPlayers, ref eGameStatus o_Status, ref List<string> o_LoseList, int i_ClientNumber)
         {
             m_GameStatus = o_Status;
             m_LoseOrder = o_LoseList;
@@ -65,9 +65,9 @@ namespace LogicUnit.Logic.GamePageLogic
 
         private Point getHeartPoint(int heartNumber)
         {
-            Point heartPoint = new Point(1 + heartNumber,0);
+            Point heartPoint = new Point(1 + heartNumber, 0);
 
-            if(m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
+            if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
             {
                 heartPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 2 - heartNumber, 2);
             }
@@ -110,7 +110,7 @@ namespace LogicUnit.Logic.GamePageLogic
             {
                 m_AmountOfPlayersThatAreAlive--;
 
-                if(m_AmountOfPlayersThatAreAlive <= 1 || i_Player == 1) //Player lost but game is still running
+                if (m_AmountOfPlayersThatAreAlive <= 1 || i_Player == 1) //Player lost but game is still running
                 {
                     returnStatus = eGameStatus.Ended;
                     //returnStatus = eGameStatus.Lost;

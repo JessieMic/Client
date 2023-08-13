@@ -35,7 +35,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     }
                     else if (m_Board[col, row] == 0)
                     {
-                        m_GameObjectsToAdd.Add(new Food(new Point(col, row),ref m_FoodCounterForPlayerScreen));
+                        m_GameObjectsToAdd.Add(new Food(new Point(col, row), ref m_FoodCounterForPlayerScreen));
                     }
                     else if (m_Board[col, row] == 2)
                     {
@@ -51,7 +51,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             {
                 PlayerGothit(i_Player);
             }
-            else if(i_WhatHappened == (int)ePacmanSpecialEvents.AteCherry)
+            else if (i_WhatHappened == (int)ePacmanSpecialEvents.AteCherry)
             {
                 pacmanAteCherry();
             }
@@ -104,7 +104,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         private void addPlayerObjects()
         {
             PacmanObject player1 = new PacmanObject(m_Board);
-            m_PacmanPlayers[0]=player1;
+            m_PacmanPlayers[0] = player1;
             m_GameObjectsToAdd.Add(player1);
 
             for (int i = 2; i <= m_GameInformation.AmountOfPlayers; i++)
@@ -116,7 +116,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     m_Board);
 
                 m_GameObjectsToAdd.Add(newGhost);
-                m_PacmanPlayers[i-1] = newGhost;
+                m_PacmanPlayers[i - 1] = newGhost;
             }
         }
     }
