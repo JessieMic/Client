@@ -101,7 +101,6 @@
 	  <None Remove="Resources\Images\pacman_ghost_2c.png" />
 	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\pausemenubutton.png" />
-	  <None Remove="Resources\Images\pause_menu_option_button.png" />
 	  <None Remove="Resources\Images\placementbutton.png" />
 	  <None Remove="Resources\Images\pp.png" />
 	  <None Remove="Resources\Images\pressedplacementbutton.png" />
@@ -136,7 +135,6 @@
 	  <MauiImage Include="Resources\Images\Game\movebutton.png" />
 	  <MauiImage Include="Resources\Images\Game\pausemenu.png" />
 	  <MauiImage Include="Resources\Images\Game\pausemenubutton.png" />
-	  <MauiImage Include="Resources\Images\Game\pause_menu_option_button.png" />
 	  <MauiImage Include="Resources\Images\lobby\code_placeholder.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\entrance_btn.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\game_placeholder.PNG" />

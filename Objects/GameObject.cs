@@ -45,6 +45,8 @@ namespace Objects
         protected bool m_CanRotateToAllDirections = true;
         protected bool m_FlipsWhenMoved = false;
 
+        public int ZIndex { get; set; } = -1;
+
         public void Initialize(eScreenObjectType i_ScreenObjectType, int i_ObjectNumber, string i_Png, Point i_Point, bool i_IsGrid, Point i_ValuesToAdd)
         {
             ObjectNumber = i_ObjectNumber;
@@ -153,6 +155,8 @@ namespace Objects
             }
         }
 
+
+
         protected void OnSpecialEvent(int eventNumber)
         {
             SpecialEvent.Invoke(this, eventNumber);
@@ -189,6 +193,11 @@ namespace Objects
             IsCollisionDetectionEnabled = false;
             Disposed.Invoke(this, null);
             IsVisable = false;
+            OnUpdate();
+        }
+
+        public virtual void OnUpdate()
+        {
             UpdateGameObject.Invoke(this, null);
         }
 

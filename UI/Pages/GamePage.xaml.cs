@@ -26,27 +26,27 @@ public partial class GamePage : ContentPage
     public GamePage()
     {
        
-        lock (m_lock)
-        {
-            if (g == 0)
-            {
-                Thread j = Thread.CurrentThread;
-                if (m_GameInformation.m_Player.PlayerNumber == 1)
-                {
-                    System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
-                }
-                g++;
-                firstThread = j.ManagedThreadId;
-            }
-            else
-            {
-                Thread v = Thread.CurrentThread;
-                g++;
-                System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- { v.ManagedThreadId }processor Id-{Thread.GetCurrentProcessorId()}");
+        //lock (m_lock)
+        //{
+        //    if (g == 0)
+        //    {
+        //        Thread j = Thread.CurrentThread;
+        //        if (m_GameInformation.m_Player.PlayerNumber == 1)
+        //        {
+        //            System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
+        //        }
+        //        g++;
+        //        firstThread = j.ManagedThreadId;
+        //    }
+        //    else
+        //    {
+        //        Thread v = Thread.CurrentThread;
+        //        g++;
+        //        System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- { v.ManagedThreadId }processor Id-{Thread.GetCurrentProcessorId()}");
                 InitializeComponent();
                 initializePage();
-            }
-        }
+        //    }
+        //}
         //Thread t = Thread.CurrentThread;
         //if (firstThread == t.ManagedThreadId)
         //{
@@ -115,16 +115,23 @@ public partial class GamePage : ContentPage
         m_GameButtonsImages.Add(i_ButtonToAdd.ID, buttonImage);
     }
 
-    private void gameObjectUpdate(object sender, GameObject i_ObjectUpdates)
+    private void gameObjectUpdate(object sender, GameObject i_ObjectUpdate)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
         {
             loopLabel.Text = m_Game.m_LoopNumber.ToString();
-            if (getObjectTypeFromID(i_ObjectUpdates.ID) == eScreenObjectType.Image || i_ObjectUpdates.ScreenObjectType == eScreenObjectType.Player)
+            if (getObjectTypeFromID(i_ObjectUpdate.ID) == eScreenObjectType.Image || i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Player)
             {
-                if (m_GameImages.ContainsKey(i_ObjectUpdates.ID))
+                if (m_GameImages.ContainsKey(i_ObjectUpdate.ID))
                 {
-                    m_GameImages[i_ObjectUpdates.ID].Update(i_ObjectUpdates);
+                    m_GameImages[i_ObjectUpdate.ID].Update(i_ObjectUpdate);
+                }
+            }
+            else if(i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Button)
+            {
+                if (m_GameButtonsImages.ContainsKey(i_ObjectUpdate.ID))
+                {
+                   m_GameButtonsImages[i_ObjectUpdate.ID].SetButtonImage(i_ObjectUpdate);
                 }
             }
         });
