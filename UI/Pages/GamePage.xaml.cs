@@ -25,28 +25,28 @@ public partial class GamePage : ContentPage
     private volatile static int firstThread = 0;
     public GamePage()
     {
-       
-        //lock (m_lock)
-        //{
-        //    if (g == 0)
-        //    {
-        //        Thread j = Thread.CurrentThread;
-        //        if (m_GameInformation.m_Player.PlayerNumber == 1)
-        //        {
-        //            System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
-        //        }
-        //        g++;
-        //        firstThread = j.ManagedThreadId;
-        //    }
-        //    else
-        //    {
-        //        Thread v = Thread.CurrentThread;
-        //        g++;
-        //        System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- { v.ManagedThreadId }processor Id-{Thread.GetCurrentProcessorId()}");
+
+        lock (m_lock)
+        {
+            if (g == 0)
+            {
+                Thread j = Thread.CurrentThread;
+                if (m_GameInformation.m_Player.PlayerNumber == 1)
+                {
+                    System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
+                }
+                g++;
+                firstThread = j.ManagedThreadId;
+            }
+            else
+            {
+                Thread v = Thread.CurrentThread;
+                g++;
+                System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- {v.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
                 InitializeComponent();
                 initializePage();
-        //    }
-        //}
+            }
+        }
         //Thread t = Thread.CurrentThread;
         //if (firstThread == t.ManagedThreadId)
         //{
@@ -152,28 +152,7 @@ public partial class GamePage : ContentPage
 
     private void hideGameObjects(object sender, List<int> i_IDlist)
     {
-        Application.Current.Dispatcher.Dispatch(async () =>
-        {
-            foreach (var ID in i_IDlist)
-            {
-                if (getObjectTypeFromID(ID) == eScreenObjectType.Image)
-                {
-                    m_GameImages[ID].IsVisible = false;
-                }
-                else
-                {
-                    m_GameButtonsImages[ID].IsVisible = false;
-                    m_GameButtonsImages[ID].IsEnabled = false;
-                }
-            }
-
-            if (m_Game.m_GameStatus != eGameStatus.Restarted || m_Game.m_GameStatus != eGameStatus.Ended)
-            {
-                //m_GameImages.Clear();
-                //m_gameButtons.Clear();
-                //startGame();
-            }
-        });
+        
     }
 
     private void showGameObjects(object sender, List<int> i_IDlist)
@@ -210,23 +189,36 @@ public partial class GamePage : ContentPage
 
     void runGame()
     {
-        //lock(m_lock)
-        //{
-        //    if(g == 0)
-        //    {
-        //        if(m_GameInformation.m_Player.PlayerNumber == 1)
-        //        {
-        //            int h = 0;
-        //        }
-        //        g++;
-               
-        //    }
-        //    else
-        //    {
-                m_Game.RunGame();
-           // }
-          
-       // }
+        m_Game.RunGame();
+    }
+
+    void exitGame()
+    {
+        clearGame();
+    }
+
+    void restartGame()
+    {
+        Application.Current.Dispatcher.Dispatch(async () =>
+        {
+            clearGame();
+            
+        });
+        initializePage();
+    }
+
+    void clearGame()
+    {
+        foreach (var button in m_GameButtonsImages)
+        {
+            button.Value.Source = null;
+        }
+        m_GameButtonsImages.Clear();
+        foreach (var image in m_GameImages)
+        {
+            image.Value.Source = null;
+        }
+        m_GameImages.Clear();
     }
 
     void initializeEvents()
@@ -235,5 +227,7 @@ public partial class GamePage : ContentPage
         m_Game.GameObjectUpdate += gameObjectUpdate;
         m_Game.GameObjectToDelete += deleteObject;
         m_Game.GameStart += runGame;
+        m_Game.GameExit += exitGame;
+        m_Game.GameRestart += restartGame;
     }
 }

@@ -29,6 +29,8 @@ namespace LogicUnit
         public event EventHandler<GameObject> GameObjectUpdate;
         public event EventHandler<GameObject> GameObjectToDelete;
         public Notify GameStart;
+        public Notify GameRestart;
+        public Notify GameExit;
 
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
@@ -80,8 +82,6 @@ namespace LogicUnit
         protected readonly CollisionManager m_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
         static readonly object m_lock = new object();
-        private volatile int sent = 0;
-        //private int recived = 0;
         private eButton m_SpecialButton;
         private int[] temp = new int[12];
         protected Queue<Vector2> a = new Queue<Vector2>();
@@ -135,13 +135,12 @@ namespace LogicUnit
             m_GameInformation.RealWorldStopwatch = new Stopwatch();
             m_GameInformation.RealWorldStopwatch.Start();
             m_GameStopwatch.Start();
-            while (m_GameStatus == eGameStatus.Running) //(m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
+            while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
             {
                 m_GameStopwatch.Restart();
                 m_gameObjectsToUpdate = new List<GameObject>();
                 m_GameObjectsToAdd = new List<GameObject>();
                 updateGame();
-
                 Draw();
 
                 Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
@@ -160,58 +159,65 @@ namespace LogicUnit
             SendServerUpdate();
             getUpdatedPosition();
             getButtonUpdate();
-            UpdatePosition(m_LastElapsedTime);
+            if(m_GameStatus == eGameStatus.Running)
+            {
+                UpdatePosition(m_LastElapsedTime);
+            }
             m_LoopNumber = m_LastElapsedTime;
         }
 
         private void getButtonUpdate()
         {
-            if(isThereSpecialButton())
-            {
-
-            }
-            else
-            {
-                changeDirectons();
-            }
-            
-        }
-
-        private bool isThereSpecialButton()
-        {
-            bool isThereSpecialButton = false;
-
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
                 if (m_PlayersDataArray[i].Button > 6)
                 {
-                    isThereSpecialButton = true;
-                    if(m_PlayersDataArray[i].Button == 8)
+                    if (m_PlayersDataArray[i].Button == 8)
                     {
-                        m_SpecialButton = eButton.PauseMenu;
-                        m_GameStatus = eGameStatus.Paused;
-                        m_PauseMenu.ShowPauseMenu();
+                        if(m_GameStatus == eGameStatus.Running)
+                        {
+                            m_SpecialButton = eButton.PauseMenu;
+                            m_GameStatus = eGameStatus.Paused;
+                            if(m_Player.PlayerNumber == i + 1)
+                            {
+                                m_PauseMenu.ShowPauseMenu();
+                            }
+                            m_GameInformation.RealWorldStopwatch.Stop();
+                        }
                     }
                     else
                     {
-                        m_PauseMenu.HidePauseMenu();
-                        if (m_PlayersDataArray[i].Button == 7)
+                        if(m_GameStatus == eGameStatus.Paused)
                         {
-                            m_SpecialButton = eButton.Resume;
-                        }
-                        else if (m_PlayersDataArray[i].Button == 9)
-                        {
-                            m_SpecialButton = eButton.Restart;
-                        }
-                        else if (m_PlayersDataArray[i].Button == 10)
-                        {
-                            m_SpecialButton = eButton.Exit;
+                            if (m_PlayersDataArray[i].Button == 7)
+                            {
+                                m_SpecialButton = eButton.Resume;
+                                m_GameStatus = eGameStatus.Running;
+                                m_PauseMenu.HidePauseMenu();
+                            }
+                            else if (m_PlayersDataArray[i].Button == 9)
+                            {
+                                m_SpecialButton = eButton.Restart;
+                                m_GameStatus = eGameStatus.Restarted;
+                                m_PauseMenu.HidePauseMenu();
+                                GameRestart.Invoke();
+                            }
+                            else if (m_PlayersDataArray[i].Button == 10)
+                            {
+                                m_SpecialButton = eButton.Exit;
+                                m_GameStatus = eGameStatus.Exited;
+                                m_PauseMenu.HidePauseMenu();
+                                GameExit.Invoke();
+                            }
+                            m_GameInformation.RealWorldStopwatch.Start();
                         }
                     }
                 }
+                else
+                {
+                    m_PlayerObjects[i].RequestDirection(Direction.getDirection(m_PlayersDataArray[i].Button));
+                }
             }
-
-            return isThereSpecialButton;
         }
 
         protected void stopMovement(int i_Player)
@@ -298,14 +304,6 @@ namespace LogicUnit
             }
         }
 
-        private void changeDirectons()
-        {
-            for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
-            {
-                ChangeDirection(Direction.getDirection(m_PlayersDataArray[i - 1].Button), i, m_LoopNumber);
-            }
-            //System.Diagnostics.Debug.WriteLine("change finish " + d);
-        }
         protected async void SendSpecialServerUpdate(object sender, int i_eventNumber)
         {
             //System.Diagnostics.Debug.WriteLine("s" + m_Player.PlayerNumber);
@@ -343,11 +341,6 @@ namespace LogicUnit
                     // m_scoreBoard.ShowScoreBoard();
                 }
             }
-        }
-
-        private void ChangeDirection(Direction i_Direction, int i_GameObject, int i_LoopNumber)
-        {
-            m_PlayerObjects[i_GameObject - 1].RequestDirection(i_Direction);
         }
 
         protected virtual void UpdatePosition(double i_TimeElapsed)

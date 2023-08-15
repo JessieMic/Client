@@ -121,6 +121,19 @@ namespace Objects
             }
         }
 
+        public string Source
+        {
+            set
+            {
+                if (value == null)
+                {
+                    IsVisible= false;
+                }
+                m_Source = value;
+                m_Image.Source = value;
+            }
+        }
+
         override public double WidthRequest
         {
             set
