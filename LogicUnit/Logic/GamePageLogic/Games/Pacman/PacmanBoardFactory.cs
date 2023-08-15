@@ -63,9 +63,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             {
                 for (int c = 0; c < m_Width; c++)
                 {
-                    mat[c, r] = m_grid[r, c];
+                    mat[c, r] = m_grid[r % 41, c % 22];
 
-                    if ((r == 0 || c == 0 || r == m_Height - 1 || c == m_Width - 1) && m_grid[r, c] == 1)
+                    if ((r == 0 || c == 0 || r == m_Height - 1 || c == m_Width - 1) && m_grid[r % 41, c % 22] == 1)
                     {
                         mat[c, r] = 0;
                     }

@@ -43,6 +43,21 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     }
                 }
             }
+
+            if(m_AmountOfPlayers == 3)
+            {
+                int y = m_ScreenMapping.m_Boundaries.Height;
+                int x = m_ScreenMapping.m_Boundaries.Width;
+
+                for(int i = y; i < m_BoardSizeByGrid.Height; i++)
+                {
+                    m_GameObjectsToAdd.Add(new Boarder(new Point(x, i)));
+                }
+                for (int i = x; i < m_BoardSizeByGrid.Width; i++)
+                {
+                    m_GameObjectsToAdd.Add(new Boarder(new Point(i, y)));
+                }
+            }
         }
 
         protected override void SpecialUpdateReceived(int i_WhatHappened, int i_Player)

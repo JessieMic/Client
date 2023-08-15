@@ -64,6 +64,7 @@ namespace LogicUnit
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
         private bool m_Flag = false;
         private bool m_IsMenuVisible = false;
+        protected int m_AmountOfPlayers;
 
         //Game loop variables
         private bool m_IsGameRunning = true;
@@ -92,7 +93,7 @@ namespace LogicUnit
             {
                 m_PlayersDataArray[i] = new(i);
             }
-
+            
             m_PlayerObjects = new GameObject[m_GameInformation.AmountOfPlayers];// new GameObject[2];//
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_InGameHubAddress)
@@ -118,12 +119,13 @@ namespace LogicUnit
 
         public void InitializeGame()
         {
+            m_AmountOfPlayers = m_GameInformation.AmountOfPlayers;
             m_BoardSizeByGrid = m_ScreenMapping.m_TotalScreenGridSize;
             m_Board = new int[m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height];
             m_CurrentPlayerData = new PlayerData(m_Player.PlayerNumber);
             m_CurrentPlayerData.Button = -1;
 
-            for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+            for (int i = 0; i < m_AmountOfPlayers; i++)
             {
                 m_DirectionsBuffer.Add(new List<Direction>());
             }
@@ -168,7 +170,7 @@ namespace LogicUnit
 
         private void getButtonUpdate()
         {
-            for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+            for (int i = 0; i < m_AmountOfPlayers; i++)
             {
                 if (m_PlayersDataArray[i].Button > 6)
                 {
@@ -230,7 +232,7 @@ namespace LogicUnit
         }
         void getUpdatedPosition()
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < m_AmountOfPlayers; i++)
             {
                 Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
                 if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
@@ -269,22 +271,12 @@ namespace LogicUnit
                 Point playerPosition = m_PlayerObjects[m_Player.PlayerNumber - 1]
                     .GetCurrentPointOnScreen();
 
-                //System.Diagnostics.Debug.WriteLine("s"+m_CurrentPlayerData.Button);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
-                // sent = m_LoopNumber;
                 r_ConnectionToServer.SendAsync(
                   "UpdatePlayerSelection",
                   m_Player.PlayerNumber - 1,
                   m_CurrentPlayerData.Button,
                   0, 0);
-                // if(a.Count != 0)
-                // {
-                //     r_ConnectionToServer.SendAsync(
-                //         "UpdatePlayerSelection",
-                //         3,
-                //         m_CurrentPlayerData.Button,
-                //         a.Dequeue(), 0);
-                //}
-
+             
                 m_NewButtonPressed = false;
             }
         }
@@ -442,70 +434,3 @@ namespace LogicUnit
         }
     }
 }
-
-//private async void calculateAvgPing()
-//{
-//    for(int i = 0; i < 4; i++)
-//    {
-//        DateTime dateTimeNow = DateTime.Now;
-//        await r_ConnectionToServer.InvokeAsync<DateTime>(
-//                             "Ping");
-//        i_AvgPing = (DateTime.Now.Millisecond - dateTimeNow.Millisecond) / (i+1);
-//        Thread.Sleep(250);
-//    }
-//}
-
-//protected void OnUpdatesReceived()
-//{
-//    for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
-//    {
-//        getUpdate(i);
-//    }
-
-//    if (m_Flag)
-//    {
-//        m_Flag = false;
-
-//        if (m_GameStatus == eGameStatus.Running)
-//        {
-//            //TODO: update other players direction
-//            //gameLoop();
-//        }
-//        else if (!m_IsMenuVisible && m_GameStatus == eGameStatus.Paused)
-//        {
-//            m_IsMenuVisible = true;
-//            OnShowGameObjects(m_PauseMenu.m_PauseMenuIDList);
-//        }
-//    }
-//    else
-//    {
-//        m_Flag = true;
-//    }
-
-//    m_FlagUpdateRecived = true;
-//}
-
-//protected virtual void getUpdate(int i_Player)
-//{
-//    eGameStatus returnStatus;
-//    m_GameStatus = m_Buttons.GetGameStatue(m_PlayersDataArray[i_Player - 1].Button, m_GameStatus);
-
-
-//    //if (m_GameStatus == eGameStatus.Running)
-//    //{
-//    //    if (m_PlayersDataArray[i_Player - 1].Button <= 4)
-//    //    {
-//    //        ChangeDirection(
-//    //            Direction.getDirection(m_PlayersDataArray[i_Player - 1].Button),
-//    //            i_Player - 1, m_PlayersDataArray[i].PlayerPointData);
-//    //    }
-//    //}
-
-
-//    if (m_IsMenuVisible && m_GameStatus != eGameStatus.Paused)
-//    {
-//        m_IsMenuVisible = false;
-//        OnHideGameObjects(m_PauseMenu.m_PauseMenuIDList);
-//    }
-
-//}
