@@ -20,7 +20,7 @@ namespace Objects
             m_Image.Aspect = Aspect.AspectFill;
             m_Image.Source = i_GameObject.ImageSource;
             m_Image.ClassId = i_GameObject.ImageSource;
-            m_Image.ZIndex = -1;
+            m_Image.ZIndex = i_GameObject.ZIndex;
             m_Image.Rotation = i_GameObject.Rotatation;
             m_Image.IsVisible = i_GameObject.IsVisable;
             if (i_GameObject.m_Size.Width != 0)
@@ -32,23 +32,10 @@ namespace Objects
                     m_Image.Aspect = Aspect.Fill;
                 }
             }
-
-            //if(i_GameObject.ScreenObjectType == eScreenObjectType.Player)
-            //{
-            //    m_Image.WidthRequest = 0;
-            //    m_Image.HeightRequest =0;
-            //    m_Image.Scale = 2;
-            //}
-
-            //m_GameImages[screenObject.ID].TranslateTo(
-            //    screenObject.PointOnScreen.Column,
-            //    screenObject.PointOnScreen.Row, 100);
         }
 
         public void Update(GameObject i_GameObject)
         {
-
-            //m_Image.Scale-=1;//i_GameObject.m_Size.Width;
             m_Image.IsAnimationPlaying = true;
             m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
             m_Image.TranslationY = i_GameObject.PointOnScreen.Row;

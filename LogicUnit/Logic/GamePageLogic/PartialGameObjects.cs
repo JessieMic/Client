@@ -17,7 +17,7 @@ namespace LogicUnit
         {
             setUIBackground();
             setGameButtons();
-           // setGameBackground();
+            setGameBackground();
             setHearts();
             setPauseMenu();
             AddGameObjects();

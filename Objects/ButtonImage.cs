@@ -15,8 +15,8 @@ namespace Objects
         {
             m_Button.BorderColor = Colors.Transparent;
             m_Button.Background = Brush.Transparent;
-            m_Button.ZIndex = 1;
-            m_Image.ZIndex = 0;
+            m_Button.ZIndex = 0;
+            m_Image.ZIndex = -1;
         }
 
         public Button GetButton()
@@ -28,12 +28,13 @@ namespace Objects
         public void SetButtonImage(GameObject i_GameObject)
         {
             SetImage(i_GameObject);
-
+            //m_Button.ZIndex = 1;
+            m_Image.ZIndex = 0;
             m_Button.TranslationX = i_GameObject.PointOnScreen.Column;
             m_Button.TranslationY = i_GameObject.PointOnScreen.Row;
             m_Button.ClassId = i_GameObject.ButtonType.ToString();
             m_Button.ZIndex = 1;
-            m_Image.ZIndex = 0;
+            IsVisible = i_GameObject.IsVisable;
             m_Button.Rotation = i_GameObject.Rotatation;
             if (i_GameObject.m_Size.Width != 0)
             {
@@ -41,7 +42,10 @@ namespace Objects
                 m_Button.HeightRequest = i_GameObject.m_Size.Height;
             }
 
-            //Text = i_GameObject.Text;
+            if(m_Button.WidthRequest != GameSettings.GameGridSize)
+            {
+                Text = i_GameObject.Text;
+            }
         }
 
         public void IsButtonPressed(bool i_IsButtonPressed)

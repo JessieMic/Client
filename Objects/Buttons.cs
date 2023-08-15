@@ -103,10 +103,11 @@ namespace Objects
                     button,
                     "pause_menu_option_button.png",
                     getPauseMenuButtonPoint(button,i_MenuPoint),
-                    true,
+                    false,
                     GameSettings.m_PauseMenuButtonOurSize, new Point(0, 0));
                 newButton.Text = button.ToString();
-
+                newButton.IsVisable = false;
+                newButton.ZIndex = 1;
                 if (m_ClientScreenDimension.Position.Row == eRowPosition.UpperRow)
                 {
                     newButton.SetImageDirection(Direction.getDirection(button.ToString()));
