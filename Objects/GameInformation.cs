@@ -49,7 +49,7 @@ namespace Objects
             {
                 isPointOnTheBoard = true;
             }
-            
+
             return isPointOnTheBoard;
         }
 
@@ -71,7 +71,7 @@ namespace Objects
                 m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(i_ScreenSizeWidth[i], i_ScreenSizeHeight[i], new Position(m_AmountOfPlayers, i + 1)));
             }
 
-            m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[m_Player.PlayerNumber-1].Position;
+            m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[m_Player.PlayerNumber - 1].Position;
         }
 
         public List<ScreenDimension> ScreenInfoOfAllPlayers

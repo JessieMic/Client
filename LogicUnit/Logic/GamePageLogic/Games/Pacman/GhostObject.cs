@@ -40,7 +40,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public override void Update(double i_TimeElapsed)
         {
-            if(AmountOfLives != 0)
+            if (AmountOfLives != 0)
             {
                 if (m_IsDyingAnimationOn)
                 {
@@ -104,9 +104,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     //IsVisable = false;
                     //IsHunting = true;
                     //m_IsDyingAnimationOn = true;
-                    
+
                     //AmountOfLives--;
-                    
+
                     if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen) && IsObjectMoving)
                     {
                         IsObjectMoving = false;
@@ -133,10 +133,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 m_IsDyingAnimationOn = false;
                 OnDisposed();
             }
-            
+
             m_DeathAnimationStart = i_DeathStartTime;
             m_IsDyingAnimationOn = true;
-            
+
         }
 
         public void InitiateCherryTime(double i_BerryStartTime)

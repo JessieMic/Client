@@ -14,16 +14,16 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         bool m_IsFoodOnScreen = false;
         private int m_FoodCounter;
 
-        public Food(Point i_Point,ref int i_ScreenFoodCounter)
+        public Food(Point i_Point, ref int i_ScreenFoodCounter)
         {
             IsCollisionDetectionEnabled = true;
             ObjectNumber = 1;
             this.Initialize(eScreenObjectType.Image, 1, "pacmanfood.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
-            m_Size.Height = m_Size.Width = GameSettings.GameGridSize/5;
+            m_Size.Height = m_Size.Width = GameSettings.GameGridSize / 5;
             centerObjectInGrid();
 
-            if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+            if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
             {
                 m_GameInformation.m_food++;
                 //i_ScreenFoodCounter++;
@@ -34,7 +34,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public override void Collided(ICollidable i_Collidable)
         {
-            if(m_IsFoodOnScreen)
+            if (m_IsFoodOnScreen)
             {
                 m_GameInformation.m_food--;
                 if (m_GameInformation.m_food == 0)

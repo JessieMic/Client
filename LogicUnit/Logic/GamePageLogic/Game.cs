@@ -82,7 +82,7 @@ namespace LogicUnit
         static readonly object m_lock = new object();
         private volatile int sent = 0;
         //private int recived = 0;
-        private  int d = 0;
+        private int d = 0;
         private int[] temp = new int[12];
         protected Queue<Vector2> a = new Queue<Vector2>();
 
@@ -92,33 +92,33 @@ namespace LogicUnit
             {
                 m_PlayersDataArray[i] = new(i);
             }
-            
+
             m_PlayerObjects = new GameObject[m_GameInformation.AmountOfPlayers];// new GameObject[2];//
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(Utils.m_InGameHubAddress)
                 .Build();
 
             r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
-                {
-                    //SpecialUpdateReceived(1, i_Player);
-                    a.Enqueue(new Vector2(i_WhatHappened,i_Player));
-                });
+            {
+                //SpecialUpdateReceived(1, i_Player);
+                a.Enqueue(new Vector2(i_WhatHappened, i_Player));
+            });
 
             Task.Run(() =>
-           {
-               Application.Current.Dispatcher.Dispatch(async () =>
-               {
-                   await r_ConnectionToServer.StartAsync();
-                   await r_ConnectionToServer.SendAsync("ResetHub");
-                   m_ConnectedToServer = true;
-                   OnGameStart();
-               });
-           });
+            {
+                Application.Current.Dispatcher.Dispatch(async () =>
+                {
+                    await r_ConnectionToServer.StartAsync();
+                    await r_ConnectionToServer.SendAsync("ResetHub");
+                    m_ConnectedToServer = true;
+                    OnGameStart();
+                });
+            });
         }
 
         public void InitializeGame()
         {
-            m_BoardSizeByGrid= m_ScreenMapping.m_TotalScreenGridSize;
+            m_BoardSizeByGrid = m_ScreenMapping.m_TotalScreenGridSize;
             m_Board = new int[m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height];
             m_CurrentPlayerData = new PlayerData(m_Player.PlayerNumber);
             m_CurrentPlayerData.Button = -1;
@@ -180,13 +180,13 @@ namespace LogicUnit
                 Thread t = Thread.CurrentThread;
                 System.Diagnostics.Debug.WriteLine($"(EVENT) - Player num- {m_GameInformation.m_Player.PlayerNumber}Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
                 Vector2 e = a.Dequeue();
-                SpecialUpdateReceived((int)e.X,(int)e.Y);
+                SpecialUpdateReceived((int)e.X, (int)e.Y);
             }
         }
 
         protected void stopMovement(int i_Player)
         {
-            if(i_Player == m_Player.PlayerNumber)
+            if (i_Player == m_Player.PlayerNumber)
             {
                 m_NewButtonPressed = true;
                 m_CurrentPlayerData.Button = 0;
@@ -201,7 +201,7 @@ namespace LogicUnit
                 {
                     if (m_Player.PlayerNumber == 1)
                     {
-                        System.Diagnostics.Debug.WriteLine("1r " + pointRecived.Column + " " + pointRecived.Row); 
+                        System.Diagnostics.Debug.WriteLine("1r " + pointRecived.Column + " " + pointRecived.Row);
                         System.Diagnostics.Debug.WriteLine("__1r " + m_PlayersDataArray[i].PlayerPointData.Column + " " + m_PlayersDataArray[i].PlayerPointData.Row);
                     }
 
@@ -219,7 +219,7 @@ namespace LogicUnit
                 OnAddScreenObjects();
             }
 
-            foreach(var player in m_PlayerObjects)
+            foreach (var player in m_PlayerObjects)
             {
                 player.Draw();
             }
@@ -234,12 +234,12 @@ namespace LogicUnit
                     .GetCurrentPointOnScreen();
 
                 //System.Diagnostics.Debug.WriteLine("s"+m_CurrentPlayerData.Button);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
-               // sent = m_LoopNumber;
-                 r_ConnectionToServer.SendAsync(
-                   "UpdatePlayerSelection",
-                   m_Player.PlayerNumber-1,
-                   m_CurrentPlayerData.Button,
-                   0,0);
+                // sent = m_LoopNumber;
+                r_ConnectionToServer.SendAsync(
+                  "UpdatePlayerSelection",
+                  m_Player.PlayerNumber - 1,
+                  m_CurrentPlayerData.Button,
+                  0, 0);
                 // if(a.Count != 0)
                 // {
                 //     r_ConnectionToServer.SendAsync(
@@ -248,7 +248,7 @@ namespace LogicUnit
                 //         m_CurrentPlayerData.Button,
                 //         a.Dequeue(), 0);
                 //}
-                
+
                 m_NewButtonPressed = false;
             }
         }
@@ -283,7 +283,7 @@ namespace LogicUnit
             System.Diagnostics.Debug.WriteLine("HIT " + m_Player.PlayerNumber);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
             r_ConnectionToServer.SendAsync(
                 "SpecialUpdate",
-                i_eventNumber,gameObject.ObjectNumber
+                i_eventNumber, gameObject.ObjectNumber
                 );
         }
         protected virtual void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
@@ -310,7 +310,7 @@ namespace LogicUnit
                 }
                 else //Game has ended 
                 {
-                   // m_scoreBoard.ShowScoreBoard();
+                    // m_scoreBoard.ShowScoreBoard();
                 }
             }
         }
@@ -329,7 +329,7 @@ namespace LogicUnit
 
             foreach (var gameObject in m_PlayerObjects)
             {
-                if(gameObject.IsCollisionDetectionEnabled)
+                if (gameObject.IsCollisionDetectionEnabled)
                 {
                     m_CollisionManager.FindCollisions(gameObject);
                 }
@@ -341,14 +341,14 @@ namespace LogicUnit
             SendServerPositionUpdate(a.ObjectNumber, i_Point);
         }
 
-        private async void SendServerPositionUpdate(int i_Player,Point i_Point)
+        private async void SendServerPositionUpdate(int i_Player, Point i_Point)
         {
             Thread t = Thread.CurrentThread;
-            
+
             System.Diagnostics.Debug.WriteLine("hIT" + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId() + " " + i_Point.Row);
             //System.Diagnostics.Debug.WriteLine("s "+m_Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
             await r_ConnectionToServer.SendAsync(
-                "UpdatePlayerSelection", i_Player-1
+                "UpdatePlayerSelection", i_Player - 1
                 ,
                 -1,
                 (int)i_Point.Column, (int)i_Point.Row);
@@ -364,8 +364,8 @@ namespace LogicUnit
 
         private void OnUpdateScreenObject(object sender, EventArgs e)
         {
-            GameObject i= sender as GameObject;
-            GameObjectUpdate.Invoke(this,i);
+            GameObject i = sender as GameObject;
+            GameObjectUpdate.Invoke(this, i);
         }
 
         public void RunGame()
@@ -378,18 +378,18 @@ namespace LogicUnit
 
         protected virtual void OnAddScreenObjects()
         {
-            foreach(var newObject in m_GameObjectsToAdd)
+            foreach (var newObject in m_GameObjectsToAdd)
             {
-                if(newObject.IsCollisionDetectionEnabled)
+                if (newObject.IsCollisionDetectionEnabled)
                 {
                     m_CollisionManager.AddObjectToMonitor(newObject);
-                    if(newObject.ScreenObjectType == eScreenObjectType.Player)
+                    if (newObject.ScreenObjectType == eScreenObjectType.Player)
                     {
-                        m_PlayerObjects[newObject.ObjectNumber-1] = newObject;
+                        m_PlayerObjects[newObject.ObjectNumber - 1] = newObject;
                         newObject.SpecialEvent += SendSpecialServerUpdate;
                         newObject.UpdatePosition += UpdateClientsAboutPosition;
                     }
-                    else 
+                    else
                     {
                         newObject.SpecialEvent += SendSpecialServerUpdate;
                     }

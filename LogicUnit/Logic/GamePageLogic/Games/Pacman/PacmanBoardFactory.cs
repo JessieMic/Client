@@ -9,8 +9,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
     public class PacmanBoardFactory
     {
-        public int[,] m_grid = 
-            { 
+        public int[,] m_grid =
+            {
         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0} ,
         {2,1,0,1,1,1,0,1,1,1,1,1,0,1,1,1,1,0,1,1,1,1,1} ,
         {0,1,0,0,1,0,0,0,0,1,0,0,0,2,1,0,0,0,1,2,0,0,1} ,
@@ -57,17 +57,17 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public int[,] BuildBoardMatrix(int m_Width, int m_Height)
         {
-            int[,] mat = new int[m_Width,m_Height];
+            int[,] mat = new int[m_Width, m_Height];
 
             for (int r = 0; r < m_Height; r++)
             {
                 for (int c = 0; c < m_Width; c++)
                 {
-                    mat[c,r] = m_grid[r, c];
+                    mat[c, r] = m_grid[r, c];
 
                     if ((r == 0 || c == 0 || r == m_Height - 1 || c == m_Width - 1) && m_grid[r, c] == 1)
                     {
-                        mat[c,r ] = 0;
+                        mat[c, r] = 0;
                     }
                 }
             }

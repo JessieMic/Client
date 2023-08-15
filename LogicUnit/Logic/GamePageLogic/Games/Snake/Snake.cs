@@ -516,7 +516,7 @@
 //                    if (false)//(hit == (int)eBoardObjectSnake.OutOfBounds || hit > 2)
 //                    {
 //                        //snake.Move(newHeadPoint, m_SnakeLastDirection[player - 1], currentDirection);
-//                        //SpecialEvent(player);
+//                        //PlayerGotHit(player);
 
 //                    }
 //                    else if (hit == (int)eBoardObjectSnake.Empty)//Normal move
@@ -554,7 +554,7 @@
 //            }
 //        }
 
-//        private void SpecialEvent(int i_Player)
+//        private void PlayerGotHit(int i_Player)
 //        {
 //            //m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
 //            OnDeleteGameObject(m_PlayersSnakes[i_Player - 1]);

@@ -51,15 +51,15 @@ namespace Objects
             ScreenObjectType = i_ScreenObjectType;
             m_ValuesToAdd = i_ValuesToAdd;
             Point point = getScreenPoint(i_Point, i_IsGrid);
-            PointOnScreen =m_StartupPoint= point;
-            ImageSource=i_Png;
-            ID=GameSettings.getID();
+            PointOnScreen = m_StartupPoint = point;
+            ImageSource = i_Png;
+            ID = GameSettings.getID();
         }
 
         public void SetImageDirection(Direction i_Direction)
         {
-            
-            if(m_CanRotateToAllDirections)
+
+            if (m_CanRotateToAllDirections)
             {
                 if (i_Direction == Direction.Up)
                 {
@@ -75,7 +75,7 @@ namespace Objects
 
             if (i_Direction == Direction.Left)
             {
-                if(m_FlipsWhenMoved)
+                if (m_FlipsWhenMoved)
                 {
                     ScaleX = -1;
                     Rotatation = 0;
@@ -120,10 +120,10 @@ namespace Objects
             ButtonType = i_ButtonType;
             ScreenObjectType = eScreenObjectType.Button;
             m_ValuesToAdd = i_ValuesToAdd;
-            Point point = getScreenPoint(i_Point,i_IsGrided);
-            PointOnScreen=point;
-            ImageSource=i_Png;
-            ID=GameSettings.getID();
+            Point point = getScreenPoint(i_Point, i_IsGrided);
+            PointOnScreen = point;
+            ImageSource = i_Png;
+            ID = GameSettings.getID();
             m_Size = i_Size;
         }
 
@@ -134,7 +134,7 @@ namespace Objects
 
         public void RequestDirection(Direction i_Direction)
         {
-            if(IsObjectMoving)
+            if (IsObjectMoving)
             {
                 if (Direction == Direction.Stop)
                 {
@@ -162,17 +162,17 @@ namespace Objects
         {
             int x = Direction.ColumnOffset + i_Direction.ColumnOffset;
             int y = Direction.RowOffset + i_Direction.RowOffset;
-            int k=m_GameInformation.m_Player.PlayerNumber;
-            
-            if(x != 0 && y != 0)
+            int k = m_GameInformation.m_Player.PlayerNumber;
+
+            if (x != 0 && y != 0)
             {
                 m_WantToTurn = true;
                 Point PointUpdate = getPointOnGrid();
                 //check if we are on our side
-                PointOnScreen = getScreenPoint(PointUpdate,true);
-                if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+                PointOnScreen = getScreenPoint(PointUpdate, true);
+                if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
                 {
-                    UpdatePosition.Invoke(this,PointUpdate);
+                    UpdatePosition.Invoke(this, PointUpdate);
                 }
             }
         }
@@ -181,15 +181,15 @@ namespace Objects
         {
             IsObjectMoving = false;
             PointOnScreen = m_StartupPoint;
-            Direction= RequestedDirection = Direction.Stop;
+            Direction = RequestedDirection = Direction.Stop;
         }
 
         protected virtual void OnDisposed()
         {
             IsCollisionDetectionEnabled = false;
-            Disposed.Invoke(this,null);
+            Disposed.Invoke(this, null);
             IsVisable = false;
-            UpdateGameObject.Invoke(this,null);
+            UpdateGameObject.Invoke(this, null);
         }
 
         bool checkIfCanChangeDirection(Direction i_Direction)
@@ -197,9 +197,9 @@ namespace Objects
             bool canChange = false;
             Point point = getPointOnGrid();
 
-            if(point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
+            if (point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
             {
-                if (m_Board[(int)point.Column+i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
+                if (m_Board[(int)point.Column + i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
                 {
                     canChange = true;
                 }
@@ -223,19 +223,19 @@ namespace Objects
 
         protected void isPointOnBoard(ref Point i_Point)
         {
-            if(i_Point.Column < m_ValuesToAdd.Column)
+            if (i_Point.Column < m_ValuesToAdd.Column)
             {
                 i_Point.Column = m_ValuesToAdd.Column;
             }
-            else if(i_Point.Row < m_ValuesToAdd.Row)
+            else if (i_Point.Row < m_ValuesToAdd.Row)
             {
-                i_Point.Row  = m_ValuesToAdd.Row;
+                i_Point.Row = m_ValuesToAdd.Row;
             }
-            else if(i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width)
+            else if (i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width)
             {
                 i_Point.Row = m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width;
             }
-            else if(i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height)
+            else if (i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height)
             {
                 i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height;
             }
@@ -246,13 +246,13 @@ namespace Objects
             Point newPoint = PointOnScreen;
             if (Direction == Direction.Left)//solid on the left
             {
-                newPoint.Column = i_Solid.PointOnScreen.Column + i_Solid.Bounds.Width; 
+                newPoint.Column = i_Solid.PointOnScreen.Column + i_Solid.Bounds.Width;
             }
             else if (Direction == Direction.Right) //solid on the right
             {
                 newPoint.Column = i_Solid.PointOnScreen.Column - m_Size.Width;
             }
-            else if(Direction == Direction.Up)
+            else if (Direction == Direction.Up)
             {
                 newPoint.Row = i_Solid.PointOnScreen.Row + i_Solid.Bounds.Height;
             }
@@ -263,11 +263,11 @@ namespace Objects
             PointOnScreen = newPoint;
         }
 
-        protected Point getScreenPoint(Point i_Point,bool i_IsGrided)
+        protected Point getScreenPoint(Point i_Point, bool i_IsGrided)
         {
             Point point = new Point();
-            
-            if(!i_IsGrided)
+
+            if (!i_IsGrided)
             {
                 GameBoardGridSize = 1;
             }
@@ -287,7 +287,7 @@ namespace Objects
         public virtual bool CheckCollision(ICollidable i_Source)
         {
             bool collided = false;
-            if(i_Source != null)
+            if (i_Source != null)
             {
                 collided = i_Source.Bounds.IntersectsWith(this.Bounds);
             }
@@ -312,7 +312,7 @@ namespace Objects
 
         private void updatePosition(double i_TimeElapsed)
         {
-            if(m_WantToTurn)
+            if (m_WantToTurn)
             {
                 m_WantToTurn = false;
             }
@@ -333,22 +333,22 @@ namespace Objects
 
             value.Row -= m_ValuesToAdd.Row;
             value.Column -= m_ValuesToAdd.Column;
-          
+
             return value;
         }
 
         public void UpdatePointOnScreen(Point i_Point)
         {
             Point p = getScreenPoint(i_Point, true);
-            if(!m_GameInformation.IsPointIsOnBoardPixels(p))
+            if (!m_GameInformation.IsPointIsOnBoardPixels(p))
             {
                 PointOnScreen = p;
             }
 
             //i_Point.Row += m_ValuesToAdd.Row;
-                //i_Point.Column += m_ValuesToAdd.Column;
-                //PointOnScreen = i_Point;
-                ////updatePosition(85);
+            //i_Point.Column += m_ValuesToAdd.Column;
+            //PointOnScreen = i_Point;
+            ////updatePosition(85);
         }
 
         public Rect Bounds
@@ -356,13 +356,13 @@ namespace Objects
             get
             {
                 return new Rect(PointOnScreen.Column, PointOnScreen.Row,
-                m_Size.Width,m_Size.Height);
+                m_Size.Width, m_Size.Height);
             }
         }
-        
+
         public void MoveToPointInGrided(Point i_Point)
         {
-            Point point = getScreenPoint(i_Point,true);
+            Point point = getScreenPoint(i_Point, true);
             PointOnScreen = point;
         }
     }

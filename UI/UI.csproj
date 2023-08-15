@@ -86,18 +86,15 @@
 	  <None Remove="Resources\Images\boarder1.png" />
 	  <None Remove="Resources\Images\boarder2.png" />
 	  <None Remove="Resources\Images\floor.png" />
+	  <None Remove="Resources\Images\giphy.gif" />
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
-	  <None Remove="Resources\Images\pacman1.png" />
-	  <None Remove="Resources\Images\pacman2.png" />
-	  <None Remove="Resources\Images\pacman3.png" />
 	  <None Remove="Resources\Images\pacmanbackground.png" />
 	  <None Remove="Resources\Images\pacmanfood.png" />
 	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
 	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
-	  <None Remove="Resources\Images\pacman_boarder .png" />
 	  <None Remove="Resources\Images\pacman_boarder.png" />
 	  <None Remove="Resources\Images\pacman_cherry.png" />
 	  <None Remove="Resources\Images\pacman_ghost_2.png" />
@@ -106,6 +103,7 @@
 	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\pause_menu_option_button.png" />
 	  <None Remove="Resources\Images\placementbutton.png" />
+	  <None Remove="Resources\Images\pp.png" />
 	  <None Remove="Resources\Images\pressedplacementbutton.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snake\snakebackground.png" />
@@ -186,64 +184,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\GamePage.xaml.cs">
-	    <DependentUpon>%(Filename)</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\LobbyPages\PlayerCardHost.xaml.cs">
-	    <DependentUpon>PlayerCardHost.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\LobbyPages\MessagePopUp.xaml.cs">
-	    <DependentUpon>MessagePopUp.xaml</DependentUpon>
-	  </Compile>
-	  <Compile Update="Pages\ScreenPlacementSelectingPage.xaml.cs">
-	    <DependentUpon>%(Filename)</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="NewContent1.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\EnterNamePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\EnterRoomCodePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\GamePage.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\GameCard.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\GameCardButton.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\GamesPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\InstructionsPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\Lobby.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\PlayerCard.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\PlayerCardGuest.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\PlayerCardHost.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\MessagePopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\LobbyPages\YesNoPopUp.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
-	  <MauiXaml Update="Pages\ScreenPlacementSelectingPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>
