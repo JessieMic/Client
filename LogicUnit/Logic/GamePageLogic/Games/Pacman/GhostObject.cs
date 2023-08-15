@@ -27,8 +27,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             m_CanRotateToAllDirections = false;
             m_FlipsWhenMoved = true;
             IsCollisionDetectionEnabled = true;
-            m_Board = i_Board;//i_playerNumber
-            this.Initialize(eScreenObjectType.Player, i_playerNumber, "pacman_ghost_" + 2 + ".png", getPointOnGrid(i_X, i_Y), true,
+            m_Board = i_Board;
+            this.Initialize(eScreenObjectType.Player, i_playerNumber, $"pacman_ghost_{ObjectNumber}.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
@@ -86,20 +86,20 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     {
                         if (m_Blink % 5 == 0)
                         {
-                            if (ImageSource == "pacman_ghost_2c.png")
+                            if (ImageSource == $"pacman_ghost_{ObjectNumber}_berry.png")
                             {
-                                ImageSource = "pacman_ghost_2.png";
+                                ImageSource = $"pacman_ghost_{ObjectNumber}.png";
                             }
                             else
                             {
-                                ImageSource = "pacman_ghost_2c.png";
+                                ImageSource = $"pacman_ghost_{ObjectNumber}_berry.png";
                             }
                         }
                         m_Blink++;
                     }
                     else if (timePassed > 7000)
                     {
-                        ImageSource = "pacman_ghost_2.png";
+                        ImageSource = $"pacman_ghost_{ObjectNumber}.png";
                         m_IsCherryTime = false;
                         IsHunting = true;
                     }
@@ -142,7 +142,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public void ResetPosition(double i_DeathStartTime)
         {
             resetToStartupPoint();
-            ImageSource = "pacman_ghost_2.png";
+            ImageSource = $"pacman_ghost_{ObjectNumber}.png";
             m_IsCherryTime = false;
             IsVisable = false;
             IsHunting = true;
@@ -162,7 +162,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public void InitiateCherryTime(double i_BerryStartTime)
         {
             IsHunting = false;
-            ImageSource = "pacman_ghost_2c.png";
+            ImageSource = $"pacman_ghost_{ObjectNumber}_berry.png";
             m_IsCherryTime = true;
             m_CherryTimeStart = i_BerryStartTime;
         }
