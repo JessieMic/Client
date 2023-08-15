@@ -64,10 +64,10 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#835A9B" ForegroundScale="0.75" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<MauiSplashScreen Include="Resources\Images\logo.png" Color="#835A9B" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -88,6 +88,7 @@
 	  <None Remove="Resources\Images\floor.png" />
 	  <None Remove="Resources\Images\giphy.gif" />
 	  <None Remove="Resources\Images\heart.png" />
+	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
 	  <None Remove="Resources\Images\pacman.png" />
 	  <None Remove="Resources\Images\pacmanbackground.png" />
@@ -187,6 +188,11 @@
 	  <MauiXaml Update="NewContent1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Platforms\Android\Resources\drawable\" />
+	  <Folder Include="Resources\Splash\" />
 	</ItemGroup>
 
 </Project>
