@@ -25,7 +25,6 @@ public partial class GamePage : ContentPage
     private volatile static int firstThread = 0;
     public GamePage()
     {
-
         lock (m_lock)
         {
             if (g == 0)
@@ -47,21 +46,7 @@ public partial class GamePage : ContentPage
                 initializePage();
             }
         }
-        //Thread t = Thread.CurrentThread;
-        //if (firstThread == t.ManagedThreadId)
-        //{
-        //    Thread.Sleep(5000);
-        //    if(g != 2)
-        //    {
-        //        System.Diagnostics.Debug.WriteLine($"THREAD FAILLLL - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
-        //        InitializeComponent();
-        //        initializePage();
-        //    }
-        //    else
-        //    {
-        //        System.Diagnostics.Debug.WriteLine($"Died ---");
-        //    }
-        //}
+
     }
 
     private void initializePage()

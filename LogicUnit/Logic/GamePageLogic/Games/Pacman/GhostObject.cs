@@ -23,18 +23,38 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public GhostObject(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
+            ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
             m_FlipsWhenMoved = true;
             IsCollisionDetectionEnabled = true;
             m_Board = i_Board;
-            this.Initialize(eScreenObjectType.Player, i_playerNumber, "pacman_ghost_" + i_playerNumber + ".png", getPointOnGrid(i_X, i_Y), true,
+            this.Initialize(eScreenObjectType.Player, i_playerNumber, $"pacman_ghost_{ObjectNumber}.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
         Point getPointOnGrid(int i_X, int i_Y)
         {
-            Point point = new Point(0, i_Y - 1);
-
+            Point point;
+            if(ObjectNumber == 2)
+            {
+                if (m_GameInformation.AmountOfPlayers == 2)
+                {
+                    point = new Point(0, i_Y - 1);
+                }
+                else
+                {
+                    point = new Point(i_X-1, 0);
+                }
+            }
+            else if(ObjectNumber == 3)
+            {
+                point = new Point(0, i_Y - 1);
+            }
+            else
+            {
+                point = new Point(i_X-1, i_Y - 1);
+            }
+            
             return point;
         }
 
@@ -66,20 +86,20 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     {
                         if (m_Blink % 5 == 0)
                         {
-                            if (ImageSource == "pacman_ghost_2c.png")
+                            if (ImageSource == $"pacman_ghost_{ObjectNumber}_berry.png")
                             {
-                                ImageSource = "pacman_ghost_2.png";
+                                ImageSource = $"pacman_ghost_{ObjectNumber}.png";
                             }
                             else
                             {
-                                ImageSource = "pacman_ghost_2c.png";
+                                ImageSource = $"pacman_ghost_{ObjectNumber}_berry.png";
                             }
                         }
                         m_Blink++;
                     }
                     else if (timePassed > 7000)
                     {
-                        ImageSource = "pacman_ghost_2.png";
+                        ImageSource = $"pacman_ghost_{ObjectNumber}.png";
                         m_IsCherryTime = false;
                         IsHunting = true;
                     }
@@ -122,7 +142,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public void ResetPosition(double i_DeathStartTime)
         {
             resetToStartupPoint();
-            ImageSource = "pacman_ghost_2.png";
+            ImageSource = $"pacman_ghost_{ObjectNumber}.png";
             m_IsCherryTime = false;
             IsVisable = false;
             IsHunting = true;
@@ -142,7 +162,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public void InitiateCherryTime(double i_BerryStartTime)
         {
             IsHunting = false;
-            ImageSource = "pacman_ghost_2c.png";
+            ImageSource = $"pacman_ghost_{ObjectNumber}_berry.png";
             m_IsCherryTime = true;
             m_CherryTimeStart = i_BerryStartTime;
         }
