@@ -33,15 +33,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             {
                 ImageSource = "pacman1.png";
             }
-            else if (m_Pic == 3 || m_Pic == 9)
+            else if (m_Pic == 2 || m_Pic == 6)
             {
                 ImageSource = "pacman2.png";
             }
-            else if (m_Pic == 6)
+            else if (m_Pic == 4)
             {
                 ImageSource = "pacman3.png";
             }
-            else if (m_Pic > 11)
+            else if (m_Pic > 7)
             {
                 m_Pic = -1;
             }
