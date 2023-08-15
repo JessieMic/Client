@@ -156,6 +156,10 @@ namespace Objects
             {
                 return eButton.Resume;
             }
+            else if(i_Button == eButton.Restart.ToString())
+            {
+                return eButton.Restart;
+            }
             else
             {
                 return eButton.Left;
