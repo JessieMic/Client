@@ -153,6 +153,8 @@ namespace Objects
             }
         }
 
+
+
         protected void OnSpecialEvent(int eventNumber)
         {
             SpecialEvent.Invoke(this, eventNumber);
@@ -189,6 +191,11 @@ namespace Objects
             IsCollisionDetectionEnabled = false;
             Disposed.Invoke(this, null);
             IsVisable = false;
+            OnUpdate();
+        }
+
+        public virtual void OnUpdate()
+        {
             UpdateGameObject.Invoke(this, null);
         }
 

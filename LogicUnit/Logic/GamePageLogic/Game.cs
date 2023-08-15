@@ -82,7 +82,7 @@ namespace LogicUnit
         static readonly object m_lock = new object();
         private volatile int sent = 0;
         //private int recived = 0;
-        private int d = 0;
+        private eButton m_SpecialButton;
         private int[] temp = new int[12];
         protected Queue<Vector2> a = new Queue<Vector2>();
 
@@ -158,30 +158,60 @@ namespace LogicUnit
         private void updateGame()
         {
             SendServerUpdate();
-            //lock(m_lock)
-            //{
-            //    if (a.Count != 0)
-            //    {
-            //        Thread t = Thread.CurrentThread;
-            //        System.Diagnostics.Debug.WriteLine("wwwwww " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
-            //        SpecialUpdateReceived(1, a.Dequeue());
-            //    }
-            //}
-            updatePosition();
-            changeDirectons();
-            //Thread t = Thread.CurrentThread;
-            //System.Diagnostics.Debug.WriteLine(m_Player.PlayerNumber+"wwwwww " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
-            //GetServerUpdate();
+            getUpdatedPosition();
+            getButtonUpdate();
+            UpdatePosition(m_LastElapsedTime);
             m_LoopNumber = m_LastElapsedTime;
+        }
 
-            updatePosition(m_LastElapsedTime);
-            if (a.Count != 0)
+        private void getButtonUpdate()
+        {
+            if(isThereSpecialButton())
             {
-                Thread t = Thread.CurrentThread;
-                System.Diagnostics.Debug.WriteLine($"(EVENT) - Player num- {m_GameInformation.m_Player.PlayerNumber}Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
-                Vector2 e = a.Dequeue();
-                SpecialUpdateReceived((int)e.X, (int)e.Y);
+
             }
+            else
+            {
+                changeDirectons();
+            }
+            
+        }
+
+        private bool isThereSpecialButton()
+        {
+            bool isThereSpecialButton = false;
+
+            for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
+            {
+                if (m_PlayersDataArray[i].Button > 6)
+                {
+                    isThereSpecialButton = true;
+                    if(m_PlayersDataArray[i].Button == 8)
+                    {
+                        m_SpecialButton = eButton.PauseMenu;
+                        m_GameStatus = eGameStatus.Paused;
+                        m_PauseMenu.ShowPauseMenu();
+                    }
+                    else
+                    {
+                        m_PauseMenu.HidePauseMenu();
+                        if (m_PlayersDataArray[i].Button == 7)
+                        {
+                            m_SpecialButton = eButton.Resume;
+                        }
+                        else if (m_PlayersDataArray[i].Button == 9)
+                        {
+                            m_SpecialButton = eButton.Restart;
+                        }
+                        else if (m_PlayersDataArray[i].Button == 10)
+                        {
+                            m_SpecialButton = eButton.Exit;
+                        }
+                    }
+                }
+            }
+
+            return isThereSpecialButton;
         }
 
         protected void stopMovement(int i_Player)
@@ -192,7 +222,7 @@ namespace LogicUnit
                 m_CurrentPlayerData.Button = 0;
             }
         }
-        void updatePosition()
+        void getUpdatedPosition()
         {
             for (int i = 0; i < 4; i++)
             {
@@ -320,7 +350,7 @@ namespace LogicUnit
             m_PlayerObjects[i_GameObject - 1].RequestDirection(i_Direction);
         }
 
-        protected virtual void updatePosition(double i_TimeElapsed)
+        protected virtual void UpdatePosition(double i_TimeElapsed)
         {
             foreach (var gameObject in m_PlayerObjects)
             {
@@ -333,6 +363,14 @@ namespace LogicUnit
                 {
                     m_CollisionManager.FindCollisions(gameObject);
                 }
+            }
+
+            if (a.Count != 0)
+            {
+                Thread t = Thread.CurrentThread;
+                System.Diagnostics.Debug.WriteLine($"(EVENT) - Player num- {m_GameInformation.m_Player.PlayerNumber}Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
+                Vector2 e = a.Dequeue();
+                SpecialUpdateReceived((int)e.X, (int)e.Y);
             }
         }
         public void UpdateClientsAboutPosition(object sender, Point i_Point)

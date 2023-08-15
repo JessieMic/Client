@@ -15,6 +15,8 @@ namespace LogicUnit.Logic.GamePageLogic
         public List<int> m_PauseMenuIDList = new List<int>();
         private Player m_Player = Player.Instance;
         private GameInformation m_gameInformation = GameInformation.Instance;
+        private List<GameObject> m_MenuButtons = new List<GameObject>();
+        private GameObject m_PauseMenuBackground;
         public void GetPauseMenu(Buttons i_Buttons, ref List<GameObject> o_GameObejectsToAdd)
         {
             GameObject pauseMenu = new GameObject();
@@ -25,18 +27,41 @@ namespace LogicUnit.Logic.GamePageLogic
             m_PauseMenuIDList.Add(pauseMenu.ID);
             o_GameObejectsToAdd.Add(pauseMenu);
             o_GameObejectsToAdd.AddRange(GetButtons(i_Buttons, menuPoint));
+            m_PauseMenuBackground = pauseMenu;
         }
 
         private List<GameObject> GetButtons(Buttons i_Buttons, Point i_MenuPoint)
         {
-            List<GameObject> menuButtons = i_Buttons.GetMenuButtons(i_MenuPoint);
+            m_MenuButtons = i_Buttons.GetMenuButtons(i_MenuPoint);
 
-            foreach(var menuButton in menuButtons)
+            foreach (var menuButton in m_MenuButtons)
             {
                 m_PauseMenuIDList.Add(menuButton.ID);
             }
 
-            return menuButtons;
+            return m_MenuButtons;
+        }
+
+        public void ShowPauseMenu()
+        {
+            changeVisibility(true);
+        }
+
+        private void changeVisibility(bool i_Show)
+        {
+            foreach (GameObject button in m_MenuButtons)
+            {
+                button.IsVisable = i_Show;
+                button.OnUpdate();
+            }
+
+           // m_PauseMenuBackground.IsVisable = i_Show;
+            m_PauseMenuBackground.OnUpdate();
+        }
+
+        public void HidePauseMenu()
+        {
+            changeVisibility(false);
         }
 
         private Point getPauseMenuBackgroundPoint()
