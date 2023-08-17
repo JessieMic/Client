@@ -13,6 +13,7 @@ public partial class EnterRoomCodePage : ContentPage
     //public string PlayerType { get; set; }
 
     private readonly LogicManager r_LogicManager;
+    private GameInformation m_GameInformation = GameInformation.Instance;
 
     public EnterRoomCodePage()
     {
@@ -34,7 +35,7 @@ public partial class EnterRoomCodePage : ContentPage
 
         if (logicResponse == eLoginErrors.Ok)
         {
-            r_LogicManager.m_Player.RoomCode = code;
+            m_GameInformation.Player.RoomCode = code;
 
             await Shell.Current.GoToAsync(nameof(EnterNamePage));
             //await Shell.Current.GoToAsync(nameof(EnterNamePage) +
@@ -71,7 +72,7 @@ public partial class EnterRoomCodePage : ContentPage
 
     private void goToMainPage()
     {
-        if (r_LogicManager.m_Player.PlayerType == PlayerType.Guest)
+        if (m_GameInformation.Player.PlayerType == PlayerType.Guest)
         {
             Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync(".."));
         }

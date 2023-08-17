@@ -13,7 +13,6 @@ namespace LogicUnit.Logic.GamePageLogic
     public class PauseMenu
     {
         public List<int> m_PauseMenuIDList = new List<int>();
-        private Player m_Player = Player.Instance;
         private GameInformation m_gameInformation = GameInformation.Instance;
         private List<GameObject> m_MenuButtons = new List<GameObject>();
         private GameObject m_PauseMenuBackground;

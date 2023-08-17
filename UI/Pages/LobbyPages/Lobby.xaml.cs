@@ -28,14 +28,15 @@ public partial class Lobby : ContentPage
     private bool m_IsGameChosen = false;
     private Microsoft.Maui.Controls.Image m_ChosenGameImg;
     private ButtonImage m_InstructionsBtn = new ButtonImage();
+    private GameInformation m_GameInformation = GameInformation.Instance;
 
     public Lobby()
     {
         InitializeComponent();
         //StatusLabel.Text = "Waiting for all players...";
-        m_PlayerName = m_LogicManager.m_Player.Name;
-        m_Code = m_LogicManager.m_Player.RoomCode;
-        m_PlayerType = m_LogicManager.m_Player.PlayerType;
+        m_PlayerName = m_GameInformation.Player.Name;
+        m_Code = m_GameInformation.Player.RoomCode;
+        m_PlayerType = m_GameInformation.Player.PlayerType;
 
 
         //m_LogicManager.SetAddPlayersAction(AddPlayers);

@@ -13,7 +13,7 @@ namespace LogicUnit
     public class ScreenMapping
     {
         private GameInformation m_GameInformation = GameInformation.Instance;
-        public Player m_Player = Player.Instance;
+        public Player m_Player;
         public SizeDTO m_TotalScreenGridSize = new SizeDTO();
         public SizeDTO m_TotalScreenPixelSize = new SizeDTO();
         public Point m_ValueToAdd; //Values that each Player adds to game objects so the would be in the right place
@@ -27,6 +27,7 @@ namespace LogicUnit
 
         public ScreenMapping()
         {
+            m_Player = m_GameInformation.Player;
             calculateMaxBoardSizeByGrid();
             calculateTotalScreenSize();
             calculateScreenValuesToAdd();

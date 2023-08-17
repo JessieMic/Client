@@ -24,7 +24,6 @@ namespace LogicUnit
         public event Notify ReceivedPlayerAmount;
         public event Notify GameIsStarting;
         private readonly HubConnection r_ConnectionToServer;
-        Player m_Player = Player.Instance;
         private GameInformation m_GameInformation = GameInformation.Instance;
         private int m_AmountOfPlayerThatAreConnected;
 
@@ -61,10 +60,10 @@ namespace LogicUnit
                 {
                     VisualUpdateSelectButtons visualUpdate = new(i_Spot, (1 + i_Spot).ToString(), false);
 
-                    if (m_Player.Name == i_NameOfPlayerThatDeselected) //(Name.Equals(nameOfPlayerThatDeselected))
+                    if (m_GameInformation.Player.Name == i_NameOfPlayerThatDeselected) //(Name.Equals(nameOfPlayerThatDeselected))
                     {
-                        m_Player.PlayerNumber = 0;
-                        m_Player.DidPlayerPickAPlacement = false;
+                        m_GameInformation.Player.PlayerNumber = 0;
+                        m_GameInformation.Player.DidPlayerPickAPlacement = false;
                     }
 
                     OnUpdateButton(visualUpdate);
@@ -92,10 +91,10 @@ namespace LogicUnit
                                 OnUpdateButton(visualUpdate);
                                 m_AmountOfPlayerThatAreConnected++;
 
-                                if (m_Player.Name == i_NameOfPlayerThatGotASpot)
+                                if (m_GameInformation.Player.Name == i_NameOfPlayerThatGotASpot)
                                 {
-                                    m_Player.PlayerNumber = 1 + i_Spot;
-                                    m_Player.DidPlayerPickAPlacement = true;
+                                    m_GameInformation.Player.PlayerNumber = 1 + i_Spot;
+                                    m_GameInformation.Player.DidPlayerPickAPlacement = true;
                                 }
 
                                 if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers)
@@ -146,7 +145,7 @@ namespace LogicUnit
         {
             bool result = false;
 
-            if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers && m_Player.PlayerNumber == 1)
+            if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers && m_GameInformation.Player.PlayerNumber == 1)
             {
                 result = true;
             }
@@ -162,7 +161,7 @@ namespace LogicUnit
         public async void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
-            if (m_Player.DidPlayerPickAPlacement)
+            if (m_GameInformation.Player.DidPlayerPickAPlacement)
             {
                 TryToDeselectScreenSpot(button.Text);
             }
@@ -182,7 +181,7 @@ namespace LogicUnit
         {
             await r_ConnectionToServer.SendAsync(
                 "TryPickAScreenSpot",
-                m_Player.Name,
+                m_GameInformation.Player.Name,
                 i_TextOnButton,
                 m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height);
         }
@@ -190,7 +189,7 @@ namespace LogicUnit
         public async Task TryToDeselectScreenSpot(string i_TextOnButton)
         {
             await r_ConnectionToServer.InvokeCoreAsync("TryToDeselectScreenSpot", args: new[]
-                {m_Player.Name,m_Player.PlayerNumber.ToString(),i_TextOnButton});
+                {m_GameInformation.Player.Name,m_GameInformation.Player.PlayerNumber.ToString(),i_TextOnButton});
         }
     }
 }
