@@ -22,7 +22,6 @@ namespace LogicUnit
     {
         private List<string> m_PlayerMovementsLogs = new List<string>();
         private readonly HubConnection r_ConnectionToServer;
-        //protected readonly LiteNetClient r_LiteNetClient = LiteNetClient.Instance;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
