@@ -18,7 +18,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             m_GameName = "pacman";
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 1;
             m_PacmanPlayers = new IPacmanGamePlayer[m_GameInformation.AmountOfPlayers];
         }
 
@@ -132,6 +132,33 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
                 m_GameObjectsToAdd.Add(newGhost);
                 m_PacmanPlayers[i - 1] = newGhost;
+            }
+        }
+
+        protected override void checkForGameStatusUpdate(int i_Player)
+        {
+            if(i_Player == 1)
+            {
+                if(m_AmountOfPlayers > 2)
+                {
+                    msg = "Ghosts won!!";
+                }
+                else
+                {
+                    msg = "Ghost won!!";
+                }
+                m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                m_GameStatus = eGameStatus.Ended;
+            }
+            else
+            {
+                if(m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
+                {
+                    msg = "Pacman won!!";
+                    m_scoreBoard.ShowScoreBoard(msg,m_PauseMenu);
+                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    m_GameStatus = eGameStatus.Ended;
+                }
             }
         }
     }

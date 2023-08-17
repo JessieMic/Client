@@ -30,6 +30,7 @@ namespace LogicUnit
         public Notify GameStart;
         public Notify GameRestart;
         public Notify GameExit;
+        public Notify ShowWinner;
 
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
@@ -61,31 +62,25 @@ namespace LogicUnit
         //List for Ui changes
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
-        private bool m_Flag = false;
-        private bool m_IsMenuVisible = false;
         protected int m_AmountOfPlayers;
 
         //Game loop variables
-        private bool m_IsGameRunning = true;
-        private int m_GapInFrames = 0;
         private Stopwatch m_LoopStopwatch = new Stopwatch();
         protected Stopwatch m_GameStopwatch = new Stopwatch();
         private int m_LastElapsedTime;
 
         protected eButton m_LastClickedButton = 0;
-        private bool m_FlagUpdateRecived = false;
         public bool m_NewButtonPressed = false;
-        private int i_AvgPing = 0;
         public int m_LoopNumber = 0;
         public GameObject[] m_PlayerObjects;
-        private const double J_DesiredFrameTime = 0.067;
-        protected readonly CollisionManager m_CollisionManager = new CollisionManager();
+        private const double k_DesiredFrameTime = 0.067;
+        protected readonly CollisionManager r_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
         static readonly object m_lock = new object();
-        private eButton m_SpecialButton;
-        private int[] temp = new int[12];
         protected Queue<Vector2> a = new Queue<Vector2>();
+        private int[] m_ServerUpdates = new int[12];
 
+        public string msg = string.Empty;
         public Game()
         {
             m_Player = m_GameInformation.Player;
@@ -137,7 +132,7 @@ namespace LogicUnit
             m_GameInformation.RealWorldStopwatch = new Stopwatch();
             m_GameInformation.RealWorldStopwatch.Start();
             m_GameStopwatch.Start();
-            while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Ended)
+            while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Exited)
             {
                 m_GameStopwatch.Restart();
                 m_gameObjectsToUpdate = new List<GameObject>();
@@ -145,7 +140,7 @@ namespace LogicUnit
                 updateGame();
                 Draw();
 
-                Thread.Sleep((int)((J_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
+                Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
                 m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
                 //m_LoopNumber++;
 
@@ -178,7 +173,6 @@ namespace LogicUnit
                     {
                         if(m_GameStatus == eGameStatus.Running)
                         {
-                            m_SpecialButton = eButton.PauseMenu;
                             m_GameStatus = eGameStatus.Paused;
                             if(m_Player.PlayerNumber == i + 1)
                             {
@@ -189,26 +183,22 @@ namespace LogicUnit
                     }
                     else
                     {
-                        if(m_GameStatus == eGameStatus.Paused)
+                        if(m_GameStatus == eGameStatus.Paused || m_GameStatus == eGameStatus.Ended)
                         {
+
+                            m_PauseMenu.HidePauseMenu();
                             if (m_PlayersDataArray[i].Button == 7)
                             {
-                                m_SpecialButton = eButton.Resume;
                                 m_GameStatus = eGameStatus.Running;
-                                m_PauseMenu.HidePauseMenu();
                             }
                             else if (m_PlayersDataArray[i].Button == 9)
                             {
-                                m_SpecialButton = eButton.Restart;
                                 m_GameStatus = eGameStatus.Restarted;
-                                m_PauseMenu.HidePauseMenu();
                                 GameRestart.Invoke();
                             }
                             else if (m_PlayersDataArray[i].Button == 10)
                             {
-                                m_SpecialButton = eButton.Exit;
                                 m_GameStatus = eGameStatus.Exited;
-                                m_PauseMenu.HidePauseMenu();
                                 GameExit.Invoke();
                             }
                             m_GameInformation.RealWorldStopwatch.Start();
@@ -234,7 +224,7 @@ namespace LogicUnit
         {
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-                Point pointRecived = new Point(temp[i + 4], temp[i + 8]);
+                Point pointRecived = new Point(m_ServerUpdates[i + 4], m_ServerUpdates[i + 8]);
                 if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
                 {
                     if (m_Player.PlayerNumber == 1)
@@ -246,7 +236,7 @@ namespace LogicUnit
                     m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
                     m_PlayersDataArray[i].PlayerPointData = pointRecived;
                 }
-                m_PlayersDataArray[i].Button = temp[i];
+                m_PlayersDataArray[i].Button = m_ServerUpdates[i];
             }
         }
 
@@ -285,14 +275,14 @@ namespace LogicUnit
         {
             while (m_ConnectedToServer)
             {
-                temp = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+                m_ServerUpdates = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
                 for (int i = 0; i < 4; i++)
                 {
-                    m_PlayersDataArray[i].Button = temp[i];
+                    m_PlayersDataArray[i].Button = m_ServerUpdates[i];
                 }
-                // m_PlayersDataArray[0].Button = temp[0];
-                //m_PlayersDataArray[1].Button = temp[1];
-                //System.Diagnostics.Debug.WriteLine("r " + temp[0]);
+                // m_PlayersDataArray[0].Button = m_ServerUpdates[0];
+                //m_PlayersDataArray[1].Button = m_ServerUpdates[1];
+                //System.Diagnostics.Debug.WriteLine("r " + m_ServerUpdates[0]);
             }
         }
 
@@ -311,9 +301,18 @@ namespace LogicUnit
 
         }
 
+        protected virtual void checkForGameStatusUpdate(int i_Player)
+        {
+
+        }
         protected virtual void PlayerLostALife(object sender, int i_Player)
         {
-            m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+           // m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
+            if(m_Hearts.setPlayerLifeAndCheckIfDead(i_Player))
+            {
+                checkForGameStatusUpdate(i_Player);
+            }
+
             System.Diagnostics.Debug.WriteLine("GOT " + m_Player.PlayerNumber);
             if (m_Hearts.m_HeartToRemove != null)
             {
@@ -321,18 +320,18 @@ namespace LogicUnit
                 m_Hearts.m_HeartToRemove = null;
             }
 
-            if (m_GameStatus != eGameStatus.Running)
-            {
-                m_scoreBoard.m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player - 1]);
-                if (m_GameStatus == eGameStatus.Lost)
-                {
-                    //gameStatusUpdate();//Will show client that he lost 
-                }
-                else //Game has ended 
-                {
-                    // m_scoreBoard.ShowScoreBoard();
-                }
-            }
+            //if (m_GameStatus != eGameStatus.Running)
+            //{
+            //    m_scoreBoard.m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player - 1]);
+            //    if (m_GameStatus == eGameStatus.Lost)
+            //    {
+            //        //gameStatusUpdate();//Will show client that he lost 
+            //    }
+            //    else //Game has ended 
+            //    {
+            //        // m_scoreBoard.ShowScoreBoard();
+            //    }
+            //}
         }
 
         protected virtual void UpdatePosition(double i_TimeElapsed)
@@ -346,7 +345,7 @@ namespace LogicUnit
             {
                 if (gameObject.IsCollisionDetectionEnabled)
                 {
-                    m_CollisionManager.FindCollisions(gameObject);
+                    r_CollisionManager.FindCollisions(gameObject);
                 }
             }
 
@@ -405,7 +404,7 @@ namespace LogicUnit
             {
                 if (newObject.IsCollisionDetectionEnabled)
                 {
-                    m_CollisionManager.AddObjectToMonitor(newObject);
+                    r_CollisionManager.AddObjectToMonitor(newObject);
                     if (newObject.ScreenObjectType == eScreenObjectType.Player)
                     {
                         m_PlayerObjects[newObject.ObjectNumber - 1] = newObject;

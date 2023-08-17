@@ -124,6 +124,26 @@ namespace LogicUnit.Logic.GamePageLogic
             return returnStatus;
         }
 
+        public bool setPlayerLifeAndCheckIfDead(int i_Player)
+        {
+            bool didPlayerDie = false;
+
+            m_AmountOfLivesPlayerHas[i_Player - 1]--;
+
+            if (i_Player == m_ClientNumber)
+            {
+                removeAHeart();
+            }
+
+            if (m_AmountOfLivesPlayerHas[i_Player - 1] == 0)
+            {
+                didPlayerDie = true;
+                m_AmountOfPlayersThatAreAlive--;
+            }
+
+            return didPlayerDie;
+        }
+
         private void removeAHeart()
         {
             try

@@ -60,7 +60,6 @@ namespace LogicUnit
             {
                 StringContent stringContent = new StringContent($"\"{i_HostName}\"", Encoding.UTF8, "application/json");
                 HttpResponseMessage response;
-
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CreateNewRoom}");
                 try
                 {
