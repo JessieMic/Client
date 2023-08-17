@@ -20,9 +20,11 @@ public partial class GamePage : ContentPage
     private Game m_Game;
     private Dictionary<int, Image> m_GameImages = new Dictionary<int, Image>();
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
+    private Label m_GameLabel = new Label();
     private volatile static int g = 0;
     static readonly object m_lock = new object();
     private volatile static int firstThread = 0;
+
     public GamePage()
     {
         lock (m_lock)
@@ -46,9 +48,9 @@ public partial class GamePage : ContentPage
                 initializePage();
             }
         }
-
+        //InitializeComponent();
+        //initializePage();
     }
-
     private void initializePage()
     {
         m_Game = m_GameLibrary.CreateAGame(m_GameInformation.NameOfGame);//m_GameInformation.m_NameOfGame);
@@ -68,7 +70,11 @@ public partial class GamePage : ContentPage
         {
             foreach (var gameObject in i_GameObjectsToAdd)
             {
-                if (gameObject.ScreenObjectType == eScreenObjectType.Button)
+                if (gameObject.ScreenObjectType == eScreenObjectType.Label)
+                {
+                    addLabel(gameObject);
+                }
+                else if (gameObject.ScreenObjectType == eScreenObjectType.Button)
                 {
                     addButton(gameObject);
                 }
@@ -78,6 +84,21 @@ public partial class GamePage : ContentPage
                 }
             }
         });
+    }
+
+    private void addLabel(GameObject i_Label)
+    {
+        m_GameLabel.Text = i_Label.Text;
+        m_GameLabel.Rotation = i_Label.Rotatation;
+        m_GameLabel.WidthRequest = i_Label.m_Size.Width;
+        m_GameLabel.HeightRequest = i_Label.m_Size.Height;
+        m_GameLabel.ZIndex = i_Label.ZIndex;
+        m_GameLabel.TranslationX = i_Label.PointOnScreen.Column;
+        m_GameLabel.TranslationY = i_Label.PointOnScreen.Row;
+        m_GameLabel.FontAutoScalingEnabled = true;
+        m_GameLabel.VerticalTextAlignment = TextAlignment.Center;
+        m_GameLabel.HorizontalTextAlignment = TextAlignment.Center;
+        gridLayout.Add(m_GameLabel);
     }
 
     private void addImage(GameObject i_GameObjectToAdd)
@@ -104,7 +125,7 @@ public partial class GamePage : ContentPage
     {
         Application.Current.Dispatcher.Dispatch(async () =>
         {
-            loopLabel.Text = m_Game.m_LoopNumber.ToString();
+            //loopLabel.Text = m_Game.m_LoopNumber.ToString();
             if (getObjectTypeFromID(i_ObjectUpdate.ID) == eScreenObjectType.Image || i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Player)
             {
                 if (m_GameImages.ContainsKey(i_ObjectUpdate.ID))
@@ -135,32 +156,6 @@ public partial class GamePage : ContentPage
         }
     }
 
-    private void hideGameObjects(object sender, List<int> i_IDlist)
-    {
-        
-    }
-
-    private void showGameObjects(object sender, List<int> i_IDlist)
-    {
-        Application.Current.Dispatcher.Dispatch(async () =>
-        {
-            foreach (var ID in i_IDlist)
-            {
-                if (getObjectTypeFromID(ID) == eScreenObjectType.Image)
-                {
-                    m_GameImages[ID].IsVisible = true;
-                    m_GameImages[ID].ZIndex = 0;
-                }
-                else
-                {
-                    m_GameButtonsImages[ID].IsVisible = true;
-                    m_GameButtonsImages[ID].IsEnabled = true;
-                    m_GameButtonsImages[ID].ZIndex = 1;
-                }
-            }
-        });
-    }
-
     private eScreenObjectType getObjectTypeFromID(int ID)
     {
         eScreenObjectType type = eScreenObjectType.Image;
@@ -184,26 +179,28 @@ public partial class GamePage : ContentPage
 
     void restartGame()
     {
-        Application.Current.Dispatcher.Dispatch(async () =>
-        {
-            clearGame();
-            
-        });
+        clearGame();
         initializePage();
     }
 
     void clearGame()
     {
-        foreach (var button in m_GameButtonsImages)
+        Application.Current.Dispatcher.Dispatch(async () =>
         {
-            button.Value.Source = null;
-        }
-        m_GameButtonsImages.Clear();
-        foreach (var image in m_GameImages)
-        {
-            image.Value.Source = null;
-        }
-        m_GameImages.Clear();
+            foreach (var button in m_GameButtonsImages)
+            {
+               button.Value.Source = null;
+               gridLayout.Remove(button.Value.GetButton());
+            }
+            m_GameButtonsImages.Clear();
+            foreach (var image in m_GameImages)
+            {
+                image.Value.Source = null;
+                gridLayout.Remove(image.Value.GetImage());
+            }
+            gridLayout.Remove(m_GameLabel);
+            m_GameImages.Clear();
+        });
     }
 
     void initializeEvents()
