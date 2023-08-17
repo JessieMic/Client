@@ -13,6 +13,7 @@ namespace UI.Pages;
 public partial class EnterNamePage : ContentPage
 {
     private readonly LogicManager r_LogicManager;
+    private GameInformation m_GameInformation = GameInformation.Instance;
     //public string PlayerType { get; set; }
     //public string RoomCode { get; set; }
 
@@ -34,23 +35,23 @@ public partial class EnterNamePage : ContentPage
         eLoginErrors logicResponse;// = eLoginErrors.Ok;
         //eLoginErrors logicResponse =0;
 
-        if (r_LogicManager.m_Player.PlayerType == PlayerType.Host)
+        if (m_GameInformation.Player.PlayerType == PlayerType.Host)
         {
             logicResponse = await r_LogicManager.CreateNewRoom(username);
 
             if (logicResponse == eLoginErrors.Ok)
             {
-                r_LogicManager.m_Player.RoomCode = r_LogicManager.GetRoomCode();
+                m_GameInformation.Player.RoomCode = r_LogicManager.GetRoomCode();
             }
         }
         else
         {
-            logicResponse = await r_LogicManager.AddPlayerToRoom(username, r_LogicManager.m_Player.RoomCode);
+            logicResponse = await r_LogicManager.AddPlayerToRoom(username, m_GameInformation.Player.RoomCode);
         }
 
         if (logicResponse == eLoginErrors.Ok)
         {
-            r_LogicManager.m_Player.Name = username;
+            m_GameInformation.Player.Name = username;
 
             await Shell.Current.GoToAsync(nameof(Lobby));
             //await Shell.Current.GoToAsync(nameof(Lobby) +
@@ -88,7 +89,7 @@ public partial class EnterNamePage : ContentPage
 
     private void goToMainPage()
     {
-        if (r_LogicManager.m_Player.PlayerType == PlayerType.Host)
+        if (m_GameInformation.Player.PlayerType == PlayerType.Host)
         {
             Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync(".."));
         }

@@ -13,6 +13,7 @@ namespace UI
         public MainPage()
         {
             InitializeComponent();
+            m_GameInformation.init();
             m_LogicManager = new LogicManager();
         }
 
@@ -34,7 +35,7 @@ namespace UI
 
         private async void OnCreateRoomClicked(object sender, EventArgs e)
         {
-            m_LogicManager.m_Player.PlayerType = PlayerType.Host;
+            m_GameInformation.Player.PlayerType = PlayerType.Host;
             await Shell.Current.GoToAsync(nameof(EnterNamePage));
             //await Shell.Current.GoToAsync(nameof(EnterNamePage) +
             //                              $"?{QueryIDs.k_PlayerType}={PlayerType.k_Host}");
@@ -42,7 +43,7 @@ namespace UI
 
         private async void OnJoinRoomClicked(object sender, EventArgs e)
         {
-            m_LogicManager.m_Player.PlayerType = PlayerType.Guest;
+            m_GameInformation.Player.PlayerType = PlayerType.Guest;
             await Shell.Current.GoToAsync(nameof(EnterRoomCodePage));
             //await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
             //                              $"?{QueryIDs.k_PlayerType}={PlayerType.k_Guest}");

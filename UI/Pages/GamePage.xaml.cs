@@ -30,9 +30,9 @@ public partial class GamePage : ContentPage
             if (g == 0)
             {
                 Thread j = Thread.CurrentThread;
-                if (m_GameInformation.m_Player.PlayerNumber == 1)
+                if (m_GameInformation.Player.PlayerNumber == 1)
                 {
-                    System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
+                    System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
                 }
                 g++;
                 firstThread = j.ManagedThreadId;
@@ -41,7 +41,7 @@ public partial class GamePage : ContentPage
             {
                 Thread v = Thread.CurrentThread;
                 g++;
-                System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.m_Player.PlayerNumber} Thread id- {v.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
+                System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.Player.PlayerNumber} Thread id- {v.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
                 InitializeComponent();
                 initializePage();
             }

@@ -34,7 +34,7 @@ namespace LogicUnit
 
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
-        protected Player m_Player = Player.Instance;
+        protected Player m_Player;
         protected PlayerData[] m_PlayersDataArray = new PlayerData[4]; //TODO replace with 4
         protected PlayerData m_CurrentPlayerData;
 
@@ -89,6 +89,7 @@ namespace LogicUnit
 
         public Game()
         {
+            m_Player = m_GameInformation.Player;
             for (int i = 0; i < 4; i++)
             {
                 m_PlayersDataArray[i] = new(i);
@@ -298,7 +299,7 @@ namespace LogicUnit
 
         protected async void SendSpecialServerUpdate(object sender, int i_eventNumber)
         {
-            //System.Diagnostics.Debug.WriteLine("s" + m_Player.PlayerNumber);
+            //System.Diagnostics.Debug.WriteLine("s" + Player.PlayerNumber);
             GameObject gameObject = sender as GameObject;
             System.Diagnostics.Debug.WriteLine("HIT " + m_Player.PlayerNumber);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
             r_ConnectionToServer.SendAsync(
@@ -353,7 +354,7 @@ namespace LogicUnit
             if (a.Count != 0)
             {
                 Thread t = Thread.CurrentThread;
-                System.Diagnostics.Debug.WriteLine($"(EVENT) - Player num- {m_GameInformation.m_Player.PlayerNumber}Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
+                System.Diagnostics.Debug.WriteLine($"(EVENT) - Player num- {m_GameInformation.Player.PlayerNumber}Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
                 Vector2 e = a.Dequeue();
                 SpecialUpdateReceived((int)e.X, (int)e.Y);
             }
@@ -369,7 +370,7 @@ namespace LogicUnit
             Thread t = Thread.CurrentThread;
 
             System.Diagnostics.Debug.WriteLine("hIT" + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId() + " " + i_Point.Row);
-            //System.Diagnostics.Debug.WriteLine("s "+m_Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
+            //System.Diagnostics.Debug.WriteLine("s "+Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
             await r_ConnectionToServer.SendAsync(
                 "UpdatePlayerSelection", i_Player - 1
                 ,

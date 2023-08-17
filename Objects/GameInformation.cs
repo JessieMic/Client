@@ -15,7 +15,7 @@ namespace Objects
         private static GameInformation m_Instance = null;
         public eGames m_NameOfGame;
         private int m_AmountOfPlayers;
-        public Player m_Player = Player.Instance;
+        public Player Player { get; set; }
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<ScreenDimension> m_ScreenInfoOfAllPlayers = new List<ScreenDimension>();
         public Point PointValuesToAddToScreen { get; set; } = new Point();
@@ -38,6 +38,11 @@ namespace Objects
                 }
                 return m_Instance;
             }
+        }
+
+        public void init()
+        {
+            Player = new Player();
         }
 
         public bool IsPointIsOnBoardPixels(Point i_Point)
@@ -71,7 +76,7 @@ namespace Objects
                 m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(i_ScreenSizeWidth[i], i_ScreenSizeHeight[i], new Position(m_AmountOfPlayers, i + 1)));
             }
 
-            m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[m_Player.PlayerNumber - 1].Position;
+            m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[Player.PlayerNumber - 1].Position;
         }
 
         public List<ScreenDimension> ScreenInfoOfAllPlayers
