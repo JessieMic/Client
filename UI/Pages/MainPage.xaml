@@ -19,26 +19,6 @@
                 <ColumnDefinition Width="25*"/>
             </Grid.ColumnDefinitions>
         </Grid>
-
-            <!--<Button
-                x:Name="SkipBtn"
-                Text="SKIP:)"
-                HorizontalOptions="Center"
-                Clicked="OnSkipClicked"/>
-
-            <Button
-                x:Name="CreateRoomBtn"
-                Text="Create a Room"
-                HorizontalOptions="Center"
-                Clicked="OnCreateRoomClicked"
-                />
-
-            <Button
-                x:Name="JoinRoomBtn"
-                Text="Join a Room"
-                HorizontalOptions="Center"
-                Clicked="OnJoinRoomClicked"
-                />-->
     </ScrollView>
 
 </ContentPage>

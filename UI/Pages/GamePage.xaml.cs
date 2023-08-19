@@ -27,29 +27,30 @@ public partial class GamePage : ContentPage
 
     public GamePage()
     {
-        lock (m_lock)
-        {
-            if (g == 0)
-            {
-                Thread j = Thread.CurrentThread;
-                if (m_GameInformation.Player.PlayerNumber == 1)
-                {
-                    System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
-                }
-                g++;
-                firstThread = j.ManagedThreadId;
-            }
-            else
-            {
-                Thread v = Thread.CurrentThread;
-                g++;
-                System.Diagnostics.Debug.WriteLine($"RUN - Player num- {m_GameInformation.Player.PlayerNumber} Thread id- {v.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
-                InitializeComponent();
-                initializePage();
-            }
-        }
-        //InitializeComponent();
-        //initializePage();
+        //lock (m_lock)
+        //{
+        //    if (g == 0)
+        //    {
+        //        Thread j = Thread.CurrentThread;
+        //        if (m_GameInformation.Player.PlayerNumber == 1)
+        //        {
+        //            System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
+        //        }
+        //        g++;
+        //        firstThread = j.ManagedThreadId;
+        //    }
+        //    else
+        //    {
+        //        Thread v = Thread.CurrentThread;
+        //        g++;
+                
+        //        InitializeComponent();
+        //        initializePage();
+        //    }
+        //}
+        System.Diagnostics.Debug.WriteLine($"WEWEWWEWEW");
+        InitializeComponent();
+        initializePage();
     }
     private void initializePage()
     {

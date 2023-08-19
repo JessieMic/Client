@@ -31,15 +31,15 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     {
         m_PlacementButtons[i_VisualUpdate.spot].Text = i_VisualUpdate.textOnButton;
 
-            if (i_VisualUpdate.didPlayerSelect)
-            {
-                m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(true);
-                m_PlacementButtons[i_VisualUpdate.spot].FontSize = m_PlacementButtons[i_VisualUpdate.spot].FontSize*0.3;
-            }
-            else
-            {
-                m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(false);
-            }
+        if (i_VisualUpdate.didPlayerSelect)
+        {
+            m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(true);
+            m_PlacementButtons[i_VisualUpdate.spot].FontSize = m_PlacementButtons[i_VisualUpdate.spot].FontSize*0.3;
+        }
+        else
+        {
+            m_PlacementButtons[i_VisualUpdate.spot].IsButtonPressed(false);
+        }
     }
 
     async Task initializePage()

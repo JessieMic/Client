@@ -14,10 +14,13 @@ namespace Objects
 
         public ButtonImage()
         {
-            m_Button.BorderColor = Colors.Transparent;
-            m_Button.Background = Brush.Transparent;
-            m_Button.ZIndex = 0;
-            m_Image.ZIndex = -1;
+            Application.Current.Dispatcher.Dispatch(() =>
+            {
+                m_Button.BorderColor = Colors.Transparent;
+                m_Button.Background = Brush.Transparent;
+                m_Button.ZIndex = 0;
+                m_Image.ZIndex = -1;
+            });
         }
 
         public Button GetButton()
@@ -191,7 +194,7 @@ namespace Objects
         {
             m_Button.WidthRequest = i_Size.Width;
             m_Button.HeightRequest = i_Size.Height;
-            if (i_Size.Height <= GameSettings.GameGridSize)
+            if (i_Size.Width <= GameSettings.GameGridSize)
             {
                 m_Button.WidthRequest *= 1.2;
                 m_Button.HeightRequest *= 1.25;
