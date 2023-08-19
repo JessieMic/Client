@@ -13,17 +13,18 @@ namespace LogicUnit.Logic.GamePageLogic
     public class PauseMenu
     {
         public List<int> m_PauseMenuIDList = new List<int>();
-        private Player m_Player = Player.Instance;
         private GameInformation m_gameInformation = GameInformation.Instance;
         private List<GameObject> m_MenuButtons = new List<GameObject>();
         private GameObject m_PauseMenuBackground;
+        public GameObject MenuLabel { get; set; }
+        public bool ShowResume { get; set; } = true;
         public void GetPauseMenu(Buttons i_Buttons, ref List<GameObject> o_GameObejectsToAdd)
         {
             GameObject pauseMenu = new GameObject();
             Point menuPoint = getPauseMenuBackgroundPoint();
             pauseMenu.IsVisable = false;
             pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", menuPoint, false, new Point(0, 0));
-            pauseMenu.m_Size = GameSettings.m_PauseMenuOurSize;
+            pauseMenu.Size = GameSettings.m_PauseMenuOurSize;
             m_PauseMenuIDList.Add(pauseMenu.ID);
             pauseMenu.ZIndex = 0;
             o_GameObejectsToAdd.Add(pauseMenu);
@@ -47,11 +48,24 @@ namespace LogicUnit.Logic.GamePageLogic
             foreach (GameObject button in m_MenuButtons)
             {
                 button.IsVisable = i_Show;
+                if (button.Text == eButton.Resume.ToString())
+                {
+                    button.IsVisable = ShowResume;
+                    MenuLabel =button;
+                    MenuLabel.ScreenObjectType = eScreenObjectType.Label;
+                }
                 button.OnUpdate();
             }
 
             m_PauseMenuBackground.IsVisable = i_Show;
             m_PauseMenuBackground.OnUpdate();
+        }
+
+        public GameObject ShowEndGameMenu()
+        {
+            ShowResume = false;
+            changeVisibility(true);
+            return MenuLabel;
         }
 
         public void HidePauseMenu()

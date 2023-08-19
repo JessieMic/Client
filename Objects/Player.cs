@@ -11,34 +11,34 @@ namespace Objects
     public class Player
     {
         public bool isInitialized = false;
-        private static Player m_Instance = null;
-        private bool m_DidPlayerPickAPlacement;
+        //private static Player m_Instance = null;
+        private bool m_DidPlayerPickAPlacement = false;
         private string m_Name;
         public int PlayerNumber { get; set; }
         private PlayerType m_PlayerType;
         private string m_RoomCade;
 
 
-        private static readonly object s_InstanceLock = new object();
-        private Player()
+       // private static readonly object s_InstanceLock = new object();
+        public Player()
         {
             m_DidPlayerPickAPlacement = false;
         }
 
-        public static Player Instance
-        {
-            get
-            {
-                lock (s_InstanceLock)
-                {
-                    if (m_Instance == null)
-                    {
-                        m_Instance = new Player();
-                    }
-                }
-                return m_Instance;
-            }
-        }
+        //public static Player Instance
+        //{
+        //    get
+        //    {
+        //        lock (s_InstanceLock)
+        //        {
+        //            if (m_Instance == null)
+        //            {
+        //                m_Instance = new Player();
+        //            }
+        //        }
+        //        return m_Instance;
+        //    }
+        //}
 
         public bool DidPlayerPickAPlacement
         {

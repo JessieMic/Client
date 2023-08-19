@@ -43,7 +43,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 GameObject newHeart = new GameObject();
                 newHeart.Initialize(eScreenObjectType.Image, 0, "heart.png",
                     getHeartPoint(i), true, getValuesToAdd());
-                newHeart.m_Size = GameSettings.m_HeartSize;
+                newHeart.Size = GameSettings.m_HeartSize;
 
                 Point a = newHeart.PointOnScreen;
 
@@ -122,6 +122,26 @@ namespace LogicUnit.Logic.GamePageLogic
             }
 
             return returnStatus;
+        }
+
+        public bool setPlayerLifeAndCheckIfDead(int i_Player)
+        {
+            bool didPlayerDie = false;
+
+            m_AmountOfLivesPlayerHas[i_Player - 1]--;
+
+            if (i_Player == m_ClientNumber)
+            {
+                removeAHeart();
+            }
+
+            if (m_AmountOfLivesPlayerHas[i_Player - 1] == 0)
+            {
+                didPlayerDie = true;
+                m_AmountOfPlayersThatAreAlive--;
+            }
+
+            return didPlayerDie;
         }
 
         private void removeAHeart()

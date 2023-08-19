@@ -12,6 +12,7 @@ namespace Objects.Enums
         Space,
         Image,
         Player,
-        Object
+        Object,
+        Label
     }
 }

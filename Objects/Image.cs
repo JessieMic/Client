@@ -23,10 +23,10 @@ namespace Objects
             m_Image.ZIndex = i_GameObject.ZIndex;
             m_Image.Rotation = i_GameObject.Rotatation;
             m_Image.IsVisible = i_GameObject.IsVisable;
-            if (i_GameObject.m_Size.Width != 0)
+            if (i_GameObject.Size.Width != 0)
             {
-                m_Image.WidthRequest = i_GameObject.m_Size.Width;
-                m_Image.HeightRequest = i_GameObject.m_Size.Height;
+                m_Image.WidthRequest = i_GameObject.Size.Width;
+                m_Image.HeightRequest = i_GameObject.Size.Height;
                 if (i_GameObject.ImageSource != "snakebackground.png")
                 {
                     m_Image.Aspect = Aspect.Fill;

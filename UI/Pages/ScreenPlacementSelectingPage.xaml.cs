@@ -20,7 +20,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     private List<Image> m_Images = new List<Image>();
     private GameInformation m_GameInformation = GameInformation.Instance;
     private static List<ButtonImage> m_PlacementButtons = new List<ButtonImage>();
-    Player m_Player = Player.Instance;
 
     public ScreenPlacementSelectingPage()
 	{
@@ -65,7 +64,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     private void initializeButtons()
     {
-        if (!m_Player.isInitialized)
+        if (!m_GameInformation.Player.isInitialized)
         {
             Application.Current.Dispatcher.Dispatch(async () =>
                 {
@@ -84,7 +83,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                         gridLayout.Add(buttonImage.GetButton(), (int)position.Column, (int)position.Row);
                         buttonImage.GetButton().Clicked += m_pageLogic.OnButtonClicked;
                     }
-                    m_Player.isInitialized = true;
+                    m_GameInformation.Player.isInitialized = true;
                     getScreenUpdate();
                 });
         }

@@ -23,7 +23,7 @@ namespace LogicUnit
         private Action<string> m_ChosenGameAction;
         ///////////////
         private GameInformation m_GameInformation = GameInformation.Instance;
-        public Player m_Player = Player.Instance;
+        //public Player m_Player = Player.Instance;
         private Timer m_TimerForPlayersUpdate;
         private List<string> m_OldPlayersList = new List<string>();
         private string? m_LastChosenGame = null;
@@ -39,12 +39,21 @@ namespace LogicUnit
   //Jessies skip settings
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
             m_GameInformation.AmountOfPlayers =2;
+
             m_Player.Name = DateTime.Now.ToString();
             //Noa Lobby settings
             // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
             //m_GameInformation.AmountOfPlayers = 2;
             // m_GameInformation.AmountOfPlayers = 0;
             //m_Player.Name = DateTime.Now.ToString();
+
+            m_GameInformation.Player.Name = DateTime.Now.ToString();
+//Noa Lobby settings
+           // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
+            //m_GameInformation.AmountOfPlayers = 2;
+           // m_GameInformation.AmountOfPlayers = 0;
+            //Player.Name = DateTime.Now.ToString();
+
 
             //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
         }
@@ -60,15 +69,14 @@ namespace LogicUnit
             {
                 StringContent stringContent = new StringContent($"\"{i_HostName}\"", Encoding.UTF8, "application/json");
                 HttpResponseMessage response;
-
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CreateNewRoom}");
                 try
                 {
                     response = await m_HttpClient.PostAsync(m_Uri, stringContent);
                     string s = await response.Content.ReadAsStringAsync();
                     m_RoomData = JsonSerializer.Deserialize<RoomData>(s);
-                    m_Player.Name = i_HostName;
-                    m_Player.RoomCode = m_RoomData.roomCode;
+                    m_GameInformation.Player.Name = i_HostName;
+                    m_GameInformation.Player.RoomCode = m_RoomData.roomCode;
                 }
                 catch(Exception e)
                 {
@@ -136,8 +144,8 @@ namespace LogicUnit
                         return eLoginErrors.NameTaken;
                     }
 
-                    m_Player.Name = i_UserName;
-                    m_Player.RoomCode = i_Code;
+                    m_GameInformation.Player.Name = i_UserName;
+                    m_GameInformation.Player.RoomCode = i_Code;
                     //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
                     m_GameInformation.AmountOfPlayers++;
                     return eLoginErrors.Ok;
@@ -164,7 +172,7 @@ namespace LogicUnit
 
         private async void getChosenGame()
         {
-            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_UpdateGame}");
             try
@@ -217,7 +225,7 @@ namespace LogicUnit
 
         private async void getPlayers()
         {
-            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_UpdatePlayers}");
 
@@ -246,7 +254,7 @@ namespace LogicUnit
 
         private async void getPlayersToRemove()
         {
-            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
 
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_UpdatePlayersToRemove}");
             HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
@@ -266,7 +274,7 @@ namespace LogicUnit
                     {
                         while (!succeed)
                         {
-                            if (playersToRemove.Contains(m_Player.Name))
+                            if (playersToRemove.Contains(m_GameInformation.Player.Name))
                             {
                                 StopUpdatesRefresher();
                                 succeed = m_RemovePlayersByHost.Invoke(playersToRemove);
@@ -304,8 +312,8 @@ namespace LogicUnit
 
         public async void PlayerLeft()
         {
-            string code = m_Player.RoomCode;
-            string name = m_Player.Name;
+            string code = m_GameInformation.Player.RoomCode;
+            string name = m_GameInformation.Player.Name;
             StringContent stringContent = new(JsonSerializer.Serialize(new
             {
                 RoomCode = code,
@@ -327,7 +335,7 @@ namespace LogicUnit
 
         public async void HostLeft()
         {
-            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_HostLeft}");
             
             try
@@ -342,7 +350,7 @@ namespace LogicUnit
 
         private async void getIfHostLeft()
         {
-            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CheckHostLeft}");
 
             try
@@ -370,7 +378,7 @@ namespace LogicUnit
 
         public async void UpdateServerToMoveToNextPage()
         {
-            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_UpdateGoToNextPage}");
 
             try
@@ -385,7 +393,7 @@ namespace LogicUnit
 
         private async void checkIfNeedToGoToNextPage()
         {
-            StringContent stringContent = new StringContent($"\"{m_Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
             m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CheckIfGoToNextPage}");
 
             try

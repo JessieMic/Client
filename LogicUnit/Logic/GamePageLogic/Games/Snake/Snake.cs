@@ -136,7 +136,7 @@
 //                addPlayerObjects(player);
 //            }
 
-//            //if(m_Player.PlayerNumber == 1)
+//            //if(Player.PlayerNumber == 1)
 //            //{
 
 //            //}
@@ -272,7 +272,7 @@
 //            m_food.set(addGameBoardObject_(
 //                eScreenObjectType.Object, randomPoint, 1, (int)eBoardObjectSnake.Food,
 //                eBoardObjectSnake.Food.ToString()));
-//            if (m_Player.PlayerNumber == 1)
+//            if (Player.PlayerNumber == 1)
 //            {
 //                //SendServerObjectUpdate(eButton.ButtonA, 5, 1);
 //            }
@@ -536,7 +536,7 @@
 //                        snake.Eat(addGameBoardObject_(eScreenObjectType.Player, newHeadPoint, player, player + 2,
 //                            eSnakeBodyParts.Head.ToString()), m_SnakeLastDirection[player - 1], currentDirection);
 //                        m_Board[newHeadPoint.Column, newHeadPoint.Row] = player + 2;
-//                        if (m_Player.PlayerNumber == 1)
+//                        if (Player.PlayerNumber == 1)
 //                        {
 //                            getNewPointForFood();
 //                        }
