@@ -16,6 +16,9 @@ public partial class YesNoPopUp : Popup
         MessageLabel.Text = m_Message;
 
         createBtnImages();
+        Size = new Size(
+            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
+            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
     }
 
     private void createBtnImages()
