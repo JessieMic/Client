@@ -6,9 +6,9 @@ namespace LogicUnit
     public class ServerContext
     {
         //public const string k_BaseAddress = "5.29.17.154:5163";
-
-        //public const string k_BaseAddress = "http://localhost:5163";//"https://finalprojectlobby.azurewebsites.net"
-        public static string k_BaseAddress =  DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "http://localhost:5163";
+        //public const string k_BaseAddress = "https://finalprojectlobby.azurewebsites.net";
+        public const string k_BaseAddress = "http://localhost:5163";//"https://finalprojectlobby.azurewebsites.net"
+        //public static string k_BaseAddress =  DeviceInfo.Platform == DevicePlatform.Android ? "http://10.0.2.2:5000" : "http://localhost:5163";
 
         //public const string k_BaseAddress = "https://gameroomserverfinalproject.azurewebsites.net/GameHub";//"http://localhost:5163";
         public const string k_CreateNewRoom = "/CreateNewRoom";

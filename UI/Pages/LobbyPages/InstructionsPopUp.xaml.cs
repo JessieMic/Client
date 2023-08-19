@@ -11,9 +11,11 @@ public partial class InstructionsPopUp : Popup
 
 		HeaderLabel.Text = "Instructions - " + i_GameName;
 		InstructionsLabel.Text = i_Instructions;
-
 		addCloseButton();
-	}
+        Size = new Size(
+            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
+            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
+    }
 
 	public void OnCloseBtnClicked(object sender, EventArgs e)
 	{
