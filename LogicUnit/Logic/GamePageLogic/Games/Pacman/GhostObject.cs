@@ -12,7 +12,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
     public class GhostObject : GameObject, IPacmanGamePlayer
     {
-        public event EventHandler<int> PlayerGotHit;
         public int AmountOfLives { get; set; } = 2;
         private bool m_IsDyingAnimationOn = false;
         private bool m_IsCherryTime = false;
@@ -130,6 +129,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen) && IsObjectMoving)
                     {
                         IsObjectMoving = false;
+                        IsHunting = true;
                         OnSpecialEvent((int)ePacmanSpecialEvents.GotHit);
                     }
                 }

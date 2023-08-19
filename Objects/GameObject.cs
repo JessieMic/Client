@@ -36,7 +36,7 @@ namespace Objects
         public Direction RequestedDirection { get; set; } = Direction.Stop;
         public eButton ButtonType { get; set; }
         public string Text { get; set; }
-        public SizeDTO m_Size = GameSettings.m_MovementButtonOurSize;
+        public SizeDTO Size { get; set; }= GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; }
         public int Velocity { get; set; } = 90;
         public bool Fade { get; set; } = false;
@@ -126,7 +126,7 @@ namespace Objects
             PointOnScreen = point;
             ImageSource = i_Png;
             ID = GameSettings.getID();
-            m_Size = i_Size;
+            Size = i_Size;
         }
 
         public void Draw()
@@ -205,13 +205,19 @@ namespace Objects
         {
             bool canChange = false;
             Point point = getPointOnGrid();
-
-            if (point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
+            try
             {
-                if (m_Board[(int)point.Column + i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
+                if (point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
                 {
-                    canChange = true;
+                    if (m_Board[(int)point.Column + i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
+                    {
+                        canChange = true;
+                    }
                 }
+            }
+            catch(Exception e)
+            {
+                canChange = false;
             }
 
             return canChange;
@@ -240,13 +246,13 @@ namespace Objects
             {
                 i_Point.Row = m_ValuesToAdd.Row;
             }
-            else if (i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width)
+            else if (i_Point.Row > m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - Size.Width)
             {
-                i_Point.Row = m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - m_Size.Width;
+                i_Point.Row = m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - Size.Width;
             }
-            else if (i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height)
+            else if (i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - Size.Height)
             {
-                i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - m_Size.Height;
+                i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - Size.Height;
             }
         }
 
@@ -259,7 +265,7 @@ namespace Objects
             }
             else if (Direction == Direction.Right) //solid on the right
             {
-                newPoint.Column = i_Solid.PointOnScreen.Column - m_Size.Width;
+                newPoint.Column = i_Solid.PointOnScreen.Column - Size.Width;
             }
             else if (Direction == Direction.Up)
             {
@@ -267,7 +273,7 @@ namespace Objects
             }
             else //direction is down
             {
-                newPoint.Row = i_Solid.PointOnScreen.Row - m_Size.Height;
+                newPoint.Row = i_Solid.PointOnScreen.Row - Size.Height;
             }
             PointOnScreen = newPoint;
         }
@@ -312,7 +318,7 @@ namespace Objects
         protected void centerObjectInGrid()
         {
             Point newPoint = PointOnScreen;
-            double valueToAdd = (GameSettings.GameGridSize / 2) - m_Size.Height / 2;
+            double valueToAdd = (GameSettings.GameGridSize / 2) - Size.Height / 2;
 
             newPoint.Row += valueToAdd;
             newPoint.Column += valueToAdd;
@@ -365,7 +371,7 @@ namespace Objects
             get
             {
                 return new Rect(PointOnScreen.Column, PointOnScreen.Row,
-                m_Size.Width, m_Size.Height);
+                Size.Width, Size.Height);
             }
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 
 namespace Objects
 {
@@ -36,17 +37,15 @@ namespace Objects
             m_Button.ZIndex = 1;
             IsVisible = i_GameObject.IsVisable;
             m_Button.Rotation = i_GameObject.Rotatation;
-            if (i_GameObject.m_Size.Width != 0)
-            {
-                m_Button.WidthRequest = i_GameObject.m_Size.Width;
-                m_Button.HeightRequest = i_GameObject.m_Size.Height;
-            }
+            setButtonSize(i_GameObject.Size);
 
             if(m_Button.WidthRequest != GameSettings.GameGridSize)
             {
                 Text = i_GameObject.Text;
             }
         }
+
+       
 
         public void IsButtonPressed(bool i_IsButtonPressed)
         {
@@ -185,6 +184,20 @@ namespace Objects
             {
                 m_Button.HorizontalOptions = value;
                 m_Image.HorizontalOptions = value;
+            }
+        }
+
+        private void setButtonSize(SizeDTO i_Size)
+        {
+            m_Button.WidthRequest = i_Size.Width;
+            m_Button.HeightRequest = i_Size.Height;
+            if (i_Size.Height <= GameSettings.GameGridSize)
+            {
+                m_Button.WidthRequest *= 1.2;
+                m_Button.HeightRequest *= 1.25;
+                m_Button.TranslationX -= 4;
+                m_Button.TranslationY -= 4;
+                m_Button.BorderColor = Colors.AliceBlue;
             }
         }
 
