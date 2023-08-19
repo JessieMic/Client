@@ -38,12 +38,12 @@ namespace LogicUnit
 
   //Jessies skip settings
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
-            m_GameInformation.AmountOfPlayers =3;//////////////////////////////////////////////////////////////////////
+            m_GameInformation.AmountOfPlayers =2;//////////////////////////////////////////////////////////////////////
             //Noa Lobby settings
             // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
             //m_GameInformation.AmountOfPlayers = 2;
             // m_GameInformation.AmountOfPlayers = 0;
-            m_GameInformation.Player.Name = DateTime.Now.ToString();
+            //m_GameInformation.Player.Name = DateTime.Now.ToString();
 //Noa Lobby settings
            // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
             //m_GameInformation.AmountOfPlayers = 2;

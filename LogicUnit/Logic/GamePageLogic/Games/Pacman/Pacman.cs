@@ -18,7 +18,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             m_GameName = "pacman";
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 3;
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
             m_PacmanPlayers = new IPacmanGamePlayer[m_GameInformation.AmountOfPlayers];
         }
 
@@ -76,6 +76,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {m_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
                 if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
                 {
+                    msg = "Pacman won!!";
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
+                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
                     m_GameStatus = eGameStatus.Ended;
                 }
             }
