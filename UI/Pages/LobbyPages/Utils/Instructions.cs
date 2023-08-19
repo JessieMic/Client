@@ -8,14 +8,15 @@ namespace UI.Pages.LobbyPages.Utils
 {
     public static class Instructions
     {
-        public static string k_SnakeInstruction = $"Use arrow buttons to move the snake." +
+        public static string k_SnakeInstructions = $"Use arrow buttons to move the snake." +
             $"{System.Environment.NewLine}The goal is to become as long as possible by eating apples." +
             $"{System.Environment.NewLine}You should avoid running into walls, your own tail, or other snakes' tail.";
 
-        public static string k_PacmanInstruction = $"Use arrow button to control you player." +
-            $"{System.Environment.NewLine}If your player is Pacman, your goal is to eat all Pac-dots, while avoiding the ghosts." +
-            $"{System.Environment.NewLine}There are some power-foods, which makes the goasts powerless," +
-            $"and Pacman can eat them and get extra points." +
-            $"{System.Environment.NewLine}If your player is a ghost, your goal is to eat pacman and prevent him from earning points.";
+        public static string k_PacmanInstructions = $"Use arrow buttons to control your player." +
+            $"{System.Environment.NewLine}The player at place number 1 will be Pacman, the rest of the players will be ghosts." +
+            $"{System.Environment.NewLine}The goal of Pacman is to eat all cookies, and the goal of the ghosts is to eat Pacman and prevent him " +
+            $"from eating all cookies." +
+            $"{System.Environment.NewLine}If Pacman eats a cherry, he can eat the ghosts for a few seconds. " +
+            $"Pacman can also win by eating all the ghosts.";
     }
 }

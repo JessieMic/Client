@@ -21,7 +21,35 @@
                 <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
 
-            <VerticalStackLayout
+            <ScrollView
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3">
+                <VerticalStackLayout
+                    Spacing="10"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center">
+
+                    <Label 
+                    x:Name="HeaderLabel"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    TextColor="{DynamicResource PaloozaTextColor}"/>
+                    <Label
+                    x:Name="InstructionsLabel"
+                    VerticalOptions="Center"
+                    HorizontalOptions="Center"
+                    FontAutoScalingEnabled="True"
+                    FontSize="Body"
+                    TextColor="{DynamicResource PaloozaTextColor}"/>
+                </VerticalStackLayout>
+            </ScrollView>
+            
+            <!--<VerticalStackLayout
             Spacing="10"
             VerticalOptions="Center" 
             HorizontalOptions="Center"
@@ -36,16 +64,21 @@
                 FontSize="Medium"
                 FontAttributes="Bold"
                 TextColor="{DynamicResource PaloozaTextColor}"/>
+                <ScrollView
+                    x:Name="scrollView"
+                    VerticalOptions="FillAndExpand">
+                    <StackLayout>
+                        <Label
+                        x:Name="InstructionsLabel"
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        FontAutoScalingEnabled="True"
+                        FontSize="Body"
+                        TextColor="{DynamicResource PaloozaTextColor}"/>
+                    </StackLayout>
+                </ScrollView>
 
-                <Label
-                x:Name="InstructionsLabel"
-                VerticalOptions="Center"
-                HorizontalOptions="Center"
-                FontAutoScalingEnabled="True"
-                FontSize="Caption"
-                TextColor="{DynamicResource PaloozaTextColor}"/>
-
-            </VerticalStackLayout>
+            </VerticalStackLayout>-->
 
             <!--<Button
             Text="Close"
