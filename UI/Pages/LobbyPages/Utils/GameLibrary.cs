@@ -2,8 +2,8 @@
 {
     class GameLibrary
     {
-        private static Game m_Snake = new Game("snake_img_new.png", "Snake", Instructions.k_SnakeInstruction);
-        private static Game m_Pacman = new Game("pacman_img_new.png", "Pacman", Instructions.k_PacmanInstruction);
+        private static Game m_Snake = new Game("snake_img_new.png", "Snake", Instructions.k_SnakeInstructions);
+        private static Game m_Pacman = new Game("pacman_img_new.png", "Pacman", Instructions.k_PacmanInstructions);
 
         public static Game GetSnakeGame()
         {
