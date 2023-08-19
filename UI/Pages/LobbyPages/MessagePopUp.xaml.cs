@@ -1,6 +1,5 @@
 using CommunityToolkit.Maui.Views;
 using Objects;
-using System;
 
 namespace UI.Pages.LobbyPages;
 
@@ -15,9 +14,10 @@ public partial class MessagePopUp : Popup
 		m_ActionWhenClosed = i_Action;
 		m_Message = i_Message;
 		MessageLabel.Text = m_Message;
-
         ButtonImage okBtn = addOKButton();
 		okBtn.GetButton().Clicked += OnOKBtnClicked;
+		Size = new Size(0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
+            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
     }
 
 	public MessagePopUp(string i_Message)

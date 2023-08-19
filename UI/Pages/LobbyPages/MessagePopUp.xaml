@@ -5,14 +5,24 @@
        x:Class="UI.Pages.LobbyPages.MessagePopUp"
        CanBeDismissedByTappingOutsideOfPopup="False"
        Color="Transparent">
-    <Border Stroke="#4e0066" StrokeThickness="5" BackgroundColor="#b07ebf">
+    <Border 
+        Stroke="#4e0066" 
+        StrokeThickness="5" 
+        BackgroundColor="#b07ebf" 
+        HorizontalOptions="CenterAndExpand" 
+        VerticalOptions="CenterAndExpand">
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="30"/>
         </Border.StrokeShape>
-        <Grid Padding="10" x:Name="gridLayout">
+        <Grid 
+            Padding="15" 
+            x:Name="gridLayout"
+            HorizontalOptions="FillAndExpand" 
+            VerticalOptions="FillAndExpand">
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="70*"/>
+                <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20*"/>
@@ -27,7 +37,7 @@
             HorizontalOptions="Center"
             FontSize="Medium"
             FontAttributes="Bold"
-            Grid.Row="0"
+            Grid.Row="1"
             Grid.Column="1"
             HorizontalTextAlignment="Center"
             TextColor="{DynamicResource PaloozaTextColor}"/>
