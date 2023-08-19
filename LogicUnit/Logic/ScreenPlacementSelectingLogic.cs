@@ -77,7 +77,6 @@ namespace LogicUnit
                 {
                     m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizeWidth, i_ScreenSizeHeight);
                     OnEnterGameRoom();
-                  
                 });
             });
 
@@ -97,7 +96,7 @@ namespace LogicUnit
                                     m_GameInformation.Player.DidPlayerPickAPlacement = true;
                                 }
 
-                                if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers)
+                                if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers && m_GameInformation.Player.PlayerNumber == 1)
                                 {
                                     r_ConnectionToServer.InvokeAsync("GameIsAboutToStart");
                                 }

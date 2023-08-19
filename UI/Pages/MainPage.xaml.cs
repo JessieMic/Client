@@ -26,7 +26,6 @@ namespace UI
 
         protected override void OnSizeAllocated(double i_Width, double i_Height)
         {
-
             base.OnSizeAllocated(i_Width, i_Height);
             m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height = (int)i_Height;
             m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width = (int)i_Width;
