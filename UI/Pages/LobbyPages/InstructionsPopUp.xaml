@@ -9,7 +9,7 @@
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="30"/>
         </Border.StrokeShape>
-        <Grid Padding="10" x:Name="gridLayout">
+        <Grid Padding="15" x:Name="gridLayout">
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*"/>
                 <RowDefinition Height="75*"/>

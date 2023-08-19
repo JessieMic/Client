@@ -14,6 +14,9 @@ public partial class GamesPopUp : Popup
         m_FuncForGameChosen = i_Action;
         addButton("OK", OnOkClicked, 2, 2);
         addButton("Cancel", OnCancelClicked, 2, 0);
+        Size = new Size(
+            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
+            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
     }
 
 	public void AddGameToComponent(GameCard i_Card)

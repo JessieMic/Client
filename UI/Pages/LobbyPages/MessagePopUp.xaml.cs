@@ -16,7 +16,8 @@ public partial class MessagePopUp : Popup
 		MessageLabel.Text = m_Message;
         ButtonImage okBtn = addOKButton();
 		okBtn.GetButton().Clicked += OnOKBtnClicked;
-		Size = new Size(0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
+		Size = new Size(
+			0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
             0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
     }
 
