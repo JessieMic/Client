@@ -57,7 +57,7 @@ namespace LogicUnit
             GameObject background = new GameObject();
             background.GameBoardGridSize = actualOurSize.Height;
             background.Initialize(eScreenObjectType.Image, 0, m_GameName +"background.png", new Point(0, 0),true, m_ScreenMapping.m_ValueToAdd);
-            background.m_Size = actualOurSize;
+            background.Size = actualOurSize;
             m_GameObjectsToAdd.Add(background);
             m_GameInformation.BackgroundRect = new Rect(
                 background.PointOnScreen.Column,
@@ -78,7 +78,7 @@ namespace LogicUnit
             actualOurSize.Width += 10;
             background.GameBoardGridSize = actualOurSize.Height;
             background.Initialize(eScreenObjectType.Image, 0, "boarder.png", new Point(0, 0), true,p);
-            background.m_Size = actualOurSize;
+            background.Size = actualOurSize;
             m_GameObjectsToAdd.Add(background);
             setb();
         }
@@ -95,7 +95,7 @@ namespace LogicUnit
             actualOurSize.Width += 5;
             background.GameBoardGridSize = actualOurSize.Height;
             background.Initialize(eScreenObjectType.Image, 0, "boarder2.png", new Point(0, 0), true, p);
-            background.m_Size = actualOurSize;
+            background.Size = actualOurSize;
             m_GameObjectsToAdd.Add(background);
         }
         private void setUIBackground()
@@ -112,7 +112,7 @@ namespace LogicUnit
             SizeDTO actualOurSize = new SizeDTO(m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width+5,
                 GameSettings.m_UIBackgroundHeight);
             UIBackground.Initialize(eScreenObjectType.Image, 0, "uibackground.png", point, true, new Point(0,0));
-            UIBackground.m_Size = actualOurSize;
+            UIBackground.Size = actualOurSize;
             m_GameObjectsToAdd.Add(UIBackground);
         }
     }

@@ -24,7 +24,7 @@ namespace LogicUnit.Logic.GamePageLogic
             Point menuPoint = getPauseMenuBackgroundPoint();
             pauseMenu.IsVisable = false;
             pauseMenu.Initialize(eScreenObjectType.Image, 0, "pausemenu.png", menuPoint, false, new Point(0, 0));
-            pauseMenu.m_Size = GameSettings.m_PauseMenuOurSize;
+            pauseMenu.Size = GameSettings.m_PauseMenuOurSize;
             m_PauseMenuIDList.Add(pauseMenu.ID);
             pauseMenu.ZIndex = 0;
             o_GameObejectsToAdd.Add(pauseMenu);

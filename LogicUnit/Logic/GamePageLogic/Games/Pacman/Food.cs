@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DTOs;
 using Objects.Enums;
 using Point = Objects.Point;
 
@@ -16,11 +17,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public Food(Point i_Point, ref int i_ScreenFoodCounter)
         {
+            SizeDTO foodSize = new SizeDTO();
+
             IsCollisionDetectionEnabled = true;
             ObjectNumber = 1;
             this.Initialize(eScreenObjectType.Image, 1, "pacmanfood.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
-            m_Size.Height = m_Size.Width = GameSettings.GameGridSize / 5;
+            foodSize.Height = foodSize.Width = GameSettings.GameGridSize / 5;
+            Size = foodSize;
             centerObjectInGrid();
 
             if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
