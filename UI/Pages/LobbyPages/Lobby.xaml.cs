@@ -33,6 +33,7 @@ public partial class Lobby : ContentPage
     public Lobby()
     {
         InitializeComponent();
+        m_LogicManager.ResetRoomData();
         //StatusLabel.Text = "Waiting for all players...";
         m_PlayerName = m_GameInformation.Player.Name;
         m_Code = m_GameInformation.Player.RoomCode;
@@ -48,7 +49,7 @@ public partial class Lobby : ContentPage
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-
+        //m_LogicManager.ResetRoomData();
         designLabelsText();
 
         CodeLabel.Text = m_Code;
@@ -70,6 +71,7 @@ public partial class Lobby : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
+        //m_LogicManager.ResetRoomData();
 
         m_PlayersNamesLabels = new List<Label>()
         {

@@ -10,6 +10,8 @@ using Image = Objects.Image;
 using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
+using UI.Pages.LobbyPages;
+
 namespace UI.Pages;
 
 public partial class GamePage : ContentPage
@@ -173,9 +175,12 @@ public partial class GamePage : ContentPage
         m_Game.RunGame();
     }
 
-    void exitGame()
+    async void exitGame()
     {
         clearGame();
+        LogicManager logicManager = new LogicManager();
+        logicManager.ResetRoomData();
+        Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync(nameof(Lobby)));
     }
 
     void restartGame()
