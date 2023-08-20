@@ -23,8 +23,8 @@ public partial class YesNoPopUp : Popup
 
     private void createBtnImages()
     {
-        ButtonImage yesBtn = addButton("Yes", 1, 2);
-        ButtonImage noBtn = addButton("No", 1, 0);
+        ButtonImage yesBtn = addButton("Yes", 2, 2);
+        ButtonImage noBtn = addButton("No", 2, 0);
         yesBtn.GetButton().Clicked += yesBtnClicked;
         noBtn.GetButton().Clicked += noButtonClicked;
     }
