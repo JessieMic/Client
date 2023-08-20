@@ -39,11 +39,7 @@ namespace LogicUnit
   //Jessies skip settings
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
             m_GameInformation.AmountOfPlayers =2;//////////////////////////////////////////////////////////////////////
-            //Noa Lobby settings
-            // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
-            //m_GameInformation.AmountOfPlayers = 2;
-            // m_GameInformation.AmountOfPlayers = 0;
-            //m_GameInformation.Player.Name = DateTime.Now.ToString();
+            m_GameInformation.Player.Name = DateTime.Now.ToString();
 //Noa Lobby settings
            // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
             //m_GameInformation.AmountOfPlayers = 2;
@@ -406,6 +402,21 @@ namespace LogicUnit
                 m_ServerErrorAction.Invoke();
             }
 
+        }
+
+        public async void ResetRoomData()
+        {
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_ResetRoomData}");
+
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+            }
+            catch (Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
         }
 
         private bool checkIfValidUsername(string i_UserName)
