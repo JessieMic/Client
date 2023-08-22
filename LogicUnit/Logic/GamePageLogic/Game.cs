@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using DTOs;
 //using ABI.Windows.Security.EnterpriseData;
 using LogicUnit.Logic.GamePageLogic;
+using LogicUnit.Logic.GamePageLogic.Games.Pacman;
 using LogicUnit.Logic.GamePageLogic.LiteNet;
 using Microsoft.AspNetCore.SignalR.Client;
 using Objects;
@@ -21,7 +22,7 @@ namespace LogicUnit
     public abstract partial class Game
     {
         private List<string> m_PlayerMovementsLogs = new List<string>();
-        private readonly HubConnection r_ConnectionToServer;
+        protected readonly HubConnection r_ConnectionToServer;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
@@ -77,9 +78,11 @@ namespace LogicUnit
         protected readonly CollisionManager r_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
         static readonly object m_lock = new object();
-        protected Queue<Vector2> a = new Queue<Vector2>();
+        protected Queue<SpecialUpdate> m_SpecialEventQueue = new Queue<SpecialUpdate>();
+        protected Queue<SpecialUpdate> m_SpecialEventWithPointQueue = new Queue<SpecialUpdate>();
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
+        protected List<GameObject> m_TemporaryGameObjects = new List<GameObject>();
 
         public string msg = string.Empty;
         public Game()
@@ -96,9 +99,14 @@ namespace LogicUnit
                 .Build();
 
             r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
-            {
-                //SpecialUpdateReceived(1, i_Player);
-                a.Enqueue(new Vector2(i_WhatHappened, i_Player));
+                {
+                    SpecialUpdateReceived(new SpecialUpdate(i_WhatHappened, i_Player));
+                });
+
+            r_ConnectionToServer.On<int, int,int>("SpecialUpdateWithPointReceived", (i_X, i_Y, i_Player) =>
+            { 
+                //m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X,i_Y, i_Player));
+                SpecialUpdateWithPointReceived(new SpecialUpdate(i_X, i_Y, i_Player));
             });
 
             Task.Run(() =>
@@ -111,6 +119,20 @@ namespace LogicUnit
                     OnGameStart();
                 });
             });
+        }
+
+        private void checkForSpecialUpdates()
+        {
+            //if (m_SpecialEventQueue.Count != 0)
+            //{
+            //    SpecialUpdate specialUpdate = m_SpecialEventQueue.Dequeue();
+            //    SpecialUpdateReceived(specialUpdate);
+            //}
+            //if (m_SpecialEventWithPointQueue.Count != 0)
+            //{
+            //    SpecialUpdate specialUpdate = m_SpecialEventQueue.Dequeue();
+            //    SpecialUpdateWithPointReceived(specialUpdate);
+            //}
         }
 
         public void InitializeGame()
@@ -160,8 +182,20 @@ namespace LogicUnit
             if(m_GameStatus == eGameStatus.Running)
             {
                 UpdatePosition(m_LastElapsedTime);
+                updateTemporaryGameObjects();
             }
             m_LoopNumber = m_LastElapsedTime;
+        }
+
+        private void updateTemporaryGameObjects()
+        {
+            foreach(var gameObject in m_TemporaryGameObjects)
+            {
+                if(gameObject.IsVisable)
+                {
+                    gameObject.Update(0);
+                }
+            }
         }
 
         private void getButtonUpdate()
@@ -241,6 +275,45 @@ namespace LogicUnit
             }
         }
 
+        protected void sp(GameObject newObject)
+        {
+            List<GameObject> k = new List<GameObject>();
+            k.Add(newObject);
+
+            if (newObject.IsCollisionDetectionEnabled)
+            {
+                r_CollisionManager.AddObjectToMonitor(newObject);
+                newObject.SpecialEvent += SendSpecialServerUpdate;
+            }
+
+            newObject.UpdateGameObject += OnUpdateScreenObject;
+           
+            AddGameObjectList.Invoke(this, k);
+        }
+
+        protected void addBoarderFor3Players()
+        {
+            if (m_AmountOfPlayers == 3)
+            {
+                int y = m_ScreenMapping.m_Boundaries.Height;
+                int x = m_ScreenMapping.m_Boundaries.Width;
+
+                for (int i = y; i < m_BoardSizeByGrid.Height; i++)
+                {
+                    addBoarder(new Point(x, i));
+                }
+                for (int i = x; i < m_BoardSizeByGrid.Width; i++)
+                {
+                    addBoarder(new Point(x, i));
+                }
+            }
+        }
+
+        protected virtual void addBoarder(Point i_Point)
+        {
+            m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), string.Empty));
+        }
+        
         protected virtual void Draw()
         {
             if (m_GameObjectsToAdd.Count != 0)
@@ -252,11 +325,18 @@ namespace LogicUnit
             {
                 player.Draw();
             }
+
+            foreach (var gameObject in m_TemporaryGameObjects)
+            {
+                if (gameObject.IsVisable)
+                {
+                    gameObject.Draw();
+                }
+            }
         }
 
         private async void SendServerUpdate()
         {
-            //System.Diagnostics.Debug.WriteLine("s" + m_CurrentPlayerData.Button);
             if (m_NewButtonPressed)
             {
                 Point playerPosition = m_PlayerObjects[m_Player.PlayerNumber - 1]
@@ -291,17 +371,22 @@ namespace LogicUnit
         {
             //System.Diagnostics.Debug.WriteLine("s" + Player.PlayerNumber);
             GameObject gameObject = sender as GameObject;
-            System.Diagnostics.Debug.WriteLine("HIT " + m_Player.PlayerNumber);//("s "+ playerPosition.Column + " "+ playerPosition.Row);
             r_ConnectionToServer.SendAsync(
                 "SpecialUpdate",
                 i_eventNumber, gameObject.ObjectNumber
                 );
         }
-        protected virtual void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
+
+        protected virtual void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
         {
 
         }
 
+        protected virtual void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
+        {
+
+        }
+        
         protected virtual void checkForGameStatusUpdate(int i_Player)
         {
 
@@ -314,25 +399,11 @@ namespace LogicUnit
                 checkForGameStatusUpdate(i_Player);
             }
 
-            System.Diagnostics.Debug.WriteLine("GOT " + m_Player.PlayerNumber);
             if (m_Hearts.m_HeartToRemove != null)
             {
                 OnDeleteGameObject(m_Hearts.m_HeartToRemove);
                 m_Hearts.m_HeartToRemove = null;
             }
-
-            //if (m_GameStatus != eGameStatus.Running)
-            //{
-            //    m_scoreBoard.m_LoseOrder.Add(m_GameInformation.m_NamesOfAllPlayers[i_Player - 1]);
-            //    if (m_GameStatus == eGameStatus.Lost)
-            //    {
-            //        //gameStatusUpdate();//Will show client that he lost 
-            //    }
-            //    else //Game has ended 
-            //    {
-            //        // m_scoreBoard.ShowScoreBoard();
-            //    }
-            //}
         }
 
         protected virtual void UpdatePosition(double i_TimeElapsed)
@@ -350,14 +421,11 @@ namespace LogicUnit
                 }
             }
 
-            if (a.Count != 0)
-            {
-                Thread t = Thread.CurrentThread;
-                System.Diagnostics.Debug.WriteLine($"(EVENT) - Player num- {m_GameInformation.Player.PlayerNumber}Thread id- {t.ManagedThreadId}processor Id-{Thread.GetCurrentProcessorId()}");
-                Vector2 e = a.Dequeue();
-                SpecialUpdateReceived((int)e.X, (int)e.Y);
-            }
+            checkForSpecialUpdates();
         }
+
+      
+
         public void UpdateClientsAboutPosition(object sender, Point i_Point)
         {
             GameObject a = sender as GameObject;
@@ -366,10 +434,7 @@ namespace LogicUnit
 
         private async void SendServerPositionUpdate(int i_Player, Point i_Point)
         {
-            Thread t = Thread.CurrentThread;
-
-            System.Diagnostics.Debug.WriteLine("hIT" + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId() + " " + i_Point.Row);
-            //System.Diagnostics.Debug.WriteLine("s "+Player.PlayerNumber+" "+ i_Point.Column + " "+ i_Point.Row);
+            System.Diagnostics.Debug.WriteLine("MOVEE"  + " " + i_Point.Row);
             await r_ConnectionToServer.SendAsync(
                 "UpdatePlayerSelection", i_Player - 1
                 ,
@@ -377,7 +442,7 @@ namespace LogicUnit
                 (int)i_Point.Column, (int)i_Point.Row);
         }
 
-        public void OnButtonClicked(object sender, EventArgs e)
+        virtual public void OnButtonClicked(object sender, EventArgs e)
         {
             Button button = sender as Button;
 
@@ -400,6 +465,15 @@ namespace LogicUnit
         {
             GameObject i = sender as GameObject;
             GameObjectUpdate.Invoke(this, i);
+        }
+
+        protected async void SendServerSpecialPointUpdate(Point i_Point,int i_Player)
+        {
+            System.Diagnostics.Debug.WriteLine("BOMB " + m_Player.PlayerNumber);
+            r_ConnectionToServer.SendAsync(
+                "SpecialUpdateWithPoint",
+                i_Point.Column, i_Point.Row,i_Player
+            );
         }
 
         public void RunGame()

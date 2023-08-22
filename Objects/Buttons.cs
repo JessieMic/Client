@@ -140,6 +140,18 @@ namespace Objects
             {
                 return eButton.Down;
             }
+            else if (i_Button == eButton.Left.ToString())
+            {
+                return eButton.Left;
+            }
+            else if (i_Button == eButton.Right.ToString())
+            {
+                return eButton.Right;
+            }
+            else if (i_Button == eButton.ButtonA.ToString())
+            {
+                return eButton.ButtonA;
+            }
             else if (i_Button == eButton.PauseMenu.ToString())
             {
                 return eButton.PauseMenu;
@@ -147,10 +159,6 @@ namespace Objects
             else if (i_Button == eButton.Exit.ToString())
             {
                 return eButton.Exit;
-            }
-            else if (i_Button == eButton.Right.ToString())
-            {
-                return eButton.Right;
             }
             else if (i_Button == eButton.Resume.ToString())
             {
@@ -162,8 +170,9 @@ namespace Objects
             }
             else
             {
-                return eButton.Left;
+                return eButton.ButtonB;
             }
+            
         }
         private Point getButtonPoint(eButton i_Type)
         {

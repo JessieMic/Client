@@ -33,10 +33,6 @@ namespace LogicUnit.Logic.GamePageLogic
 
                     Movable.SetImageDirection(Movable.Direction);
                 }
-                else
-                {
-                    int a = 3;
-                }
             }
         }
 

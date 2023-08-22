@@ -94,7 +94,7 @@ public partial class GamePage : ContentPage
         gridLayout.Add(buttonImage.GetImage());
         gridLayout.Add(buttonImage.GetButton());
         buttonImage.GetButton().Pressed+= m_Game.OnButtonClicked;
-        if(m_Game.DoesGameNeedToKnowIfButtonReleased())
+        if(m_Game.DoesGameNeedToKnowIfButtonReleased() && i_ButtonToAdd.ButtonType != eButton.ButtonA)
         {
             buttonImage.GetButton().Released += m_Game.OnButtonRelesed;
         }
