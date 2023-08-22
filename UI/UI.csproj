@@ -87,6 +87,7 @@
 	  <None Remove="Resources\Images\boarder2.png" />
 	  <None Remove="Resources\Images\bomb.png" />
 	  <None Remove="Resources\Images\bombitbackground.png" />
+	  <None Remove="Resources\Images\explosion.png" />
 	  <None Remove="Resources\Images\floor.png" />
 	  <None Remove="Resources\Images\giphy.gif" />
 	  <None Remove="Resources\Images\heart.png" />
