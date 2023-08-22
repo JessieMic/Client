@@ -34,6 +34,7 @@ namespace UI
 
         private async void OnCreateRoomClicked(object sender, EventArgs e)
         {
+            m_GameInformation.Player.Name = string.Empty;
             m_GameInformation.Player.PlayerType = PlayerType.Host;
             await Shell.Current.GoToAsync(nameof(EnterNamePage));
             //await Shell.Current.GoToAsync(nameof(EnterNamePage) +
@@ -42,6 +43,7 @@ namespace UI
 
         private async void OnJoinRoomClicked(object sender, EventArgs e)
         {
+            m_GameInformation.Player.Name = string.Empty;
             m_GameInformation.Player.PlayerType = PlayerType.Guest;
             await Shell.Current.GoToAsync(nameof(EnterRoomCodePage));
             //await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
@@ -50,6 +52,10 @@ namespace UI
 
         private async void OnSkipClicked(object sender, EventArgs e)
         {
+            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
+
+            m_GameInformation.AmountOfPlayers = 2;
+            m_GameInformation.Player.Name = DateTime.Now.ToString();
             await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
         }
 

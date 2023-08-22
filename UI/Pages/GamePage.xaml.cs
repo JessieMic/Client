@@ -2,7 +2,6 @@ using System.Globalization;
 using Microsoft.Maui.Controls.Shapes;
 using GradientStop = Microsoft.Maui.Controls.GradientStop;
 using LogicUnit;
-using LogicUnit.Logic.GamePageLogic.Games.Snake;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
@@ -23,34 +22,9 @@ public partial class GamePage : ContentPage
     private Dictionary<int, Image> m_GameImages = new Dictionary<int, Image>();
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
     private Label m_GameLabel = new Label();
-    private volatile static int g = 0;
-    static readonly object m_lock = new object();
-    private volatile static int firstThread = 0;
 
     public GamePage()
     {
-        //lock (m_lock)
-        //{
-        //    if (g == 0)
-        //    {
-        //        Thread j = Thread.CurrentThread;
-        //        if (m_GameInformation.Player.PlayerNumber == 1)
-        //        {
-        //            System.Diagnostics.Debug.WriteLine($"BLOCKED - Player num- {m_GameInformation.Player.PlayerNumber} Thread id-{j.ManagedThreadId} processor Id-{Thread.GetCurrentProcessorId()}");
-        //        }
-        //        g++;
-        //        firstThread = j.ManagedThreadId;
-        //    }
-        //    else
-        //    {
-        //        Thread v = Thread.CurrentThread;
-        //        g++;
-                
-        //        InitializeComponent();
-        //        initializePage();
-        //    }
-        //}
-        System.Diagnostics.Debug.WriteLine($"WEWEWWEWEW");
         InitializeComponent();
         initializePage();
     }
@@ -59,7 +33,6 @@ public partial class GamePage : ContentPage
         m_Game = m_GameLibrary.CreateAGame(m_GameInformation.NameOfGame);//m_GameInformation.m_NameOfGame);
         initializeEvents();
         initializeGame();
-
     }
 
     private void initializeGame()
@@ -120,7 +93,12 @@ public partial class GamePage : ContentPage
         buttonImage.ZIndex = 1;
         gridLayout.Add(buttonImage.GetImage());
         gridLayout.Add(buttonImage.GetButton());
-        buttonImage.GetButton().Clicked += m_Game.OnButtonClicked;
+        buttonImage.GetButton().Pressed+= m_Game.OnButtonClicked;
+        if(m_Game.DoesGameNeedToKnowIfButtonReleased())
+        {
+            buttonImage.GetButton().Released += m_Game.OnButtonRelesed;
+        }
+
         m_GameButtonsImages.Add(i_ButtonToAdd.ID, buttonImage);
     }
 

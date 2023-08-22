@@ -19,12 +19,16 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         private bool m_IsDyingAnimationOn = false;
         private bool m_IsCherryTime = false;
         private short m_Pic = 0;
+        private ClickMover m_ClickMover = new ClickMover();
+        //private ClickReleaseMover m_ClickMover = new ClickReleaseMover();
+
         public PacmanObject(int[,] i_Board)
         {
-            m_Board = i_Board;
+            Board = i_Board;
             IsCollisionDetectionEnabled = true;
             this.Initialize(eScreenObjectType.Player, 1, "pacman1.png", new Point(0, 0), true,
                 m_GameInformation.PointValuesToAddToScreen);
+            m_ClickMover.Movable = this as IMovable;
         }
 
         public override void Update(double i_TimeElapsed)
@@ -124,6 +128,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             m_IsCherryTime = true;
             IsHunting = true;
             m_CherryTimeStart = i_BerryStartTime;
+        }
+
+        public override void RequestDirection(Direction i_Direction)
+        {
+            m_ClickMover.RequestDirection( i_Direction);
         }
     }
 }

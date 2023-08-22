@@ -11,7 +11,7 @@ using Point = Objects.Point;
 
 namespace Objects
 {
-    public class GameObject : ICollidable
+    public class GameObject : ICollidable , IMovable
     {
         public event EventHandler<EventArgs> UpdateGameObject;
         public event EventHandler<EventArgs> Disposed;
@@ -40,8 +40,8 @@ namespace Objects
         public int ID { get; set; }
         public int Velocity { get; set; } = 90;
         public bool Fade { get; set; } = false;
-        protected int[,] m_Board;
-        protected bool m_WantToTurn = false;
+        public int[,] Board { get; set; }
+        public bool WantToTurn { get; set; } = false;
         protected bool m_CanRotateToAllDirections = true;
         protected bool m_FlipsWhenMoved = false;
 
@@ -52,7 +52,7 @@ namespace Objects
             ObjectNumber = i_ObjectNumber;
             ScreenObjectType = i_ScreenObjectType;
             m_ValuesToAdd = i_ValuesToAdd;
-            Point point = getScreenPoint(i_Point, i_IsGrid);
+            Point point = GetScreenPoint(i_Point, i_IsGrid);
             PointOnScreen = m_StartupPoint = point;
             ImageSource = i_Png;
             ID = GameSettings.getID();
@@ -95,34 +95,12 @@ namespace Objects
             }
         }
 
-        public void FlipImage(Direction i_Direction)
-        {
-            //if (i_Direction == Direction.Left)
-            //{
-            //    ScaleX = -1;
-            //}
-            //else if (i_Scale == eImageScale.FlipY)
-            //{
-            //    ScaleY = -1;
-            //    Rotatation = 0;
-            //}
-            //if (i_Scale == eImageScale.OriginalX)
-            //{
-            //    ScaleX = 1;
-            //}
-            //else
-            //{
-            //    ScaleY= 1;
-            //    Rotatation = 0;
-            //}
-        }
-
         public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, bool i_IsGrided, SizeDTO i_Size, Point i_ValuesToAdd)
         {
             ButtonType = i_ButtonType;
             ScreenObjectType = eScreenObjectType.Button;
             m_ValuesToAdd = i_ValuesToAdd;
-            Point point = getScreenPoint(i_Point, i_IsGrided);
+            Point point = GetScreenPoint(i_Point, i_IsGrided);
             PointOnScreen = point;
             ImageSource = i_Png;
             ID = GameSettings.getID();
@@ -134,51 +112,17 @@ namespace Objects
             UpdateGameObject.Invoke(this, null);
         }
 
-        public void RequestDirection(Direction i_Direction)
-        {
-            if (IsObjectMoving)
-            {
-                if (Direction == Direction.Stop)
-                {
-                    Direction = i_Direction;
-                }
-                else if (Direction != i_Direction)
-                {
-                    RequestedDirection = i_Direction;
-                    if (checkIfCanChangeDirection(i_Direction))
-                    {
-                        checkIfWantToTurn(i_Direction);
-                        Direction = i_Direction;
-                    }
-                }
-                SetImageDirection(Direction);
-            }
-        }
-
-
+        public virtual void RequestDirection(Direction i_Direction)
+        { }
 
         protected void OnSpecialEvent(int eventNumber)
         {
             SpecialEvent.Invoke(this, eventNumber);
         }
 
-        void checkIfWantToTurn(Direction i_Direction)
+        public void OnUpdatePosition(Point i_Point)
         {
-            int x = Direction.ColumnOffset + i_Direction.ColumnOffset;
-            int y = Direction.RowOffset + i_Direction.RowOffset;
-            int k = m_GameInformation.Player.PlayerNumber;
-
-            if (x != 0 && y != 0)
-            {
-                m_WantToTurn = true;
-                Point PointUpdate = getPointOnGrid();
-                //check if we are on our side
-                PointOnScreen = getScreenPoint(PointUpdate, true);
-                if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
-                {
-                    UpdatePosition.Invoke(this, PointUpdate);
-                }
-            }
+            UpdatePosition.Invoke(this, i_Point);
         }
 
         protected void resetToStartupPoint()
@@ -201,29 +145,7 @@ namespace Objects
             UpdateGameObject.Invoke(this, null);
         }
 
-        bool checkIfCanChangeDirection(Direction i_Direction)
-        {
-            bool canChange = false;
-            Point point = getPointOnGrid();
-            try
-            {
-                if (point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
-                {
-                    if (m_Board[(int)point.Column + i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
-                    {
-                        canChange = true;
-                    }
-                }
-            }
-            catch(Exception e)
-            {
-                canChange = false;
-            }
-
-            return canChange;
-        }
-
-        Point getPointOnGrid()
+        public Point GetPointOnGrid()
         {
             double temp;
             Point point = GetCurrentPointOnScreen();
@@ -278,7 +200,7 @@ namespace Objects
             PointOnScreen = newPoint;
         }
 
-        protected Point getScreenPoint(Point i_Point, bool i_IsGrided)
+        public Point GetScreenPoint(Point i_Point, bool i_IsGrided)
         {
             Point point = new Point();
 
@@ -311,9 +233,7 @@ namespace Objects
         }
 
         public virtual void Collided(ICollidable i_Collidable)
-        {
-
-        }
+        { }
 
         protected void centerObjectInGrid()
         {
@@ -327,9 +247,9 @@ namespace Objects
 
         private void updatePosition(double i_TimeElapsed)
         {
-            if (m_WantToTurn)
+            if (WantToTurn)
             {
-                m_WantToTurn = false;
+                WantToTurn = false;
             }
             else
             {
@@ -354,16 +274,11 @@ namespace Objects
 
         public void UpdatePointOnScreen(Point i_Point)
         {
-            Point p = getScreenPoint(i_Point, true);
+            Point p = GetScreenPoint(i_Point, true);
             if (!m_GameInformation.IsPointIsOnBoardPixels(p))
             {
                 PointOnScreen = p;
             }
-
-            //i_Point.Row += m_ValuesToAdd.Row;
-            //i_Point.Column += m_ValuesToAdd.Column;
-            //PointOnScreen = i_Point;
-            ////updatePosition(85);
         }
 
         public Rect Bounds
@@ -374,11 +289,32 @@ namespace Objects
                 Size.Width, Size.Height);
             }
         }
-
         public void MoveToPointInGrided(Point i_Point)
         {
-            Point point = getScreenPoint(i_Point, true);
+            Point point = GetScreenPoint(i_Point, true);
             PointOnScreen = point;
         }
     }
 }
+
+//public void FlipImage(Direction i_Direction)
+//{
+//    if (i_Direction == Direction.Left)
+//    {
+//        ScaleX = -1;
+//    }
+//    else if (i_Scale == eImageScale.FlipY)
+//    {
+//        ScaleY = -1;
+//        Rotatation = 0;
+//    }
+//    if (i_Scale == eImageScale.OriginalX)
+//    {
+//        ScaleX = 1;
+//    }
+//    else
+//    {
+//        ScaleY = 1;
+//        Rotatation = 0;
+//    }
+//}

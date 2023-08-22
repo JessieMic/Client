@@ -18,17 +18,21 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public double m_CherryTimeStart;
         public double m_DeathAnimationStart;
         private int m_Blink;
+        private ClickMover m_ClickMover = new ClickMover();
+        //private ClickReleaseMover m_ClickMover = new ClickReleaseMover();
         public bool IsHunting { get; set; } = true;
 
         public GhostObject(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
+            
             ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
             m_FlipsWhenMoved = true;
             IsCollisionDetectionEnabled = true;
-            m_Board = i_Board;
+            Board = i_Board;
             this.Initialize(eScreenObjectType.Player, i_playerNumber, $"pacman_ghost_{ObjectNumber}.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
+            m_ClickMover.Movable = this as IMovable;
         }
 
         Point getPointOnGrid(int i_X, int i_Y)
@@ -139,6 +143,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 collidedWithSolid(i_Collidable);
             }
         }
+
         public void ResetPosition(double i_DeathStartTime)
         {
             resetToStartupPoint();
@@ -165,6 +170,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             ImageSource = $"pacman_ghost_{ObjectNumber}_berry.png";
             m_IsCherryTime = true;
             m_CherryTimeStart = i_BerryStartTime;
+        }
+
+        public override void RequestDirection(Direction i_Direction)
+        {
+            m_ClickMover.RequestDirection( i_Direction);
         }
     }
 }
