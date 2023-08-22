@@ -4,12 +4,13 @@ using Objects;
 using Objects.Enums.BoardEnum;
 using System.Numerics;
 using LogicUnit.Logic.GamePageLogic.Games.Pacman;
+using Microsoft.AspNetCore.SignalR.Client;
 
 namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 {
     public class BombIt : Game
     {
-        private IPacmanGamePlayer[] m_PacmanPlayers;
+        private BombItPlayer[] m_BombItPlayers;
         PacmanBoardFactory m_PacmanBoard = new PacmanBoardFactory();
         private int m_FoodCounterForPlayerScreen = 0;
         private int m_AmountOfScreenThatHaveNoFood = 0;
@@ -21,7 +22,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             m_Buttons.m_AmountOfExtraButtons = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
-            m_PacmanPlayers = new IPacmanGamePlayer[m_GameInformation.AmountOfPlayers];
+            m_BombItPlayers = new BombItPlayer[m_GameInformation.AmountOfPlayers];
         }
 
         void createBoard()
@@ -33,86 +34,66 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                 {
                     if (m_Board[col, row] == 1)
                     {
-                        m_GameObjectsToAdd.Add(new Boarder(new Point(col, row)));
+                        addBoarder(new Point(col, row));
                     }
                     else if (m_Board[col, row] == 0)
                     {
-                        m_GameObjectsToAdd.Add(new Food(new Point(col, row), ref m_FoodCounterForPlayerScreen));
+                        //m_GameObjectsToAdd.Add(new Food(new Point(col, row), ref m_FoodCounterForPlayerScreen));
                     }
                     else if (m_Board[col, row] == 2)
                     {
-                        m_GameObjectsToAdd.Add(new Cherry(new Point(col, row)));
+                        //m_GameObjectsToAdd.Add(new Cherry(new Point(col, row)));
                     }
                 }
             }
-
-            if (m_AmountOfPlayers == 3)
-            {
-                int y = m_ScreenMapping.m_Boundaries.Height;
-                int x = m_ScreenMapping.m_Boundaries.Width;
-
-                for (int i = y; i < m_BoardSizeByGrid.Height; i++)
-                {
-                    m_GameObjectsToAdd.Add(new Boarder(new Point(x, i)));
-                }
-                for (int i = x; i < m_BoardSizeByGrid.Width; i++)
-                {
-                    m_GameObjectsToAdd.Add(new Boarder(new Point(i, y)));
-                }
-            }
+            addBoarderFor3Players();
         }
 
-        protected override void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
+        protected override void addBoarder(Point i_Point)
         {
-            if (i_WhatHappened == (int)ePacmanSpecialEvents.GotHit)
-            {
-                PlayerGothit(i_Player);
-            }
-            else if (i_WhatHappened == (int)ePacmanSpecialEvents.AteCherry)
-            {
-                pacmanAteCherry();
-            }
-            else
-            {
-                m_FoodCounterForPlayerScreen++;
-                System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {m_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
-                if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
-                {
-                    msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
-                    m_GameStatus = eGameStatus.Ended;
-                }
-            }
+            m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), "pacman_boarder.png"));
+        }
+
+        protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
+        {
+            //create new bomb with xy
+
+            //if (i_WhatHappened == (int)ePacmanSpecialEvents.GotHit)
+            //{
+            //    PlayerGothit(i_Player);
+            //}
+            //else if (i_WhatHappened == (int)ePacmanSpecialEvents.AteCherry) ///special events of dropped bomb
+            //{
+            //    bombWasDropped();
+            //}
+            //else
+            //{
+            //    m_FoodCounterForPlayerScreen++;
+            //    System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {m_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
+            //    if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
+            //    {
+            //        msg = "Pacman won!!";
+            //        m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
+            //        m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+            //        m_GameStatus = eGameStatus.Ended;
+            //    }
+            //}
+        }
+
+        protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
+        {
+            sp(m_BombItPlayers[i_SpecialUpdate.Player_ID -1].PlaceBomb(i_SpecialUpdate.X,i_SpecialUpdate.Y));
+            
         }
 
         private void PlayerGothit(int i_Player)
         {
             double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-            if (i_Player == 1)
-            {
-                stopMovement(m_Player.PlayerNumber);
-                foreach (var player in m_PacmanPlayers)
-                {
-                    player.ResetPosition(startTimeOfDeathAnimation);
-                }
-            }
-            else
-            {
-                m_PacmanPlayers[i_Player - 1].AmountOfLives--;
-                m_PacmanPlayers[i_Player - 1].ResetPosition(startTimeOfDeathAnimation);
-                stopMovement(i_Player);
-            }
-            base.PlayerLostALife(null, i_Player);
-        }
 
-        private void pacmanAteCherry()
-        {
-            double startTimeOfCherryTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-            foreach (var player in m_PacmanPlayers)
-            {
-                player.InitiateCherryTime(startTimeOfCherryTime);
-            }
+            m_BombItPlayers[i_Player - 1].AmountOfLives--;
+            m_BombItPlayers[i_Player - 1].DeathAnimation(startTimeOfDeathAnimation);
+
+            base.PlayerLostALife(null, i_Player);
         }
 
         protected override void AddGameObjects()
@@ -123,47 +104,50 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         private void addPlayerObjects()
         {
-            PacmanObject player1 = new PacmanObject(m_Board);
-            m_PacmanPlayers[0] = player1;
-            m_GameObjectsToAdd.Add(player1);
-
-            for (int i = 2; i <= m_GameInformation.AmountOfPlayers; i++)
+            for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
             {
-                GhostObject newGhost = new GhostObject(
+                BombItPlayer newPlayer = new BombItPlayer(
                     i,
                     m_BoardSizeByGrid.Width,
                     m_BoardSizeByGrid.Height,
                     m_Board);
 
-                m_GameObjectsToAdd.Add(newGhost);
-                m_PacmanPlayers[i - 1] = newGhost;
+                m_GameObjectsToAdd.Add(newPlayer);
+                m_BombItPlayers[i - 1] = newPlayer;
             }
         }
 
         protected override void checkForGameStatusUpdate(int i_Player)
         {
-            if (i_Player == 1)
+            if (m_Hearts.m_AmountOfPlayersThatAreAlive == 1)//Search for the player that is alive
             {
-                if (m_AmountOfPlayers > 2)
-                {
-                    msg = "Ghosts won!!";
-                }
-                else
-                {
-                    msg = "Ghost won!!";
-                }
+                msg = "Pacman won!!";
+                m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
                 m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
                 m_GameStatus = eGameStatus.Ended;
             }
+        }
+
+        public override void OnButtonClicked(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+
+            if (m_Buttons.StringToButton(button!.ClassId) == eButton.ButtonA)
+            {
+                BombPlaceRequest();
+            }
             else
             {
-                if (m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
-                {
-                    msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
-                    m_GameStatus = eGameStatus.Ended;
-                }
+                m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
+                m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
+            }
+        }
+
+        private void BombPlaceRequest()
+        {
+            if(m_BombItPlayers[m_GameInformation.Player.PlayerNumber-1].CanPlaceABomb)
+            {
+                SendServerSpecialPointUpdate(m_BombItPlayers[m_GameInformation.Player.PlayerNumber-1].RequestPlaceBomb(), m_GameInformation.Player.PlayerNumber);
             }
         }
     }

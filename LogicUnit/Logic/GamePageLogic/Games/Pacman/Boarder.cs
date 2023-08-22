@@ -11,7 +11,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
     public class Boarder : GameObject
     {
-        public Boarder(Point i_Point)
+        public Boarder(Point i_Point,string i_Png)
         {
             IsCollisionDetectionEnabled = true;
             ObjectNumber = 2;

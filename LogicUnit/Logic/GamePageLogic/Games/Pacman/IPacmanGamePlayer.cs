@@ -12,6 +12,5 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public int AmountOfLives { get; set; }
         public void InitiateCherryTime(double i_BerryStartTime);
         public void ResetPosition(double i_DeathStartTime);
-       
     }
 }

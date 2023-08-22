@@ -32,7 +32,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 {
                     if (m_Board[col, row] == 1)
                     {
-                        m_GameObjectsToAdd.Add(new Boarder(new Point(col, row)));
+                        addBoarder(new Point(col, row));
                     }
                     else if (m_Board[col, row] == 0)
                     {
@@ -45,29 +45,21 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 }
             }
 
-            if(m_AmountOfPlayers == 3)
-            {
-                int y = m_ScreenMapping.m_Boundaries.Height;
-                int x = m_ScreenMapping.m_Boundaries.Width;
-
-                for(int i = y; i < m_BoardSizeByGrid.Height; i++)
-                {
-                    m_GameObjectsToAdd.Add(new Boarder(new Point(x, i)));
-                }
-                for (int i = x; i < m_BoardSizeByGrid.Width; i++)
-                {
-                    m_GameObjectsToAdd.Add(new Boarder(new Point(i, y)));
-                }
-            }
+            addBoarderFor3Players();
         }
 
-        protected override void SpecialUpdateReceived(int i_WhatHappened, int i_Player)
+        protected override void addBoarder(Point i_Point)
         {
-            if (i_WhatHappened == (int)ePacmanSpecialEvents.GotHit)
+            m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), "pacman_boarder.png"));
+        }
+
+        protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
+        {
+            if (i_SpecialUpdate.Update == (int)ePacmanSpecialEvents.GotHit)
             {
-                PlayerGothit(i_Player);
+                PlayerGothit(i_SpecialUpdate.Player_ID);
             }
-            else if (i_WhatHappened == (int)ePacmanSpecialEvents.AteCherry)
+            else if (i_SpecialUpdate.Update == (int)ePacmanSpecialEvents.AteCherry)
             {
                 pacmanAteCherry();
             }

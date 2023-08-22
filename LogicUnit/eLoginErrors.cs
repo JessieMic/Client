@@ -4,7 +4,9 @@ namespace LogicUnit
 {
     public enum eLoginErrors
     {
-        [Description("Please enter a username at least two characters long. Use only letters (a-z,A-Z) and numbers.")]
+        [Description("Please enter "
+                     + "a"
+                     + " username at least two characters long. Use only letters (a-z,A-Z) and numbers.")]
         InvalidName,
 
         [Description("This username is already in use. Please enter a different username.")]

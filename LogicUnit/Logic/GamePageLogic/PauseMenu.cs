@@ -48,12 +48,24 @@ namespace LogicUnit.Logic.GamePageLogic
             foreach (GameObject button in m_MenuButtons)
             {
                 button.IsVisable = i_Show;
-                if (button.Text == eButton.Resume.ToString())
+
+                if (!ShowResume)
                 {
-                    button.IsVisable = ShowResume;
-                    MenuLabel =button;
-                    MenuLabel.ScreenObjectType = eScreenObjectType.Label;
+                    if (button.Text == eButton.Resume.ToString())
+                    {
+                        button.IsVisable = ShowResume;
+                        MenuLabel = button;
+                        if (!ShowResume)
+                        {
+                            MenuLabel.ScreenObjectType = eScreenObjectType.Label;
+                        }
+                    }
                 }
+                else
+                {
+                    button.IsVisable = i_Show;
+                }
+
                 button.OnUpdate();
             }
 
