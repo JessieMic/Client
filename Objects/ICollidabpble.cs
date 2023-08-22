@@ -18,6 +18,7 @@ namespace Objects
         public bool IsCollisionDetectionEnabled { get; set; }
         public Point PointOnScreen { get;}
         bool CheckCollision(ICollidable i_Source);
+        public int ObjectNumber { get; set; }
         void Collided(ICollidable i_Collidable);
     }
 }

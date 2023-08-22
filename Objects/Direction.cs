@@ -23,6 +23,17 @@ namespace Objects
            RowOffset = i_Row;
         }
 
+        public List<Direction> GetAllDirections()
+        {
+            List<Direction> allDirections = new List<Direction>();
+            allDirections.Add(Direction.Down);
+            allDirections.Add(Direction.Right);
+            allDirections.Add(Direction.Left);
+            allDirections.Add(Direction.Up);
+
+            return allDirections;
+        }
+
         public static Direction getDirection(string i_Button)
         {
 

@@ -49,6 +49,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             addBoarderFor3Players();
         }
 
+        protected override void specialEventInvoked(object i_Sender, int i_eventNumber)
+        {
+            m_GameObjectsToAdd.AddRange(m_BombItPlayers[i_eventNumber-1].GetExplosions());
+        }
+
         protected override void addBoarder(Point i_Point)
         {
             m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), "pacman_boarder.png"));
@@ -82,8 +87,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
         {
-            sp(m_BombItPlayers[i_SpecialUpdate.Player_ID -1].PlaceBomb(i_SpecialUpdate.X,i_SpecialUpdate.Y));
-            
+            Point bombPoint = new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y);
+            if (m_GameInformation.IsPointIsOnBoardGrided(bombPoint))
+            {
+                foreach (var player in m_BombItPlayers)
+                {
+                    player.CheckIfOnBomb(i_SpecialUpdate.Player_ID,bombPoint);
+                }
+            }
+            sp(m_BombItPlayers[i_SpecialUpdate.Player_ID -1].PlaceBomb(bombPoint));
         }
 
         private void PlayerGothit(int i_Player)

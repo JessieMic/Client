@@ -107,7 +107,7 @@ namespace Objects
             Size = i_Size;
         }
 
-        public void Draw()
+        public void OnDraw()
         {
             UpdateGameObject.Invoke(this, null);
         }
@@ -132,7 +132,7 @@ namespace Objects
             Direction = RequestedDirection = Direction.Stop;
         }
 
-        protected virtual void OnDisposed()
+        public virtual void OnDisposed()
         {
             IsCollisionDetectionEnabled = false;
             Disposed.Invoke(this, null);
@@ -178,7 +178,7 @@ namespace Objects
             }
         }
 
-        protected void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsDto i_SizeOfSolid)
+        protected  virtual void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsDto i_SizeOfSolid)
         {
             Point newPoint = PointOnScreen;
             if (Direction == Direction.Left)//solid on the left

@@ -283,7 +283,7 @@ namespace LogicUnit
             if (newObject.IsCollisionDetectionEnabled)
             {
                 r_CollisionManager.AddObjectToMonitor(newObject);
-                newObject.SpecialEvent += SendSpecialServerUpdate;
+                newObject.SpecialEvent += specialEventInvoked;
             }
 
             newObject.UpdateGameObject += OnUpdateScreenObject;
@@ -323,14 +323,14 @@ namespace LogicUnit
 
             foreach (var player in m_PlayerObjects)
             {
-                player.Draw();
+                player.OnDraw();
             }
 
             foreach (var gameObject in m_TemporaryGameObjects)
             {
                 if (gameObject.IsVisable)
                 {
-                    gameObject.Draw();
+                    gameObject.OnDraw();
                 }
             }
         }
@@ -365,6 +365,11 @@ namespace LogicUnit
                 //m_PlayersDataArray[1].Button = m_ServerUpdates[1];
                 //System.Diagnostics.Debug.WriteLine("r " + m_ServerUpdates[0]);
             }
+        }
+
+        protected virtual void specialEventInvoked(object i_Sender, int i_eventNumber)
+        {
+            SendSpecialServerUpdate(i_Sender,i_eventNumber);
         }
 
         protected async void SendSpecialServerUpdate(object sender, int i_eventNumber)
@@ -494,7 +499,7 @@ namespace LogicUnit
                     if (newObject.ScreenObjectType == eScreenObjectType.Player)
                     {
                         m_PlayerObjects[newObject.ObjectNumber - 1] = newObject;
-                        newObject.SpecialEvent += SendSpecialServerUpdate;
+                        newObject.SpecialEvent += specialEventInvoked;
                         newObject.UpdatePosition += UpdateClientsAboutPosition;
                     }
                     else
