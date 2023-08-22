@@ -4,14 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Objects.Enums
+namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 {
-    public enum eGames
+    internal class BombItPlayer
     {
-        Snake,
-        Pong,
-        Pacman,
-        BombIt,
-        Tanks
     }
 }

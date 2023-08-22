@@ -79,6 +79,7 @@ namespace LogicUnit
         static readonly object m_lock = new object();
         protected Queue<Vector2> a = new Queue<Vector2>();
         private int[] m_ServerUpdates = new int[12];
+        protected eMoveType m_MoveType;
 
         public string msg = string.Empty;
         public Game()
@@ -384,6 +385,17 @@ namespace LogicUnit
             m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
         }
 
+        public void OnButtonRelesed(object sender, EventArgs e)
+        {
+            Button button = sender as Button;
+
+            if(m_CurrentPlayerData.Button == (int)m_Buttons.StringToButton(button!.ClassId))
+            {
+                m_CurrentPlayerData.Button = (int)eButton.Stop;
+                m_NewButtonPressed = true;
+            }
+        }
+
         private void OnUpdateScreenObject(object sender, EventArgs e)
         {
             GameObject i = sender as GameObject;
@@ -430,6 +442,18 @@ namespace LogicUnit
         protected virtual void OnGameStart()
         {
             GameStart.Invoke();
+        }
+
+        public bool DoesGameNeedToKnowIfButtonReleased()
+        {
+            bool result = false;
+
+            if(m_MoveType == eMoveType.ClickAndRelease)
+            {
+                result = true;
+            }
+
+            return result;
         }
     }
 }

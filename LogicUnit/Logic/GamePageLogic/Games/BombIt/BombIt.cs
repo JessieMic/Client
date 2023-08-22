@@ -3,21 +3,22 @@ using Point = Objects.Point;
 using Objects;
 using Objects.Enums.BoardEnum;
 using System.Numerics;
+using LogicUnit.Logic.GamePageLogic.Games.Pacman;
 
-namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
+namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 {
-    public class Pacman : Game
+    public class BombIt : Game
     {
-
         private IPacmanGamePlayer[] m_PacmanPlayers;
         PacmanBoardFactory m_PacmanBoard = new PacmanBoardFactory();
         private int m_FoodCounterForPlayerScreen = 0;
         private int m_AmountOfScreenThatHaveNoFood = 0;
 
-        public Pacman()
+        public BombIt()
         {
-            m_GameName = "pacman";
-            m_MoveType = eMoveType.ClicKOnce;
+            m_GameName = "BombIt";
+            m_MoveType = eMoveType.ClickAndRelease;
+            m_Buttons.m_AmountOfExtraButtons = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
             m_PacmanPlayers = new IPacmanGamePlayer[m_GameInformation.AmountOfPlayers];
@@ -45,12 +46,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 }
             }
 
-            if(m_AmountOfPlayers == 3)
+            if (m_AmountOfPlayers == 3)
             {
                 int y = m_ScreenMapping.m_Boundaries.Height;
                 int x = m_ScreenMapping.m_Boundaries.Width;
 
-                for(int i = y; i < m_BoardSizeByGrid.Height; i++)
+                for (int i = y; i < m_BoardSizeByGrid.Height; i++)
                 {
                     m_GameObjectsToAdd.Add(new Boarder(new Point(x, i)));
                 }
@@ -141,9 +142,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         protected override void checkForGameStatusUpdate(int i_Player)
         {
-            if(i_Player == 1)
+            if (i_Player == 1)
             {
-                if(m_AmountOfPlayers > 2)
+                if (m_AmountOfPlayers > 2)
                 {
                     msg = "Ghosts won!!";
                 }
@@ -156,10 +157,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             }
             else
             {
-                if(m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
+                if (m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
                 {
                     msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg,m_PauseMenu);
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
                     m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
                     m_GameStatus = eGameStatus.Ended;
                 }

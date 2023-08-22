@@ -34,17 +34,6 @@ namespace LogicUnit
         public LogicManager()
         {
             r_Connection = new Connection();
-
-
-  //Jessies skip settings
-            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
-            m_GameInformation.AmountOfPlayers =2;//////////////////////////////////////////////////////////////////////
-            m_GameInformation.Player.Name = DateTime.Now.ToString();
-//Noa Lobby settings
-           // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Snake;
-            //m_GameInformation.AmountOfPlayers = 2;
-           // m_GameInformation.AmountOfPlayers = 0;
-           //m_TimerForPlayersUpdate = new Timer(getPlayers, null, 0, 500);
         }
 
         public string GetRoomCode()
