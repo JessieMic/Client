@@ -71,7 +71,7 @@ public partial class Lobby : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        //m_LogicManager.ResetRoomData();
+        m_LogicManager.ResetRoomData();
 
         m_PlayersNamesLabels = new List<Label>()
         {
@@ -170,6 +170,7 @@ public partial class Lobby : ContentPage
 
     private void goToNextPage()
     {
+        m_LogicManager.StopUpdatesRefresher();
         Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage)));
     }
 
