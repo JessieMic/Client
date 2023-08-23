@@ -71,7 +71,7 @@ public partial class Lobby : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        //m_LogicManager.ResetRoomData();
+        m_LogicManager.ResetRoomData();
 
         m_PlayersNamesLabels = new List<Label>()
         {
