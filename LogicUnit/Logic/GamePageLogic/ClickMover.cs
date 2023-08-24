@@ -57,7 +57,9 @@ namespace LogicUnit.Logic.GamePageLogic
             Point point = Movable.GetPointOnGrid();
             try
             {
-                if (point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
+                if (point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0
+                    && m_GameInformation.GameBoardSizeByGrid.Height > point.Row + i_Direction.RowOffset &&
+                        m_GameInformation.GameBoardSizeByGrid.Width > point.Column + i_Direction.ColumnOffset)
                 {
                     if (Movable.Board[(int)point.Column + i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
                     {

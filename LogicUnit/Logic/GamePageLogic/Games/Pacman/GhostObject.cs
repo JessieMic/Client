@@ -24,7 +24,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public GhostObject(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
-            
+            DoWeCheckTheObjectForCollision = true;
             ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
             m_FlipsWhenMoved = true;
@@ -116,20 +116,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             if (i_Collidable is PacmanObject)
             {
-                if (IsHunting) //Ate pacman
+                if(!IsHunting)//got eaten
                 {
-                    //Maybe gets points but in general, we wait for pacman to reset pos
-                }
-                else//got eaten
-                {
-                    //ImageSource = "pacman_ghost_2.png";
-                    //m_IsCherryTime = false;
-                    //IsVisable = false;
-                    //IsHunting = true;
-                    //m_IsDyingAnimationOn = true;
-
-                    //AmountOfLives--;
-
                     if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen) && IsObjectMoving)
                     {
                         IsObjectMoving = false;
@@ -161,7 +149,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
             m_DeathAnimationStart = i_DeathStartTime;
             m_IsDyingAnimationOn = true;
-
         }
 
         public void InitiateCherryTime(double i_BerryStartTime)

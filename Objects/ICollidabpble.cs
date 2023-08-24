@@ -16,6 +16,7 @@ namespace Objects
         public event EventHandler<EventArgs> UpdateGameObject;
         public Rect Bounds { get; }
         public bool IsCollisionDetectionEnabled { get; set; }
+        public bool DoWeCheckTheObjectForCollision { get; set; }
         public Point PointOnScreen { get;}
         bool CheckCollision(ICollidable i_Source);
         public int ObjectNumber { get; set; }
