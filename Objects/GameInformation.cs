@@ -21,6 +21,7 @@ namespace Objects
         public Point PointValuesToAddToScreen { get; set; } = new Point();
         public string[] m_NamesOfAllPlayers;
         public SizeDTO GameBoardSizeByPixel { get; set; }
+        public SizeDTO GameBoardSizeByGrid { get; set; }
         private static readonly object s_InstanceLock = new object();
         public Rect BackgroundRect { get; set; }
         public Stopwatch RealWorldStopwatch { get; set; }
@@ -43,6 +44,11 @@ namespace Objects
         public void init()
         {
             Player = new Player();
+        }
+
+        public string GetNameOfPlayer(int i_PlayerNumber)
+        {
+            return m_NamesOfAllPlayers[i_PlayerNumber];
         }
 
         public bool IsPointIsOnBoardPixels(Point i_Point)

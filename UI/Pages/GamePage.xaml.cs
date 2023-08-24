@@ -64,6 +64,10 @@ public partial class GamePage : ContentPage
 
     private void addLabel(GameObject i_Label)
     {
+        if(m_GameInformation.Player.PlayerNumber == 1)
+        {
+            int das = 6;
+        }
         m_GameLabel.Text = i_Label.Text;
         m_GameLabel.Rotation = i_Label.Rotatation;
         m_GameLabel.WidthRequest = i_Label.Size.Width;

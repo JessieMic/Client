@@ -82,7 +82,6 @@ namespace LogicUnit
         protected Queue<SpecialUpdate> m_SpecialEventWithPointQueue = new Queue<SpecialUpdate>();
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
-        protected List<GameObject> m_TemporaryGameObjects = new List<GameObject>();
 
         public string msg = string.Empty;
         public Game()
@@ -99,14 +98,20 @@ namespace LogicUnit
                 .Build();
 
             r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
+            {
+                lock (m_lock)
                 {
-                    SpecialUpdateReceived(new SpecialUpdate(i_WhatHappened, i_Player));
-                });
+                    m_SpecialEventQueue.Enqueue(new SpecialUpdate(i_WhatHappened, i_Player));
+                }
+            });
 
             r_ConnectionToServer.On<int, int,int>("SpecialUpdateWithPointReceived", (i_X, i_Y, i_Player) =>
             { 
-                //m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X,i_Y, i_Player));
-                SpecialUpdateWithPointReceived(new SpecialUpdate(i_X, i_Y, i_Player));
+                lock(m_lock)
+                {
+                    m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+                }
+                //SpecialUpdateWithPointReceived(new SpecialUpdate(i_X, i_Y, i_Player));
             });
 
             Task.Run(() =>
@@ -123,16 +128,19 @@ namespace LogicUnit
 
         private void checkForSpecialUpdates()
         {
-            //if (m_SpecialEventQueue.Count != 0)
-            //{
-            //    SpecialUpdate specialUpdate = m_SpecialEventQueue.Dequeue();
-            //    SpecialUpdateReceived(specialUpdate);
-            //}
-            //if (m_SpecialEventWithPointQueue.Count != 0)
-            //{
-            //    SpecialUpdate specialUpdate = m_SpecialEventQueue.Dequeue();
-            //    SpecialUpdateWithPointReceived(specialUpdate);
-            //}
+            lock(m_lock)
+            {
+                if (m_SpecialEventQueue.Count != 0)
+                {
+                    SpecialUpdate specialUpdate = m_SpecialEventQueue.Dequeue();
+                    SpecialUpdateReceived(specialUpdate);
+                }
+                if (m_SpecialEventWithPointQueue.Count != 0)
+                {
+                    SpecialUpdate specialUpdate = m_SpecialEventWithPointQueue.Dequeue();
+                    SpecialUpdateWithPointReceived(specialUpdate);
+                }
+            }
         }
 
         public void InitializeGame()
@@ -158,8 +166,8 @@ namespace LogicUnit
             while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Exited)
             {
                 m_GameStopwatch.Restart();
-                m_gameObjectsToUpdate = new List<GameObject>();
-                m_GameObjectsToAdd = new List<GameObject>();
+                m_gameObjectsToUpdate.Clear();
+                m_GameObjectsToAdd.Clear();
                 updateGame();
                 Draw();
 
@@ -182,20 +190,8 @@ namespace LogicUnit
             if(m_GameStatus == eGameStatus.Running)
             {
                 UpdatePosition(m_LastElapsedTime);
-                updateTemporaryGameObjects();
             }
             m_LoopNumber = m_LastElapsedTime;
-        }
-
-        private void updateTemporaryGameObjects()
-        {
-            foreach(var gameObject in m_TemporaryGameObjects)
-            {
-                if(gameObject.IsVisable)
-                {
-                    gameObject.Update(0);
-                }
-            }
         }
 
         private void getButtonUpdate()
@@ -275,7 +271,7 @@ namespace LogicUnit
             }
         }
 
-        protected void sp(GameObject newObject)
+        protected void addGameObjectImmediately(GameObject newObject)
         {
             List<GameObject> k = new List<GameObject>();
             k.Add(newObject);
@@ -316,7 +312,7 @@ namespace LogicUnit
         
         protected virtual void Draw()
         {
-            if (m_GameObjectsToAdd.Count != 0)
+            if (m_GameObjectsToAdd.Count != 0 && m_GameStatus != eGameStatus.Ended)
             {
                 OnAddScreenObjects();
             }
@@ -324,14 +320,6 @@ namespace LogicUnit
             foreach (var player in m_PlayerObjects)
             {
                 player.OnDraw();
-            }
-
-            foreach (var gameObject in m_TemporaryGameObjects)
-            {
-                if (gameObject.IsVisable)
-                {
-                    gameObject.OnDraw();
-                }
             }
         }
 
@@ -392,23 +380,24 @@ namespace LogicUnit
 
         }
         
-        protected virtual void checkForGameStatusUpdate(int i_Player)
+        protected virtual void checkForGameStatusUpdate()
         {
 
         }
+
         protected virtual void PlayerLostALife(object sender, int i_Player)
         {
            // m_GameStatus = m_Hearts.setPlayerLifeAndGetGameStatus(i_Player);
             if(m_Hearts.setPlayerLifeAndCheckIfDead(i_Player))
             {
-                checkForGameStatusUpdate(i_Player);
+               // checkForGameStatusUpdate(i_Player);
             }
 
-            if (m_Hearts.m_HeartToRemove != null)
-            {
-                OnDeleteGameObject(m_Hearts.m_HeartToRemove);
-                m_Hearts.m_HeartToRemove = null;
-            }
+            //if (m_Hearts.m_HeartToRemove != null)
+            //{
+            //    OnDeleteGameObject(m_Hearts.m_HeartToRemove);
+            //    m_Hearts.m_HeartToRemove = null;
+            //}
         }
 
         protected virtual void UpdatePosition(double i_TimeElapsed)
@@ -418,15 +407,9 @@ namespace LogicUnit
                 gameObject.Update(i_TimeElapsed);
             }
 
-            foreach (var gameObject in m_PlayerObjects)
-            {
-                if (gameObject.IsCollisionDetectionEnabled)
-                {
-                    r_CollisionManager.FindCollisions(gameObject);
-                }
-            }
-
             checkForSpecialUpdates();
+            r_CollisionManager.CheckAllCollidablesForCollision();
+            checkForGameStatusUpdate();
         }
 
       

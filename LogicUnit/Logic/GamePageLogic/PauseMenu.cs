@@ -53,12 +53,9 @@ namespace LogicUnit.Logic.GamePageLogic
                 {
                     if (button.Text == eButton.Resume.ToString())
                     {
-                        button.IsVisable = ShowResume;
+                        button.IsVisable = !ShowResume;
                         MenuLabel = button;
-                        if (!ShowResume)
-                        {
-                            MenuLabel.ScreenObjectType = eScreenObjectType.Label;
-                        }
+                        MenuLabel.ScreenObjectType = eScreenObjectType.Label;
                     }
                 }
                 else

@@ -18,26 +18,5 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             this.Initialize(eScreenObjectType.Image, 0, "explosion.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
-
-        //public override void Update(double i_TimeElapsed)
-        //{
-        //    if (i_TimeElapsed > 4500)
-        //    {
-        //        IsVisable = false;
-        //        OnDisposed();
-        //    }
-        //}
-
-        //public override void Collided(ICollidable i_Collidable)
-        //{
-        //    //if (i_Collidable is PacmanObject)
-        //    //{
-
-        //    //}
-        //    //else if (i_Collidable is Boarder)
-        //    //{
-        //    //    collidedWithSolid(i_Collidable);
-        //    //}
-        //}
     }
 }

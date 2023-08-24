@@ -23,6 +23,7 @@ namespace LogicUnit.Logic.GamePageLogic
         public SizeDTO m_ClientScreenOurSize = new SizeDTO();
         public List<GameObject> m_HeartsOnScreen = new List<GameObject>();
         public GameObject m_HeartToRemove = null;
+        private GameInformation m_GameInformation = GameInformation.Instance;
 
         public void setHearts(int i_AmountOfPlayers, ref eGameStatus o_Status, ref List<string> o_LoseList, int i_ClientNumber)
         {
@@ -144,12 +145,29 @@ namespace LogicUnit.Logic.GamePageLogic
             return didPlayerDie;
         }
 
+        public string GetNameOfPlayerThatIsAlive()
+        {
+            string name = String.Empty;
+
+            for(int i = 0; i < m_AmountOfPlayers; i++)
+            {
+                if(m_AmountOfLivesPlayerHas[i] != 0)
+                {
+                    name = m_GameInformation.GetNameOfPlayer(i);
+                }
+            }
+
+            return name;
+        }
+
         private void removeAHeart()
         {
             try
             {
                 int lastHeartIndex = m_HeartsOnScreen.Count - 1;
                 m_HeartToRemove = m_HeartsOnScreen[lastHeartIndex];
+                m_HeartToRemove.IsVisable = false;
+                m_HeartToRemove.OnUpdate();
                 m_HeartsOnScreen.RemoveAt(lastHeartIndex);
             }
             catch

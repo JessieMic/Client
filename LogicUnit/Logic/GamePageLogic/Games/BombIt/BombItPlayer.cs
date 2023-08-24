@@ -21,18 +21,17 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         private Bomb m_Bomb;
         private double m_BombStartTime;
         private double m_TimeThatBombWasPlaced;
-        private bool m_IsSteppingOnAbomb = false;
-        private Point m_BombPointWeAreSteppingOn =new Point();
         private ClickReleaseMover m_ClickReleaseMover = new ClickReleaseMover();
 
         public BombItPlayer(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
+            DoWeCheckTheObjectForCollision = true;
             ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
             m_FlipsWhenMoved = true;
-            IsCollisionDetectionEnabled = true;
+            IsCollisionDetectionEnabled = true;//$"pacman_ghost_{ObjectNumber + 1}.png"
             Board = i_Board;
-            this.Initialize(eScreenObjectType.Player, i_playerNumber, $"pacman_ghost_{ObjectNumber + 1}.png", getPointOnGrid(i_X, i_Y), true,
+            this.Initialize(eScreenObjectType.Player, i_playerNumber,"b1dino1.png" , getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
             m_ClickReleaseMover.Movable = this as IMovable;
         }
@@ -86,15 +85,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         {
             if (AmountOfLives != 0)
             {
-                //if (m_IsSteppingOnAbomb)
-                //{
-                //    Point p = base.GetPointOnGrid();
-                //    if (m_BombPointWeAreSteppingOn != p)
-                //    {
-                //        m_IsSteppingOnAbomb = false;
-                //    }
-                //}
-
                 if (m_IsDyingAnimationOn)
                 {
                     double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
@@ -130,27 +120,17 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         {
             if (i_Collidable is Explosion)
             {
-                Rotatation += 20;
-            }
-            else if (i_Collidable is Bomb)
-            {
-                if (i_Collidable.ObjectNumber != ObjectNumber)//m_Bomb == null || i_Collidable.PointOnScreen != m_Bomb.PointOnScreen)
+                if (!m_IsDyingAnimationOn && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen) && IsObjectMoving)
                 {
-                    if(m_IsSteppingOnAbomb)
-                    {
-                        double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeThatBombWasPlaced;
-                        if (timePassed > 3700)
-                        {
-                            m_IsSteppingOnAbomb = false;
-                        }
-                    }
-                    else
-                    { 
-                        collidedWithSolid(i_Collidable);
-                    }
+                    IsObjectMoving = false;
+                    OnSpecialEvent(-1);
                 }
             }
             else if (i_Collidable is Boarder)
+            {
+                collidedWithSolid(i_Collidable);
+            }
+            else if(i_Collidable is BreakableBoarder)
             {
                 collidedWithSolid(i_Collidable);
             }
@@ -174,42 +154,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             m_ClickReleaseMover.RequestDirection(i_Direction);
         }
 
-        public void CheckIfOnBomb(int i_BombNumber,Point i_Point)
-        {
-            if (ObjectNumber != i_BombNumber && i_Point == base.GetPointOnGrid())
-            {
-                m_BombPointWeAreSteppingOn.Row = i_Point.Row;
-                m_BombPointWeAreSteppingOn.Column = i_Point.Column;
-                m_TimeThatBombWasPlaced = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-                m_IsSteppingOnAbomb = true;
-            }
-        }
-
         public List<Explosion> GetExplosions()
         {
-            return m_Bomb.m_Explosions;
+            return m_Bomb.ExplosionsToAdd;
         }
-
-        //protected override void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsDto i_SizeOfSolid)
-        //{
-        //    Point newPoint = PointOnScreen;
-        //    if (Direction == Direction.Right)
-        //    {
-        //        newPoint.Column = i_Solid.PointOnScreen.Column + i_Solid.Bounds.Width;
-        //    }
-        //    else if (Direction == Direction.Left) 
-        //    {
-        //        newPoint.Column = i_Solid.PointOnScreen.Column - Size.Width;
-        //    }
-        //    else if (Direction == Direction.Down)
-        //    {
-        //        newPoint.Row = i_Solid.PointOnScreen.Row + i_Solid.Bounds.Height;
-        //    }
-        //    else 
-        //    {
-        //        newPoint.Row = i_Solid.PointOnScreen.Row - Size.Height;
-        //    }
-        //    PointOnScreen = newPoint;
-        //}
     }
 }

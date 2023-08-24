@@ -58,20 +58,12 @@ namespace LogicUnit.Logic.GamePageLogic
         bool checkIfCanChangeDirection(Direction i_Direction)
         {
             bool canChange = false;
-            Point point = Movable.GetPointOnGrid();
-            try
+            Point point = Movable.GetPointOnGrid().Move(i_Direction);
+
+            if (point.Row >= 0 && point.Column  >= 0 && m_GameInformation.GameBoardSizeByGrid.Height > point.Row  &&
+                                                       m_GameInformation.GameBoardSizeByGrid.Width > point.Column)
             {
-                if (point.Row + i_Direction.RowOffset >= 0 && point.Column + i_Direction.ColumnOffset >= 0)
-                {
-                    if (Movable.Board[(int)point.Column + i_Direction.ColumnOffset, (int)point.Row + i_Direction.RowOffset] != 1)
-                    {
-                        canChange = true;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                canChange = false;
+                canChange = true;
             }
 
             return canChange;
