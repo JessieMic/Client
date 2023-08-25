@@ -70,10 +70,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
         {
-            //if (i_SpecialUpdate.Update == (int)ePacmanSpecialEvents.GotHit)
-            //{
+            if (i_SpecialUpdate.Update < 4)
+            {
                 PlayerGothit(i_SpecialUpdate.Player_ID);
-            //}
+            }
+            else
+            {
+                base.SpecialUpdateReceived(i_SpecialUpdate);
+            }
         }
 
         protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
@@ -147,8 +151,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             }
             else
             {
-                m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
-                m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
+                base.OnButtonClicked(sender, e);
             }
         }
 

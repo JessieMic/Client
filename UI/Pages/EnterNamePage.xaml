@@ -21,10 +21,9 @@
         <StackLayout Grid.Column="1" Grid.Row="1"
                      VerticalOptions="Center">
 
-            <Entry Placeholder="Enter name"
+            <Entry Placeholder="Enter Name"
                    x:Name="Entry"
                    MaxLength="10"
-                   Text="Name"
                    VerticalOptions="Center"
                    FontSize="30"
                    ReturnType="Next">

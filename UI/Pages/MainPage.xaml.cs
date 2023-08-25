@@ -16,6 +16,13 @@ namespace UI
             m_GameInformation.init();
             m_LogicManager = new LogicManager();
         }
+        private async void OnSkipClicked(object sender, EventArgs e)
+        {
+            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
+            m_GameInformation.AmountOfPlayers = 2;
+            m_GameInformation.Player.Name = DateTime.Now.ToString();
+            await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
+        }
 
         protected override void OnNavigatedTo(NavigatedToEventArgs args)
         {
@@ -29,7 +36,6 @@ namespace UI
             base.OnSizeAllocated(i_Width, i_Height);
             m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height = (int)i_Height;
             m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width = (int)i_Width;
-           // m_pageLogic.SetPlayerScreenSize((int)i_Width, (int)i_Height);
         }
 
         private async void OnCreateRoomClicked(object sender, EventArgs e)
@@ -48,15 +54,6 @@ namespace UI
             await Shell.Current.GoToAsync(nameof(EnterRoomCodePage));
             //await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
             //                              $"?{QueryIDs.k_PlayerType}={PlayerType.k_Guest}");
-        }
-
-        private async void OnSkipClicked(object sender, EventArgs e)
-        {
-            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
-
-            m_GameInformation.AmountOfPlayers = 2;
-            m_GameInformation.Player.Name = DateTime.Now.ToString();
-            await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
         }
 
         private void addComponents()
