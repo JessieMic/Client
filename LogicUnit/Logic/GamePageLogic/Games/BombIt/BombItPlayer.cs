@@ -22,7 +22,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         private double m_BombStartTime;
         private double m_TimeThatBombWasPlaced;
         private ClickReleaseMover m_ClickReleaseMover = new ClickReleaseMover();
-
+        private short m_Pic = 0;
         public BombItPlayer(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
             DoWeCheckTheObjectForCollision = true;
@@ -83,6 +83,25 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         public override void Update(double i_TimeElapsed)
         {
+            if (m_Pic == 0)
+            {
+                ImageSource = "b1dino1.png";
+            }
+            else if (m_Pic == 2 || m_Pic == 6)
+            {
+                ImageSource = "b2dino1.png";
+            }
+            else if (m_Pic == 4)
+            {
+                ImageSource = "b3dino1.png";
+            }
+            else if (m_Pic > 7)
+            {
+                m_Pic = -1;
+            }
+
+            m_Pic++;
+
             if (AmountOfLives != 0)
             {
                 if (m_IsDyingAnimationOn)

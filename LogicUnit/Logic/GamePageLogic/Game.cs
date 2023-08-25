@@ -445,48 +445,7 @@ namespace LogicUnit
         {
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-            //    if (m_PlayersDataArray[i].Button > 6)
-            //    {
-            //        if (m_PlayersDataArray[i].Button == 8)
-            //        {
-            //            if (m_GameStatus == eGameStatus.Running)
-            //            {
-            //                m_GameStatus = eGameStatus.Paused;
-            //                if (m_Player.PlayerNumber == i + 1)
-            //                {
-            //                    m_PauseMenu.ShowPauseMenu();
-            //                }
-            //                m_GameInformation.RealWorldStopwatch.Stop();
-            //            }
-            //        }
-            //        else
-            //        {
-            //            if (m_GameStatus == eGameStatus.Paused || m_GameStatus == eGameStatus.Ended)
-            //            {
-
-            //                m_PauseMenu.HidePauseMenu();
-            //                if (m_PlayersDataArray[i].Button == 7)
-            //                {
-            //                    m_GameStatus = eGameStatus.Running;
-            //                }
-            //                else if (m_PlayersDataArray[i].Button == 9)
-            //                {
-            //                    m_GameStatus = eGameStatus.Restarted;
-            //                    GameRestart.Invoke();
-            //                }
-            //                else if (m_PlayersDataArray[i].Button == 10)
-            //                {
-            //                    m_GameStatus = eGameStatus.Exited;
-            //                    GameExit.Invoke();
-            //                }
-            //                m_GameInformation.RealWorldStopwatch.Start();
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-                    m_PlayerObjects[i].RequestDirection(Direction.getDirection(m_PlayersDataArray[i].Button));
-                //}
+                m_PlayerObjects[i].RequestDirection(Direction.getDirection(m_PlayersDataArray[i].Button));
             }
         }
 

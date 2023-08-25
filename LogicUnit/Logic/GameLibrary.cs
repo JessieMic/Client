@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LogicUnit.Logic.GamePageLogic.Games.BombIt;
 using LogicUnit.Logic.GamePageLogic.Games.Pacman;
+using LogicUnit.Logic.GamePageLogic.Games.Pong.LogicUnit.Logic.GamePageLogic.Games.Pong;
 using Objects.Enums;
 
 namespace LogicUnit
@@ -25,7 +26,8 @@ namespace LogicUnit
                 case eGames.BombIt:
                     newGame = new BombIt();
                     break;
-                case eGames.Snake:
+                case eGames.Pong:
+                    newGame = new Pong();
                     break;
             }
 

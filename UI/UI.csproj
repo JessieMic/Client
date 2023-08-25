@@ -83,6 +83,8 @@
 	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
 	  <None Remove="Resources\Fonts\DePixelHalbfett.ttf" />
 	  <None Remove="Resources\Images\b1dino1.png" />
+	  <None Remove="Resources\Images\b2dino1.png" />
+	  <None Remove="Resources\Images\b3dino1.png" />
 	  <None Remove="Resources\Images\boarder.png" />
 	  <None Remove="Resources\Images\boarder1.png" />
 	  <None Remove="Resources\Images\boarder2.png" />
