@@ -160,9 +160,9 @@ namespace LogicUnit
 
                 if (strResponse.Length != 0 && strResponse != m_LastChosenGame)
                 {
-                    if (strResponse == "Snake")
+                    if (strResponse == "BombIt")
                     {
-                        m_GameInformation.NameOfGame = eGames.Snake;
+                        m_GameInformation.NameOfGame = eGames.BombIt;
                     }
                     else if (strResponse == "Pacman")
                     {
