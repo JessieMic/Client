@@ -12,13 +12,27 @@ namespace LogicUnit.Logic.GamePageLogic
     {
         public IMovable Movable { get; set; }
         protected GameInformation m_GameInformation = GameInformation.Instance;
+        private short update = 0;
+        private  bool isOnScreen = false;
         public void RequestDirection(Direction i_Direction)
         {
             if (Movable.IsObjectMoving)
             {
+                isOnScreen = false;
+                if (m_GameInformation.IsPointIsOnBoardPixels(Movable.PointOnScreen))
+                {
+                    isOnScreen = true;
+                    update = 0;
+                }
+
                 if (i_Direction == Direction.Stop && Movable.Direction != Direction.Stop)
                 {
                     Movable.RequestedDirection = Movable.Direction;
+                    if (isOnScreen)
+                    {
+                        Point PointUpdate = Movable.GetPointOnGrid();
+                        Movable.OnUpdatePosition(PointUpdate);
+                    }
                 }
 
                 Movable.Direction = i_Direction;
@@ -33,6 +47,14 @@ namespace LogicUnit.Logic.GamePageLogic
 
                     Movable.SetImageDirection(Movable.Direction);
                 }
+
+                if(update > 70 && m_GameInformation.Player.PlayerNumber == 1)
+                {
+                    Point PointUpdate = Movable.GetPointOnGrid();
+                    Movable.OnUpdatePosition(PointUpdate);
+                    update = 0;
+                }
+                update++;
             }
         }
 
@@ -42,13 +64,12 @@ namespace LogicUnit.Logic.GamePageLogic
             int y = Movable.RequestedDirection.RowOffset + i_Direction.RowOffset;
 
             if (x != 0 && y != 0)
-            { 
+            {
+                Point PointUpdate = Movable.GetPointOnGrid();
                 Movable.WantToTurn = true;
                 Movable.RequestedDirection = i_Direction;
-                Point PointUpdate = Movable.GetPointOnGrid();
-                //check if we are on our side
                 Movable.PointOnScreen = Movable.GetScreenPoint(PointUpdate, true);
-                if (m_GameInformation.IsPointIsOnBoardPixels(Movable.PointOnScreen))
+                if (isOnScreen)
                 {
                     Movable.OnUpdatePosition(PointUpdate);
                 }

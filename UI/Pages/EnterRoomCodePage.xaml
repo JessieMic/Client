@@ -24,7 +24,6 @@
             <Entry Placeholder="Enter Code"
                    x:Name="Entry"
                    MaxLength="10"
-                   Text="Code"
                    VerticalOptions="Center"
                    FontSize="30"
                    ReturnType="Next">

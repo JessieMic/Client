@@ -7,6 +7,7 @@ public partial class YesNoPopUp : Popup
 {
     private string m_Message;
     private Action m_ClickYesAction;
+    private GameInformation m_GameInformation = GameInformation.Instance;
 
     public YesNoPopUp(string i_Message, Action i_ClickYesAction)
 	{
@@ -17,8 +18,8 @@ public partial class YesNoPopUp : Popup
 
         createBtnImages();
         Size = new Size(
-            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
-            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width),
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height));
     }
 
     private void createBtnImages()

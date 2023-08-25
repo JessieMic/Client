@@ -280,6 +280,11 @@ namespace Objects
             {
                 PointOnScreen = p;
             }
+            else if(!m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))//update is on screen, if actual point isnt 
+            {
+                PointOnScreen = p;
+                System.Diagnostics.Debug.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+            }
         }
 
         public Rect Bounds
