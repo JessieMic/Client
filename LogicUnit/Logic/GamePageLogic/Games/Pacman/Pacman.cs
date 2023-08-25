@@ -63,6 +63,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             {
                 pacmanAteCherry();
             }
+            else if(i_SpecialUpdate.Update > 6)
+            {
+                base.SpecialUpdateReceived(i_SpecialUpdate);
+            }
             else
             {
                 m_FoodCounterForPlayerScreen++;
