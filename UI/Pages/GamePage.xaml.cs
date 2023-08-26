@@ -65,6 +65,11 @@ public partial class GamePage : ContentPage
 
     private void addLabel(GameObject i_Label)
     {
+        if(m_GameInformation.Player.PlayerNumber == 1)
+        {
+            int das = 6;
+        }
+        m_GameLabel.IsVisible = true;
         m_GameLabel.Text = i_Label.Text;
         m_GameLabel.Rotation = i_Label.Rotatation;
         m_GameLabel.WidthRequest = i_Label.Size.Width;
@@ -190,6 +195,8 @@ public partial class GamePage : ContentPage
                 image.Value.Source = null;
                 gridLayout.Remove(image.Value.GetImage());
             }
+
+            m_GameLabel.IsVisible = false;
             gridLayout.Remove(m_GameLabel);
             m_GameImages.Clear();
         });

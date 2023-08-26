@@ -24,6 +24,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public PacmanObject(int[,] i_Board)
         {
+            DoWeCheckTheObjectForCollision = true;
             Board = i_Board;
             IsCollisionDetectionEnabled = true;
             this.Initialize(eScreenObjectType.Player, 1, "pacman1.png", new Point(0, 0), true,

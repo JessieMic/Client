@@ -67,7 +67,7 @@
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#835A9B" ForegroundScale="0.75" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Images\logo.png" Color="#835A9B" />
+		<MauiSplashScreen Include="Resources\Images\Game\logo.png" Color="#835A9B" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -82,26 +82,24 @@
 	<ItemGroup>
 	  <None Remove="Platforms\Android\Resources\xml\network_security_config.xml" />
 	  <None Remove="Resources\Fonts\DePixelHalbfett.ttf" />
+	  <None Remove="Resources\Images\b1dino1.png" />
+	  <None Remove="Resources\Images\b2dino1.png" />
+	  <None Remove="Resources\Images\b3dino1.png" />
 	  <None Remove="Resources\Images\boarder.png" />
 	  <None Remove="Resources\Images\boarder1.png" />
 	  <None Remove="Resources\Images\boarder2.png" />
 	  <None Remove="Resources\Images\bomb.png" />
 	  <None Remove="Resources\Images\bombitbackground.png" />
 	  <None Remove="Resources\Images\explosion.png" />
-	  <None Remove="Resources\Images\floor.png" />
-	  <None Remove="Resources\Images\giphy.gif" />
+	  <None Remove="Resources\Images\Game\pausemenu.png" />
 	  <None Remove="Resources\Images\heart.png" />
 	  <None Remove="Resources\Images\logo.png" />
 	  <None Remove="Resources\Images\movebutton.png" />
-	  <None Remove="Resources\Images\pacman.png" />
 	  <None Remove="Resources\Images\pacman1.png" />
 	  <None Remove="Resources\Images\pacman2.png" />
 	  <None Remove="Resources\Images\pacman3.png" />
 	  <None Remove="Resources\Images\pacmanbackground.png" />
 	  <None Remove="Resources\Images\pacmanfood.png" />
-	  <None Remove="Resources\Images\pacman\pacmanobject1food.png" />
-	  <None Remove="Resources\Images\pacman\pacmanplayer1body.png" />
-	  <None Remove="Resources\Images\pacman\pacmanplayer2body.png" />
 	  <None Remove="Resources\Images\pacman_boarder.png" />
 	  <None Remove="Resources\Images\pacman_cherry.png" />
 	  <None Remove="Resources\Images\pacman_ghost_2.png" />
@@ -114,7 +112,6 @@
 	  <None Remove="Resources\Images\pausemenu.png" />
 	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\placementbutton.png" />
-	  <None Remove="Resources\Images\pp.png" />
 	  <None Remove="Resources\Images\pressedplacementbutton.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snake\snakebackground.png" />
@@ -140,13 +137,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Include="Resources\Images\BombIt\bomb.png" />
+	  <MauiImage Include="Resources\Images\BombIt\bombitbackground.png" />
+	  <MauiImage Include="Resources\Images\BombIt\explosion.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder1.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder2.png" />
 	  <MauiImage Include="Resources\Images\Game\heart.png" />
+	  <MauiImage Include="Resources\Images\Game\logo.png" />
 	  <MauiImage Include="Resources\Images\Game\movebutton.png" />
 	  <MauiImage Include="Resources\Images\Game\pausemenu.png" />
 	  <MauiImage Include="Resources\Images\Game\pausemenubutton.png" />
+	  <MauiImage Include="Resources\Images\Game\pause_menu_option_button.png" />
+	  <MauiImage Include="Resources\Images\Game\uibackground.png" />
 	  <MauiImage Include="Resources\Images\lobby\code_placeholder.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\entrance_btn.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\game_placeholder.PNG" />
@@ -158,9 +161,21 @@
 	  <MauiImage Include="Resources\Images\lobby\remove_btn.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\snake_img.PNG" />
 	  <MauiImage Include="Resources\Images\lobby\snake_img_new.png" />
-	  <MauiImage Include="Resources\Images\pacman\pacmanobject1food.png" />
-	  <MauiImage Include="Resources\Images\pacman\pacmanplayer1body.png" />
-	  <MauiImage Include="Resources\Images\pacman\pacmanplayer2body.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman1.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman2.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman3.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacmanbackground.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacmanfood.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_boarder.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_cherry.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_ghost_2.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_ghost_2c.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_ghost_2_berry.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_ghost_3.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_ghost_3_berry.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_ghost_4.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_ghost_4_berry.png" />
+	  <MauiImage Include="Resources\Images\pacman\pacman_img_new.png" />
 	  <MauiImage Include="Resources\Images\SelectingPositionScreen\placementbutton.png" />
 	  <MauiImage Include="Resources\Images\SelectingPositionScreen\pressedplacementbutton.png" />
 	  <MauiImage Include="Resources\Images\snake\snakebackground.png" />

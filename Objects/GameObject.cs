@@ -40,6 +40,7 @@ namespace Objects
         public int ID { get; set; }
         public int Velocity { get; set; } = 90;
         public bool Fade { get; set; } = false;
+        public bool DoWeCheckTheObjectForCollision { get; set; } = false;
         public int[,] Board { get; set; }
         public bool WantToTurn { get; set; } = false;
         protected bool m_CanRotateToAllDirections = true;
@@ -278,6 +279,11 @@ namespace Objects
             if (!m_GameInformation.IsPointIsOnBoardPixels(p))
             {
                 PointOnScreen = p;
+            }
+            else if(!m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))//update is on screen, if actual point isnt 
+            {
+                PointOnScreen = p;
+                System.Diagnostics.Debug.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
             }
         }
 

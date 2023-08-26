@@ -7,6 +7,7 @@ namespace UI.Pages.LobbyPages;
 public partial class GamesPopUp : Popup
 {
     private Action<Game> m_FuncForGameChosen;
+    protected GameInformation m_GameInformation = GameInformation.Instance;
 
     public GamesPopUp(Action<Game> i_Action)
 	{
@@ -15,8 +16,8 @@ public partial class GamesPopUp : Popup
         addButton("OK", OnOkClicked, 2, 2);
         addButton("Cancel", OnCancelClicked, 2, 0);
         Size = new Size(
-            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
-            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width),
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height));
     }
 
 	public void AddGameToComponent(GameCard i_Card)

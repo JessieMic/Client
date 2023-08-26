@@ -13,7 +13,35 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
     internal class Bomb : GameObject
     {
         private bool m_HasBombExploded = false;
-        public List<Explosion> m_Explosions = new List<Explosion>();
+
+        public List<Explosion> ExplosionsToAdd { get; private set; } = new List<Explosion>();
+
+        private void expload()
+        {
+            Point point = base.GetPointOnGrid();
+            int whatsInFront = -1;
+
+            ExplosionsToAdd.Add(new Explosion(point));
+            foreach (var direction in Direction.GetAllDirections())
+            {
+                Point nextPoint = point;
+
+                for (int i = 0; i < 2; i++)
+                {
+                    if (checkDirectionForExplosion(nextPoint, direction, ref whatsInFront))
+                    {
+                        nextPoint = nextPoint.Move(direction);
+                        ExplosionsToAdd.Add(new Explosion(nextPoint));
+                        if (whatsInFront == 2)
+                        {
+                            Board[(int)point.Column, (int)point.Row] = 0;
+                            break;
+                        }
+                    }
+                }
+            }
+            OnSpecialEvent(ObjectNumber);
+        }
 
         public Bomb(Point i_Point, int[,] i_Board, int i_PlayerNumber)
         {
@@ -28,7 +56,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             
             if (i_TimeElapsed > 3500)
             {
-                foreach(var explosion in m_Explosions)
+                foreach(var explosion in ExplosionsToAdd)
                 {
                     explosion.OnDisposed();
                 }
@@ -43,36 +71,18 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             }
         }
 
-        private void expload()
-        {
-            Point point = base.GetPointOnGrid();
-
-            m_Explosions.Add(new Explosion(point));
-            foreach(var direction in Direction.GetAllDirections())
-            {
-                Point p = point;
-                if(checkDirectionForExplosion(p, direction))
-                {
-                    p = p.Move(direction);
-                    m_Explosions.Add(new Explosion(p));
-                    if (checkDirectionForExplosion(p, direction))
-                    {
-                        p = p.Move(direction);
-                        m_Explosions.Add(new Explosion(p));
-                    }
-                }
-            }
-            OnSpecialEvent(ObjectNumber);
-        }
-
-        bool checkDirectionForExplosion(Point i_Point, Direction i_Direction)
+        bool checkDirectionForExplosion(Point i_Point, Direction i_Direction, ref int i_WhatsInFront)
         {
             bool canChange = false;
+            Point point = i_Point.Move(i_Direction);
+ 
             try
             {
-                if (i_Point.Row + i_Direction.RowOffset >= 0 && i_Point.Column + i_Direction.ColumnOffset >= 0)
+                if (point.Row >= 0 && point.Column >= 0 && m_GameInformation.GameBoardSizeByGrid.Height > point.Row &&
+                    m_GameInformation.GameBoardSizeByGrid.Width > point.Column)
                 {
-                    if (Board[(int)i_Point.Column + i_Direction.ColumnOffset, (int)i_Point.Row + i_Direction.RowOffset] != 1)
+                    i_WhatsInFront = Board[(int)point.Column, (int)point.Row];
+                    if (i_WhatsInFront != 1)
                     {
                         canChange = true;
                     }
@@ -84,14 +94,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             }
 
             return canChange;
-        }
-
-        public override void Collided(ICollidable i_Collidable)
-        {
-            if (i_Collidable is Boarder)
-            {
-                collidedWithSolid(i_Collidable);
-            }
         }
     }
 }

@@ -11,9 +11,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
     public class BombIt : Game
     {
         private BombItPlayer[] m_BombItPlayers;
-        PacmanBoardFactory m_PacmanBoard = new PacmanBoardFactory();
+        BombItBoard m_BombItBoard = new BombItBoard();
         private int m_FoodCounterForPlayerScreen = 0;
         private int m_AmountOfScreenThatHaveNoFood = 0;
+        private int j = 0;
 
         public BombIt()
         {
@@ -27,7 +28,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         void createBoard()
         {
-            m_Board = m_PacmanBoard.BuildBoardMatrix(m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height);
+            m_Board = m_BombItBoard.BuildBoardMatrix(m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height);
             for (int col = 0; col < m_BoardSizeByGrid.Width; col++)
             {
                 for (int row = 0; row < m_BoardSizeByGrid.Height; row++)
@@ -42,7 +43,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                     }
                     else if (m_Board[col, row] == 2)
                     {
-                        //m_GameObjectsToAdd.Add(new Cherry(new Point(col, row)));
+                        m_GameObjectsToAdd.Add(new BreakableBoarder(new Point(col, row)));
                     }
                 }
             }
@@ -51,7 +52,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         protected override void specialEventInvoked(object i_Sender, int i_eventNumber)
         {
-            m_GameObjectsToAdd.AddRange(m_BombItPlayers[i_eventNumber-1].GetExplosions());
+            if(i_eventNumber == -1)
+            {
+                base.specialEventInvoked(i_Sender, i_eventNumber);
+            }
+            else
+            {
+                m_GameObjectsToAdd.AddRange(m_BombItPlayers[i_eventNumber - 1].GetExplosions());
+            }
+            
         }
 
         protected override void addBoarder(Point i_Point)
@@ -61,41 +70,19 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
         {
-            //create new bomb with xy
-
-            //if (i_WhatHappened == (int)ePacmanSpecialEvents.GotHit)
-            //{
-            //    PlayerGothit(i_Player);
-            //}
-            //else if (i_WhatHappened == (int)ePacmanSpecialEvents.AteCherry) ///special events of dropped bomb
-            //{
-            //    bombWasDropped();
-            //}
-            //else
-            //{
-            //    m_FoodCounterForPlayerScreen++;
-            //    System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {m_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
-            //    if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
-            //    {
-            //        msg = "Pacman won!!";
-            //        m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-            //        m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
-            //        m_GameStatus = eGameStatus.Ended;
-            //    }
-            //}
+            if (i_SpecialUpdate.Update < 4)
+            {
+                PlayerGothit(i_SpecialUpdate.Player_ID);
+            }
+            else
+            {
+                base.SpecialUpdateReceived(i_SpecialUpdate);
+            }
         }
 
         protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
         {
-            Point bombPoint = new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y);
-            if (m_GameInformation.IsPointIsOnBoardGrided(bombPoint))
-            {
-                foreach (var player in m_BombItPlayers)
-                {
-                    player.CheckIfOnBomb(i_SpecialUpdate.Player_ID,bombPoint);
-                }
-            }
-            sp(m_BombItPlayers[i_SpecialUpdate.Player_ID -1].PlaceBomb(bombPoint));
+            addGameObjectImmediately(m_BombItPlayers[i_SpecialUpdate.Player_ID -1].PlaceBomb(new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y)));
         }
 
         private void PlayerGothit(int i_Player)
@@ -129,14 +116,28 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             }
         }
 
-        protected override void checkForGameStatusUpdate(int i_Player)
+        protected override void checkForGameStatusUpdate()
         {
-            if (m_Hearts.m_AmountOfPlayersThatAreAlive == 1)//Search for the player that is alive
+            if (m_Hearts.m_AmountOfPlayersThatAreAlive <= 1)//Search for the player that is alive
             {
-                msg = "Pacman won!!";
-                m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
-                m_GameStatus = eGameStatus.Ended;
+                j++;
+                if(j == 5 && m_GameStatus != eGameStatus.Ended)
+                {
+                    if(m_Hearts.m_AmountOfPlayersThatAreAlive == 0)
+                    {
+                        msg = "Everyone lost!!";
+                    }
+                    else
+                    {
+                        string nameOfWinner = m_Hearts.GetNameOfPlayerThatIsAlive();
+                        msg = $"{nameOfWinner} won!!";
+                    }
+
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
+                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    OnAddScreenObjects();
+                    m_GameStatus = eGameStatus.Ended;
+                }
             }
         }
 
@@ -150,8 +151,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             }
             else
             {
-                m_NewButtonPressed = m_CurrentPlayerData.Button != (int)m_Buttons.StringToButton(button!.ClassId);
-                m_CurrentPlayerData.Button = (int)m_Buttons.StringToButton(button!.ClassId);
+                base.OnButtonClicked(sender, e);
             }
         }
 

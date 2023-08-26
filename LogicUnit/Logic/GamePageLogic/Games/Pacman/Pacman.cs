@@ -63,6 +63,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             {
                 pacmanAteCherry();
             }
+            else if(i_SpecialUpdate.Update > 6)
+            {
+                base.SpecialUpdateReceived(i_SpecialUpdate);
+            }
             else
             {
                 m_FoodCounterForPlayerScreen++;
@@ -131,28 +135,31 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             }
         }
 
-        protected override void checkForGameStatusUpdate(int i_Player)
+        protected override void checkForGameStatusUpdate()
         {
-            if(i_Player == 1)
+            if(m_GameStatus != eGameStatus.Ended)
             {
-                if(m_AmountOfPlayers > 2)
+                if (m_Hearts.m_AmountOfLivesPlayerHas[0] == 0)
                 {
-                    msg = "Ghosts won!!";
+                    if (m_AmountOfPlayers > 2)
+                    {
+                        msg = "Ghosts won!!";
+                    }
+                    else
+                    {
+                        msg = "Ghost won!!";
+                    }
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
+                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    OnAddScreenObjects();
+                    m_GameStatus = eGameStatus.Ended;
                 }
-                else
-                {
-                    msg = "Ghost won!!";
-                }
-                m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
-                m_GameStatus = eGameStatus.Ended;
-            }
-            else
-            {
-                if(m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
+                else if (m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
                 {
                     msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg,m_PauseMenu);
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
                     m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    OnAddScreenObjects();
                     m_GameStatus = eGameStatus.Ended;
                 }
             }

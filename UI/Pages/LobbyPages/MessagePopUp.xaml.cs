@@ -7,8 +7,9 @@ public partial class MessagePopUp : Popup
 {
 	private Action m_ActionWhenClosed;
 	private string m_Message;
+    protected GameInformation m_GameInformation = GameInformation.Instance;
 
-	public MessagePopUp(Action i_Action, string i_Message)
+    public MessagePopUp(Action i_Action, string i_Message)
 	{
 		InitializeComponent();
 		m_ActionWhenClosed = i_Action;
@@ -16,9 +17,9 @@ public partial class MessagePopUp : Popup
 		MessageLabel.Text = m_Message;
         ButtonImage okBtn = addOKButton();
 		okBtn.GetButton().Clicked += OnOKBtnClicked;
-		Size = new Size(
-			0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
-            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
+        Size = new Size(
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width ),
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height));
     }
 
 	public MessagePopUp(string i_Message)

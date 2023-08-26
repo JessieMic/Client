@@ -5,7 +5,9 @@ namespace UI.Pages.LobbyPages;
 
 public partial class InstructionsPopUp : Popup
 {
-	public InstructionsPopUp(string i_GameName, string i_Instructions)
+    private GameInformation m_GameInformation = GameInformation.Instance;
+
+    public InstructionsPopUp(string i_GameName, string i_Instructions)
 	{
         InitializeComponent();
 
@@ -13,8 +15,8 @@ public partial class InstructionsPopUp : Popup
 		InstructionsLabel.Text = i_Instructions;
 		addCloseButton();
         Size = new Size(
-            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Width / DeviceDisplay.Current.MainDisplayInfo.Density),
-            0.7 * (DeviceDisplay.Current.MainDisplayInfo.Height / DeviceDisplay.Current.MainDisplayInfo.Density));
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width),
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height));
     }
 
 	public void OnCloseBtnClicked(object sender, EventArgs e)

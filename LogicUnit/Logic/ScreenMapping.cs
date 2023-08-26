@@ -88,6 +88,7 @@ namespace LogicUnit
             m_TotalScreenPixelSize.Width = m_TotalScreenGridSize.Width * m_GameBoardGridSize;
             m_TotalScreenPixelSize.Height = m_TotalScreenGridSize.Height * m_GameBoardGridSize;
             m_GameInformation.GameBoardSizeByPixel = m_TotalScreenPixelSize;
+            m_GameInformation.GameBoardSizeByGrid = m_TotalScreenGridSize;
         }
 
         private void calculateTotalHeightScreenSize()
