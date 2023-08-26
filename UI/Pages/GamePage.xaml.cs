@@ -10,6 +10,7 @@ using System.Runtime.Versioning;
 using System.Threading;
 using System.Threading.Tasks;
 using UI.Pages.LobbyPages;
+using CommunityToolkit.Maui.Views;
 
 namespace UI.Pages;
 
@@ -155,7 +156,14 @@ public partial class GamePage : ContentPage
 
     void runGame()
     {
-        m_Game.RunGame();
+        try
+        {
+            m_Game.RunGame();
+        }
+        catch(Exception e)
+        {
+            serverError($"{e.Message}{Environment.NewLine}error on m_Game.RunGame() in function runGame");
+        }
     }
 
     async void exitGame()
@@ -194,6 +202,20 @@ public partial class GamePage : ContentPage
         });
     }
 
+    void serverError(string i_Message)
+    {
+        this.Dispatcher.Dispatch(() =>
+        {
+            MessagePopUp messagePopUp = new MessagePopUp(i_Message);
+            this.ShowPopup(messagePopUp);
+        });
+    }
+
+    void goToLobby()
+    {
+        Shell.Current.GoToAsync(nameof(Lobby));
+    }
+
     void initializeEvents()
     {
         m_Game.AddGameObjectList += addGameObjects;
@@ -202,5 +224,18 @@ public partial class GamePage : ContentPage
         m_Game.GameStart += runGame;
         m_Game.GameExit += exitGame;
         m_Game.GameRestart += restartGame;
+
+        m_Game.ServerError += serverError;
+        m_Game.DisposeEvents += disposeEvents;
+    }
+
+    void disposeEvents()
+    {
+        m_Game.AddGameObjectList -= addGameObjects;
+        m_Game.GameObjectUpdate -= gameObjectUpdate;
+        m_Game.GameObjectToDelete -= deleteObject;
+        m_Game.GameStart -= runGame;
+        m_Game.GameExit -= exitGame;
+        m_Game.GameRestart -= restartGame;
     }
 }
