@@ -29,9 +29,9 @@ public class InGameHub : Hub
         await Clients.All.SendAsync("SpecialUpdateReceived", i_WhatHappened, i_PlayerID);
     }
 
-    public async Task SpecialUpdateWithPoint(int i_X,int i_Y, int i_PlayerID)
+    public async Task SpecialUpdateWithPoint(int i_X, int i_Y, int i_PlayerID)
     {
-        await Clients.All.SendAsync("SpecialUpdateWithPointReceived", i_X,i_Y, i_PlayerID);
+        await Clients.All.SendAsync("SpecialUpdateWithPointReceived", i_X, i_Y, i_PlayerID);
     }
 
     public int[] GetPlayersData()
@@ -51,5 +51,11 @@ public class InGameHub : Hub
     public DateTime Ping()
     {
         return DateTime.Now;
+    }
+
+    public override async Task OnDisconnectedAsync(Exception exception)
+    {
+        await Clients.All.SendAsync("Disconnected", "an error occurred");
+        await base.OnDisconnectedAsync(exception);
     }
 }
