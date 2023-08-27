@@ -42,7 +42,7 @@ namespace LogicUnit.Logic.GamePageLogic
             changeVisibility(true);
         }
 
-        private void changeVisibility(bool i_Show)
+        private void changeVisibility(bool i_Show)//true , show fa;se
         {
             foreach (GameObject button in m_MenuButtons)
             {
@@ -52,7 +52,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 {
                     if (button.Text == eButton.Resume.ToString())
                     {
-                        button.IsVisable = !ShowResume;
+                        button.IsVisable = ShowResume;
                     }
                 }
                 else
@@ -78,7 +78,7 @@ namespace LogicUnit.Logic.GamePageLogic
             changeVisibility(false);
         }
 
-        private Point getPauseMenuBackgroundPoint()
+        public Point getPauseMenuBackgroundPoint()
         {
             SizeDTO screenSize = m_gameInformation.m_ClientScreenDimension.ScreenSizeInPixels;
 

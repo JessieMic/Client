@@ -73,8 +73,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {m_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
                 if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
                 {
-                    msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu,m_Buttons.GameObjectFitForLabel);
+                    m_EndGameText = "Pacman won!!";
+                    m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
                     m_GameStatus = eGameStatus.Ended;
                 }
             }
@@ -142,21 +142,19 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 {
                     if (m_AmountOfPlayers > 2)
                     {
-                        msg = "Ghosts won!!";
+                        m_EndGameText = "Ghosts won!!";
                     }
                     else
                     {
-                        msg = "Ghost won!!";
+                        m_EndGameText = "Ghost won!!";
                     }
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu, m_Buttons.GameObjectFitForLabel);
-                    OnAddScreenObjects();
+                    m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
                     m_GameStatus = eGameStatus.Ended;
                 }
                 else if (m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
                 {
-                    msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu, m_Buttons.GameObjectFitForLabel);
-                    OnAddScreenObjects();
+                    m_EndGameText = "Pacman won!!";
+                    m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
                     m_GameStatus = eGameStatus.Ended;
                 }
             }

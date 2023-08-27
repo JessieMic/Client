@@ -43,37 +43,6 @@ namespace Objects
             }
         }
 
-        public eGameStatus GetGameStatue(int i_Button,eGameStatus i_GameStatus)
-        {
-            eGameStatus status = eGameStatus.Running;
-
-            if(i_GameStatus == eGameStatus.Running && i_Button == (int)eButton.PauseMenu)
-            {
-                status = eGameStatus.Paused;
-            }
-            else
-            {
-                if (i_Button == (int)eButton.Exit)
-                {
-                    status = eGameStatus.Exited;
-                }
-                else if(i_Button == (int)eButton.Restart)
-                {
-                    status = eGameStatus.Restarted;
-                }
-                else if(i_Button == (int)eButton.Resume)
-                {
-                    status = eGameStatus.Running;
-                }
-                else if (i_Button != (int)eButton.Resume)
-                {
-                    status = i_GameStatus;
-                }
-            }
-
-            return status;
-        }
-
         private Point getValuesToAdd()
         { 
             Point values = new Point();

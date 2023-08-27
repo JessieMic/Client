@@ -39,7 +39,6 @@ public partial class GamePage : ContentPage
     private void initializeGame()
     {
         addLabel(m_Game.InitializeGame());
-        //m_Game.GetLabel());
     }
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
@@ -66,11 +65,10 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
             {
                 m_GameLabel.IsVisible = false;
-                //m_GameLabel.Text = i_Label.Text;
                 m_GameLabel.Rotation = i_Label.Rotatation;
                 m_GameLabel.WidthRequest = i_Label.Size.Width;
                 m_GameLabel.HeightRequest = i_Label.Size.Height;
-                m_GameLabel.ZIndex = i_Label.ZIndex;
+                m_GameLabel.ZIndex = 1;
                 m_GameLabel.TranslationX = i_Label.PointOnScreen.Column;
                 m_GameLabel.TranslationY = i_Label.PointOnScreen.Row;
                 m_GameLabel.FontAutoScalingEnabled = true;
@@ -125,12 +123,8 @@ public partial class GamePage : ContentPage
             }
             if (i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Label)
             {
-                if (m_GameButtonsImages.ContainsKey(i_ObjectUpdate.ID))
-                {
-                    m_GameLabel.IsVisible = true;
-                    m_GameButtonsImages[i_ObjectUpdate.ID].IsVisible = false;
-                    m_GameLabel.Text = m_GameButtonsImages[i_ObjectUpdate.ID].Text;
-                }
+                m_GameLabel.IsVisible = true;
+                m_GameLabel.Text = i_ObjectUpdate.Text;
             }
         });
     }

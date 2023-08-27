@@ -120,15 +120,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                     {
                         if (m_Hearts.m_AmountOfPlayersThatAreAlive == 0)
                         {
-                            msg = "Everyone lost!!";
+                            m_EndGameText = "Everyone lost!!";
                         }
                         else
                         {
                             string nameOfWinner = m_Hearts.GetNameOfPlayerThatIsAlive();
-                            msg = $"{nameOfWinner} won!!";
+                            m_EndGameText = $"{nameOfWinner} won!!";
                         }
 
-                        m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu, m_Buttons.GameObjectFitForLabel);
+                        m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
                         OnAddScreenObjects();
                         m_GameStatus = eGameStatus.Ended;
                     }
