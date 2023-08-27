@@ -16,7 +16,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             MonitorForCollision = true;
             DoWeCheckTheObjectForCollision = true;
             ObjectNumber = 2;
-            this.Initialize(eScreenObjectType.Image, 2, "pacman_cherry.png", i_Point, true,
+            this.Initialize(eScreenObjectType.Image, 2, "mushroom.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 

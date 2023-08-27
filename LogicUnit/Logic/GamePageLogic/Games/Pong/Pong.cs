@@ -19,9 +19,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
     {
         public class Pong : Game
         {
-            private BombItPlayer[] m_BombItPlayers;
+            private Bat[] m_BombItPlayers;
             BombItBoard m_BombItBoard = new BombItBoard();
-            private Ball m_Ball = new Ball();
+            private Ball m_Ball;
             private int m_FoodCounterForPlayerScreen = 0;
             private int m_AmountOfScreenThatHaveNoFood = 0;
             private int j = 0;
@@ -32,7 +32,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 m_MoveType = eMoveType.ClickAndRelease;
                 m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.RightAndLeft;
                 m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
-                m_BombItPlayers = new BombItPlayer[m_GameInformation.AmountOfPlayers];
+                m_BombItPlayers = new Bat[m_GameInformation.AmountOfPlayers];
             }
 
 
@@ -86,7 +86,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
                 {
-                    BombItPlayer newPlayer = new BombItPlayer(
+                    Bat newPlayer = new Bat(
                         i,
                         m_BoardSizeByGrid.Width,
                         m_BoardSizeByGrid.Height,
@@ -95,7 +95,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                     m_GameObjectsToAdd.Add(newPlayer);
                     m_BombItPlayers[i - 1] = newPlayer;
                 }
-
+                m_Ball = new Ball();
                 m_GameObjectsToAdd.Add(m_Ball);
             }
 

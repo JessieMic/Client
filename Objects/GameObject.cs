@@ -31,7 +31,7 @@ namespace Objects
         public eScreenObjectType ScreenObjectType { get; set; }
         public int GameBoardGridSize { get; set; } = GameSettings.GameGridSize;
         protected GameInformation m_GameInformation = GameInformation.Instance;
-        private Point m_ValuesToAdd;
+        protected Point m_ValuesToAdd;
         public bool IsObjectMoving { get; set; } = true;
         public Direction Direction { get; set; } = Direction.Stop;
         public Direction RequestedDirection { get; set; } = Direction.Stop;

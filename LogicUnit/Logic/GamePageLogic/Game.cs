@@ -310,7 +310,7 @@ namespace LogicUnit
                 {
                     p.Column = 0;
                 }
-                System.Diagnostics.Debug.WriteLine($"{p.Column}    {p.Row}");
+                
                 if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
                 {
                     if(p.Row < 0)
@@ -605,7 +605,6 @@ namespace LogicUnit
 
         protected async void SendServerSpecialPointUpdate(Point i_Point,int i_Player)
         {
-            System.Diagnostics.Debug.WriteLine("BOMB " + m_Player.PlayerNumber);
             try
             {
                 r_ConnectionToServer.SendAsync(

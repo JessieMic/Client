@@ -18,7 +18,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         public BombIt()
         {
-            m_GameName = "BombIt";
+            m_GameName = "bombit";
             m_MoveType = eMoveType.ClickAndRelease;
             m_Buttons.m_AmountOfExtraButtons = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
@@ -52,16 +52,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             {
                 base.specialEventInvoked(i_Sender, i_eventNumber);
             }
-            else
-            {
-                
-            }
-            
         }
 
         protected override void addBoarder(Point i_Point)
         {
-            m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), "pacman_boarder.png"));
+            m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), "bombitwall.png"));
         }
 
         protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
