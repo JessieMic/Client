@@ -98,6 +98,10 @@ namespace Objects
             {
                 png = "pausemenubutton.png";
             }
+            else if(i_Button == eButton.ButtonA)
+            {
+                png = "aburron.png";
+            }
             return png.ToLower();
         }
 
@@ -200,7 +204,7 @@ namespace Objects
                 }
                 else if (i_Type == eButton.ButtonA)
                 {
-                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 6, 1);
+                    returnPoint.SetAndGetPoint(m_ClientScreenOurSize.Width - 10, 1);
                 }
                 else if (i_Type == eButton.ButtonB)
                 {

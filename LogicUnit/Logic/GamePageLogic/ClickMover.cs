@@ -12,18 +12,16 @@ namespace LogicUnit.Logic.GamePageLogic
     {
         public IMovable Movable { get; set; }
         protected GameInformation m_GameInformation = GameInformation.Instance;
-        private short update = 0;
-        private short saftyUpdate = 0;
         bool isOnScreen=false;
         public void RequestDirection(Direction i_Direction)
         {
             if (Movable.IsObjectMoving)
             {
                 isOnScreen = false;
+
                 if (m_GameInformation.IsPointIsOnBoardPixels(Movable.PointOnScreen))
                 {
                     isOnScreen = true;
-                    saftyUpdate = 0;
                 }
 
                 if (Movable.Direction == Direction.Stop)
@@ -42,13 +40,7 @@ namespace LogicUnit.Logic.GamePageLogic
                     }
                 }
 
-                //if (isOnScreen && update == 20)
-                //{
-                //    //Point PointUpdate = Movable.GetPointOnGrid();
-                //    //Movable.OnUpdatePosition(PointUpdate);
-                //    //update = 0;
-                //}
-                 if (Movable.Updated > 40)
+                 if (Movable.Updated > 50)
                 {
                     if(m_GameInformation.Player.PlayerNumber == 1)
                     {
@@ -62,17 +54,9 @@ namespace LogicUnit.Logic.GamePageLogic
                         Movable.OnUpdatePosition(PointUpdate);
                     }
                     Movable.Updated = 0;
-                    update = 0;
-                    saftyUpdate = 0;
                 }
 
-                 if (Movable.ObjectNumber == 1)
-                 {
-                     System.Diagnostics.Debug.WriteLine($"========={Movable.Updated}=====");
-                 }
                 Movable.Updated++;
-                update++;
-                saftyUpdate++;
                 Movable.SetImageDirection(Movable.Direction);
             }
         }

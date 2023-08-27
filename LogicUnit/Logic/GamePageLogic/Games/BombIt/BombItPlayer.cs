@@ -32,7 +32,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             MonitorForCollision = true;
             Board = i_Board;
             Bomb = new Bomb(ref i_Board, ObjectNumber);
-            this.Initialize(eScreenObjectType.Player, i_playerNumber,"b1dino1.png" , getPointOnGrid(i_X, i_Y), true,
+            this.Initialize(eScreenObjectType.Player, i_playerNumber,$"a{i_playerNumber}slime1.png" , getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
             m_ClickReleaseMover.Movable = this as IMovable;
         }
@@ -84,15 +84,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         {
             if (m_Pic == 0)
             {
-                ImageSource = "b1dino1.png";
+                ImageSource = $"a{ObjectNumber}slime1.png";
             }
             else if (m_Pic == 2 || m_Pic == 6)
             {
-                ImageSource = "b2dino1.png";
+                ImageSource = $"a{ObjectNumber}slime2.png";
             }
             else if (m_Pic == 4)
             {
-                ImageSource = "b3dino1.png";
+                ImageSource = $"a{ObjectNumber}slime3.png";
             }
             else if (m_Pic > 7)
             {
