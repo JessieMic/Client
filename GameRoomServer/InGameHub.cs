@@ -10,13 +10,11 @@ public class InGameHub : Hub
 
     public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
     {
-        //Console.WriteLine($"{i_PlayerID} sent {i_button}");
         if (i_button != -1)
         {
             s_PlayersPressedButtons[i_PlayerID] = i_button;
         }
-
-        if (i_X != -1)
+        else 
         {
             s_PlayersPressedButtons[i_PlayerID + 4] = i_X;
             s_PlayersPressedButtons[i_PlayerID + 8] = i_Y;
