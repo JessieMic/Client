@@ -37,10 +37,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                     {
                         addBoarder(new Point(col, row));
                     }
-                    else if (m_Board[col, row] == 0)
-                    {
-                        //m_GameObjectsToAdd.Add(new Food(new Point(col, row), ref m_FoodCounterForPlayerScreen));
-                    }
                     else if (m_Board[col, row] == 2)
                     {
                         m_GameObjectsToAdd.Add(new BreakableBoarder(new Point(col, row)));
@@ -58,7 +54,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             }
             else
             {
-                m_GameObjectsToAdd.AddRange(m_BombItPlayers[i_eventNumber - 1].GetExplosions());
+                
             }
             
         }
@@ -82,7 +78,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
         {
-            addGameObjectImmediately(m_BombItPlayers[i_SpecialUpdate.Player_ID -1].PlaceBomb(new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y)));
+            m_BombItPlayers[i_SpecialUpdate.Player_ID - 1].PlaceBomb(new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y));
+            
         }
 
         private void PlayerGothit(int i_Player)
@@ -98,10 +95,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         protected override void AddGameObjects()
         {
             createBoard();
-            addPlayerObjects();
+            addPlayersAndBombsObjects();
         }
 
-        private void addPlayerObjects()
+        private void addPlayersAndBombsObjects()
         {
             for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
             {
@@ -109,10 +106,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                     i,
                     m_BoardSizeByGrid.Width,
                     m_BoardSizeByGrid.Height,
-                    m_Board);
+                    ref m_Board);
 
                 m_GameObjectsToAdd.Add(newPlayer);
                 m_BombItPlayers[i - 1] = newPlayer;
+                m_GameObjectsToAdd.Add(newPlayer.Bomb);
+                m_GameObjectsToAdd.AddRange(m_BombItPlayers[i-1].GetExplosions());
             }
         }
 
@@ -133,8 +132,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                         msg = $"{nameOfWinner} won!!";
                     }
 
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu,m_Buttons.GameObjectFitForLabel);
                     OnAddScreenObjects();
                     m_GameStatus = eGameStatus.Ended;
                 }

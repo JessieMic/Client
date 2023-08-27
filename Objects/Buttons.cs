@@ -16,7 +16,7 @@ namespace Objects
         public SizeDTO m_ClientScreenOurSize = new SizeDTO();
         public eTypeOfGameMovementButtons m_TypeMovementButtons;
         public int m_AmountOfExtraButtons = 0;
-
+        public GameObject GameObjectFitForLabel { get; set; }
 
         public void GetGameButtons(ref List<GameObject> i_GameObjectsToAdd)
         {
@@ -38,9 +38,8 @@ namespace Objects
                 {
                     newButton.Rotatation = 0;
                 }
-                
+
                 i_GameObjectsToAdd.Add(newButton);
-                
             }
         }
 
@@ -112,7 +111,10 @@ namespace Objects
                 {
                     newButton.SetImageDirection(Direction.getDirection(button.ToString()));
                 }
-
+                if (button == eButton.Resume)
+                {
+                    GameObjectFitForLabel = newButton;
+                }
                 menuButtons.Add(newButton);
             }
             return menuButtons;
@@ -198,7 +200,7 @@ namespace Objects
                 }
                 else if(i_Type == eButton.ButtonA)
                 {
-                    returnPoint.SetAndGetPoint(5, 1);
+                    returnPoint.SetAndGetPoint(11, 1);
                 }
                 else if(i_Type == eButton.ButtonB)
                 {

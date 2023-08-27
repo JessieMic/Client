@@ -28,7 +28,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
             m_FlipsWhenMoved = true;
-            IsCollisionDetectionEnabled = true;
+            MonitorForCollision = true;
             Board = i_Board;
             this.Initialize(eScreenObjectType.Player, i_playerNumber, $"pacman_ghost_{ObjectNumber}.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
@@ -141,7 +141,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             IsHunting = true;
             m_IsDyingAnimationOn = true;
             IsObjectMoving = false;
-            if (AmountOfLives == 0 && IsCollisionDetectionEnabled)
+            if (AmountOfLives == 0 && MonitorForCollision)
             {
                 m_IsDyingAnimationOn = false;
                 OnDisposed();

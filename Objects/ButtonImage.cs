@@ -64,6 +64,10 @@ namespace Objects
 
         public string Text
         {
+            get
+            {
+                return m_Button.Text;
+            }
             set
             {
                 m_Button.Text = value;
@@ -131,8 +135,18 @@ namespace Objects
                 {
                     IsVisible= false;
                 }
-                m_Source = value;
-                m_Image.Source = value;
+               
+                try
+                {
+                    m_Source = value;
+                    m_Image.Source = value;
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                    throw;
+                }
+               
             }
         }
 

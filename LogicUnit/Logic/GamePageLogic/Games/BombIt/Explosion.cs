@@ -12,11 +12,26 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 {
     internal class Explosion : GameObject
     {
-        public Explosion(Point i_Point)
+        public Explosion()
         {
-            IsCollisionDetectionEnabled = true;
-            this.Initialize(eScreenObjectType.Image, 0, "explosion.png", i_Point, true,
+            MonitorForCollision = true;
+            IsVisable = false;
+            IsCollisionEnabled = false;
+            this.Initialize(eScreenObjectType.Image, 2, "explosion.png",new Point(0,0), true,
                 m_GameInformation.PointValuesToAddToScreen);
+        }
+
+        public void Ignite(Point i_Point)
+        {
+            MoveToPointInGrided(i_Point);
+            ChangeState(true);
+        }
+
+        public void ChangeState(bool i_IsIgnited)
+        {
+            IsVisable = i_IsIgnited;
+            IsCollisionEnabled = i_IsIgnited;
+            OnUpdate();
         }
     }
 }

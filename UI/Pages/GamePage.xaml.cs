@@ -37,7 +37,8 @@ public partial class GamePage : ContentPage
 
     private void initializeGame()
     {
-        m_Game.InitializeGame();
+        addLabel(m_Game.InitializeGame());
+        //m_Game.GetLabel());
     }
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
@@ -46,11 +47,8 @@ public partial class GamePage : ContentPage
         {
             foreach (var gameObject in i_GameObjectsToAdd)
             {
-                if (gameObject.ScreenObjectType == eScreenObjectType.Label)
-                {
-                    addLabel(gameObject);
-                }
-                else if (gameObject.ScreenObjectType == eScreenObjectType.Button)
+                
+                if (gameObject.ScreenObjectType == eScreenObjectType.Button)
                 {
                     addButton(gameObject);
                 }
@@ -64,22 +62,21 @@ public partial class GamePage : ContentPage
 
     private void addLabel(GameObject i_Label)
     {
-        if(m_GameInformation.Player.PlayerNumber == 1)
-        {
-            int das = 6;
-        }
-        m_GameLabel.IsVisible = true;
-        m_GameLabel.Text = i_Label.Text;
-        m_GameLabel.Rotation = i_Label.Rotatation;
-        m_GameLabel.WidthRequest = i_Label.Size.Width;
-        m_GameLabel.HeightRequest = i_Label.Size.Height;
-        m_GameLabel.ZIndex = i_Label.ZIndex;
-        m_GameLabel.TranslationX = i_Label.PointOnScreen.Column;
-        m_GameLabel.TranslationY = i_Label.PointOnScreen.Row;
-        m_GameLabel.FontAutoScalingEnabled = true;
-        m_GameLabel.VerticalTextAlignment = TextAlignment.Center;
-        m_GameLabel.HorizontalTextAlignment = TextAlignment.Center;
-        gridLayout.Add(m_GameLabel);
+        Application.Current.Dispatcher.Dispatch(async () =>
+            {
+                m_GameLabel.IsVisible = false;
+                //m_GameLabel.Text = i_Label.Text;
+                m_GameLabel.Rotation = i_Label.Rotatation;
+                m_GameLabel.WidthRequest = i_Label.Size.Width;
+                m_GameLabel.HeightRequest = i_Label.Size.Height;
+                m_GameLabel.ZIndex = i_Label.ZIndex;
+                m_GameLabel.TranslationX = i_Label.PointOnScreen.Column;
+                m_GameLabel.TranslationY = i_Label.PointOnScreen.Row;
+                m_GameLabel.FontAutoScalingEnabled = true;
+                m_GameLabel.VerticalTextAlignment = TextAlignment.Center;
+                m_GameLabel.HorizontalTextAlignment = TextAlignment.Center;
+                gridLayout.Add(m_GameLabel);
+            });
     }
 
     private void addImage(GameObject i_GameObjectToAdd)
@@ -111,7 +108,6 @@ public partial class GamePage : ContentPage
     {
         Application.Current.Dispatcher.Dispatch(async () =>
         {
-            //loopLabel.Text = m_Game.m_LoopNumber.ToString();
             if (getObjectTypeFromID(i_ObjectUpdate.ID) == eScreenObjectType.Image || i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Player)
             {
                 if (m_GameImages.ContainsKey(i_ObjectUpdate.ID))
@@ -126,10 +122,18 @@ public partial class GamePage : ContentPage
                    m_GameButtonsImages[i_ObjectUpdate.ID].SetButtonImage(i_ObjectUpdate);
                 }
             }
+            if (i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Label)
+            {
+                if (m_GameButtonsImages.ContainsKey(i_ObjectUpdate.ID))
+                {
+                    m_GameLabel.IsVisible = true;
+                    m_GameButtonsImages[i_ObjectUpdate.ID].IsVisible = false;
+                    m_GameLabel.Text = m_GameButtonsImages[i_ObjectUpdate.ID].Text;
+                }
+            }
         });
     }
     
-
     public void deleteObject(object sender, GameObject? i_ObjectToDelete)
     {
         if (i_ObjectToDelete.Fade)
@@ -184,7 +188,7 @@ public partial class GamePage : ContentPage
             m_GameButtonsImages.Clear();
             foreach (var image in m_GameImages)
             {
-                image.Value.Source = null;
+                image.Value.IsVisible= false;
                 gridLayout.Remove(image.Value.GetImage());
             }
 

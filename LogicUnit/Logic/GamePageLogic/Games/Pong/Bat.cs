@@ -22,7 +22,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         {
             DoWeCheckTheObjectForCollision = true;
             ObjectNumber = i_playerNumber;
-            IsCollisionDetectionEnabled = true;
+            MonitorForCollision = true;
             Board = i_Board;
             this.Initialize(eScreenObjectType.Player, i_playerNumber, "b1dino1.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
@@ -107,7 +107,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         {
             IsVisable = false;
             m_IsDyingAnimationOn = true;
-            if (AmountOfLives == 0 && IsCollisionDetectionEnabled)
+            if (AmountOfLives == 0 && MonitorForCollision)
             {
                 m_IsDyingAnimationOn = false;
                 OnDisposed();

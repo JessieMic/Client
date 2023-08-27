@@ -16,7 +16,6 @@ namespace LogicUnit.Logic.GamePageLogic
         private GameInformation m_gameInformation = GameInformation.Instance;
         private List<GameObject> m_MenuButtons = new List<GameObject>();
         private GameObject m_PauseMenuBackground;
-        public GameObject MenuLabel { get; set; }
         public bool ShowResume { get; set; } = true;
         public void GetPauseMenu(Buttons i_Buttons, ref List<GameObject> o_GameObejectsToAdd)
         {
@@ -54,8 +53,6 @@ namespace LogicUnit.Logic.GamePageLogic
                     if (button.Text == eButton.Resume.ToString())
                     {
                         button.IsVisable = !ShowResume;
-                        MenuLabel = button;
-                        MenuLabel.ScreenObjectType = eScreenObjectType.Label;
                     }
                 }
                 else
@@ -70,11 +67,10 @@ namespace LogicUnit.Logic.GamePageLogic
             m_PauseMenuBackground.OnUpdate();
         }
 
-        public GameObject ShowEndGameMenu()
+        public void ShowEndGameMenu()
         {
             ShowResume = false;
             changeVisibility(true);
-            return MenuLabel;
         }
 
         public void HidePauseMenu()

@@ -18,19 +18,20 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         private bool m_PlacedBomb =false;
         private bool m_IsDyingAnimationOn = false;
         public double m_DeathAnimationStart;
-        private Bomb m_Bomb;
+        public Bomb Bomb { get; private set; }
         private double m_BombStartTime;
         private double m_TimeThatBombWasPlaced;
         private ClickReleaseMover m_ClickReleaseMover = new ClickReleaseMover();
         private short m_Pic = 0;
-        public BombItPlayer(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
+        public BombItPlayer(int i_playerNumber, int i_X, int i_Y, ref int[,] i_Board)
         {
             DoWeCheckTheObjectForCollision = true;
             ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
             m_FlipsWhenMoved = true;
-            IsCollisionDetectionEnabled = true;//$"pacman_ghost_{ObjectNumber + 1}.png"
+            MonitorForCollision = true;
             Board = i_Board;
+            Bomb = new Bomb(ref i_Board, ObjectNumber);
             this.Initialize(eScreenObjectType.Player, i_playerNumber,"b1dino1.png" , getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
             m_ClickReleaseMover.Movable = this as IMovable;
@@ -72,13 +73,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             return base.GetPointOnGrid();
         }
 
-        public Bomb PlaceBomb(Point i_Point)
+        public void PlaceBomb(Point i_Point)
         {
             m_BombStartTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
             m_PlacedBomb = true;
-            m_Bomb = new Bomb(i_Point, Board, ObjectNumber);
-
-            return m_Bomb;
+            Bomb.Drop(i_Point);
         }
 
         public override void Update(double i_TimeElapsed)
@@ -123,12 +122,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                 if (m_PlacedBomb)
                 {
                     double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_BombStartTime;
-                    m_Bomb.Update(timePassed);
                     if (timePassed > 3500)
                     {
                         m_PlacedBomb = false;
                         CanPlaceABomb = true;
                     }
+                    Bomb.Update(timePassed);
                 }
 
                 base.Update(i_TimeElapsed);
@@ -159,7 +158,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         {
             IsVisable = false;
             m_IsDyingAnimationOn = true;
-            if (AmountOfLives == 0 && IsCollisionDetectionEnabled)
+            if (AmountOfLives == 0 && MonitorForCollision)
             {
                 m_IsDyingAnimationOn = false;
                 OnDisposed();
@@ -173,9 +172,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             m_ClickReleaseMover.RequestDirection(i_Direction);
         }
 
-        public List<Explosion> GetExplosions()
+        public Explosion[] GetExplosions()
         {
-            return m_Bomb.ExplosionsToAdd;
+            return Bomb.Explosions;
         }
     }
 }
