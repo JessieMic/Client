@@ -46,7 +46,7 @@ namespace LogicUnit
 
         //Need to initialize each different game
         protected string m_GameName;
-        protected ScoreBoard m_scoreBoard = new ScoreBoard();
+        protected ScoreBoard m_ScoreBoard;
         protected Hearts m_Hearts = new Hearts();
         protected PauseMenu m_PauseMenu = new PauseMenu();
 
@@ -83,8 +83,7 @@ namespace LogicUnit
         protected Queue<SpecialUpdate> m_SpecialEventWithPointQueue = new Queue<SpecialUpdate>();
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
-
-        public string msg = string.Empty;
+        protected string m_EndGameText = string.Empty;
 
         //Server Error
         public Action<string> ServerError;
@@ -193,7 +192,9 @@ namespace LogicUnit
                 m_DirectionsBuffer.Add(new List<Direction>());
             }
             SetGameScreen();
-            return m_Buttons.GameObjectFitForLabel;
+            m_ScoreBoard.Label.UpdateGameObject += OnUpdateScreenObject; 
+
+            return m_ScoreBoard.Label;
         }
 
         public void GameLoop()

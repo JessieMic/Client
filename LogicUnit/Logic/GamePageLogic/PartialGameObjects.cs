@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DTOs;
+using LogicUnit.Logic.GamePageLogic;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
@@ -20,18 +21,24 @@ namespace LogicUnit
             setGameBackground();
             setHearts();
             setPauseMenu();
+            setScoreBoard();
             AddGameObjects();
             OnAddScreenObjects();
         }
 
         protected abstract void AddGameObjects();
 
-        protected void setPauseMenu()
+        private void setScoreBoard()
+        {
+            m_ScoreBoard = new ScoreBoard(m_PauseMenu);
+        }
+
+        private void setPauseMenu()
         {
            m_PauseMenu.GetPauseMenu(m_Buttons,ref m_GameObjectsToAdd);
         }
 
-        protected void setHearts()
+        private void setHearts()
         {
             m_Hearts.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
             m_Hearts.m_ClientScreenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.PlayerNumber - 1];
@@ -39,7 +46,7 @@ namespace LogicUnit
             m_Hearts.getHearts(ref m_GameObjectsToAdd);
         }
 
-        protected void setGameButtons()
+        private void setGameButtons()
         {
             m_Buttons.m_MovementButtonOurSize = m_ScreenMapping.m_MovementButtonOurSize;
             m_Buttons.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
@@ -48,7 +55,7 @@ namespace LogicUnit
             m_Buttons.GetGameButtons(ref m_GameObjectsToAdd);
         }
 
-        protected void setGameBackground()
+        private void setGameBackground()
         {
             setBoarder();
             SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
@@ -65,7 +72,7 @@ namespace LogicUnit
                 actualOurSize.Height);
         }
 
-        void setBoarder()
+        private void setBoarder()
         {
             SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
                 m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
@@ -82,7 +89,7 @@ namespace LogicUnit
             setb();
         }
 
-        void setb()
+        private void setb()
         {
             SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
                 m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);

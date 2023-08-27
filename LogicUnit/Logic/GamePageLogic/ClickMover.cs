@@ -53,6 +53,7 @@ namespace LogicUnit.Logic.GamePageLogic
                     if(m_GameInformation.Player.PlayerNumber == 1)
                     {
                         Point PointUpdate = Movable.GetPointOnGrid();
+                        System.Diagnostics.Debug.WriteLine($"{isOnScreen} DDDDDDDD");
                         Movable.OnUpdatePosition(PointUpdate);
                     }
                     update = 0;

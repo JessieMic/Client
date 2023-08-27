@@ -60,6 +60,11 @@ namespace Objects
             ID = GameSettings.getID();
         }
 
+        public void Initialize()
+        {
+            ID = GameSettings.getID();
+        }
+
         public void SetImageDirection(Direction i_Direction)
         {
 
