@@ -74,8 +74,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                 if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
                 {
                     msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu,m_Buttons.GameObjectFitForLabel);
                     m_GameStatus = eGameStatus.Ended;
                 }
             }
@@ -149,16 +148,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     {
                         msg = "Ghost won!!";
                     }
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu, m_Buttons.GameObjectFitForLabel);
                     OnAddScreenObjects();
                     m_GameStatus = eGameStatus.Ended;
                 }
                 else if (m_Hearts.m_AmountOfPlayersThatAreAlive == 1)
                 {
                     msg = "Pacman won!!";
-                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                    m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                    m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu, m_Buttons.GameObjectFitForLabel);
                     OnAddScreenObjects();
                     m_GameStatus = eGameStatus.Ended;
                 }

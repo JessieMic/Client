@@ -41,7 +41,7 @@ namespace Objects
 
             foreach (ICollidable target in r_Collidables)
             {
-                if (i_Collidable != target )////////
+                if (target.IsCollisionEnabled && i_Collidable != target )
                 {
                     if (i_Collidable.CheckCollision(target))
                     {

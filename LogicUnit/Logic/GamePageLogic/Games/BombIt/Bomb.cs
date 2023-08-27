@@ -13,15 +13,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
     internal class Bomb : GameObject
     {
         private bool m_HasBombExploded = false;
+        public Explosion[] Explosions{ get; private set; } = new Explosion[9];
 
-        public List<Explosion> ExplosionsToAdd { get; private set; } = new List<Explosion>();
-
-        private void expload()
+        private void SetExplosions()
         {
             Point point = base.GetPointOnGrid();
             int whatsInFront = -1;
-
-            ExplosionsToAdd.Add(new Explosion(point));
+            int index = 1;
+            Explosions[0].Ignite(point);
             foreach (var direction in Direction.GetAllDirections())
             {
                 Point nextPoint = point;
@@ -31,7 +30,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                     if (checkDirectionForExplosion(nextPoint, direction, ref whatsInFront))
                     {
                         nextPoint = nextPoint.Move(direction);
-                        ExplosionsToAdd.Add(new Explosion(nextPoint));
+                        Explosions[index].Ignite(nextPoint);
+                        index++;
                         if (whatsInFront == 2)
                         {
                             Board[(int)point.Column, (int)point.Row] = 0;
@@ -40,34 +40,60 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                     }
                 }
             }
-            OnSpecialEvent(ObjectNumber);
         }
 
-        public Bomb(Point i_Point, int[,] i_Board, int i_PlayerNumber)
+        public void Drop(Point i_Point)
         {
-            IsCollisionDetectionEnabled = true;
+            MoveToPointInGrided(i_Point);
+            ChangeState(true);
+        }
+
+        public Bomb(ref int[,] i_Board, int i_PlayerNumber)
+        {
+            MonitorForCollision = true;
+            ChangeState(false);
             Board = i_Board;
-            this.Initialize(eScreenObjectType.Image, i_PlayerNumber, $"bomb.png", i_Point, true,
+            this.Initialize(eScreenObjectType.Image, i_PlayerNumber, $"bomb.png",new Point(0,0), true,
                 m_GameInformation.PointValuesToAddToScreen);
+            addExplosions();
+        }
+
+        public void ChangeState(bool i_State)
+        {
+            IsVisable = i_State;
+            IsCollisionEnabled = i_State;
+            OnUpdate();
+        }
+
+        private void addExplosions()
+        {
+            for(int i = 0; i < 9; i++)
+            {
+                Explosions[i]= new Explosion();
+            }
         }
 
         public override void Update(double i_TimeElapsed)
         {
-            
+            if(IsVisable = false && !m_HasBombExploded)
+            {
+                ChangeState(true);
+            }
+
             if (i_TimeElapsed > 3500)
             {
-                foreach(var explosion in ExplosionsToAdd)
+                foreach(var explosion in Explosions)
                 {
-                    explosion.OnDisposed();
+                    explosion.ChangeState(false);
                 }
-                OnDisposed();
+                ChangeState(false);
+                m_HasBombExploded = false;
             }
             else if (!m_HasBombExploded && i_TimeElapsed > 2500)
             {
                 m_HasBombExploded = true;
-                IsVisable = false;
-                expload();
-                OnUpdate();
+                ChangeState(false);
+                SetExplosions();
             }
         }
 

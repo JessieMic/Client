@@ -13,7 +13,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
     {
         public BreakableBoarder(Point i_Point)
         {
-            IsCollisionDetectionEnabled = true;
+            MonitorForCollision = true;
             DoWeCheckTheObjectForCollision = true;
             ObjectNumber = 2;
             this.Initialize(eScreenObjectType.Image, 2, "pacman_cherry.png", i_Point, true,

@@ -13,7 +13,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
     {
         public Boarder(Point i_Point,string i_Png)
         {
-            IsCollisionDetectionEnabled = true;
+            MonitorForCollision = true;
             ObjectNumber = 2;
             this.Initialize(eScreenObjectType.Image, 2, "pacman_boarder.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);

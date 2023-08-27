@@ -128,8 +128,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                             msg = $"{nameOfWinner} won!!";
                         }
 
-                        m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu);
-                        m_GameObjectsToAdd.Add(m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu));
+                        m_scoreBoard.ShowScoreBoard(msg, m_PauseMenu, m_Buttons.GameObjectFitForLabel);
                         OnAddScreenObjects();
                         m_GameStatus = eGameStatus.Ended;
                     }

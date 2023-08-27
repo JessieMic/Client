@@ -19,7 +19,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             SizeDTO foodSize = new SizeDTO();
 
-            IsCollisionDetectionEnabled = true;
+            MonitorForCollision = true;
             ObjectNumber = 1;
             this.Initialize(eScreenObjectType.Image, 1, "pacmanfood.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);

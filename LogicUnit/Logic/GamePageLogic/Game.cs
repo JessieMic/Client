@@ -180,7 +180,7 @@ namespace LogicUnit
             }
         }
 
-        public void InitializeGame()
+        public GameObject InitializeGame()
         {
             m_AmountOfPlayers = m_GameInformation.AmountOfPlayers;
             m_BoardSizeByGrid = m_ScreenMapping.m_TotalScreenGridSize;
@@ -193,6 +193,7 @@ namespace LogicUnit
                 m_DirectionsBuffer.Add(new List<Direction>());
             }
             SetGameScreen();
+            return m_Buttons.GameObjectFitForLabel;
         }
 
         public void GameLoop()
@@ -259,20 +260,9 @@ namespace LogicUnit
             }
         }
 
-        protected void addGameObjectImmediately(GameObject newObject)
+        public GameObject GetLabel()
         {
-            List<GameObject> k = new List<GameObject>();
-            k.Add(newObject);
-
-            if (newObject.IsCollisionDetectionEnabled)
-            {
-                r_CollisionManager.AddObjectToMonitor(newObject);
-                newObject.SpecialEvent += specialEventInvoked;
-            }
-
-            newObject.UpdateGameObject += OnUpdateScreenObject;
-           
-            AddGameObjectList.Invoke(this, k);
+            return m_Buttons.GameObjectFitForLabel;
         }
 
         protected void addBoarderFor3Players()
@@ -351,9 +341,6 @@ namespace LogicUnit
                 {
                     m_PlayersDataArray[i].Button = m_ServerUpdates[i];
                 }
-                // m_PlayersDataArray[0].Button = m_ServerUpdates[0];
-                //m_PlayersDataArray[1].Button = m_ServerUpdates[1];
-                //System.Diagnostics.Debug.WriteLine("r " + m_ServerUpdates[0]);
             }
         }
 
@@ -410,10 +397,7 @@ namespace LogicUnit
 
         protected virtual void PlayerLostALife(object sender, int i_Player)
         {
-            if(m_Hearts.setPlayerLifeAndCheckIfDead(i_Player))
-            {
-               // checkForGameStatusUpdate(i_Player);
-            }
+            m_Hearts.setPlayerLifeAndCheckIfDead(i_Player);
         }
 
         protected virtual void UpdatePosition(double i_TimeElapsed)
@@ -427,8 +411,6 @@ namespace LogicUnit
             r_CollisionManager.CheckAllCollidablesForCollision();
             checkForGameStatusUpdate();
         }
-
-      
 
         public void UpdateClientsAboutPosition(object sender, Point i_Point)
         {
@@ -577,7 +559,7 @@ namespace LogicUnit
         {
             foreach (var newObject in m_GameObjectsToAdd)
             {
-                if (newObject.IsCollisionDetectionEnabled)
+                if (newObject.MonitorForCollision)
                 {
                     r_CollisionManager.AddObjectToMonitor(newObject);
                     if (newObject.ScreenObjectType == eScreenObjectType.Player)

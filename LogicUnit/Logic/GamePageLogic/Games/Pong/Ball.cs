@@ -17,7 +17,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             Point point = new Point(
                 m_GameInformation.GameBoardSizeByPixel.Width,
                 m_GameInformation.GameBoardSizeByPixel.Height);
-            IsCollisionDetectionEnabled = true;
+            MonitorForCollision = true;
             this.Initialize(eScreenObjectType.Image, 0, $"bomb.png", point, true,
                 m_GameInformation.PointValuesToAddToScreen);
         }

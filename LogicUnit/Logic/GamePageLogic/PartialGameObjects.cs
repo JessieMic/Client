@@ -31,7 +31,6 @@ namespace LogicUnit
            m_PauseMenu.GetPauseMenu(m_Buttons,ref m_GameObjectsToAdd);
         }
 
-
         protected void setHearts()
         {
             m_Hearts.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;

@@ -13,7 +13,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
     {
         public Cherry(Point i_Point)
         {
-            IsCollisionDetectionEnabled = true;
+            MonitorForCollision = true;
             this.Initialize(eScreenObjectType.Image, 1, "pacman_cherry.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
             //Size.Height = Size.Width = GameSettings.GameGridSize / 5;

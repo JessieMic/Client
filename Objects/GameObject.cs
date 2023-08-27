@@ -23,10 +23,11 @@ namespace Objects
         public int Rotatation { get; set; } = 0;
         public int ScaleX { get; set; } = 1;
         private Point m_StartupPoint;
-        public bool IsCollisionDetectionEnabled { get; set; }
+        public bool MonitorForCollision { get; set; }
         public int ScaleY { get; set; } = 1;
         public string ImageSource { get; set; }
         public int ObjectNumber { get; set; }
+        public bool IsCollisionEnabled { get; set; } = true;
         public eScreenObjectType ScreenObjectType { get; set; }
         public int GameBoardGridSize { get; set; } = GameSettings.GameGridSize;
         protected GameInformation m_GameInformation = GameInformation.Instance;
@@ -135,15 +136,16 @@ namespace Objects
 
         public virtual void OnDisposed()
         {
-            IsCollisionDetectionEnabled = false;
-            Disposed.Invoke(this, null);
+            MonitorForCollision = false;
+            IsCollisionEnabled =false;
+            Disposed?.Invoke(this, null);
             IsVisable = false;
             OnUpdate();
         }
 
         public virtual void OnUpdate()
         {
-            UpdateGameObject.Invoke(this, null);
+            UpdateGameObject?.Invoke(this, null);
         }
 
         public Point GetPointOnGrid()
