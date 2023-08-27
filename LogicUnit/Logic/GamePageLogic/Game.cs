@@ -64,6 +64,7 @@ namespace LogicUnit
         //List for Ui changes
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
         protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
+
         protected int m_AmountOfPlayers;
 
         //Game loop variables
@@ -79,8 +80,10 @@ namespace LogicUnit
         protected readonly CollisionManager r_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
         static readonly object m_lock = new object();
+        static readonly object m_lockxy= new object();
         protected Queue<SpecialUpdate> m_SpecialEventQueue = new Queue<SpecialUpdate>();
         protected Queue<SpecialUpdate> m_SpecialEventWithPointQueue = new Queue<SpecialUpdate>();
+        protected Queue<SpecialUpdate> m_XYUPDATE = new Queue<SpecialUpdate>();
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
         protected string m_EndGameText = string.Empty;
@@ -129,11 +132,34 @@ namespace LogicUnit
             });
 
             r_ConnectionToServer.On<int, int,int>("SpecialUpdateWithPointReceived", (i_X, i_Y, i_Player) =>
-            { 
-                lock(m_lock)
-                {
-                    m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
-                }
+            {
+                //if(i_Player < 0)
+                //{
+                //    lock(m_lockxy)
+                //    {
+                //        m_XYUPDATE.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+                //    }
+                //}
+                //else
+                //{
+                    lock (m_lock)
+                    {
+                        m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+                        
+                    }
+                //}
+
+                //lock (m_lock)
+                //{
+                //    if(i_Player < 0)
+                //    {
+                //        m_XYUPDATE.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+                //    }
+                //    else
+                //    {
+                //        m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+                //    }
+                //}
                 //SpecialUpdateWithPointReceived(new SpecialUpdate(i_X, i_Y, i_Player));
             });
 
@@ -164,17 +190,20 @@ namespace LogicUnit
 
         private void checkForSpecialUpdates()
         {
-            lock(m_lock)
+            if(m_SpecialEventQueue.Count != 0 || m_SpecialEventWithPointQueue.Count != 0)
             {
-                if (m_SpecialEventQueue.Count != 0)
+                lock (m_lock)
                 {
-                    SpecialUpdate specialUpdate = m_SpecialEventQueue.Dequeue();
-                    SpecialUpdateReceived(specialUpdate);
-                }
-                if (m_SpecialEventWithPointQueue.Count != 0)
-                {
-                    SpecialUpdate specialUpdate = m_SpecialEventWithPointQueue.Dequeue();
-                    SpecialUpdateWithPointReceived(specialUpdate);
+                    if (m_SpecialEventQueue.Count != 0)
+                    {
+                        SpecialUpdate specialUpdate = m_SpecialEventQueue.Dequeue();
+                        SpecialUpdateReceived(specialUpdate);
+                    }
+                    if (m_SpecialEventWithPointQueue.Count != 0)
+                    {
+                        SpecialUpdate specialUpdate = m_SpecialEventWithPointQueue.Dequeue();
+                        SpecialUpdateWithPointReceived(specialUpdate);
+                    }
                 }
             }
         }
@@ -249,12 +278,46 @@ namespace LogicUnit
         }
         void getUpdatedPosition()
         {
+            //Queue<SpecialUpdate> temp = new Queue<SpecialUpdate>();
+            //if(m_XYUPDATE.Count != 0)
+            //{
+            //    lock(m_lockxy)
+            //    {
+            //        while(m_XYUPDATE.Count != 0)
+            //        {
+            //            temp.Enqueue( m_XYUPDATE.Dequeue());
+            //        }
+            //    }
+
+            //    foreach(var u in temp)
+            //    {
+                    
+            //    }
+            //}
+
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
                 Point pointRecived = new Point(m_ServerUpdates[i + 4], m_ServerUpdates[i + 8]);
+                Point p = new Point(
+                    pointRecived.Column,
+                    pointRecived.Row);
+                
+                if(p.Row == -100)
+                {
+                    p.Row = 0;
+                }
+                if (p.Column == -100)
+                {
+                    p.Column = 0;
+                }
+                System.Diagnostics.Debug.WriteLine($"{p.Column}    {p.Row}");
                 if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
                 {
-                    m_PlayerObjects[i].UpdatePointOnScreen(pointRecived);
+                    if(p.Row < 0)
+                    {
+                        p.Row = - pointRecived.Row;
+                    }
+                    m_PlayerObjects[i].UpdatePointOnScreen(p);
                     m_PlayersDataArray[i].PlayerPointData = pointRecived;
                 }
                 m_PlayersDataArray[i].Button = m_ServerUpdates[i];
@@ -436,6 +499,14 @@ namespace LogicUnit
 //             }
             try
             {
+                if(i_Point.Row == 0)
+                {
+                    i_Point.Row = -100;
+                }
+                if (i_Point.Column == 0)
+                {
+                    i_Point.Column = -100;
+                }
                 await r_ConnectionToServer.SendAsync(
                   "UpdatePlayerSelection", i_Player - 1
                   ,

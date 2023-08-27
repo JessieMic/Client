@@ -90,13 +90,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
                     IsObjectMoving = false;
                     if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
                     {
-                        Thread t = Thread.CurrentThread;
-                        System.Diagnostics.Debug.WriteLine(m_GameInformation.Player.PlayerNumber + " AAAAAA " + t.ManagedThreadId + " " + Thread.GetCurrentProcessorId());
                         OnSpecialEvent((int)ePacmanSpecialEvents.GotHit);
                     }
                     else
                     {
-                        //IsObjectMoving = true;
+                        IsObjectMoving = true;
                     }
                 }
             }

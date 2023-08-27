@@ -42,23 +42,35 @@ namespace LogicUnit.Logic.GamePageLogic
                     }
                 }
 
-                if (isOnScreen && update == 20)
-                {
-                    Point PointUpdate = Movable.GetPointOnGrid();
-                    Movable.OnUpdatePosition(PointUpdate);
-                    update = 0;
-                }
-                else if(saftyUpdate > 70)
+                //if (isOnScreen && update == 20)
+                //{
+                //    //Point PointUpdate = Movable.GetPointOnGrid();
+                //    //Movable.OnUpdatePosition(PointUpdate);
+                //    //update = 0;
+                //}
+                 if (Movable.Updated > 40)
                 {
                     if(m_GameInformation.Player.PlayerNumber == 1)
                     {
                         Point PointUpdate = Movable.GetPointOnGrid();
-                        System.Diagnostics.Debug.WriteLine($"{isOnScreen} DDDDDDDD");
+                        PointUpdate.Row = -PointUpdate.Row;
+                        if(Movable.ObjectNumber==1)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"{isOnScreen} DDDDDDDD");
+                        }
+                        
                         Movable.OnUpdatePosition(PointUpdate);
                     }
+                    Movable.Updated = 0;
                     update = 0;
                     saftyUpdate = 0;
                 }
+
+                 if (Movable.ObjectNumber == 1)
+                 {
+                     System.Diagnostics.Debug.WriteLine($"========={Movable.Updated}=====");
+                 }
+                Movable.Updated++;
                 update++;
                 saftyUpdate++;
                 Movable.SetImageDirection(Movable.Direction);
@@ -78,8 +90,8 @@ namespace LogicUnit.Logic.GamePageLogic
                 Movable.PointOnScreen = Movable.GetScreenPoint(PointUpdate, true);
                 if(isOnScreen)
                 {
+                    System.Diagnostics.Debug.WriteLine($"__________{PointUpdate.Column} __________");
                     Movable.OnUpdatePosition(PointUpdate);
-                    update = 0;
                 }
             }
         }

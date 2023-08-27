@@ -16,6 +16,7 @@ namespace Objects
         public Point PointOnScreen { get; set; }
         public int[,] Board { get; set; }
         public int ObjectNumber { get; set; }
+        public int Updated { get; set; } 
         public void SetImageDirection(Direction i_Direction);
         public Point GetScreenPoint(Point i_Point, bool i_IsGrided);
         public Point GetPointOnGrid();
