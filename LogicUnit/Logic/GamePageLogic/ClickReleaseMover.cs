@@ -13,25 +13,26 @@ namespace LogicUnit.Logic.GamePageLogic
         public IMovable Movable { get; set; }
         protected GameInformation m_GameInformation = GameInformation.Instance;
         private short update = 0;
-        private  bool isOnScreen = false;
+        private  bool m_IsOnScreen = false;
+
         public void RequestDirection(Direction i_Direction)
         {
             if (Movable.IsObjectMoving)
             {
-                isOnScreen = false;
+                m_IsOnScreen = false;
                 if (m_GameInformation.IsPointIsOnBoardPixels(Movable.PointOnScreen))
                 {
-                    isOnScreen = true;
+                    m_IsOnScreen = true;
                     update = 0;
                 }
 
                 if (i_Direction == Direction.Stop && Movable.Direction != Direction.Stop)
                 {
                     Movable.RequestedDirection = Movable.Direction;
-                    if (isOnScreen)
+                    if (m_IsOnScreen)
                     {
                         Point PointUpdate = Movable.GetPointOnGrid();
-                        Movable.OnUpdatePosition(PointUpdate);
+                       // Movable.OnUpdatePosition(PointUpdate);
                     }
                 }
 
@@ -51,7 +52,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 if(update > 70 && m_GameInformation.Player.PlayerNumber == 1)
                 {
                     Point PointUpdate = Movable.GetPointOnGrid();
-                    Movable.OnUpdatePosition(PointUpdate);
+                    //Movable.OnUpdatePosition(PointUpdate);
                     update = 0;
                 }
                 update++;
@@ -69,9 +70,9 @@ namespace LogicUnit.Logic.GamePageLogic
                 Movable.WantToTurn = true;
                 Movable.RequestedDirection = i_Direction;
                 Movable.PointOnScreen = Movable.GetScreenPoint(PointUpdate, true);
-                if (isOnScreen)
+                if (m_IsOnScreen)
                 {
-                    Movable.OnUpdatePosition(PointUpdate);
+                   // Movable.OnUpdatePosition(PointUpdate);
                 }
             }
         }

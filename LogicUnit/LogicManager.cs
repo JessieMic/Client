@@ -410,7 +410,7 @@ namespace LogicUnit
 
         private bool checkIfValidUsername(string i_UserName)
         {
-            if (i_UserName.Length < k_MinNameLength || i_UserName.Length > k_MaxNameLength)
+            if (string.IsNullOrEmpty(i_UserName) || i_UserName.Length < k_MinNameLength || i_UserName.Length > k_MaxNameLength)
             {
                 return false;
             }

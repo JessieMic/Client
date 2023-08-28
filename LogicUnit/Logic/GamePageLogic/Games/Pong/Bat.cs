@@ -19,14 +19,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         public double m_DeathAnimationStart;
         private ClickReleaseMover m_ClickReleaseMover = new ClickReleaseMover();
 
-        public Bat(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
+        public Bat(int i_PlayerNumber, int i_X, int i_Y, int[,] i_Board)
         {
             Velocity = 300;
             DoWeCheckTheObjectForCollision = true;
-            ObjectNumber = i_playerNumber;
+            ObjectNumber = i_PlayerNumber;
             MonitorForCollision = true;
             Board = i_Board;
-            this.Initialize(eScreenObjectType.Player, i_playerNumber, "pacmanfood.png", getPointOnGrid(i_X, i_Y), true,
+            this.Initialize(eScreenObjectType.Player, i_PlayerNumber, "uibackground.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
             m_ClickReleaseMover.Movable = this as IMovable;
             Size = new SizeDTO(45 * 5,20);
@@ -35,25 +35,18 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         Point getPointOnGrid(int i_X, int i_Y)
         {
             Point point;
-            if (ObjectNumber == 2)
+
+            if(ObjectNumber == 1 || (m_GameInformation.AmountOfPlayers == 4 && ObjectNumber == 2))
+            {
+                point = new Point(
+                    m_GameInformation.GameBoardSizeByGrid.Width / 2,
+                    0.5);
+            }
+            else
             {
                point = new Point(
                     m_GameInformation.GameBoardSizeByGrid.Width / 2,
                     m_GameInformation.GameBoardSizeByGrid.Height-1);
-            }
-            else if (ObjectNumber == 3)
-            {
-                point = new Point(0, i_Y - 1);
-            }
-            else if (ObjectNumber == 4)
-            {
-                point = new Point(i_X - 1, i_Y - 1);
-            }
-            else
-            {
-                point = new Point(
-                    m_GameInformation.GameBoardSizeByGrid.Width / 2,
-                    0);
             }
 
             return point;
@@ -82,25 +75,21 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 base.Update(i_TimeElapsed);
             }
         }
+        protected override void  isPointOnBoard(ref Point i_Point)
+        {
+            if (i_Point.Column < m_ValuesToAdd.Column)
+            {
+                i_Point.Column = m_ValuesToAdd.Column;
+            }
+            else if (i_Point.Column > m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width + m_ValuesToAdd.Column - Size.Width)
+            {
+                i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - Size.Width;
+            }
+        }
 
         public override void Collided(ICollidable i_Collidable)
         {
-            //if (i_Collidable is Explosion)
-            //{
-            //    if (!m_IsDyingAnimationOn && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen) && IsObjectMoving)
-            //    {
-            //        IsObjectMoving = false;
-            //        OnSpecialEvent(-1);
-            //    }
-            //}
-            //else if (i_Collidable is Boarder)
-            //{
-            //    collidedWithSolid(i_Collidable);
-            //}
-            //else if (i_Collidable is BreakableBoarder)
-            //{
-            //    collidedWithSolid(i_Collidable);
-            //}
+           i_Collidable.Collided(this);
         }
 
         public void DeathAnimation(double i_DeathStartTime)

@@ -19,16 +19,14 @@ namespace LogicUnit.Logic.GamePageLogic
         public int m_ClientNumber;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         public eGameStatus m_GameStatus;
-        public List<string> m_LoseOrder;
         public SizeDTO m_ClientScreenOurSize = new SizeDTO();
         public List<GameObject> m_HeartsOnScreen = new List<GameObject>();
         public GameObject m_HeartToRemove = null;
         private GameInformation m_GameInformation = GameInformation.Instance;
 
-        public void setHearts(int i_AmountOfPlayers, ref eGameStatus o_Status, ref List<string> o_LoseList, int i_ClientNumber)
+        public void setHearts(int i_AmountOfPlayers, ref eGameStatus o_Status, int i_ClientNumber)
         {
             m_GameStatus = o_Status;
-            m_LoseOrder = o_LoseList;
             m_AmountOfPlayers = m_AmountOfPlayersThatAreAlive = i_AmountOfPlayers;
             m_ClientNumber = i_ClientNumber;
             for (int i = 0; i < m_AmountOfPlayers; i++)
