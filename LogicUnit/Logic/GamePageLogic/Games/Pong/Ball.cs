@@ -12,75 +12,93 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 {
     internal class Ball : GameObject
     {
-        int xDirectionBounceFactor=220;
-        int yDirectionBounceFactor=220;
+        int xDirectionBounceFactor;
+        int yDirectionBounceFactor;
+        private int m_StartUpDirection = 1;
+
         public Ball()
         {              
                 Point point = new Point(
                 m_GameInformation.GameBoardSizeByGrid.Width/2,
                 m_GameInformation.GameBoardSizeByGrid.Height/2);
             MonitorForCollision = true;
+            IsObjectMoving = true;
             this.Initialize(eScreenObjectType.Image, 0, "pacmanfood.png", point, true,
                 m_GameInformation.PointValuesToAddToScreen);
+            xDirectionBounceFactor= yDirectionBounceFactor=Velocity = 120;
         }
 
         public override void Update(double i_TimeElapsed)
         {
             Point newPoint = PointOnScreen;
-            newPoint.Column += xDirectionBounceFactor * i_TimeElapsed / 1000;
-            newPoint.Row += yDirectionBounceFactor * i_TimeElapsed / 1000;
+            bool isPointOnScreen;
 
-            //isPointOnBoard(ref newPoint);
-            PointOnScreen = newPoint;
-
-            //if (PointOnScreen.Column  <= m_ValuesToAdd.Column || PointOnScreen.Column >= m_GameInformation.GameBoardSizeByPixel.Height+ m_ValuesToAdd.Column - 45)
-            //{
-            //    xDirectionBounceFactor = -xDirectionBounceFactor;
-            //}
-
-            //if (PointOnScreen.Row <= m_ValuesToAdd.Row  || PointOnScreen.Column >= m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Row - 45)
-            //{
-            //    xDirectionBounceFactor = -xDirectionBounceFactor;
-            //}
-
-            if (PointOnScreen.Column <= m_ValuesToAdd.Column )
+            if(IsObjectMoving)
             {
-                xDirectionBounceFactor = 220;
-            }
+                newPoint.Column += xDirectionBounceFactor * i_TimeElapsed / 1000;
+                newPoint.Row += yDirectionBounceFactor * i_TimeElapsed / 1000;
+                PointOnScreen = newPoint;
+                isPointOnScreen = m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen);
 
-            if (PointOnScreen.Column >= m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - 45)
-            {
-                xDirectionBounceFactor = -220;
-            }
+                if (PointOnScreen.Column <= m_ValuesToAdd.Column)
+                {
+                    xDirectionBounceFactor = Velocity;
+                }
 
-            if (PointOnScreen.Row <= m_ValuesToAdd.Row)
-            {
-                yDirectionBounceFactor = 220;
-            }
+                if (PointOnScreen.Column >= m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - 45)
+                {
+                    xDirectionBounceFactor = -Velocity;
+                }
 
-            if (PointOnScreen.Row>= m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - 45)
-            {
-                yDirectionBounceFactor = -220;
-            }
 
-            ////if ball's 'x' cordinate reaches start of the screen width
-            //if (PointOnScreen.Column <= 10)
+                if (PointOnScreen.Row <= m_ValuesToAdd.Row)
+                {
+                    if (isPointOnScreen)
+                    {
+                       // OnSpecialEvent(1);
+                        IsObjectMoving = false;
+                    }
+                    else
+                    {
+                        yDirectionBounceFactor = Velocity;
+                    }
+                }
+
+                if (PointOnScreen.Row >= m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - 45)
+                {
+                    if (isPointOnScreen)
+                    {
+                        //OnSpecialEvent(2);
+                        IsObjectMoving = false;
+                    }
+                    else
+                    {
+                        yDirectionBounceFactor = -Velocity;
+                    }
+                }
+            }
+        }
+
+        public override void Collided(ICollidable i_Collidable)
+        {
+            yDirectionBounceFactor *= -1;
+            //if(i_Collidable.ObjectNumber == 2)
             //{
-            //    xDirectionBounceFactor = 50;
+            //    yDirectionBounceFactor = -Velocity;
             //}
-            ////if ball's 'y' cordinate reaches end of the screen height
-            //if (PointOnScreen.Row >= m_GameInformation.GameBoardSizeByPixel.Height - 45)
+            //else
             //{
-            //    yDirectionBounceFactor = -50;
+            //    yDirectionBounceFactor = Velocity;
             //}
-            ////if ball's 'x' cordinate reaches start of the screen height
-            //if (PointOnScreen.Row <= 45) //if (ballYPosition <= -(screenHeight / 2)+75)
-            //{
-            //    yDirectionBounceFactor = 50;
-            //}
+        }
 
-
-
+        public void Reset()
+        {
+            m_StartUpDirection *= -1;
+            xDirectionBounceFactor = Velocity * m_StartUpDirection;
+            yDirectionBounceFactor = Velocity * m_StartUpDirection;
+            resetToStartupPoint();
+            IsObjectMoving = true;
         }
 
     }

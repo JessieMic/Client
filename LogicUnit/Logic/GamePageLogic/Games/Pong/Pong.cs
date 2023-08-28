@@ -52,9 +52,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
             {
-                if (i_SpecialUpdate.Update < 4)
+                if (i_SpecialUpdate.Update <= 2)
                 {
-                    PlayerGothit(i_SpecialUpdate.Player_ID);
+                    m_Ball.Reset();
+                    PlayerGothit(i_SpecialUpdate.Update);
                 }
                 else
                 {

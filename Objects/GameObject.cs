@@ -167,7 +167,7 @@ namespace Objects
             return point;
         }
 
-        protected void isPointOnBoard(ref Point i_Point)
+        protected virtual void isPointOnBoard(ref Point i_Point)
         {
             if (i_Point.Column < m_ValuesToAdd.Column)
             {
@@ -264,7 +264,7 @@ namespace Objects
             {
                 Point newPoint = PointOnScreen;
                 newPoint.Column += ((Direction.ColumnOffset * Velocity) * i_TimeElapsed / 1000);
-                newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed / 1000);
+                //newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed / 1000);
 
                 isPointOnBoard(ref newPoint);
                 PointOnScreen = newPoint;

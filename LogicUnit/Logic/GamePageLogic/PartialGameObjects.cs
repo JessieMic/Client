@@ -42,7 +42,7 @@ namespace LogicUnit
         {
             m_Hearts.m_ClientScreenDimension = m_GameInformation.m_ClientScreenDimension;
             m_Hearts.m_ClientScreenOurSize = m_ScreenMapping.m_PlayerGameBoardScreenSize[m_Player.PlayerNumber - 1];
-            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus, ref m_LoseOrder,m_Player.PlayerNumber);
+            m_Hearts.setHearts(m_GameInformation.AmountOfPlayers, ref m_GameStatus,m_Player.PlayerNumber);
             m_Hearts.getHearts(ref m_GameObjectsToAdd);
         }
 

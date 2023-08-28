@@ -241,8 +241,6 @@ namespace LogicUnit
 
                 Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
                 m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
-                //m_LoopNumber++;
-
             }
             if (m_GameStatus == eGameStatus.Ended)
             {

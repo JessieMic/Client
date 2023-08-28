@@ -34,7 +34,7 @@ namespace Objects
                     getValuesToAdd());
 
                 newButton.SetImageDirection(Direction.getDirection(button.ToString()));
-                if(button == eButton.PauseMenu && m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
+                if((button == eButton.PauseMenu || button == eButton.ButtonA) && m_ClientScreenDimension.Position.Row == eRowPosition.LowerRow)
                 {
                     newButton.Rotatation = 0;
                 }
@@ -173,11 +173,11 @@ namespace Objects
                 }
                 else if(i_Type == eButton.ButtonA)
                 {
-                    returnPoint.SetAndGetPoint(11, 1);
+                    returnPoint.SetAndGetPoint(9, 1);
                 }
                 else if(i_Type == eButton.ButtonB)
                 {
-                    returnPoint.SetAndGetPoint(7, 1);
+                    returnPoint.SetAndGetPoint(5, 1);
                 }
                 else if (i_Type == eButton.PauseMenu)
                 {

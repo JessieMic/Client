@@ -132,9 +132,23 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiImage Include="Resources\Images\BombIt\a1slime1.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a1slime2.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a1slime3.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a2slime1.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a2slime2.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a2slime3.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a3slime1.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a3slime2.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a3slime3.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a4slime1.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a4slime2.png" />
+	  <MauiImage Include="Resources\Images\BombIt\a4slime3.png" />
 	  <MauiImage Include="Resources\Images\BombIt\bomb.png" />
-	  <MauiImage Include="Resources\Images\BombIt\bombitbackground.png" />
+	  <MauiImage Include="Resources\Images\BombIt\bombitwall.png" />
 	  <MauiImage Include="Resources\Images\BombIt\explosion.png" />
+	  <MauiImage Include="Resources\Images\BombIt\mushroom.png" />
+	  <MauiImage Include="Resources\Images\Game\aburron.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder1.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder2.png" />
