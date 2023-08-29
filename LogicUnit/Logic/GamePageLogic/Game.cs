@@ -133,34 +133,10 @@ namespace LogicUnit
 
             r_ConnectionToServer.On<int, int,int>("SpecialUpdateWithPointReceived", (i_X, i_Y, i_Player) =>
             {
-                //if(i_Player < 0)
-                //{
-                //    lock(m_lockxy)
-                //    {
-                //        m_XYUPDATE.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
-                //    }
-                //}
-                //else
-                //{
-                    lock (m_lock)
-                    {
-                        m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
-                        
-                    }
-                //}
-
-                //lock (m_lock)
-                //{
-                //    if(i_Player < 0)
-                //    {
-                //        m_XYUPDATE.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
-                //    }
-                //    else
-                //    {
-                //        m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
-                //    }
-                //}
-                //SpecialUpdateWithPointReceived(new SpecialUpdate(i_X, i_Y, i_Player));
+                lock (m_lock)
+                {
+                    m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+                }
             });
 
             r_ConnectionToServer.On<string>("Disconnected", (i_Message) =>
@@ -315,7 +291,7 @@ namespace LogicUnit
                     {
                         p.Row = - pointRecived.Row;
                     }
-                    m_PlayerObjects[i].UpdatePointOnScreen(p);
+                    m_PlayerObjects[i].UpdatePointOnScreenByGrid(p);
                     m_PlayersDataArray[i].PlayerPointData = pointRecived;
                 }
                 m_PlayersDataArray[i].Button = m_ServerUpdates[i];
@@ -607,7 +583,7 @@ namespace LogicUnit
             {
                 r_ConnectionToServer.SendAsync(
                     "SpecialUpdateWithPoint",
-                    i_Point.Column, i_Point.Row, i_Player
+                    (int)i_Point.Column,(int)i_Point.Row, i_Player
                 );
             }
             catch(Exception e)

@@ -12,9 +12,9 @@ namespace UI
 
         private async void OnSkipClicked(object sender, EventArgs e)
         {
-           //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pong;
+           m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pong;
           m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
-            //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
+           // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
             m_GameInformation.AmountOfPlayers = 2;
             m_GameInformation.Player.Name = DateTime.Now.ToString();
             await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
