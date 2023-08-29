@@ -120,15 +120,13 @@ public partial class Lobby : ContentPage
     private void OnChooseGameClicked(object sender, EventArgs e)
     {
         GamesPopUp gamesPopUp = new GamesPopUp(UpdateChosenGame);
-
-        Game snakeGame = Utils.GameLibrary.GetSnakeGame();
         Game pacmanGame = Utils.GameLibrary.GetPacmanGame();
-
-        GameCard snakeCard = new GameCard(snakeGame);
+        Game bombItGame = Utils.GameLibrary.GetBombItGame();
         GameCard pacmanCard = new GameCard(pacmanGame);
+        GameCard bombItCard = new GameCard(bombItGame);
 
-        gamesPopUp.AddGameToComponent(snakeCard);
         gamesPopUp.AddGameToComponent(pacmanCard);
+        gamesPopUp.AddGameToComponent(bombItCard);
 
         this.ShowPopup(gamesPopUp);
     }
@@ -151,9 +149,17 @@ public partial class Lobby : ContentPage
             }
             else
             {
-                YesNoPopUp yesNoPopUp = new YesNoPopUp($"There are {amountOfPlayers} players in the room." +
-                    $"{Environment.NewLine}Are you sure you want to continue?", updateServerToMoveToNextPage);
-                this.ShowPopup(yesNoPopUp);
+                if (m_ChosenGame == Utils.GameLibrary.GetPongGame() && amountOfPlayers == 3)
+                {
+                    MessagePopUp messagePopUp = new MessagePopUp(Utils.Messages.k_PongThreePlayers);
+                    this.ShowPopup(messagePopUp);
+                }
+                else
+                {
+                    YesNoPopUp yesNoPopUp = new YesNoPopUp($"There are {amountOfPlayers} players in the room." +
+                        $"{Environment.NewLine}Are you sure you want to continue?", updateServerToMoveToNextPage);
+                    this.ShowPopup(yesNoPopUp);
+                }
             }
         }
         else
@@ -412,77 +418,3 @@ public partial class Lobby : ContentPage
         }
     }
 }
-
-//    [Obsolete]
-//    protected override void OnNavigatedTo(NavigatedToEventArgs args)
-//    {
-//        base.OnNavigatedTo(args);
-
-//        CodeLabel.Text = m_Code;
-
-//        //PlayerCard playerCard = new PlayerCard(RemovePlayer, m_PlayerName);
-//        //PlayersComponent.Add(playerCard);
-
-//        if (m_PlayerType == PlayerType.Host)
-//        {
-//            //playerCard.AddRemoveButton();
-
-//            ChooseGameButton = new Button();
-//            ChooseGameButton.Text = "Choose a Game";
-//            ChooseGameButton.HorizontalOptions = LayoutOptions.CenterAndExpand;
-//            ChooseGameButton.VerticalOptions = LayoutOptions.CenterAndExpand;
-//            ChooseGameButton.Clicked += OnChooseGameClicked;
-//            ButtonsComponent.Add(ChooseGameButton);
-//        }
-
-//        //m_LogicManager.SetAddPlayersAction(AddPlayers);
-//        //m_LogicManager.SetPlayersToRemoveAction(RemovedByHost);
-//        //m_LogicManager.SetChosenGameAction(ShowChosenGame);
-//        //m_LogicManager.StartUpdatesRefresher();
-
-//        //m_IsPageinitialized = true;
-
-//        //List<string> list = new List<string>
-//        //{
-//        //    "Name",
-//        //    "Player1",
-//        //    "Player2",
-//        //    "Player3"
-//        //};
-//        //AddPlayers(list);
-//    }
-
-//    public void PlayerClickedLeave(string i_PlayerName)
-//    {
-//        foreach (PlayerCard card in PlayersComponent.Children.ToList())
-//        {
-//            if (card.CheckIfName(i_PlayerName))
-//            {
-//                PlayersComponent.Remove(card);
-//            }
-//        }
-//    }
-
-//    //public void ChangeStatusLabelToReady()
-//    //{
-//    //    StatusLabel.Text = "All players connected!";
-//    //}
-
-
-
-
-
-//    private void editGameDetailsLabel()
-//    {
-//        FormattedString formattedString = new FormattedString();
-
-//        formattedString.Spans.Add(
-//            new Span { Text = "Game Details:" + Environment.NewLine, FontAttributes = FontAttributes.Bold });
-//        formattedString.Spans.Add(
-//            new Span { Text = m_ChosenGame.GetDetails() });
-
-//        GameDetailsLabel.FormattedText = formattedString;
-//        GameDetailsLabel.HorizontalTextAlignment = TextAlignment.Center;
-//        ChosenGameComponent.Add(GameDetailsLabel);
-//    }
-//}
