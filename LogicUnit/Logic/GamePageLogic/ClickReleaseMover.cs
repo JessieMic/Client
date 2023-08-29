@@ -32,7 +32,7 @@ namespace LogicUnit.Logic.GamePageLogic
                     if (m_IsOnScreen)
                     {
                         Point PointUpdate = Movable.GetPointOnGrid();
-                       // Movable.OnUpdatePosition(PointUpdate);
+                        Movable.OnUpdatePosition(PointUpdate);
                     }
                 }
 
@@ -52,7 +52,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 if(update > 70 && m_GameInformation.Player.PlayerNumber == 1)
                 {
                     Point PointUpdate = Movable.GetPointOnGrid();
-                    //Movable.OnUpdatePosition(PointUpdate);
+                    Movable.OnUpdatePosition(PointUpdate);
                     update = 0;
                 }
                 update++;
@@ -72,7 +72,7 @@ namespace LogicUnit.Logic.GamePageLogic
                 Movable.PointOnScreen = Movable.GetScreenPoint(PointUpdate, true);
                 if (m_IsOnScreen)
                 {
-                   // Movable.OnUpdatePosition(PointUpdate);
+                    Movable.OnUpdatePosition(PointUpdate);
                 }
             }
         }

@@ -202,7 +202,7 @@ namespace Objects
             {
                 newPoint.Row = i_Solid.PointOnScreen.Row + i_Solid.Bounds.Height;
             }
-            else //direction is down
+            else if (Direction == Direction.Down)
             {
                 newPoint.Row = i_Solid.PointOnScreen.Row - Size.Height;
             }
@@ -281,18 +281,21 @@ namespace Objects
             return value;
         }
 
-        public void UpdatePointOnScreen(Point i_Point)
+        public void UpdatePointOnScreenByGrid(Point i_Point)
         {
-            Point p = GetScreenPoint(i_Point, true);
+            UpdatePointOnScreenByPixel(GetScreenPoint(i_Point, true));
+        }
+
+        public void UpdatePointOnScreenByPixel(Point i_Point)
+        {
             Updated = 0;
-            if (!m_GameInformation.IsPointIsOnBoardPixels(p))
+            if (!m_GameInformation.IsPointIsOnBoardPixels(i_Point))
             {
-                PointOnScreen = p;
+                PointOnScreen = i_Point;
             }
-            else if(!m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))//update is on screen, if actual point isnt 
+            else if (!m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))//update is on screen, if actual point isnt 
             {
-                PointOnScreen = p;
-                System.Diagnostics.Debug.WriteLine("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
+                PointOnScreen = i_Point;
             }
         }
 

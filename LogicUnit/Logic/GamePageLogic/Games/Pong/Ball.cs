@@ -15,6 +15,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         int xDirectionBounceFactor;
         int yDirectionBounceFactor;
         private int m_StartUpDirection = 1;
+        private double m_StartTimeOfCoolDownTime = 0;
+        private bool m_IsCoolDownTimeStarted = false;
+        private int m_TimesGotHit = 0;
+        private double m_TimeFromLastUpdate = 0;
 
         public Ball()
         {              
@@ -30,77 +34,131 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
         public override void Update(double i_TimeElapsed)
         {
-            Point newPoint = PointOnScreen;
-            bool isPointOnScreen;
-
             if(IsObjectMoving)
             {
-                newPoint.Column += xDirectionBounceFactor * i_TimeElapsed / 1000;
-                newPoint.Row += yDirectionBounceFactor * i_TimeElapsed / 1000;
-                PointOnScreen = newPoint;
-                isPointOnScreen = m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen);
-
-                if (PointOnScreen.Column <= m_ValuesToAdd.Column)
+                updatePoint(i_TimeElapsed);
+                bounceFromHittingSidesOfGameBoard();
+                checkIfLost();
+               // RefreshOtherClientsAboutPosition();
+            }
+            else if (m_IsCoolDownTimeStarted)
+            {
+                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_StartTimeOfCoolDownTime;
+                if(timePassed > 2000)
                 {
-                    xDirectionBounceFactor = Velocity;
+                    m_IsCoolDownTimeStarted = false;
+                    IsObjectMoving = true;
                 }
+            }
+            //else if (m_GameInformation.Player.PlayerNumber == 1)
+            //{
+            //    if (m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeFromLastUpdate > 3000
+            //       && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+            //    {
+            //        m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            //        OnSpecialEvent(-1);
+                   
+            //    }
+            //}
 
-                if (PointOnScreen.Column >= m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - 45)
+
+            m_TimesGotHit++;
+        }
+
+        private void RefreshOtherClientsAboutPosition()
+        {
+            if(IsObjectMoving)
+            {
+                if(m_TimesGotHit > 4)
                 {
-                    xDirectionBounceFactor = -Velocity;
+                    m_TimesGotHit = 0;
+                    if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+                    {
+                        OnSpecialEvent(-1);
+                    }
                 }
+            }
+        }
 
+        private void bounceFromHittingSidesOfGameBoard()
+        {
+            if (PointOnScreen.Column <= m_ValuesToAdd.Column)
+            {
+                xDirectionBounceFactor = Velocity;
+            }
 
-                if (PointOnScreen.Row <= m_ValuesToAdd.Row)
+            if (PointOnScreen.Column >= m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - 45)
+            {
+                xDirectionBounceFactor = -Velocity;
+            }
+        }
+
+        private void updatePoint(double i_TimeElapsed)
+        {
+            Point newPoint = PointOnScreen;
+
+            newPoint.Column += xDirectionBounceFactor * i_TimeElapsed / 1000;
+            newPoint.Row += yDirectionBounceFactor * i_TimeElapsed / 1000;
+            PointOnScreen = newPoint;
+        }
+
+        private void checkIfLost()
+        {
+            bool isPointOnScreen = m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen);
+            
+            if (PointOnScreen.Row <= m_ValuesToAdd.Row)
+            {
+                if (isPointOnScreen)
                 {
-                    if (isPointOnScreen)
-                    {
-                       // OnSpecialEvent(1);
-                        IsObjectMoving = false;
-                    }
-                    else
-                    {
-                        yDirectionBounceFactor = Velocity;
-                    }
+                    OnSpecialEvent(m_GameInformation.Player.PlayerNumber);
+                    System.Diagnostics.Debug.WriteLine("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+                    IsObjectMoving = false;
                 }
-
-                if (PointOnScreen.Row >= m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - 45)
+                else
                 {
-                    if (isPointOnScreen)
-                    {
-                        //OnSpecialEvent(2);
-                        IsObjectMoving = false;
-                    }
-                    else
-                    {
-                        yDirectionBounceFactor = -Velocity;
-                    }
+                    yDirectionBounceFactor *= -1;
+                }
+            }
+
+            if (PointOnScreen.Row >= m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - 45)
+            {
+                if (isPointOnScreen)
+                {
+                    OnSpecialEvent(m_GameInformation.Player.PlayerNumber);
+                    System.Diagnostics.Debug.WriteLine("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                    IsObjectMoving = false;
+                }
+                else
+                {
+                    yDirectionBounceFactor *= -1;
                 }
             }
         }
 
         public override void Collided(ICollidable i_Collidable)
         {
-            yDirectionBounceFactor *= -1;
-            //if(i_Collidable.ObjectNumber == 2)
-            //{
-            //    yDirectionBounceFactor = -Velocity;
-            //}
-            //else
-            //{
-            //    yDirectionBounceFactor = Velocity;
-            //}
+            if (m_GameInformation.ScreenInfoOfAllPlayers[i_Collidable.ObjectNumber - 1].Position.Row == eRowPosition.UpperRow)
+            {
+                yDirectionBounceFactor = 120;
+            }
+            else
+            {
+                yDirectionBounceFactor = -120;
+            }
         }
 
         public void Reset()
         {
+            m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            m_TimesGotHit = 0;
+            IsObjectMoving = false;
+            m_StartTimeOfCoolDownTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            m_IsCoolDownTimeStarted = true;
             m_StartUpDirection *= -1;
             xDirectionBounceFactor = Velocity * m_StartUpDirection;
             yDirectionBounceFactor = Velocity * m_StartUpDirection;
             resetToStartupPoint();
-            IsObjectMoving = true;
         }
-
     }
     
 }
