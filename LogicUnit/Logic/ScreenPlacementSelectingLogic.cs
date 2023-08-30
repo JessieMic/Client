@@ -31,7 +31,7 @@ namespace LogicUnit
         {
 
             r_ConnectionToServer = new HubConnectionBuilder()
-                .WithUrl(Utils.m_GameHubAddress)
+                .WithUrl(ServerAddressManager.Instance!.GameHubAddress)
                 .Build();
 
             r_ConnectionToServer.On<string[]>("RecieveScreenUpdate", (i_ButtonsThatAreOccupied) =>

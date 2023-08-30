@@ -2,14 +2,31 @@
 
 public class ServerAddressManager
 {
-    private readonly string r_BaseAddress;
-    public string GameHubAddress { get; }
-    public string InGameHubAddress { get; }
+    private static ServerAddressManager? s_Instance = null;
 
-    public ServerAddressManager(string i_BaseAddress)
+    public string GameHubAddress { get; private set; }
+    public string InGameHubAddress { get; private set; }
+
+    private static readonly object sr_Lock = new();
+
+    private ServerAddressManager()
     {
-        r_BaseAddress = i_BaseAddress;
+    }
+
+    public void SetAddresses(string i_BaseAddress)
+    {
         GameHubAddress = i_BaseAddress + "/GameHub";
         InGameHubAddress = i_BaseAddress + "/InGameHub";
+    }
+
+    public static ServerAddressManager? Instance
+    {
+        get
+        {
+            lock(sr_Lock)
+            {
+                return s_Instance ??= new ServerAddressManager();
+            }
+        }
     }
 }

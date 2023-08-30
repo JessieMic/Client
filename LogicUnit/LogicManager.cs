@@ -384,8 +384,7 @@ namespace LogicUnit
 
                 if (goToNextPage)
                 {
-                    //TODO: change from action to func that receives the address manager
-                    ServerAddressManager addressManager = new ServerAddressManager( await getServerAddress());
+                    ServerAddressManager.Instance!.SetAddresses(await getServerAddress());
                     m_GoToNextPage.Invoke();
                 }
             }

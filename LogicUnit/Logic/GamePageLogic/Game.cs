@@ -102,7 +102,7 @@ namespace LogicUnit
             
             m_PlayerObjects = new GameObject[m_GameInformation.AmountOfPlayers];// new GameObject[2];//
             r_ConnectionToServer = new HubConnectionBuilder()
-                .WithUrl(Utils.m_InGameHubAddress)
+                .WithUrl(ServerAddressManager.Instance!.InGameHubAddress)
                 .Build();
 
             r_ConnectionToServer.Reconnecting += (sender) =>
