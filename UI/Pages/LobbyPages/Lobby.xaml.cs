@@ -177,6 +177,7 @@ public partial class Lobby : ContentPage
     private void goToNextPage()
     {
         m_LogicManager.StopUpdatesRefresher();
+
         Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage)));
     }
 
