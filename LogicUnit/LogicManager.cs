@@ -17,6 +17,7 @@ namespace LogicUnit
         private Uri m_Uri;
         private HttpClient m_HttpClient = new HttpClient();
         private RoomData m_RoomData;
+        private string m_gameRoomAddress;
         //private Action<List<string>> m_AddPlayersToScreen;
         private Func<List<string>, bool> m_AddPlayersToScreen;
         private Func<List<string>, bool> m_RemovePlayersByHost;
@@ -383,6 +384,9 @@ namespace LogicUnit
 
                 if (goToNextPage)
                 {
+                    //TODO: change from action to func that receives the address manager
+                    string address = await getServerAddress();
+                    ServerAddressManager addressManager = new ServerAddressManager(){BaseAddress = await getServerAddress()};
                     m_GoToNextPage.Invoke();
                 }
             }
@@ -465,6 +469,26 @@ namespace LogicUnit
         public void StopUpdatesRefresher()
         {
             m_TimerForPlayersUpdate.Dispose();
+        }
+
+        private async Task<string> getServerAddress()
+        {
+            StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
+            m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_GetServerAddress}");
+            string address = "";
+            UriBuilder uriBuilder = new UriBuilder(m_Uri);
+            uriBuilder.Query= $"i_RoomCode={m_GameInformation.Player.RoomCode}";
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.GetAsync(uriBuilder.Uri);
+                address = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception e)
+            {
+                m_ServerErrorAction.Invoke();
+            }
+
+            return address;
         }
     }
 }
