@@ -14,5 +14,7 @@ namespace UI.Pages.LobbyPages.Utils
         public static string k_WaitForPlayers = $"You can't move on to the game." +
                     $"{Environment.NewLine}Wait for other players to join.";
         public static string k_MustChooseGame = "You must choose a game first.";
+        public static string k_PongThreePlayers = $"You can't play Pong with 3 players," +
+            $"{Environment.NewLine}only with 2 or 4 players.";
     }
 }

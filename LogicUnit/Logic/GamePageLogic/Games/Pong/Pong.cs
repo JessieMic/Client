@@ -35,27 +35,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 m_BombItPlayers = new Bat[m_GameInformation.AmountOfPlayers];
             }
 
-
-            protected override void specialEventInvoked(object i_Sender, int i_eventNumber)
-            {
-                if (i_eventNumber == -1)
-                {
-                    base.specialEventInvoked(i_Sender, i_eventNumber);
-                }
-                else
-                {
-                    //m_GameObjectsToAdd.AddRange(m_BombItPlayers[i_eventNumber - 1].GetExplosions());
-                }
-
-            }
-
-
             protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
             {
-                if (i_SpecialUpdate.Update <= 2)
+                if (i_SpecialUpdate.Update <= 4 && i_SpecialUpdate.Update >0)
                 {
                     m_Ball.Reset();
-                    PlayerGothit(i_SpecialUpdate.Update);
+                    SideGotHit(i_SpecialUpdate.Update);
                 }
                 else
                 {
@@ -63,24 +48,65 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 }
             }
 
-            protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
+            protected void SideGotHit(int i_Player)
             {
-                //addGameObjectImmediately(m_BombItPlayers[i_SpecialUpdate.Player_ID - 1].PlaceBomb(new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y)));
+                try
+                {
+                    if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].Position.Row == eRowPosition.UpperRow)
+                    {
+                        base.PlayerLostALife(null, 1);
+                        if (m_GameInformation.AmountOfPlayers == 4)
+                        {
+                            base.PlayerLostALife(null, 2);
+                        }
+                    }
+                    else
+                    {
+                        if (m_GameInformation.AmountOfPlayers == 4)
+                        {
+                            base.PlayerLostALife(null, 3);
+                            base.PlayerLostALife(null, 4);
+                        }
+                        else
+                        {
+                            base.PlayerLostALife(null, 2);
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
             }
 
-            private void PlayerGothit(int i_Player)
+            protected override void specialEventInvoked(object i_Sender, int i_eventNumber)
             {
-                double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+                if(i_eventNumber == -1)
+                {
+                    SendServerSpecialPointUpdate(m_Ball.GetCurrentPointOnScreen(), -1);
+                }
+                else
+                {
+                    SendSpecialServerUpdate(i_Sender, i_eventNumber);
+                }
+            }
 
-                m_BombItPlayers[i_Player - 1].AmountOfLives--;
-                m_BombItPlayers[i_Player - 1].DeathAnimation(startTimeOfDeathAnimation);
-
-                base.PlayerLostALife(null, i_Player);
+            protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
+            {
+                m_Ball.UpdatePointOnScreenByPixel(m_Ball.GetScreenPoint(new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y),false));
             }
 
             protected override void AddGameObjects()
             {
+                addBall();
                 addPlayerObjects();
+            }
+
+            private void addBall()
+            {
+                m_Ball = new Ball();
+                m_GameObjectsToAdd.Add(m_Ball);
+                m_Ball.SpecialEvent += specialEventInvoked;
             }
 
             private void addPlayerObjects()
@@ -96,8 +122,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                     m_GameObjectsToAdd.Add(newPlayer);
                     m_BombItPlayers[i - 1] = newPlayer;
                 }
-                m_Ball = new Ball();
-                m_GameObjectsToAdd.Add(m_Ball);
             }
 
             protected override void UpdatePosition(double i_TimeElapsed)

@@ -161,7 +161,7 @@ namespace LogicUnit
 
                 if (strResponse.Length != 0 && strResponse != m_LastChosenGame)
                 {
-                    if (strResponse == "BombIt")
+                    if (strResponse == "Bomb-It")
                     {
                         m_GameInformation.NameOfGame = eGames.BombIt;
                     }
@@ -169,7 +169,10 @@ namespace LogicUnit
                     {
                         m_GameInformation.NameOfGame = eGames.Pacman;
                     }
-                    // TODO: add more games when created
+                    else if (strResponse == "Pong")
+                    {
+                        m_GameInformation.NameOfGame = eGames.Pong;
+                    }
 
                     m_LastChosenGame = strResponse;
                     m_ChosenGameAction.Invoke(strResponse);

@@ -34,19 +34,39 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
         Point getPointOnGrid(int i_X, int i_Y)
         {
-            Point point;
+            Point point = new Point();
 
-            if(ObjectNumber == 1 || (m_GameInformation.AmountOfPlayers == 4 && ObjectNumber == 2))
+            if(m_GameInformation.AmountOfPlayers == 4)
             {
-                point = new Point(
-                    m_GameInformation.GameBoardSizeByGrid.Width / 2,
-                    0.5);
+                if(ObjectNumber == 1 || ObjectNumber == 3)
+                {
+                    point.Column = m_GameInformation.GameBoardSizeByGrid.Width / 4;
+                }
+                else
+                {
+                    point.Column = m_GameInformation.GameBoardSizeByGrid.Width * 3/ 4;
+                }
+
+                if(ObjectNumber == 2 || ObjectNumber == 1)
+                {
+                    point.Row = 0.5;
+                }
+                else
+                {
+                    point.Row = m_GameInformation.GameBoardSizeByGrid.Height - 1;
+                }
             }
             else
             {
-               point = new Point(
-                    m_GameInformation.GameBoardSizeByGrid.Width / 2,
-                    m_GameInformation.GameBoardSizeByGrid.Height-1);
+                point.Column = m_GameInformation.GameBoardSizeByGrid.Width / 2;
+                if(ObjectNumber == 1)
+                {
+                    point.Row = 0.5;
+                }
+                else
+                {
+                    point.Row = m_GameInformation.GameBoardSizeByGrid.Height - 1;
+                }
             }
 
             return point;
@@ -81,7 +101,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 i_Point.Column = m_ValuesToAdd.Column;
             }
-            else if (i_Point.Column > m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width + m_ValuesToAdd.Column - Size.Width)
+            else if (i_Point.Column > m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - Size.Width)
             {
                 i_Point.Column = m_GameInformation.GameBoardSizeByPixel.Width + m_ValuesToAdd.Column - Size.Width;
             }
@@ -89,7 +109,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
         public override void Collided(ICollidable i_Collidable)
         {
-           i_Collidable.Collided(this);
+            if(i_Collidable is Ball)
+            {
+                i_Collidable.Collided(this);
+            }
+            else
+            {
+                collidedWithSolid(i_Collidable);
+                Direction = Direction.Stop;
+            }
         }
 
         public void DeathAnimation(double i_DeathStartTime)
