@@ -25,21 +25,6 @@ namespace Objects
             m_DidPlayerPickAPlacement = false;
         }
 
-        //public static Player Instance
-        //{
-        //    get
-        //    {
-        //        lock (s_InstanceLock)
-        //        {
-        //            if (m_Instance == null)
-        //            {
-        //                m_Instance = new Player();
-        //            }
-        //        }
-        //        return m_Instance;
-        //    }
-        //}
-
         public bool DidPlayerPickAPlacement
         {
             get

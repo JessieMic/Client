@@ -34,6 +34,7 @@ public partial class Lobby : ContentPage
     {
         InitializeComponent();
         m_LogicManager.ResetRoomData();
+        m_GameInformation.Reset();
         //StatusLabel.Text = "Waiting for all players...";
         m_PlayerName = m_GameInformation.Player.Name;
         m_Code = m_GameInformation.Player.RoomCode;

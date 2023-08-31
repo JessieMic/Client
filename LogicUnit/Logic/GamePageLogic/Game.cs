@@ -37,7 +37,7 @@ namespace LogicUnit
         //basic game info
         protected GameInformation m_GameInformation = GameInformation.Instance;
         protected Player m_Player;
-        protected PlayerData[] m_PlayersDataArray = new PlayerData[4]; //TODO replace with 4
+        protected PlayerData[] m_PlayersDataArray = new PlayerData[4];
         protected PlayerData m_CurrentPlayerData;
 
         //Screen info 
@@ -220,6 +220,7 @@ namespace LogicUnit
             }
             if (m_GameStatus == eGameStatus.Ended)
             {
+                r_ConnectionToServer.StopAsync();
                 m_ConnectedToServer = false;
             }
         }
@@ -555,6 +556,7 @@ namespace LogicUnit
                     else if (i_SpecialUpdate.Update == 10)
                     {
                         m_GameStatus = eGameStatus.Exited;
+                       m_GameInformation.Reset();
                         GameExit.Invoke();
                     }
                     m_GameInformation.RealWorldStopwatch.Start();
