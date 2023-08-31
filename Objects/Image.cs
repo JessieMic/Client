@@ -11,12 +11,7 @@ namespace Objects
     {
         public Microsoft.Maui.Controls.Image m_Image = new Microsoft.Maui.Controls.Image();
         protected string m_Source;
-        protected GameInformation m_GameInformation = GameInformation.Instance;
 
-        public Image()
-        {
-            //den = m_GameInformation.ScreenDensity/2.75;
-        }
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
@@ -32,7 +27,10 @@ namespace Objects
             {
                 m_Image.WidthRequest = i_GameObject.Size.Width;
                 m_Image.HeightRequest = i_GameObject.Size.Height;
-               
+                if (i_GameObject.ImageSource != "snakebackground.png")
+                {
+                    m_Image.Aspect = Aspect.Fill;
+                }
             }
         }
 
@@ -81,7 +79,7 @@ namespace Objects
             }
         }
 
-         virtual public double TranslationX
+        virtual public double TranslationX
         {
             set
             {
@@ -96,7 +94,7 @@ namespace Objects
                 m_Image.TranslationY = value;
             }
         }
-        
+
         virtual public int ZIndex
         {
             set

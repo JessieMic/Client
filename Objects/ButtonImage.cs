@@ -42,17 +42,17 @@ namespace Objects
             m_Button.Rotation = i_GameObject.Rotatation;
             setButtonSize(i_GameObject.Size);
 
-            if(m_Button.WidthRequest != GameSettings.GameGridSize)
+            if (m_Button.WidthRequest != GameSettings.GameGridSize)
             {
                 Text = i_GameObject.Text;
             }
         }
 
-       
+
 
         public void IsButtonPressed(bool i_IsButtonPressed)
         {
-            if(i_IsButtonPressed)
+            if (i_IsButtonPressed)
             {
                 m_Image.Source = m_SourcePressed;
             }
@@ -133,20 +133,20 @@ namespace Objects
             {
                 if (value == null)
                 {
-                    IsVisible= false;
+                    IsVisible = false;
                 }
-               
+
                 try
                 {
                     m_Source = value;
                     m_Image.Source = value;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                     throw;
                 }
-               
+
             }
         }
 
@@ -182,7 +182,7 @@ namespace Objects
             set
             {
                 m_Button.ZIndex = value;
-                m_Image.ZIndex = value-1;
+                m_Image.ZIndex = value - 1;
             }
         }
 
