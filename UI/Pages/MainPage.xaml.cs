@@ -13,13 +13,13 @@ namespace UI
         private async void OnSkipClicked(object sender, EventArgs e)
         {
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pong;
-            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
+                //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
             // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
             m_GameInformation.AmountOfPlayers = 2;
             m_GameInformation.Player.Name = DateTime.Now.ToString();
             
             //TODO: remove once done:
-            LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://192.116.98.113:44305");
+            LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://192.116.98.113:44305");//"http://localhost:5163" );//(
             //End of TODO
             await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
         }

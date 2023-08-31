@@ -24,6 +24,8 @@ namespace Objects
         public SizeDTO GameBoardSizeByGrid { get; set; }
         private static readonly object s_InstanceLock = new object();
         public Rect BackgroundRect { get; set; }
+
+        public bool serverR { get; set; } = false;
         public Stopwatch RealWorldStopwatch { get; set; }
         public int m_food = 0;
         public static GameInformation Instance
