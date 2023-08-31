@@ -27,7 +27,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 m_GameInformation.GameBoardSizeByGrid.Height/2);
             MonitorForCollision = true;
             IsObjectMoving = true;
-            this.Initialize(eScreenObjectType.Image, 0, "pacmanfood.png", point, true,
+            this.Initialize(eScreenObjectType.Image, m_GameInformation.Player.PlayerNumber, "pacmanfood.png", point, true,
                 m_GameInformation.PointValuesToAddToScreen);
             xDirectionBounceFactor= yDirectionBounceFactor=Velocity = 120;
         }
@@ -47,7 +47,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 if(timePassed > 2000)
                 {
                     m_IsCoolDownTimeStarted = false;
-                    IsObjectMoving = true;
+                    IsObjectMoving = false;
                 }
             }
             //else if (m_GameInformation.Player.PlayerNumber == 1)
@@ -65,20 +65,20 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             m_TimesGotHit++;
         }
 
-        private void RefreshOtherClientsAboutPosition()
-        {
-            if(IsObjectMoving)
-            {
-                if(m_TimesGotHit > 4)
-                {
-                    m_TimesGotHit = 0;
-                    if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
-                    {
-                        OnSpecialEvent(-1);
-                    }
-                }
-            }
-        }
+        //private void RefreshOtherClientsAboutPosition()
+        //{
+        //    if(IsObjectMoving)
+        //    {
+        //        if(m_TimesGotHit > 4)
+        //        {
+        //            m_TimesGotHit = 0;
+        //            if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+        //            {
+        //                OnSpecialEvent(-1);
+        //            }
+        //        }
+        //    }
+        //}
 
         private void bounceFromHittingSidesOfGameBoard()
         {
@@ -110,8 +110,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 if (isPointOnScreen)
                 {
-                    OnSpecialEvent(m_GameInformation.Player.PlayerNumber);
-                    System.Diagnostics.Debug.WriteLine("GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
+                    OnSpecialEvent(2);
+                    System.Diagnostics.Debug.WriteLine("1GGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
                     IsObjectMoving = false;
                 }
                 else
@@ -124,8 +124,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 if (isPointOnScreen)
                 {
-                    OnSpecialEvent(m_GameInformation.Player.PlayerNumber);
-                    System.Diagnostics.Debug.WriteLine("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+                    OnSpecialEvent(2);
+                    System.Diagnostics.Debug.WriteLine("2GGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
                     IsObjectMoving = false;
                 }
                 else

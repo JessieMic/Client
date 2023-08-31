@@ -181,7 +181,8 @@ public partial class GamePage : ContentPage
     void clearGame()
     {
         Application.Current.Dispatcher.Dispatch(async () =>
-        {
+            {
+                //disposeEvents();
             foreach (var button in m_GameButtonsImages)
             {
                button.Value.Source = null;

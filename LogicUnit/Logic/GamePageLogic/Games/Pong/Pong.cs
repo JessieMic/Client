@@ -37,10 +37,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
             {
-                if (i_SpecialUpdate.Update <= 4 && i_SpecialUpdate.Update >0)
+                if (i_SpecialUpdate.Update == 2 )
                 {
                     m_Ball.Reset();
-                    SideGotHit(i_SpecialUpdate.Update);
+                    SideGotHit(i_SpecialUpdate.Player_ID);
                 }
                 else
                 {
@@ -54,6 +54,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 {
                     if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].Position.Row == eRowPosition.UpperRow)
                     {
+                        System.Diagnostics.Debug.WriteLine("PLAYER 1 LOST");
                         base.PlayerLostALife(null, 1);
                         if (m_GameInformation.AmountOfPlayers == 4)
                         {
@@ -83,7 +84,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 if(i_eventNumber == -1)
                 {
-                    SendServerSpecialPointUpdate(m_Ball.GetCurrentPointOnScreen(), -1);
+                   // SendServerSpecialPointUpdate(m_Ball.GetCurrentPointOnScreen(), -1);
                 }
                 else
                 {

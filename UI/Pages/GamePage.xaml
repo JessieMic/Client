@@ -9,13 +9,7 @@
              Title="">
     
     <AbsoluteLayout x:Name="gridLayout">
-        <Label Text ="0"
-               x:Name="loopLabel"
-               TextColor="Red"
-               WidthRequest="40"
-               HeightRequest="63"
-               FontSize="20">
-        </Label>
+       
     </AbsoluteLayout>
 
 
