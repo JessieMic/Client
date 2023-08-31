@@ -254,7 +254,7 @@ namespace Objects
             PointOnScreen = newPoint;
         }
 
-        private void updatePosition(double i_TimeElapsed)
+        protected virtual void updatePosition(double i_TimeElapsed)
         {
             if (WantToTurn)
             {
@@ -264,7 +264,7 @@ namespace Objects
             {
                 Point newPoint = PointOnScreen;
                 newPoint.Column += ((Direction.ColumnOffset * Velocity) * i_TimeElapsed / 1000);
-                //newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed / 1000);
+                newPoint.Row += ((Direction.RowOffset * Velocity) * i_TimeElapsed / 1000);
 
                 isPointOnBoard(ref newPoint);
                 PointOnScreen = newPoint;
