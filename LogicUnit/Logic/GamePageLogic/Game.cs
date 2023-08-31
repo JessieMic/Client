@@ -23,7 +23,7 @@ namespace LogicUnit
     public abstract partial class Game
     {
         private List<string> m_PlayerMovementsLogs = new List<string>();
-        protected readonly HubConnection r_ConnectionToServer;
+        protected  HubConnection r_ConnectionToServer;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
@@ -127,6 +127,10 @@ namespace LogicUnit
             {
                 lock (m_lock)
                 {
+                    if(m_GameInformation.Player.PlayerNumber == 1)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"----  Player = {i_Player}---- what {i_WhatHappened} ----  ");
+                    }
                     m_SpecialEventQueue.Enqueue(new SpecialUpdate(i_WhatHappened, i_Player));
                 }
             });
@@ -141,6 +145,8 @@ namespace LogicUnit
 
             r_ConnectionToServer.On<string>("Disconnected", (i_Message) =>
             {
+               // r_ConnectionToServer.StopAsync();
+                m_GameStatus = eGameStatus.Exited;
                 //DisposeEvents.Invoke();
                 ServerError.Invoke(i_Message);
             });
@@ -151,6 +157,10 @@ namespace LogicUnit
                 {
                     try
                     {
+                        if (m_GameInformation.Player.PlayerNumber == 1)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"----  START ----  ");
+                        }
                         await r_ConnectionToServer.StartAsync();
                         await r_ConnectionToServer.SendAsync("ResetHub");
                         m_ConnectedToServer = true;
@@ -218,11 +228,14 @@ namespace LogicUnit
                 Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
                 m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
             }
-            if (m_GameStatus == eGameStatus.Ended)
+
+            if(m_GameInformation.Player.PlayerNumber==1)
             {
-                r_ConnectionToServer.StopAsync();
-                m_ConnectedToServer = false;
+                System.Diagnostics.Debug.WriteLine($"----  stop ----  ");
             }
+            
+           
+            m_ConnectedToServer = false;
         }
 
         private void updateGame()
@@ -550,11 +563,13 @@ namespace LogicUnit
                     }
                     else if (i_SpecialUpdate.Update == 9)
                     {
+                        stopConnection();
                         m_GameStatus = eGameStatus.Restarted;
                         GameRestart.Invoke();
                     }
                     else if (i_SpecialUpdate.Update == 10)
                     {
+                        stopConnection();
                         m_GameStatus = eGameStatus.Exited;
                        m_GameInformation.Reset();
                         GameExit.Invoke();
@@ -564,6 +579,12 @@ namespace LogicUnit
             }
         }
 
+        public void stopConnection()
+        {
+            r_ConnectionToServer.StopAsync();
+            m_ConnectedToServer = false;
+            r_ConnectionToServer = null;
+        }
 
         private void getButtonUpdate()
         {
