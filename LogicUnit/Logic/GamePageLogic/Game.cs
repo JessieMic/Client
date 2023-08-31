@@ -101,26 +101,32 @@ namespace LogicUnit
             }
             
             m_PlayerObjects = new GameObject[m_GameInformation.AmountOfPlayers];// new GameObject[2];//
-            r_ConnectionToServer = new HubConnectionBuilder()
-                .WithUrl(ServerAddressManager.Instance!.InGameHubAddress)
-                .Build();
+
+           // if(!m_GameInformation.serverR)
+           // {
+                r_ConnectionToServer = new HubConnectionBuilder()
+                    .WithUrl(ServerAddressManager.Instance!.InGameHubAddress)
+                    .Build();
+              //  m_GameInformation.serverR = true;
+            //}
+            
 
             r_ConnectionToServer.Reconnecting += (sender) =>
             {
-                DisposeEvents.Invoke();
+                DisposeEvents?.Invoke();
                 ServerError.Invoke("Trying to reconnect");
                 return Task.CompletedTask;
             };
 
-            r_ConnectionToServer.Closed += (sender) =>
-            {
-                //DisposeEvents.Invoke();
-                if (m_Player.PlayerNumber == 1)
-                {
-                    ServerError.Invoke("connection is closed");
-                }
-                return Task.CompletedTask;
-            };
+            //r_ConnectionToServer.Closed += (sender) =>
+            //{
+            //    ////DisposeEvents.Invoke();
+            //    //if (m_Player.PlayerNumber == 1)
+            //    //{
+            //    //    ServerError.Invoke("connection is closed");
+            //    //}
+            //    //return Task.CompletedTask;
+            //};
             
 
             r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
@@ -145,10 +151,10 @@ namespace LogicUnit
 
             r_ConnectionToServer.On<string>("Disconnected", (i_Message) =>
             {
-               // r_ConnectionToServer.StopAsync();
-                m_GameStatus = eGameStatus.Exited;
-                //DisposeEvents.Invoke();
-                ServerError.Invoke(i_Message);
+               //// r_ConnectionToServer.StopAsync();
+               // m_GameStatus = eGameStatus.Exited;
+               // //DisposeEvents.Invoke();
+               // ServerError.Invoke(i_Message);
             });
 
             Task.Run(() =>
@@ -425,6 +431,7 @@ namespace LogicUnit
             }
             try
             {
+                System.Diagnostics.Debug.WriteLine($"####{i_eventNumber}    {number}####");
                 r_ConnectionToServer.SendAsync(
                     "SpecialUpdate",
                     i_eventNumber, number
@@ -583,7 +590,7 @@ namespace LogicUnit
         {
             r_ConnectionToServer.StopAsync();
             m_ConnectedToServer = false;
-            r_ConnectionToServer = null;
+            //r_ConnectionToServer = null;
         }
 
         private void getButtonUpdate()

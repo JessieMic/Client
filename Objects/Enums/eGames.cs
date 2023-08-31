@@ -8,7 +8,7 @@ namespace Objects.Enums
 {
     public enum eGames
     {
-        Pong,
+        Pong=1,
         Pacman,
         BombIt
     }
