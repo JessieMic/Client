@@ -19,7 +19,7 @@ namespace UI
             m_GameInformation.Player.Name = DateTime.Now.ToString();
             
             //TODO: remove once done:
-            LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://localhost:5163" );//("http://192.116.98.113:44305");
+            LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://192.116.98.113:44305");//"http://localhost:5163" );//(
             //End of TODO
             await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
         }
