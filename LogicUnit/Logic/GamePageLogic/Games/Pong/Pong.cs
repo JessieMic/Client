@@ -54,7 +54,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 {
                     if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].Position.Row == eRowPosition.UpperRow)
                     {
-                        System.Diagnostics.Debug.WriteLine("PLAYER 1 LOST");
                         base.PlayerLostALife(null, 1);
                         if (m_GameInformation.AmountOfPlayers == 4)
                         {
@@ -84,7 +83,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 if(i_eventNumber == -1)
                 {
-                   // SendServerSpecialPointUpdate(m_Ball.GetCurrentPointOnScreen(), -1);
+                    SendServerSpecialPointUpdate(m_Ball.GetCurrentPointOnScreen(), -1);
                 }
                 else
                 {
@@ -107,7 +106,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 m_Ball = new Ball();
                 m_GameObjectsToAdd.Add(m_Ball);
-                m_Ball.SpecialEvent += specialEventInvoked;
             }
 
             private void addPlayerObjects()

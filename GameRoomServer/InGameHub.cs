@@ -7,11 +7,16 @@ namespace GameRoomServer;
 public class InGameHub : Hub
 {
     private static int[] s_PlayersPressedButtons = new int[12];
+    private static bool m_DidWeRestart = false;
 
     public async Task UpdatePlayerSelection(int i_PlayerID, int i_button, int i_X, int i_Y)
     {
         if (i_button != -1)
         {
+            if(i_button == 9)
+            {
+                m_DidWeRestart = true;
+            }
             s_PlayersPressedButtons[i_PlayerID] = i_button;
         }
         else 
@@ -24,6 +29,11 @@ public class InGameHub : Hub
 
     public async Task SpecialUpdate(int i_WhatHappened, int i_PlayerID)
     {
+        if(i_WhatHappened == 9 || i_PlayerID == 9)
+        {
+            Console.WriteLine("restaret req");
+            m_DidWeRestart = true;
+        }
         await Clients.All.SendAsync("SpecialUpdateReceived", i_WhatHappened, i_PlayerID);
     }
 
@@ -43,6 +53,8 @@ public class InGameHub : Hub
 
     public void ResetHub()
     {
+        Console.WriteLine("reset hub");
+        m_DidWeRestart = false;
         s_PlayersPressedButtons = new int[12];
     }
 
@@ -53,7 +65,11 @@ public class InGameHub : Hub
 
     public override async Task OnDisconnectedAsync(Exception exception)
     {
-        await Clients.All.SendAsync("Disconnected", "an error occurred");
-        await base.OnDisconnectedAsync(exception);
+        Console.WriteLine("diss req");
+        if(!m_DidWeRestart)
+        {
+            await Clients.All.SendAsync("Disconnected", "an error occurred");
+            await base.OnDisconnectedAsync(exception);
+        }
     }
 }

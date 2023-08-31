@@ -12,14 +12,15 @@ namespace UI
 
         private async void OnSkipClicked(object sender, EventArgs e)
         {
-            m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pong;
+            //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pong;
                 //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
-            // m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
+             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
             m_GameInformation.AmountOfPlayers = 2;
-            m_GameInformation.Player.Name = DateTime.Now.ToString();
+            m_GameInformation.Player.Name = DateTime.Now.Millisecond.ToString();
             
             //TODO: remove once done:
-            LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://192.116.98.113:44305");//"http://localhost:5163" );//(
+           LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://192.116.98.113:44305");//"http://localhost:5163" );//(
+           // LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://localhost:5163");
             //End of TODO
             await Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage));
         }
@@ -43,6 +44,19 @@ namespace UI
             base.OnSizeAllocated(i_Width, i_Height);
             m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height = (int)i_Height;
             m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width = (int)i_Width;
+        }
+
+        protected override void OnAppearing()// works on App() constructor , App OnStart(), MainPage() constructor  
+        {
+            base.OnAppearing();
+            MainThread.BeginInvokeOnMainThread(async () => await DelayedShowWidth());
+        }
+        private async Task DelayedShowWidth()
+        {
+            await Task.Delay(500);
+            var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+           m_GameInformation.ScreenDensity = mainDisplayInfo.Density;
+            // do something 	    
         }
 
         private async void OnCreateRoomClicked(object sender, EventArgs e)

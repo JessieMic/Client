@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Diagnostics;
@@ -120,14 +121,14 @@ namespace LogicUnit
 
             //r_ConnectionToServer.Closed += (sender) =>
             //{
-            //    ////DisposeEvents.Invoke();
-            //    //if (m_Player.PlayerNumber == 1)
-            //    //{
-            //    //    ServerError.Invoke("connection is closed");
-            //    //}
-            //    //return Task.CompletedTask;
+            //    //DisposeEvents.Invoke();
+            //    if (m_Player.PlayerNumber == 1)
+            //    {
+            //        ServerError.Invoke("connection is closed");
+            //    }
+            //    return Task.CompletedTask;
             //};
-            
+
 
             r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
             {
@@ -151,10 +152,10 @@ namespace LogicUnit
 
             r_ConnectionToServer.On<string>("Disconnected", (i_Message) =>
             {
-               //// r_ConnectionToServer.StopAsync();
-               // m_GameStatus = eGameStatus.Exited;
-               // //DisposeEvents.Invoke();
-               // ServerError.Invoke(i_Message);
+                // r_ConnectionToServer.StopAsync();
+                m_GameStatus = eGameStatus.Exited;
+                //DisposeEvents.Invoke();
+                ServerError.Invoke(i_Message);
             });
 
             Task.Run(() =>
@@ -390,8 +391,13 @@ namespace LogicUnit
                 {
                     m_ServerUpdates = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
                 }
+                catch(TaskCanceledException ex) //TODO : Continue only when we restarted
+                {
+                    continue;
+                }
                 catch(Exception e)
                 {
+
                     ServerError.Invoke($"{e.Message}{Environment.NewLine}error on InvokeAsync(\"GetPlayersData\") in function GetServerUpdate");
                 }
 
@@ -645,7 +651,7 @@ namespace LogicUnit
                     }
                     else
                     {
-                        newObject.SpecialEvent += SendSpecialServerUpdate;
+                        newObject.SpecialEvent += specialEventInvoked;
                     }
                 }
 
