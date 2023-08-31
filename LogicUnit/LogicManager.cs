@@ -13,6 +13,7 @@ namespace LogicUnit
         private const int k_MaxNameLength = 10;
         private const int k_UpdateTimerInterval = 500;
 
+        private readonly ServerAddressManager r_ServerAddressManager = ServerAddressManager.Instance;
         private readonly Connection r_Connection;
         private Uri m_Uri;
         private HttpClient m_HttpClient = new HttpClient();
@@ -31,6 +32,7 @@ namespace LogicUnit
         private Action m_HostLeftAction;
         private Action m_ServerErrorAction;
         private Action m_GoToNextPage;
+
 
         public LogicManager()
         {
@@ -387,7 +389,7 @@ namespace LogicUnit
 
                 if (goToNextPage)
                 {
-                    ServerAddressManager.Instance!.SetAddresses(await getServerAddress());
+                    r_ServerAddressManager!.SetAddresses(await getServerAddress());
                     m_GoToNextPage.Invoke();
                 }
             }
