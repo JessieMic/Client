@@ -11,12 +11,18 @@ namespace Objects
     {
         public Microsoft.Maui.Controls.Image m_Image = new Microsoft.Maui.Controls.Image();
         protected string m_Source;
+        protected GameInformation m_GameInformation = GameInformation.Instance;
+        protected double den=1;
 
+        public Image()
+        {
+            //den = m_GameInformation.ScreenDensity/2.75;
+        }
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
-            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
-            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column/ den;
+            m_Image.TranslationY = i_GameObject.PointOnScreen.Row/ den;
             m_Image.Aspect = Aspect.AspectFill;
             m_Image.Source = i_GameObject.ImageSource;
             m_Image.ClassId = i_GameObject.ImageSource;
@@ -25,20 +31,17 @@ namespace Objects
             m_Image.IsVisible = i_GameObject.IsVisable;
             if (i_GameObject.Size.Width != 0)
             {
-                m_Image.WidthRequest = i_GameObject.Size.Width;
-                m_Image.HeightRequest = i_GameObject.Size.Height;
-                if (i_GameObject.ImageSource != "snakebackground.png")
-                {
-                    m_Image.Aspect = Aspect.Fill;
-                }
+                m_Image.WidthRequest = i_GameObject.Size.Width/ den;
+                m_Image.HeightRequest = i_GameObject.Size.Height/ den;
+               
             }
         }
 
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
-            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column / den;
+            m_Image.TranslationY = i_GameObject.PointOnScreen.Row / den;
             m_Image.IsVisible = i_GameObject.IsVisable;
             m_Image.ScaleX = i_GameObject.ScaleX;
             m_Image.ScaleY = i_GameObject.ScaleY;

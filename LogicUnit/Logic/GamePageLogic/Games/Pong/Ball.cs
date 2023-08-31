@@ -47,19 +47,21 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 if(timePassed > 2000)
                 {
                     m_IsCoolDownTimeStarted = false;
-                    IsObjectMoving = false;
+                    IsObjectMoving = true;
                 }
             }
-            //else if (m_GameInformation.Player.PlayerNumber == 1)
-            //{
-            //    if (m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeFromLastUpdate > 3000
-            //       && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
-            //    {
-            //        m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-            //        OnSpecialEvent(-1);
-                   
-            //    }
-            //}
+
+            if (m_GameInformation.Player.PlayerNumber == 1)
+            {
+                if (m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeFromLastUpdate > 3000
+                   && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+                {
+                    System.Diagnostics.Debug.WriteLine("WOWOW");
+                    m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+                    OnSpecialEvent(-1);
+
+                }
+            }
 
 
             m_TimesGotHit++;
@@ -111,12 +113,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 if (isPointOnScreen)
                 {
                     OnSpecialEvent(2);
-                    System.Diagnostics.Debug.WriteLine("1GGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
                     IsObjectMoving = false;
                 }
                 else
                 {
-                    yDirectionBounceFactor *= -1;
+                    yDirectionBounceFactor = Velocity;
                 }
             }
 
@@ -125,12 +126,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 if (isPointOnScreen)
                 {
                     OnSpecialEvent(2);
-                    System.Diagnostics.Debug.WriteLine("2GGGGGGGGGGGGGGGGGGGGGGGGGGGGG");
                     IsObjectMoving = false;
                 }
                 else
                 {
-                    yDirectionBounceFactor *= -1;
+                    yDirectionBounceFactor = -Velocity;
                 }
             }
         }
