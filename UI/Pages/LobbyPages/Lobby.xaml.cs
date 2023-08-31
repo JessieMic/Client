@@ -122,11 +122,14 @@ public partial class Lobby : ContentPage
         GamesPopUp gamesPopUp = new GamesPopUp(UpdateChosenGame);
         Game pacmanGame = Utils.GameLibrary.GetPacmanGame();
         Game bombItGame = Utils.GameLibrary.GetBombItGame();
+        Game pongGame = Utils.GameLibrary.GetPongGame();
         GameCard pacmanCard = new GameCard(pacmanGame);
         GameCard bombItCard = new GameCard(bombItGame);
+        GameCard pongCard = new GameCard(pongGame);
 
         gamesPopUp.AddGameToComponent(pacmanCard);
         gamesPopUp.AddGameToComponent(bombItCard);
+        gamesPopUp.AddGameToComponent(pongCard);
 
         this.ShowPopup(gamesPopUp);
     }

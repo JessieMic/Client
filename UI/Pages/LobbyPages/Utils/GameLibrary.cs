@@ -42,6 +42,8 @@
                     return m_Pacman;
                 case "bomb-it":
                     return m_BombIt;
+                case "pong":
+                    return m_Pong;
             }
 
             return null;
