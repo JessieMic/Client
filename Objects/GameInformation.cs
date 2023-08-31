@@ -26,9 +26,11 @@ namespace Objects
         public Rect BackgroundRect { get; set; }
 
         public double ScreenDensity { get; set; } = 1;
-        public bool serverR { get; set; } = false;
+        public bool ServerReset { get; set; } = false;
         public Stopwatch RealWorldStopwatch { get; set; }
         public int m_food = 0;
+
+        
         public static GameInformation Instance
         {
             get

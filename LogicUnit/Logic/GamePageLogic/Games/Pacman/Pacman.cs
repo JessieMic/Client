@@ -14,13 +14,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         private int m_FoodCounterForPlayerScreen = 0;
         private int m_AmountOfScreenThatHaveNoFood = 0;
 
-        public Pacman()
+        public Pacman(InGameConnectionManager i_GameConnectionManager)
+            : base(i_GameConnectionManager)
         {
             m_GameName = "pacman";
             m_MoveType = eMoveType.ClicKOnce;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
-            m_PacmanPlayers = new IPacmanGamePlayer[m_GameInformation.AmountOfPlayers];
+            m_PacmanPlayers = new IPacmanGamePlayer[r_GameInformation.AmountOfPlayers];
         }
 
         void createBoard()
@@ -70,8 +71,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             else
             {
                 m_FoodCounterForPlayerScreen++;
-                System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {m_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
-                if (m_FoodCounterForPlayerScreen == m_GameInformation.AmountOfPlayers)
+                System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {r_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
+                if (m_FoodCounterForPlayerScreen == r_GameInformation.AmountOfPlayers)
                 {
                     m_EndGameText = "Pacman won!!";
                     m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
@@ -82,7 +83,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         private void PlayerGothit(int i_Player)
         {
-            double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            double startTimeOfDeathAnimation = r_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
             if (i_Player == 1)
             {
                 stopMovement(m_Player.PlayerNumber);
@@ -102,7 +103,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         private void pacmanAteCherry()
         {
-            double startTimeOfCherryTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            double startTimeOfCherryTime = r_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
             foreach (var player in m_PacmanPlayers)
             {
                 player.InitiateCherryTime(startTimeOfCherryTime);
@@ -121,7 +122,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             m_PacmanPlayers[0] = player1;
             m_GameObjectsToAdd.Add(player1);
 
-            for (int i = 2; i <= m_GameInformation.AmountOfPlayers; i++)
+            for (int i = 2; i <= r_GameInformation.AmountOfPlayers; i++)
             {
                 GhostObject newGhost = new GhostObject(
                     i,

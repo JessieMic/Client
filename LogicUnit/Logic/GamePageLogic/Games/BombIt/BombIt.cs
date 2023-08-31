@@ -16,14 +16,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         private int m_AmountOfScreenThatHaveNoFood = 0;
         private int j = 0;
 
-        public BombIt()
+        public BombIt(InGameConnectionManager i_GameConnectionManager)
+            : base(i_GameConnectionManager)
         {
             m_GameName = "bombit";
             m_MoveType = eMoveType.ClickAndRelease;
             m_Buttons.m_AmountOfExtraButtons = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
             m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
-            m_BombItPlayers = new BombItPlayer[m_GameInformation.AmountOfPlayers];
+            m_BombItPlayers = new BombItPlayer[r_GameInformation.AmountOfPlayers];
         }
 
         void createBoard()
@@ -79,7 +80,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         private void PlayerGothit(int i_Player)
         {
-            double startTimeOfDeathAnimation = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+            double startTimeOfDeathAnimation = r_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
 
             m_BombItPlayers[i_Player - 1].AmountOfLives--;
             m_BombItPlayers[i_Player - 1].DeathAnimation(startTimeOfDeathAnimation);
@@ -95,7 +96,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         private void addPlayersAndBombsObjects()
         {
-            for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
+            for (int i = 1; i <= r_GameInformation.AmountOfPlayers; i++)
             {
                 BombItPlayer newPlayer = new BombItPlayer(
                     i,
@@ -150,9 +151,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         private void BombPlaceRequest()
         {
-            if(m_BombItPlayers[m_GameInformation.Player.PlayerNumber-1].CanPlaceABomb)
+            if(m_BombItPlayers[r_GameInformation.Player.PlayerNumber-1].CanPlaceABomb)
             {
-                SendServerSpecialPointUpdate(m_BombItPlayers[m_GameInformation.Player.PlayerNumber-1].RequestPlaceBomb(), m_GameInformation.Player.PlayerNumber);
+                SendServerSpecialPointUpdate(m_BombItPlayers[r_GameInformation.Player.PlayerNumber-1].RequestPlaceBomb(), r_GameInformation.Player.PlayerNumber);
             }
         }
     }
