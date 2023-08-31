@@ -137,5 +137,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         {
             m_ClickReleaseMover.RequestDirection(i_Direction);
         }
+
+        protected override void updatePosition(double i_TimeElapsed)
+        {
+            Point newPoint = PointOnScreen;
+
+            newPoint.Column += ((Direction.ColumnOffset * Velocity) * i_TimeElapsed / 1000);
+            isPointOnBoard(ref newPoint);
+            PointOnScreen = newPoint;
+        }
     }
 }
