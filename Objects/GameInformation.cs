@@ -41,6 +41,13 @@ namespace Objects
             }
         }
 
+        public void Reset()
+        {
+            Player.isInitialized = false;
+            Player.DidPlayerPickAPlacement = false;
+            m_food = 0;
+        }
+
         public void init()
         {
             Player = new Player();

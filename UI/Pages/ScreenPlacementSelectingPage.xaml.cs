@@ -15,8 +15,8 @@ namespace UI.Pages;
 using System.Xml.Linq;
 public partial class ScreenPlacementSelectingPage : ContentPage
 {
-    private ScreenPlacementSelectingLogic m_pageLogic = new ScreenPlacementSelectingLogic();
-    private static List<Button> m_PlacementButton = new List<Button>();
+    private ScreenPlacementSelectingLogic m_pageLogic;
+    private  List<Button> m_PlacementButton = new List<Button>();
     private List<Image> m_Images = new List<Image>();
     private GameInformation m_GameInformation = GameInformation.Instance;
     private static List<ButtonImage> m_PlacementButtons = new List<ButtonImage>();
@@ -44,6 +44,10 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     async Task initializePage()
     {
+        m_pageLogic = new ScreenPlacementSelectingLogic();
+        m_PlacementButton = new List<Button>();
+        m_Images = new List<Image>();
+        m_PlacementButtons = new List<ButtonImage>();
         UIbackground.TranslationY = UIbackground.HeightRequest = GameSettings.UIBackgroundSize.Height;
         UIbackground.WidthRequest = m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width;
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;

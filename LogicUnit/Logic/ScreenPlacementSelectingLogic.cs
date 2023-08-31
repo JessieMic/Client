@@ -29,7 +29,6 @@ namespace LogicUnit
 
         public ScreenPlacementSelectingLogic()
         {
-
             r_ConnectionToServer = new HubConnectionBuilder()
                 .WithUrl(ServerAddressManager.Instance!.GameHubAddress)
                 .Build();
@@ -125,6 +124,7 @@ namespace LogicUnit
 
         protected virtual void OnEnterGameRoom()
         {
+            r_ConnectionToServer.StopAsync();
             GameIsStarting?.Invoke();
         }
 
