@@ -11,8 +11,8 @@
         </Border.StrokeShape>
         <Grid Padding="15" x:Name="gridLayout">
             <Grid.RowDefinitions>
-                <RowDefinition Height="20*"/>
-                <RowDefinition Height="70*"/>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="75*"/>
                 <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -21,25 +21,28 @@
                 <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
 
-            <Label
-            x:Name="MessageLabel"
-            Text=""
-            VerticalOptions="Center"
-            HorizontalOptions="Center"
-            FontSize="Medium"
-            FontAttributes="Bold"
-            Grid.Row="1"
-            Grid.Column="1"
-            HorizontalTextAlignment="Center"
-            TextColor="{DynamicResource PaloozaTextColor}"/>
+            <ScrollView
+                VerticalOptions="Center" 
+                HorizontalOptions="Center"
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3">
 
-            <!--<Button
-            Text="OK"
-            x:Name="OKBtn"
-            VerticalOptions="Center"
-            HorizontalOptions="End"
-            Grid.Row="1"
-            Clicked="OnOKBtnClicked"/>-->
+                <VerticalStackLayout
+                    Spacing="10"
+                    VerticalOptions="Center" 
+                    HorizontalOptions="Center">
+                    <Label
+                        x:Name="MessageLabel"
+                        Text=""
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        HorizontalTextAlignment="Center"
+                        TextColor="{DynamicResource PaloozaTextColor}"/>
+                </VerticalStackLayout>
+            </ScrollView>
         </Grid>
     </Border>
 </mct:Popup>
