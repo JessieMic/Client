@@ -34,8 +34,8 @@ namespace Objects
             SetImage(i_GameObject);
             //m_Button.ZIndex = 1;
             m_Image.ZIndex = 0;
-            m_Button.TranslationX = i_GameObject.PointOnScreen.Column / den;
-            m_Button.TranslationY = i_GameObject.PointOnScreen.Row / den;
+            m_Button.TranslationX = i_GameObject.PointOnScreen.Column;
+            m_Button.TranslationY = i_GameObject.PointOnScreen.Row;
             m_Button.ClassId = i_GameObject.ButtonType.ToString();
             m_Button.ZIndex = 1;
             IsVisible = i_GameObject.IsVisable;
@@ -206,8 +206,8 @@ namespace Objects
 
         private void setButtonSize(SizeDTO i_Size)
         {
-            m_Button.WidthRequest = i_Size.Width/den;
-            m_Button.HeightRequest = i_Size.Height / den;
+            m_Button.WidthRequest = i_Size.Width;
+            m_Button.HeightRequest = i_Size.Height;
             if (i_Size.Width <= GameSettings.GameGridSize)
             {
                 m_Button.WidthRequest *= 1.2;
