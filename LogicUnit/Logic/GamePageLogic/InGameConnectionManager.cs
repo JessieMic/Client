@@ -23,7 +23,7 @@ public class InGameConnectionManager
 
         r_ConnectionToServer.Reconnecting += (sender) =>
             {
-                DisposeEvents?.Invoke();
+                //DisposeEvents?.Invoke();
                 ServerError.Invoke("Trying to reconnect");
                 return Task.CompletedTask;
             };
