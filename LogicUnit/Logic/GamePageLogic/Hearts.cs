@@ -158,6 +158,21 @@ namespace LogicUnit.Logic.GamePageLogic
             return name;
         }
 
+        public List<string> GetNamesOfPlayersThatAreAlive()
+        {
+            List<string> names = new List<string>();
+
+            for (int i = 0; i < m_AmountOfPlayers; i++)
+            {
+                if (m_AmountOfLivesPlayerHas[i] != 0)
+                {
+                    names.Add(m_GameInformation.GetNameOfPlayer(i));
+                }
+            }
+
+            return names;
+        }
+
         private void removeAHeart()
         {
             try

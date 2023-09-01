@@ -19,12 +19,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
     {
         public class Pong : Game
         {
-            private Bat[] m_BombItPlayers;
+            private Bat[] m_Players;
             BombItBoard m_BombItBoard = new BombItBoard();
             private Ball m_Ball;
-            private int m_FoodCounterForPlayerScreen = 0;
-            private int m_AmountOfScreenThatHaveNoFood = 0;
-            private int j = 0;
+
 
             public Pong(InGameConnectionManager i_GameConnectionManager)
                 : base(i_GameConnectionManager)
@@ -33,7 +31,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 m_MoveType = eMoveType.ClickAndRelease;
                 m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.RightAndLeft;
                 m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
-                m_BombItPlayers = new Bat[r_GameInformation.AmountOfPlayers];
+                m_Players = new Bat[r_GameInformation.AmountOfPlayers];
             }
 
             protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
@@ -120,7 +118,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                         m_Board);
 
                     m_GameObjectsToAdd.Add(newPlayer);
-                    m_BombItPlayers[i - 1] = newPlayer;
+                    m_Players[i - 1] = newPlayer;
                 }
             }
 
@@ -138,25 +136,24 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             protected override void checkForGameStatusUpdate()
             {
-                if (m_Hearts.m_AmountOfPlayersThatAreAlive <= 1)//Search for the player that is alive
+                if ((m_Hearts.m_AmountOfPlayersThatAreAlive <= 1 && m_AmountOfPlayers== 2) ||
+                    (m_Hearts.m_AmountOfPlayersThatAreAlive <= 2 && m_AmountOfPlayers == 2 && m_AmountOfPlayers == 4))//Search for the player that is alive
                 {
-                    j++;
-                    if (j == 5 && m_GameStatus != eGameStatus.Ended)
+                    if(m_AmountOfPlayers == 4)
                     {
-                        if (m_Hearts.m_AmountOfPlayersThatAreAlive == 0)
+                        List<string> names = m_Hearts.GetNamesOfPlayersThatAreAlive();
+                        if(names.Count == 2)
                         {
-                            m_EndGameText = "Everyone lost!!";
+                            m_EndGameText = $"{names[0]} and {names[1]} won !!";
                         }
-                        else
-                        {
-                            string nameOfWinner = m_Hearts.GetNameOfPlayerThatIsAlive();
-                            m_EndGameText = $"{nameOfWinner} won!!";
-                        }
-
-                        m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
-                        //OnAddScreenObjects();
-                        m_GameStatus = eGameStatus.Ended;
                     }
+                    else
+                    {
+                        m_EndGameText = $"{m_Hearts.GetNameOfPlayerThatIsAlive()} won!!";
+                    }
+
+                    m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
+                    m_GameStatus = eGameStatus.Ended;
                 }
             }
         }
