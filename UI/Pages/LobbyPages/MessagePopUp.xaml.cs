@@ -31,6 +31,9 @@ public partial class MessagePopUp : Popup
 
         ButtonImage okBtn = addOKButton();
 		okBtn.GetButton().Clicked += ClosePopUp;
+        Size = new Size(
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width),
+            0.7 * (m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Height));
     }
 
 	public void OnOKBtnClicked(object sender, EventArgs e)

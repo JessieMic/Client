@@ -5,7 +5,10 @@
        x:Class="UI.Pages.LobbyPages.YesNoPopUp"
        CanBeDismissedByTappingOutsideOfPopup="False"
        Color="Transparent">
-    <Border Stroke="#4e0066" StrokeThickness="5" BackgroundColor="#b07ebf">
+    <Border 
+        Stroke="#4e0066" 
+        StrokeThickness="5" 
+        BackgroundColor="#b07ebf">
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="30"/>
         </Border.StrokeShape>
