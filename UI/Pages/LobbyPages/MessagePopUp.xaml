@@ -8,17 +8,11 @@
     <Border 
         Stroke="#4e0066" 
         StrokeThickness="5" 
-        BackgroundColor="#b07ebf" 
-        HorizontalOptions="CenterAndExpand" 
-        VerticalOptions="CenterAndExpand">
+        BackgroundColor="#b07ebf">
         <Border.StrokeShape>
             <RoundRectangle CornerRadius="30"/>
         </Border.StrokeShape>
-        <Grid 
-            Padding="15" 
-            x:Name="gridLayout"
-            HorizontalOptions="FillAndExpand" 
-            VerticalOptions="FillAndExpand">
+        <Grid Padding="15" x:Name="gridLayout">
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*"/>
                 <RowDefinition Height="75*"/>
