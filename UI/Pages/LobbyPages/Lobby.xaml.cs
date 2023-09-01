@@ -202,14 +202,16 @@ public partial class Lobby : ContentPage
 
     private async void goToMainPage()
     {
-        if (m_PlayerType == PlayerType.Host)
-        {
-            Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync("../..")); // two pages back - goes to the main page
-        }
-        else
-        {
-            Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync("../../..")); // three pages back - goes to the main page
-        }
+        //if (m_PlayerType == PlayerType.Host)
+        //{
+        //    Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync("../..")); // two pages back - goes to the main page
+        //}
+        //else
+        //{
+        //    Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync("../../..")); // three pages back - goes to the main page
+        //}
+
+        await Shell.Current.GoToAsync("///MainPage");
     }
 
     public bool AddPlayers(List<string> i_PlayersNames)
