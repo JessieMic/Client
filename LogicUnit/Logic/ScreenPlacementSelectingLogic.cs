@@ -122,6 +122,11 @@ namespace LogicUnit
             ReceivedPlayerAmount?.Invoke();
         }
 
+        public void StopConnection()
+        {
+            r_ConnectionToServer.StopAsync();
+        }
+
         protected virtual void OnEnterGameRoom()
         {
             //r_ConnectionToServer.StopAsync();
