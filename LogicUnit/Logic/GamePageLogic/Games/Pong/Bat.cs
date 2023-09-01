@@ -26,7 +26,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             ObjectNumber = i_PlayerNumber;
             MonitorForCollision = true;
             Board = i_Board;
-            this.Initialize(eScreenObjectType.Player, i_PlayerNumber, "uibackground.png", getPointOnGrid(i_X, i_Y), true,
+            this.Initialize(eScreenObjectType.Player, i_PlayerNumber, "bat.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
             m_ClickReleaseMover.Movable = this as IMovable;
             Size = new SizeDTO(45 * 5,20);
