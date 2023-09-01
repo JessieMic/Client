@@ -24,7 +24,7 @@ public class InGameConnectionManager
         r_ConnectionToServer.Reconnecting += (sender) =>
         {
             //DisposeEvents?.Invoke();
-            ServerError.Invoke("Trying to reconnect");
+            ServerError?.Invoke("Trying to reconnect");
             return Task.CompletedTask;
         };
         
@@ -54,7 +54,7 @@ public class InGameConnectionManager
             // r_ConnectionToServer.StopAsync();
             GameStatus = eGameStatus.Exited;
             //DisposeEvents.Invoke();
-            ServerError.Invoke(i_Message);
+            ServerError?.Invoke(i_Message);
         });
     }
 

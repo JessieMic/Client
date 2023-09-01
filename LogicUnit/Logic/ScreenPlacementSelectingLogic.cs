@@ -124,7 +124,7 @@ namespace LogicUnit
 
         protected virtual void OnEnterGameRoom()
         {
-            r_ConnectionToServer.StopAsync();
+            //r_ConnectionToServer.StopAsync();
             GameIsStarting?.Invoke();
         }
 
