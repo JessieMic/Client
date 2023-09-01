@@ -17,7 +17,9 @@ namespace UI
              m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
             m_GameInformation.AmountOfPlayers = 2;
             m_GameInformation.Player.Name = DateTime.Now.Millisecond.ToString();
-            
+            //var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+            //m_GameInformation.Player.Name = mainDisplayInfo.Density.ToString();
+
             //TODO: remove once done:
           LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://192.116.98.113:44305");//"http://localhost:5163" );//(
            // LogicUnit.ServerAddressManager.Instance!.SetAddresses("http://localhost:5163");
@@ -55,8 +57,9 @@ namespace UI
         //{
         //    await Task.Delay(500);
         //    var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
-        //   m_GameInformation.ScreenDensity = mainDisplayInfo.Density;
-        //    // do something 	    
+        //    m_GameInformation.ScreenDensity = mainDisplayInfo.Density;
+        //    // do something
+        //    addComponents();
         //}
 
         private async void OnCreateRoomClicked(object sender, EventArgs e)
@@ -88,12 +91,17 @@ namespace UI
         private void createButtonImage(string i_Text, EventHandler m_ClickEvent, int i_Row, int i_Col)
         {
             ButtonImage btn = new ButtonImage();
+            double height = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+            double width = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
             //btn.GetButton().WidthRequest = 1000;
             //btn.GetImage().WidthRequest = 1000;
-            btn.HorizontalOptions = LayoutOptions.CenterAndExpand;
-            btn.VerticalOptions = LayoutOptions.CenterAndExpand;
-            btn.GetButton().VerticalOptions = LayoutOptions.FillAndExpand;
-            btn.GetButton().HorizontalOptions = LayoutOptions.FillAndExpand;
+            //btn.HorizontalOptions = LayoutOptions.CenterAndExpand;
+            //btn.VerticalOptions = LayoutOptions.CenterAndExpand;
+            //btn.GetButton().VerticalOptions = LayoutOptions.FillAndExpand;
+            //btn.GetButton().HorizontalOptions = LayoutOptions.FillAndExpand;
+            btn.WidthRequest = 0.5 * width;
+            btn.HeightRequest = 0.2 * height;
+            btn.FontSize = 0.3 * 0.2 * height;
 
             btn.Text = i_Text;
             btn.Source = "entrance_btn.PNG";
