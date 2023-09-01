@@ -356,6 +356,13 @@ namespace LogicUnit
                     m_PlayersDataArray[i].Button = m_ServerUpdates[i];
                 }
             }
+
+            if(m_GameStatus == eGameStatus.Exited)
+            {
+                stopConnection();
+                r_GameInformation.Reset();
+                GameExit.Invoke();
+            }
         }
 
         protected virtual void specialEventInvoked(object i_Sender, int i_eventNumber)
@@ -532,10 +539,8 @@ namespace LogicUnit
                     }
                     else if (i_SpecialUpdate.Update == 10)
                     {
-                        stopConnection();
                         m_GameStatus = eGameStatus.Exited;
-                        r_GameInformation.Reset();
-                        GameExit.Invoke();
+                        m_ConnectedToServer = false;
                     }
                     r_GameInformation.RealWorldStopwatch.Start();
                 }
@@ -545,7 +550,6 @@ namespace LogicUnit
         public void stopConnection()
         {
             r_InGameConnectionManager.r_ConnectionToServer.StopAsync();
-            m_ConnectedToServer = false;
             //r_ConnectionToServer = null;
         }
 
