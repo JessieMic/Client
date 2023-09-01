@@ -93,12 +93,6 @@ namespace UI
             ButtonImage btn = new ButtonImage();
             double height = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
             double width = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
-            //btn.GetButton().WidthRequest = 1000;
-            //btn.GetImage().WidthRequest = 1000;
-            //btn.HorizontalOptions = LayoutOptions.CenterAndExpand;
-            //btn.VerticalOptions = LayoutOptions.CenterAndExpand;
-            //btn.GetButton().VerticalOptions = LayoutOptions.FillAndExpand;
-            //btn.GetButton().HorizontalOptions = LayoutOptions.FillAndExpand;
             btn.WidthRequest = 0.5 * width;
             btn.HeightRequest = 0.2 * height;
             btn.FontSize = 0.3 * 0.2 * height;
