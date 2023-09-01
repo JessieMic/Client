@@ -34,9 +34,18 @@ public partial class GamePage : ContentPage
 
     private void initializePage()
     {
-        m_Game = m_GameLibrary.CreateAGame(m_GameInformation.NameOfGame, r_InGameConnectionManager);//m_GameInformation.m_NameOfGame);
-        initializeEvents();
-        initializeGame();
+        try
+        {
+            m_Game = m_GameLibrary.CreateAGame(m_GameInformation.NameOfGame, r_InGameConnectionManager);//m_GameInformation.m_NameOfGame);
+            initializeEvents();
+            initializeGame();
+            runGame();
+        }
+        catch
+        {
+            throw;
+        }
+       
     }
 
     private void initializeGame()
@@ -48,14 +57,11 @@ public partial class GamePage : ContentPage
     {
         lock (i_GameObjectsToAdd)
         {
-
-
             Application.Current.Dispatcher.Dispatch(async () =>
             {
                 //TODO
                 foreach (var gameObject in i_GameObjectsToAdd)
                 {
-
                     if (gameObject.ScreenObjectType == eScreenObjectType.Button)
                     {
                         addButton(gameObject);
@@ -226,24 +232,31 @@ public partial class GamePage : ContentPage
 
     void initializeEvents()
     {
-        m_Game.AddGameObjectList += addGameObjects;
-        m_Game.GameObjectUpdate += gameObjectUpdate;
-        m_Game.GameObjectToDelete += deleteObject;
-        m_Game.GameStart += runGame;
-        m_Game.GameExit += exitGame;
-        m_Game.GameRestart += restartGame;
+        try
+        {
+            m_Game.AddGameObjectList += addGameObjects;
+            m_Game.GameObjectUpdate += gameObjectUpdate;
+            m_Game.GameObjectToDelete += deleteObject;
+            m_Game.GameStart += runGame;
+            m_Game.GameExit += exitGame;
+            m_Game.GameRestart += restartGame;
 
-        m_Game.ServerError += serverError;
-        m_Game.DisposeEvents += disposeEvents;
+            m_Game.ServerError += serverError;
+            m_Game.DisposeEvents += disposeEvents;
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     void disposeEvents()
     {
-        m_Game.AddGameObjectList -= addGameObjects;
-        m_Game.GameObjectUpdate -= gameObjectUpdate;
-        m_Game.GameObjectToDelete -= deleteObject;
-        m_Game.GameStart -= runGame;
-        m_Game.GameExit -= exitGame;
-        m_Game.GameRestart -= restartGame;
+        //m_Game.AddGameObjectList -= addGameObjects;
+        //m_Game.GameObjectUpdate -= gameObjectUpdate;
+        //m_Game.GameObjectToDelete -= deleteObject;
+        //m_Game.GameStart -= runGame;
+        //m_Game.GameExit -= exitGame;
+        //m_Game.GameRestart -= restartGame;
     }
 }

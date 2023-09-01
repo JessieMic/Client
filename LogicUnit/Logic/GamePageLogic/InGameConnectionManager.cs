@@ -22,40 +22,40 @@ public class InGameConnectionManager
                     .Build();
 
         r_ConnectionToServer.Reconnecting += (sender) =>
-            {
-                //DisposeEvents?.Invoke();
-                ServerError.Invoke("Trying to reconnect");
-                return Task.CompletedTask;
-            };
+        {
+            //DisposeEvents?.Invoke();
+            ServerError.Invoke("Trying to reconnect");
+            return Task.CompletedTask;
+        };
         
 
         r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
+        {
+            lock (r_Lock)
             {
-                lock (r_Lock)
+                if (GameInfo.Player.PlayerNumber == 1)
                 {
-                    if (GameInfo.Player.PlayerNumber == 1)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"----  Player = {i_Player}---- what {i_WhatHappened} ----  ");
-                    }
-                    SpecialEventQueue.Enqueue(new SpecialUpdate(i_WhatHappened, i_Player));
+                    System.Diagnostics.Debug.WriteLine($"----  Player = {i_Player}---- what {i_WhatHappened} ----  ");
                 }
-            });
+                SpecialEventQueue.Enqueue(new SpecialUpdate(i_WhatHappened, i_Player));
+            }
+        });
 
         r_ConnectionToServer.On<int, int, int>("SpecialUpdateWithPointReceived", (i_X, i_Y, i_Player) =>
+        {
+            lock (r_Lock)
             {
-                lock (r_Lock)
-                {
-                    SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
-                }
-            });
+                SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+            }
+        });
 
         r_ConnectionToServer.On<string>("Disconnected", (i_Message) =>
-            {
-                // r_ConnectionToServer.StopAsync();
-                GameStatus = eGameStatus.Exited;
-                //DisposeEvents.Invoke();
-                ServerError.Invoke(i_Message);
-            });
+        {
+            // r_ConnectionToServer.StopAsync();
+            GameStatus = eGameStatus.Exited;
+            //DisposeEvents.Invoke();
+            ServerError.Invoke(i_Message);
+        });
     }
 
 }
