@@ -2,6 +2,7 @@ using CommunityToolkit.Maui.Views;
 using LogicUnit;
 using Objects;
 using Objects.Enums;
+using CommunityToolkit.Maui.Core.Extensions;
 //using System.Xml.Linq;
 //using static ObjCRuntime.Dlfcn;
 using UI.Pages.LobbyPages;

@@ -26,7 +26,7 @@
                    MaxLength="10"
                    VerticalOptions="Center"
                    FontSize="30"
-                   ReturnType="Next">
+                   ReturnType="Done">
             </Entry>
 
             <Label Text =""
