@@ -27,7 +27,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 m_GameInformation.GameBoardSizeByGrid.Height/2);
             MonitorForCollision = true;
             IsObjectMoving = true;
-            this.Initialize(eScreenObjectType.Image, m_GameInformation.Player.PlayerNumber, "pacmanfood.png", point, true,
+            this.Initialize(eScreenObjectType.Image, m_GameInformation.Player.PlayerNumber, "pong_ball.png", point, true,
                 m_GameInformation.PointValuesToAddToScreen);
             xDirectionBounceFactor= yDirectionBounceFactor=Velocity = 120;
         }
@@ -39,7 +39,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 updatePoint(i_TimeElapsed);
                 bounceFromHittingSidesOfGameBoard();
                 checkIfLost();
-               // RefreshOtherClientsAboutPosition();
             }
             else if (m_IsCoolDownTimeStarted)
             {
@@ -62,25 +61,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
                 }
             }
-
-
-            m_TimesGotHit++;
         }
-
-        //private void RefreshOtherClientsAboutPosition()
-        //{
-        //    if(IsObjectMoving)
-        //    {
-        //        if(m_TimesGotHit > 4)
-        //        {
-        //            m_TimesGotHit = 0;
-        //            if(m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
-        //            {
-        //                OnSpecialEvent(-1);
-        //            }
-        //        }
-        //    }
-        //}
 
         private void bounceFromHittingSidesOfGameBoard()
         {
@@ -160,5 +141,4 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             resetToStartupPoint();
         }
     }
-    
 }

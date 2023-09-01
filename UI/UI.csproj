@@ -99,6 +99,7 @@
 	  <None Remove="Resources\Images\a4slime2.png" />
 	  <None Remove="Resources\Images\a4slime3.png" />
 	  <None Remove="Resources\Images\aburron.png" />
+	  <None Remove="Resources\Images\bat.png" />
 	  <None Remove="Resources\Images\boarder.png" />
 	  <None Remove="Resources\Images\boarder1.png" />
 	  <None Remove="Resources\Images\boarder2.png" />
@@ -129,6 +130,7 @@
 	  <None Remove="Resources\Images\pausemenubutton.png" />
 	  <None Remove="Resources\Images\placementbutton.png" />
 	  <None Remove="Resources\Images\pongbackground.png" />
+	  <None Remove="Resources\Images\pong_ball.png" />
 	  <None Remove="Resources\Images\pressedplacementbutton.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snake_img_new.png" />
@@ -150,8 +152,6 @@
 	  <MauiImage Include="Resources\Images\BombIt\a4slime3.png" />
 	  <MauiImage Include="Resources\Images\BombIt\bomb.png" />
 	  <MauiImage Include="Resources\Images\BombIt\bombitwall.png" />
-	  <MauiImage Include="Resources\Images\BombIt\explosion.png" />
-	  <MauiImage Include="Resources\Images\BombIt\mushroom.png" />
 	  <MauiImage Include="Resources\Images\Game\aburron.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder.png" />
 	  <MauiImage Include="Resources\Images\Game\boarder1.png" />
