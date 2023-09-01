@@ -129,7 +129,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                     }
 
                     m_ScoreBoard.ShowScoreBoard(m_EndGameText, m_PauseMenu);
-                    OnAddScreenObjects();
+                    //OnAddScreenObjects();
                     m_GameStatus = eGameStatus.Ended;
                 }
             }
