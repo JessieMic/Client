@@ -38,12 +38,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 updatePoint(i_TimeElapsed);
                 bounceFromHittingSidesOfGameBoard();
-                checkIfLost();
+                checkIfOutOfBounds();
             }
             else if (m_IsCoolDownTimeStarted)
             {
                 double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_StartTimeOfCoolDownTime;
-                if(timePassed > 2000)
+                if(timePassed > 2500)
                 {
                     m_IsCoolDownTimeStarted = false;
                     IsObjectMoving = true;
@@ -52,13 +52,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             if (m_GameInformation.Player.PlayerNumber == 1)
             {
-                if (m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeFromLastUpdate > 3000
+                if (m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeFromLastUpdate > 3500
                    && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
                 {
-                    System.Diagnostics.Debug.WriteLine("WOWOW");
                     m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
                     OnSpecialEvent(-1);
-
                 }
             }
         }
@@ -85,34 +83,32 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             PointOnScreen = newPoint;
         }
 
-        private void checkIfLost()
+        private void checkIfOutOfBounds()
         {
             bool isPointOnScreen = m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen);
             
             if (PointOnScreen.Row <= m_ValuesToAdd.Row)
             {
-                if (isPointOnScreen)
-                {
-                    OnSpecialEvent(2);
-                    IsObjectMoving = false;
-                }
-                else
-                {
-                    yDirectionBounceFactor = Velocity;
-                }
+                ballOutOfBounds(isPointOnScreen, 1);
             }
 
             if (PointOnScreen.Row >= m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - 45)
             {
-                if (isPointOnScreen)
-                {
-                    OnSpecialEvent(2);
-                    IsObjectMoving = false;
-                }
-                else
-                {
-                    yDirectionBounceFactor = -Velocity;
-                }
+                ballOutOfBounds(isPointOnScreen, -1);
+            }
+        }
+
+        private void ballOutOfBounds(bool i_IsPointOnScreen,int i_Direction)
+        {
+            if (i_IsPointOnScreen)
+            {
+                m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+                IsObjectMoving = false;
+                OnSpecialEvent(2);
+            }
+            else
+            {
+                yDirectionBounceFactor = Velocity * i_Direction;
             }
         }
 

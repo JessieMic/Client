@@ -57,7 +57,9 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         protected override void addBoarder(Point i_Point)
         {
-            m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), "bombitwall.png"));
+            Random random = new Random();
+
+            m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), $"bombitwall{random.Next(1,3)}.png"));
         }
 
         protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)

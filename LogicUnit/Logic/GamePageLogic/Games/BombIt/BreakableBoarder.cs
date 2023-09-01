@@ -13,10 +13,12 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
     {
         public BreakableBoarder(Point i_Point)
         {
+            Random random = new Random();
+
             MonitorForCollision = true;
             DoWeCheckTheObjectForCollision = true;
             ObjectNumber = 2;
-            this.Initialize(eScreenObjectType.Image, 2, "mushroom.png", i_Point, true,
+            this.Initialize(eScreenObjectType.Image, 2, $"mushroom{random.Next(1,3)}.png", i_Point, true,
                 m_GameInformation.PointValuesToAddToScreen);
         }
 
