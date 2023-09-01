@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UI.Pages.LobbyPages;
 using CommunityToolkit.Maui.Views;
+using LogicUnit.Logic.GamePageLogic;
 
 namespace UI.Pages;
 
@@ -19,6 +20,7 @@ public partial class GamePage : ContentPage
 
     private GameInformation m_GameInformation = GameInformation.Instance;
     private GameLibrary m_GameLibrary = new GameLibrary();
+    private readonly InGameConnectionManager r_InGameConnectionManager = new();
     private Game m_Game;
     private Dictionary<int, Image> m_GameImages = new Dictionary<int, Image>();
     private Dictionary<int, ButtonImage> m_GameButtonsImages = new Dictionary<int, ButtonImage>();
@@ -29,11 +31,21 @@ public partial class GamePage : ContentPage
         InitializeComponent();
         initializePage();
     }
+
     private void initializePage()
     {
-        m_Game = m_GameLibrary.CreateAGame(m_GameInformation.NameOfGame);//m_GameInformation.m_NameOfGame);
-        initializeEvents();
-        initializeGame();
+        try
+        {
+            m_Game = m_GameLibrary.CreateAGame(m_GameInformation.NameOfGame, r_InGameConnectionManager);//m_GameInformation.m_NameOfGame);
+            initializeEvents();
+            initializeGame();
+            runGame();
+        }
+        catch
+        {
+            throw;
+        }
+       
     }
 
     private void initializeGame()
@@ -43,21 +55,24 @@ public partial class GamePage : ContentPage
 
     public void addGameObjects(object sender, List<GameObject> i_GameObjectsToAdd)
     {
-        Application.Current.Dispatcher.Dispatch(async () =>
+        lock (i_GameObjectsToAdd)
         {
-            foreach (var gameObject in i_GameObjectsToAdd)
+            Application.Current.Dispatcher.Dispatch(async () =>
             {
-                
-                if (gameObject.ScreenObjectType == eScreenObjectType.Button)
+                //TODO
+                foreach (var gameObject in i_GameObjectsToAdd)
                 {
-                    addButton(gameObject);
+                    if (gameObject.ScreenObjectType == eScreenObjectType.Button)
+                    {
+                        addButton(gameObject);
+                    }
+                    else// if (screenObject.ScreenObjectType == eScreenObjectType.Image)
+                    {
+                        addImage(gameObject);
+                    }
                 }
-                else// if (screenObject.ScreenObjectType == eScreenObjectType.Image)
-                {
-                    addImage(gameObject);
-                }
-            }
-        });
+            });
+        }
     }
 
     private void addLabel(GameObject i_Label)
@@ -94,8 +109,8 @@ public partial class GamePage : ContentPage
         buttonImage.ZIndex = 1;
         gridLayout.Add(buttonImage.GetImage());
         gridLayout.Add(buttonImage.GetButton());
-        buttonImage.GetButton().Pressed+= m_Game.OnButtonClicked;
-        if(m_Game.DoesGameNeedToKnowIfButtonReleased() && i_ButtonToAdd.ButtonType != eButton.ButtonA)
+        buttonImage.GetButton().Pressed += m_Game.OnButtonClicked;
+        if (m_Game.DoesGameNeedToKnowIfButtonReleased() && i_ButtonToAdd.ButtonType != eButton.ButtonA)
         {
             buttonImage.GetButton().Released += m_Game.OnButtonRelesed;
         }
@@ -114,11 +129,11 @@ public partial class GamePage : ContentPage
                     m_GameImages[i_ObjectUpdate.ID].Update(i_ObjectUpdate);
                 }
             }
-            else if(i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Button)
+            else if (i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Button)
             {
                 if (m_GameButtonsImages.ContainsKey(i_ObjectUpdate.ID))
                 {
-                   m_GameButtonsImages[i_ObjectUpdate.ID].SetButtonImage(i_ObjectUpdate);
+                    m_GameButtonsImages[i_ObjectUpdate.ID].SetButtonImage(i_ObjectUpdate);
                 }
             }
             if (i_ObjectUpdate.ScreenObjectType == eScreenObjectType.Label)
@@ -128,7 +143,7 @@ public partial class GamePage : ContentPage
             }
         });
     }
-    
+
     public void deleteObject(object sender, GameObject? i_ObjectToDelete)
     {
         if (i_ObjectToDelete.Fade)
@@ -158,7 +173,7 @@ public partial class GamePage : ContentPage
         {
             m_Game.RunGame();
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             serverError($"{e.Message}{Environment.NewLine}error on m_Game.RunGame() in function runGame");
         }
@@ -183,22 +198,22 @@ public partial class GamePage : ContentPage
         Application.Current.Dispatcher.Dispatch(async () =>
             {
                 //disposeEvents();
-            foreach (var button in m_GameButtonsImages)
-            {
-               button.Value.Source = null;
-               gridLayout.Remove(button.Value.GetButton());
-            }
-            m_GameButtonsImages.Clear();
-            foreach (var image in m_GameImages)
-            {
-                image.Value.IsVisible= false;
-                gridLayout.Remove(image.Value.GetImage());
-            }
+                foreach (var button in m_GameButtonsImages)
+                {
+                    button.Value.Source = null;
+                    gridLayout.Remove(button.Value.GetButton());
+                }
+                m_GameButtonsImages.Clear();
+                foreach (var image in m_GameImages)
+                {
+                    image.Value.IsVisible = false;
+                    gridLayout.Remove(image.Value.GetImage());
+                }
 
-            m_GameLabel.IsVisible = false;
-            gridLayout.Remove(m_GameLabel);
-            m_GameImages.Clear();
-        });
+                m_GameLabel.IsVisible = false;
+                gridLayout.Remove(m_GameLabel);
+                m_GameImages.Clear();
+            });
     }
 
     void serverError(string i_Message)
@@ -217,24 +232,31 @@ public partial class GamePage : ContentPage
 
     void initializeEvents()
     {
-        m_Game.AddGameObjectList += addGameObjects;
-        m_Game.GameObjectUpdate += gameObjectUpdate;
-        m_Game.GameObjectToDelete += deleteObject;
-        m_Game.GameStart += runGame;
-        m_Game.GameExit += exitGame;
-        m_Game.GameRestart += restartGame;
+        try
+        {
+            m_Game.AddGameObjectList += addGameObjects;
+            m_Game.GameObjectUpdate += gameObjectUpdate;
+            m_Game.GameObjectToDelete += deleteObject;
+            m_Game.GameStart += runGame;
+            m_Game.GameExit += exitGame;
+            m_Game.GameRestart += restartGame;
 
-        m_Game.ServerError += serverError;
-        m_Game.DisposeEvents += disposeEvents;
+            m_Game.ServerError += serverError;
+            m_Game.DisposeEvents += disposeEvents;
+        }
+        catch
+        {
+            throw;
+        }
     }
 
     void disposeEvents()
     {
-        m_Game.AddGameObjectList -= addGameObjects;
-        m_Game.GameObjectUpdate -= gameObjectUpdate;
-        m_Game.GameObjectToDelete -= deleteObject;
-        m_Game.GameStart -= runGame;
-        m_Game.GameExit -= exitGame;
-        m_Game.GameRestart -= restartGame;
+        //m_Game.AddGameObjectList -= addGameObjects;
+        //m_Game.GameObjectUpdate -= gameObjectUpdate;
+        //m_Game.GameObjectToDelete -= deleteObject;
+        //m_Game.GameStart -= runGame;
+        //m_Game.GameExit -= exitGame;
+        //m_Game.GameRestart -= restartGame;
     }
 }

@@ -26,13 +26,14 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             private int m_AmountOfScreenThatHaveNoFood = 0;
             private int j = 0;
 
-            public Pong()
+            public Pong(InGameConnectionManager i_GameConnectionManager)
+                : base(i_GameConnectionManager)
             {
                 m_GameName = "Pong";
                 m_MoveType = eMoveType.ClickAndRelease;
                 m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.RightAndLeft;
                 m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
-                m_BombItPlayers = new Bat[m_GameInformation.AmountOfPlayers];
+                m_BombItPlayers = new Bat[r_GameInformation.AmountOfPlayers];
             }
 
             protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
@@ -52,17 +53,17 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             {
                 try
                 {
-                    if (m_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].Position.Row == eRowPosition.UpperRow)
+                    if (r_GameInformation.ScreenInfoOfAllPlayers[i_Player - 1].Position.Row == eRowPosition.UpperRow)
                     {
                         base.PlayerLostALife(null, 1);
-                        if (m_GameInformation.AmountOfPlayers == 4)
+                        if (r_GameInformation.AmountOfPlayers == 4)
                         {
                             base.PlayerLostALife(null, 2);
                         }
                     }
                     else
                     {
-                        if (m_GameInformation.AmountOfPlayers == 4)
+                        if (r_GameInformation.AmountOfPlayers == 4)
                         {
                             base.PlayerLostALife(null, 3);
                             base.PlayerLostALife(null, 4);
@@ -110,7 +111,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             private void addPlayerObjects()
             {
-                for (int i = 1; i <= m_GameInformation.AmountOfPlayers; i++)
+                for (int i = 1; i <= r_GameInformation.AmountOfPlayers; i++)
                 {
                     Bat newPlayer = new Bat(
                         i,

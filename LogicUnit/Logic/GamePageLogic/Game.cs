@@ -24,7 +24,7 @@ namespace LogicUnit
     public abstract partial class Game
     {
         private List<string> m_PlayerMovementsLogs = new List<string>();
-        protected  HubConnection r_ConnectionToServer;
+        //protected  HubConnection r_ConnectionToServer;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
@@ -36,7 +36,7 @@ namespace LogicUnit
         public Notify ShowWinner;
 
         //basic game info
-        protected GameInformation m_GameInformation = GameInformation.Instance;
+        protected readonly GameInformation r_GameInformation = GameInformation.Instance;
         protected Player m_Player;
         protected PlayerData[] m_PlayersDataArray = new PlayerData[4];
         protected PlayerData m_CurrentPlayerData;
@@ -81,109 +81,60 @@ namespace LogicUnit
         protected readonly CollisionManager r_CollisionManager = new CollisionManager();
         private bool m_ConnectedToServer = true;    //TODO
         static readonly object m_lock = new object();
-        static readonly object m_lockxy= new object();
-        protected Queue<SpecialUpdate> m_SpecialEventQueue = new Queue<SpecialUpdate>();
-        protected Queue<SpecialUpdate> m_SpecialEventWithPointQueue = new Queue<SpecialUpdate>();
+        static readonly object m_lockxy = new object();
+        protected Queue<SpecialUpdate> m_SpecialEventQueue;
+        protected Queue<SpecialUpdate> m_SpecialEventWithPointQueue;
         protected Queue<SpecialUpdate> m_XYUPDATE = new Queue<SpecialUpdate>();
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
         protected string m_EndGameText = string.Empty;
 
+        private readonly InGameConnectionManager r_InGameConnectionManager;
+
         //Server Error
         public Action<string> ServerError;
         public Notify DisposeEvents;
-        
-        public Game()
+
+        public Game(InGameConnectionManager i_InGameConnectionManager)
         {
-            m_Player = m_GameInformation.Player;
+            m_Player = r_GameInformation.Player;
             for (int i = 0; i < 4; i++)
             {
                 m_PlayersDataArray[i] = new(i);
             }
-            
-            m_PlayerObjects = new GameObject[m_GameInformation.AmountOfPlayers];// new GameObject[2];//
 
-           // if(!m_GameInformation.serverR)
-           // {
-                r_ConnectionToServer = new HubConnectionBuilder()
-                    .WithUrl(ServerAddressManager.Instance!.InGameHubAddress)
-                    .Build();
-              //  m_GameInformation.serverR = true;
-            //}
-            
+            m_PlayerObjects = new GameObject[r_GameInformation.AmountOfPlayers];// new GameObject[2];//
 
-            r_ConnectionToServer.Reconnecting += (sender) =>
+            r_InGameConnectionManager = i_InGameConnectionManager;
+            m_SpecialEventQueue = r_InGameConnectionManager.SpecialEventQueue;
+            m_SpecialEventWithPointQueue = r_InGameConnectionManager.SpecialEventWithPointQueue;
+            m_GameStatus = r_InGameConnectionManager.GameStatus;
+
+            try
             {
-                DisposeEvents?.Invoke();
-                ServerError.Invoke("Trying to reconnect");
-                return Task.CompletedTask;
-            };
-
-            //r_ConnectionToServer.Closed += (sender) =>
-            //{
-            //    //DisposeEvents.Invoke();
-            //    if (m_Player.PlayerNumber == 1)
-            //    {
-            //        ServerError.Invoke("connection is closed");
-            //    }
-            //    return Task.CompletedTask;
-            //};
-
-
-            r_ConnectionToServer.On<int, int>("SpecialUpdateReceived", (int i_WhatHappened, int i_Player) =>
-            {
-                lock (m_lock)
+                if (r_GameInformation.Player.PlayerNumber == 1)
                 {
-                    if(m_GameInformation.Player.PlayerNumber == 1)
-                    {
-                        System.Diagnostics.Debug.WriteLine($"----  Player = {i_Player}---- what {i_WhatHappened} ----  ");
-                    }
-                    m_SpecialEventQueue.Enqueue(new SpecialUpdate(i_WhatHappened, i_Player));
+                    System.Diagnostics.Debug.WriteLine($"----  START ----  ");
                 }
-            });
 
-            r_ConnectionToServer.On<int, int,int>("SpecialUpdateWithPointReceived", (i_X, i_Y, i_Player) =>
-            {
-                lock (m_lock)
+
+                if (r_InGameConnectionManager.r_ConnectionToServer.State != HubConnectionState.Connected)
                 {
-                    m_SpecialEventWithPointQueue.Enqueue(new SpecialUpdate(i_X, i_Y, i_Player));
+                    r_InGameConnectionManager.r_ConnectionToServer.StartAsync();
                 }
-            });
 
-            r_ConnectionToServer.On<string>("Disconnected", (i_Message) =>
+                r_InGameConnectionManager.r_ConnectionToServer.SendAsync("ResetHub");
+                m_ConnectedToServer = true;
+            }
+            catch (Exception ex)
             {
-                // r_ConnectionToServer.StopAsync();
-                m_GameStatus = eGameStatus.Exited;
-                //DisposeEvents.Invoke();
-                ServerError.Invoke(i_Message);
-            });
-
-            Task.Run(() =>
-            {
-                Application.Current.Dispatcher.Dispatch(async () =>
-                {
-                    try
-                    {
-                        if (m_GameInformation.Player.PlayerNumber == 1)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"----  START ----  ");
-                        }
-                        await r_ConnectionToServer.StartAsync();
-                        await r_ConnectionToServer.SendAsync("ResetHub");
-                        m_ConnectedToServer = true;
-                        OnGameStart();
-                    }
-                    catch(Exception ex)
-                    {
-                        ServerError.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
-                    }
-                });
-            });
+                ServerError.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
+            }
         }
 
         private void checkForSpecialUpdates()
         {
-            if(m_SpecialEventQueue.Count != 0 || m_SpecialEventWithPointQueue.Count != 0)
+            if (m_SpecialEventQueue.Count != 0 || m_SpecialEventWithPointQueue.Count != 0)
             {
                 lock (m_lock)
                 {
@@ -203,7 +154,11 @@ namespace LogicUnit
 
         public GameObject InitializeGame()
         {
-            m_AmountOfPlayers = m_GameInformation.AmountOfPlayers;
+            //while(!m_ConnectedToServer)
+            //{
+
+            //}
+            m_AmountOfPlayers = r_GameInformation.AmountOfPlayers;
             m_BoardSizeByGrid = m_ScreenMapping.m_TotalScreenGridSize;
             m_Board = new int[m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height];
             m_CurrentPlayerData = new PlayerData(m_Player.PlayerNumber);
@@ -214,21 +169,21 @@ namespace LogicUnit
                 m_DirectionsBuffer.Add(new List<Direction>());
             }
             SetGameScreen();
-            m_ScoreBoard.Label.UpdateGameObject += OnUpdateScreenObject; 
+            m_ScoreBoard.Label.UpdateGameObject += OnUpdateScreenObject;
 
             return m_ScoreBoard.Label;
         }
 
         public void GameLoop()
         {
-            m_GameInformation.RealWorldStopwatch = new Stopwatch();
-            m_GameInformation.RealWorldStopwatch.Start();
+            r_GameInformation.RealWorldStopwatch = new Stopwatch();
+            r_GameInformation.RealWorldStopwatch.Start();
             m_GameStopwatch.Start();
             while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Exited)
             {
                 m_GameStopwatch.Restart();
                 m_gameObjectsToUpdate.Clear();
-                m_GameObjectsToAdd.Clear();
+                //m_GameObjectsToAdd.Clear();
                 updateGame();
                 Draw();
 
@@ -236,12 +191,12 @@ namespace LogicUnit
                 m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
             }
 
-            if(m_GameInformation.Player.PlayerNumber==1)
+            if (r_GameInformation.Player.PlayerNumber == 1)
             {
                 System.Diagnostics.Debug.WriteLine($"----  stop ----  ");
             }
-            
-           
+
+
             m_ConnectedToServer = false;
         }
 
@@ -250,7 +205,7 @@ namespace LogicUnit
             SendServerUpdate();
             getUpdatedPosition();
             getButtonUpdate();
-            if(m_GameStatus == eGameStatus.Running)
+            if (m_GameStatus == eGameStatus.Running)
             {
                 UpdatePosition(m_LastElapsedTime);
             }
@@ -261,7 +216,7 @@ namespace LogicUnit
             m_LoopNumber = m_LastElapsedTime;
         }
 
-       
+
 
         protected void stopMovement(int i_Player)
         {
@@ -286,7 +241,7 @@ namespace LogicUnit
 
             //    foreach(var u in temp)
             //    {
-                    
+
             //    }
             //}
 
@@ -296,8 +251,8 @@ namespace LogicUnit
                 Point p = new Point(
                     pointRecived.Column,
                     pointRecived.Row);
-                
-                if(p.Row == -100)
+
+                if (p.Row == -100)
                 {
                     p.Row = 0;
                 }
@@ -305,12 +260,12 @@ namespace LogicUnit
                 {
                     p.Column = 0;
                 }
-                
+
                 if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
                 {
-                    if(p.Row < 0)
+                    if (p.Row < 0)
                     {
-                        p.Row = - pointRecived.Row;
+                        p.Row = -pointRecived.Row;
                     }
                     m_PlayerObjects[i].UpdatePointOnScreenByGrid(p);
                     m_PlayersDataArray[i].PlayerPointData = pointRecived;
@@ -346,14 +301,9 @@ namespace LogicUnit
         {
             m_GameObjectsToAdd.Add(new Boarder(new Point(i_Point.Column, i_Point.Row), string.Empty));
         }
-        
+
         protected virtual void Draw()
         {
-            if (m_GameObjectsToAdd.Count != 0 && m_GameStatus != eGameStatus.Ended)
-            {
-                OnAddScreenObjects();
-            }
-
             foreach (var player in m_PlayerObjects)
             {
                 player.OnDraw();
@@ -368,17 +318,17 @@ namespace LogicUnit
                     .GetCurrentPointOnScreen();
                 try
                 {
-                    r_ConnectionToServer.SendAsync(
+                    r_InGameConnectionManager.r_ConnectionToServer.SendAsync(
                       "UpdatePlayerSelection",
                       m_Player.PlayerNumber - 1,
                       m_CurrentPlayerData.Button,
                       0, 0);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"UpdatePlayerSelection\") in function SendServerUpdate");
                 }
-             
+
                 m_NewButtonPressed = false;
             }
         }
@@ -389,13 +339,13 @@ namespace LogicUnit
             {
                 try
                 {
-                    m_ServerUpdates = await r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
+                    m_ServerUpdates = await r_InGameConnectionManager.r_ConnectionToServer.InvokeAsync<int[]>("GetPlayersData");
                 }
-                catch(TaskCanceledException ex) //TODO : Continue only when we restarted
+                catch (TaskCanceledException ex) //TODO : Continue only when we restarted
                 {
                     continue;
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
 
                     ServerError.Invoke($"{e.Message}{Environment.NewLine}error on InvokeAsync(\"GetPlayersData\") in function GetServerUpdate");
@@ -410,7 +360,7 @@ namespace LogicUnit
 
         protected virtual void specialEventInvoked(object i_Sender, int i_eventNumber)
         {
-            SendSpecialServerUpdate(i_Sender,i_eventNumber);
+            SendSpecialServerUpdate(i_Sender, i_eventNumber);
         }
 
         protected async void SendSpecialServerUpdate(object? sender, int i_eventNumber)
@@ -419,18 +369,18 @@ namespace LogicUnit
             //GameObject gameObject = sender as GameObject;
             //try
             //{
-                //r_ConnectionToServer.SendAsync(
-                    //"SpecialUpdate",
-                    //i_eventNumber, gameObject.ObjectNumber
-                    //);
+            //r_ConnectionToServer.SendAsync(
+            //"SpecialUpdate",
+            //i_eventNumber, gameObject.ObjectNumber
+            //);
             //}
             //catch(Exception e)
             //{
-                //ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"SpecialUpdate\") in function SendSpecialServerUpdate");
+            //ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"SpecialUpdate\") in function SendSpecialServerUpdate");
             //}
-  
-            int number = m_GameInformation.Player.PlayerNumber;
-            if(sender != null)
+
+            int number = r_GameInformation.Player.PlayerNumber;
+            if (sender != null)
             {
                 GameObject gameObject = sender as GameObject;
                 number = gameObject.ObjectNumber;
@@ -438,18 +388,18 @@ namespace LogicUnit
             try
             {
                 System.Diagnostics.Debug.WriteLine($"####{i_eventNumber}    {number}####");
-                r_ConnectionToServer.SendAsync(
+                r_InGameConnectionManager.r_ConnectionToServer.SendAsync(
                     "SpecialUpdate",
                     i_eventNumber, number
                     );
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"SpecialUpdate\") in function SendSpecialServerUpdate");
             }
         }
 
-        
+
         protected virtual void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
         {
 
@@ -485,22 +435,22 @@ namespace LogicUnit
 
         private async void SendServerPositionUpdate(int i_Player, Point i_Point)
         {
-//             System.Diagnostics.Debug.WriteLine("MOVEE"  + " " + i_Point.Row);
-//             try
-//             {
-//                 await r_ConnectionToServer.SendAsync(
-//                     "UpdatePlayerSelection", i_Player - 1
-//                     ,
-//                     -1,
-//                     (int)i_Point.Column, (int)i_Point.Row);
-//             }
-//             catch(Exception e)
-//             {
-//                 ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"UpdatePlayerSelection\") in function SendServerPositionUpdate");
-//             }
+            //             System.Diagnostics.Debug.WriteLine("MOVEE"  + " " + i_Point.Row);
+            //             try
+            //             {
+            //                 await r_ConnectionToServer.SendAsync(
+            //                     "UpdatePlayerSelection", i_Player - 1
+            //                     ,
+            //                     -1,
+            //                     (int)i_Point.Column, (int)i_Point.Row);
+            //             }
+            //             catch(Exception e)
+            //             {
+            //                 ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"UpdatePlayerSelection\") in function SendServerPositionUpdate");
+            //             }
             try
             {
-                if(i_Point.Row == 0)
+                if (i_Point.Row == 0)
                 {
                     i_Point.Row = -100;
                 }
@@ -508,16 +458,16 @@ namespace LogicUnit
                 {
                     i_Point.Column = -100;
                 }
-                await r_ConnectionToServer.SendAsync(
+                await r_InGameConnectionManager.r_ConnectionToServer.SendAsync(
                   "UpdatePlayerSelection", i_Player - 1
                   ,
                   -1,
                   (int)i_Point.Column, (int)i_Point.Row);
             }
-          catch(Exception e)
-          {
-               ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"UpdatePlayerSelection\") in function SendServerPositionUpdate");
-          }
+            catch (Exception e)
+            {
+                ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"UpdatePlayerSelection\") in function SendServerPositionUpdate");
+            }
         }
 
         virtual public void OnButtonClicked(object sender, EventArgs e)
@@ -529,9 +479,9 @@ namespace LogicUnit
 
             //r_ConnectionToServer.StopAsync();
 
-            if((int)m_Buttons.StringToButton(button!.ClassId) > 6)
+            if ((int)m_Buttons.StringToButton(button!.ClassId) > 6)
             {
-               SendSpecialServerUpdate(null, (int)m_Buttons.StringToButton(button!.ClassId));
+                SendSpecialServerUpdate(null, (int)m_Buttons.StringToButton(button!.ClassId));
             }
             else
             {
@@ -561,7 +511,7 @@ namespace LogicUnit
                     {
                         m_PauseMenu.ShowPauseMenu();
                     }
-                    m_GameInformation.RealWorldStopwatch.Stop();
+                    r_GameInformation.RealWorldStopwatch.Stop();
                 }
             }
             else
@@ -576,7 +526,7 @@ namespace LogicUnit
                     }
                     else if (i_SpecialUpdate.Update == 9)
                     {
-                        stopConnection();
+                        //stopConnection();
                         m_GameStatus = eGameStatus.Restarted;
                         GameRestart.Invoke();
                     }
@@ -584,17 +534,17 @@ namespace LogicUnit
                     {
                         stopConnection();
                         m_GameStatus = eGameStatus.Exited;
-                       m_GameInformation.Reset();
+                        r_GameInformation.Reset();
                         GameExit.Invoke();
                     }
-                    m_GameInformation.RealWorldStopwatch.Start();
+                    r_GameInformation.RealWorldStopwatch.Start();
                 }
             }
         }
 
         public void stopConnection()
         {
-            r_ConnectionToServer.StopAsync();
+            r_InGameConnectionManager.r_ConnectionToServer.StopAsync();
             m_ConnectedToServer = false;
             //r_ConnectionToServer = null;
         }
@@ -613,16 +563,16 @@ namespace LogicUnit
             GameObjectUpdate.Invoke(this, i);
         }
 
-        protected async void SendServerSpecialPointUpdate(Point i_Point,int i_Player)
+        protected async void SendServerSpecialPointUpdate(Point i_Point, int i_Player)
         {
             try
             {
-                r_ConnectionToServer.SendAsync(
+                r_InGameConnectionManager.r_ConnectionToServer.SendAsync(
                     "SpecialUpdateWithPoint",
-                    (int)i_Point.Column,(int)i_Point.Row, i_Player
+                    (int)i_Point.Column, (int)i_Point.Row, i_Player
                 );
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"SpecialUpdateWithPoint\") in function SendServerSpecialPointUpdate");
             }
@@ -674,7 +624,7 @@ namespace LogicUnit
         {
             bool result = false;
 
-            if(m_MoveType == eMoveType.ClickAndRelease)
+            if (m_MoveType == eMoveType.ClickAndRelease)
             {
                 result = true;
             }
