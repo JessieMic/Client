@@ -10,13 +10,22 @@ namespace Objects
     public class Image
     {
         public Microsoft.Maui.Controls.Image m_Image = new Microsoft.Maui.Controls.Image();
+        protected double m_Density;
         protected string m_Source;
 
+        public Image()
+        {
+            m_Density = GameInformation.Instance.ScreenDensity;
+            if(m_Density != 1)
+            {
+                m_Density /= 2.75;
+            }
+        }
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
-            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
-            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column/ m_Density);
+            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row / m_Density);
             m_Image.Aspect = Aspect.AspectFill;
             m_Image.Source = i_GameObject.ImageSource;
             m_Image.ClassId = i_GameObject.ImageSource;
@@ -25,9 +34,9 @@ namespace Objects
             m_Image.IsVisible = i_GameObject.IsVisable;
             if (i_GameObject.Size.Width != 0)
             {
-                m_Image.WidthRequest = i_GameObject.Size.Width;
-                m_Image.HeightRequest = i_GameObject.Size.Height;
-                if (i_GameObject.ImageSource != "snakebackground.png")
+                m_Image.WidthRequest = (int)(i_GameObject.Size.Width / m_Density);
+                m_Image.HeightRequest = (int)(i_GameObject.Size.Height/ m_Density);
+                if (i_GameObject.ImageSource != "bombitbackground.png")
                 {
                     m_Image.Aspect = Aspect.Fill;
                 }
@@ -37,8 +46,8 @@ namespace Objects
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
-            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column / m_Density);
+            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row / m_Density);
             m_Image.IsVisible = i_GameObject.IsVisable;
             m_Image.ScaleX = i_GameObject.ScaleX;
             m_Image.ScaleY = i_GameObject.ScaleY;
@@ -46,7 +55,6 @@ namespace Objects
             {
                 m_Image.Source = m_Image.ClassId = i_GameObject.ImageSource;
             }
-            //m_Image.ZIndex = -1;
             m_Image.Rotation = i_GameObject.Rotatation;
         }
 
