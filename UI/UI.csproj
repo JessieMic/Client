@@ -108,6 +108,7 @@
 	  <None Remove="Resources\Images\bombitwall.png" />
 	  <None Remove="Resources\Images\bombitwall1.png" />
 	  <None Remove="Resources\Images\bombitwall2.png" />
+	  <None Remove="Resources\Images\bombit_img.png" />
 	  <None Remove="Resources\Images\explosion.png" />
 	  <None Remove="Resources\Images\explosion1.png" />
 	  <None Remove="Resources\Images\explosion2.png" />
@@ -139,6 +140,7 @@
 	  <None Remove="Resources\Images\placementbutton.png" />
 	  <None Remove="Resources\Images\pongbackground.png" />
 	  <None Remove="Resources\Images\pong_ball.png" />
+	  <None Remove="Resources\Images\pong_img.png" />
 	  <None Remove="Resources\Images\pressedplacementbutton.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snake_img_new.png" />
