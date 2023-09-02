@@ -11,6 +11,7 @@ namespace Objects
     {
         public SizeDTO ScreenSizeInPixels = new SizeDTO();
         public Position m_Position = new Position();
+        public double Density { get; set; }
 
         public ScreenDimension(int i_ScreenWidth,int i_ScreenHeight, Position i_Position)
         {
