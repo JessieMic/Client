@@ -16,16 +16,26 @@ namespace Objects
         public Image()
         {
             m_Density = GameInformation.Instance.ScreenDensity;
-            if(m_Density != 1)
+            if(GameInformation.Instance.Player.PlayerNumber == 1)
             {
-                m_Density /= 2.75;
+                m_Density = 1;
+               //m_Density = 2.625;
             }
+            else
+            {
+                m_Density =3/2.625;
+            }
+
+            //if (m_Density != 1)
+            //{
+            //    m_Density /= 2.615;
+            //}
         }
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
             m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column/ m_Density);
-            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row / m_Density);
+            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row);
             m_Image.Aspect = Aspect.AspectFill;
             m_Image.Source = i_GameObject.ImageSource;
             m_Image.ClassId = i_GameObject.ImageSource;
@@ -34,7 +44,7 @@ namespace Objects
             m_Image.IsVisible = i_GameObject.IsVisable;
             if (i_GameObject.Size.Width != 0)
             {
-                m_Image.WidthRequest = (int)(i_GameObject.Size.Width / m_Density);
+                m_Image.WidthRequest = (int)(i_GameObject.Size.Width );
                 m_Image.HeightRequest = (int)(i_GameObject.Size.Height/ m_Density);
                 if (i_GameObject.ImageSource != "bombitbackground.png")
                 {
@@ -46,7 +56,7 @@ namespace Objects
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column / m_Density);
+            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column );
             m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row / m_Density);
             m_Image.IsVisible = i_GameObject.IsVisable;
             m_Image.ScaleX = i_GameObject.ScaleX;
