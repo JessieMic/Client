@@ -6,17 +6,9 @@ public partial class GameCard : ContentView
 {
 	private Game m_Game;
 
-	//public GameCard(GameCard i_Card) // copy ctor
-	//{
-	//	InitializeComponent();
-	//	this.GameImage.Source = i_Card.GameImage.Source;
-	//	this.GameNameLabel.Text = i_Card.GameNameLabel.Text;
-	//}
-
 	public GameCard(string i_Url, string i_Name)
 	{
 		InitializeComponent();
-		//GameImage.Source = ImageSource.FromFile(i_Url);
 		GameNameLabel.Text = i_Name;
 	}
 
@@ -25,6 +17,12 @@ public partial class GameCard : ContentView
 		InitializeComponent();
 		m_Game = i_Game;
 		GameImage.Source = ImageSource.FromFile(i_Game.GetPicUrl());
+
+		if (i_Game == GameLibrary.GetBombItGame())
+		{
+			GameImage.Source = ImageSource.FromFile("bombit_img_games.png");
+        }
+
         GameNameLabel.Text = i_Game.GetName();
     }
 

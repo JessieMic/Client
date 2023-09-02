@@ -24,7 +24,8 @@ public partial class InstructionsPopUp : Popup
 		Close();
 	}
 
-	private void addCloseButton()
+    [Obsolete]
+    private void addCloseButton()
 	{
 		ButtonImage closeBtn = new ButtonImage();
 		closeBtn.Source = "lobby_ready_btn.PNG";
