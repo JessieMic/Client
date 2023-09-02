@@ -4,8 +4,8 @@
     {
         //private static Game m_Snake = new Game("snake_img_new.png", "Snake", Instructions.k_SnakeInstructions);
         private static Game m_Pacman = new Game("pacman_img_new.png", "Pacman", Instructions.k_PacmanInstructions);
-        private static Game m_BombIt = new Game("bomb.png", "Bomb-It", Instructions.k_BombItInstructions);
-        private static Game m_Pong = new Game("","Pong", Instructions.k_PongInstructions);
+        private static Game m_BombIt = new Game("bombit_img.png", "Bomb-It", Instructions.k_BombItInstructions);
+        private static Game m_Pong = new Game("pong_img.png","Pong", Instructions.k_PongInstructions);
         //public static Game GetSnakeGame()
         //{
         //    return m_Snake;
