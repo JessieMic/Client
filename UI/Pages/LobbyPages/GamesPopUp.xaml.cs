@@ -48,6 +48,7 @@ public partial class GamesPopUp : Popup
         Close();
     }
 
+    [Obsolete]
     private void addButton(string i_Text, EventHandler i_ClickEvent, int i_Row, int i_Col)
     {
         ButtonImage btn = new ButtonImage();

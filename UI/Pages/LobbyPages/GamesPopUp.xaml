@@ -22,24 +22,13 @@
             </Grid.ColumnDefinitions>
 
             <HorizontalStackLayout
-            Grid.Row="1"
-            Grid.Column="1"
-            Spacing="15"
-            x:Name="GamesComponent"/>
-
-            <!--<Button
-            Text="OK"
-            x:Name="OkButton"
-            Grid.Row="2"
-            Grid.Column="2"
-            Clicked="OnOkClicked"/>-->
-
-            <!--<Button
-            Text="Cancel"
-            x:Name="CancelButton"
-            Grid.Row="2"
-            Grid.Column="0"
-            Clicked="OnCancelClicked"/>-->
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="3"
+                Spacing="15"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand"
+                x:Name="GamesComponent"/>
         </Grid>
     </Border>
 </mct:Popup>
