@@ -18,12 +18,13 @@ namespace Objects
             m_Density = GameInformation.Instance.ScreenDensity;
             if(GameInformation.Instance.Player.PlayerNumber == 1)
             {
-                m_Density = 1;
+                m_Density = 3 / 2.625;
+                
                //m_Density = 2.625;
             }
             else
             {
-                m_Density =3/2.625;
+                m_Density = 1;
             }
 
             //if (m_Density != 1)
@@ -44,7 +45,7 @@ namespace Objects
             m_Image.IsVisible = i_GameObject.IsVisable;
             if (i_GameObject.Size.Width != 0)
             {
-                m_Image.WidthRequest = (int)(i_GameObject.Size.Width / m_Density);
+                m_Image.WidthRequest = (i_GameObject.Size.Width / m_Density);
                 m_Image.HeightRequest = (int)(i_GameObject.Size.Height);
                 if (i_GameObject.ImageSource != "bombitbackground.png")
                 {
@@ -56,8 +57,8 @@ namespace Objects
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column );
-            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row / m_Density);
+            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column / m_Density);
+            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row );
             m_Image.IsVisible = i_GameObject.IsVisable;
             m_Image.ScaleX = i_GameObject.ScaleX;
             m_Image.ScaleY = i_GameObject.ScaleY;
