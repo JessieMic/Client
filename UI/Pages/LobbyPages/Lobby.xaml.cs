@@ -6,19 +6,12 @@ using Game = UI.Pages.LobbyPages.Utils.Game;
 
 namespace UI.Pages.LobbyPages;
 
-//[QueryProperty(nameof(PlayerType), QueryIDs.k_PlayerType)]
-//[QueryProperty(nameof(RoomCode), QueryIDs.k_Code)]
-//[QueryProperty(nameof(PlayerName), QueryIDs.k_Name)]
 public partial class Lobby : ContentPage
 {
-    //public string PlayerType { get; set; }
     private string m_Code;
     private PlayerType m_PlayerType;
     private string m_PlayerName;
-
     private LogicManager m_LogicManager = new LogicManager();
-    //public Button ChooseGameButton;
-    //public Button InstructionsButton;
     private GameCard m_ChosenGameCard;
     private Label GameDetailsLabel = new Label();
     private Game m_ChosenGame;
@@ -33,7 +26,7 @@ public partial class Lobby : ContentPage
     public Lobby()
     {
         InitializeComponent();
-        m_LogicManager.ResetRoomData();
+        //m_LogicManager.ResetRoomData();
         m_GameInformation.Reset();
         //StatusLabel.Text = "Waiting for all players...";
         m_PlayerName = m_GameInformation.Player.Name;
@@ -72,7 +65,7 @@ public partial class Lobby : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        m_LogicManager.ResetRoomData();
+        //m_LogicManager.ResetRoomData();
 
         m_PlayersNamesLabels = new List<Label>()
         {

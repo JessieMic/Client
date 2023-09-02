@@ -19,13 +19,14 @@ public partial class EnterRoomCodePage : ContentPage
     {
         InitializeComponent();
         r_LogicManager = new LogicManager();
+        placeContinueButton();
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
 
-        placeContinueButton();
+        //placeContinueButton();
     }
 
     private async void OnContinueClicked(object sender, EventArgs e)
