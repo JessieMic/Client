@@ -12,6 +12,7 @@ namespace Objects
         public Microsoft.Maui.Controls.Image m_Image = new Microsoft.Maui.Controls.Image();
         protected double m_Density;
         protected string m_Source;
+        protected double m_MoveX;
 
         public Image()
         {
@@ -19,11 +20,14 @@ namespace Objects
             if(GameInformation.Instance.Player.PlayerNumber == 1)
             {
                 m_Density = 3 / 2.625;
-                
-               //m_Density = 2.625;
+
+                m_MoveX = GameInformation.Instance.GameBoardSizeByPixel.Width;
+                m_MoveX = m_MoveX - m_MoveX / m_Density;
+                //m_Density = 2.625;
             }
             else
             {
+                m_MoveX = 0;
                 m_Density = 1;
             }
 
@@ -35,7 +39,7 @@ namespace Objects
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
-            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column/ m_Density);
+            m_Image.TranslationX = (int)(m_MoveX +(i_GameObject.PointOnScreen.Column/ m_Density));
             m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row);
             m_Image.Aspect = Aspect.AspectFill;
             m_Image.Source = i_GameObject.ImageSource;
@@ -57,7 +61,7 @@ namespace Objects
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            m_Image.TranslationX = (int)(i_GameObject.PointOnScreen.Column / m_Density);
+            m_Image.TranslationX = (int)(m_MoveX + (i_GameObject.PointOnScreen.Column / m_Density));
             m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row );
             m_Image.IsVisible = i_GameObject.IsVisable;
             m_Image.ScaleX = i_GameObject.ScaleX;
