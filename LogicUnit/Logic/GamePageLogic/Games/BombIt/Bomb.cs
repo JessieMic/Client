@@ -82,12 +82,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
             if (i_TimeElapsed > 3500)
             {
-                foreach(var explosion in Explosions)
-                {
-                    explosion.ChangeState(false);
-                }
-                ChangeState(false);
-                m_HasBombExploded = false;
+                StopExplosion();
             }
             else if (!m_HasBombExploded && i_TimeElapsed > 2500)
             {
@@ -95,6 +90,16 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                 ChangeState(false);
                 SetExplosions();
             }
+        }
+
+        public void StopExplosion()
+        {
+            foreach (var explosion in Explosions)
+            {
+                explosion.ChangeState(false);
+            }
+            ChangeState(false);
+            m_HasBombExploded = false;
         }
 
         bool checkDirectionForExplosion(Point i_Point, Direction i_Direction, ref int i_WhatsInFront)
