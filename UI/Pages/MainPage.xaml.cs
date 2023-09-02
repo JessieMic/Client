@@ -32,13 +32,14 @@ namespace UI
             InitializeComponent();
             m_GameInformation.init();
             m_LogicManager = new LogicManager();
+            addComponents();
         }
 
         protected override void OnNavigatedTo(NavigatedToEventArgs args)
         {
             base.OnNavigatedTo(args);
 
-            addComponents();
+            //addComponents();
         }
 
         protected override void OnSizeAllocated(double i_Width, double i_Height)
