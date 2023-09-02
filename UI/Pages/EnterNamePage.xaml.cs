@@ -77,12 +77,14 @@ public partial class EnterNamePage : ContentPage
     private void placeContinueButton()
     {
         ButtonImage continueBtn = new ButtonImage();
+        double height = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        double width = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+
         continueBtn.Text = "Continue";
         continueBtn.GetButton().Clicked += OnContinueClicked;
-        continueBtn.VerticalOptions = LayoutOptions.CenterAndExpand;
-        continueBtn.HorizontalOptions = LayoutOptions.CenterAndExpand;
-        continueBtn.GetButton().VerticalOptions = LayoutOptions.FillAndExpand;
-        continueBtn.GetButton().HorizontalOptions = LayoutOptions.FillAndExpand;
+        continueBtn.WidthRequest = 0.5 * width;
+        continueBtn.HeightRequest = 0.2 * height;
+        continueBtn.FontSize = 0.3 * 0.2 * height;
         continueBtn.Source = "entrance_btn.PNG";
         objectsComponent.Add(continueBtn.GetImage(), 1, 3);
         objectsComponent.Add(continueBtn.GetButton(), 1, 3);
