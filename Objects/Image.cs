@@ -44,8 +44,8 @@ namespace Objects
             m_Image.IsVisible = i_GameObject.IsVisable;
             if (i_GameObject.Size.Width != 0)
             {
-                m_Image.WidthRequest = (int)(i_GameObject.Size.Width );
-                m_Image.HeightRequest = (int)(i_GameObject.Size.Height/ m_Density);
+                m_Image.WidthRequest = (int)(i_GameObject.Size.Width / m_Density);
+                m_Image.HeightRequest = (int)(i_GameObject.Size.Height);
                 if (i_GameObject.ImageSource != "bombitbackground.png")
                 {
                     m_Image.Aspect = Aspect.Fill;
