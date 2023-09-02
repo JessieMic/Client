@@ -161,6 +161,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             if (AmountOfLives == 0 && MonitorForCollision)
             {
                 m_IsDyingAnimationOn = false;
+                Bomb.StopExplosion();
                 OnDisposed();
             }
             m_DeathAnimationStart = i_DeathStartTime;
