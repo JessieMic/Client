@@ -34,12 +34,14 @@
 	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
 	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
 	  <DebugSymbols>False</DebugSymbols>
+	  <RunAOTCompilation>False</RunAOTCompilation>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
 	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
-	  <DebugSymbols>False</DebugSymbols>
+	  <DebugSymbols>True</DebugSymbols>
+	  <RunAOTCompilation>False</RunAOTCompilation>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">

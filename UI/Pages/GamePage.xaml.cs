@@ -48,6 +48,11 @@ public partial class GamePage : ContentPage
        
     }
 
+    protected override bool OnBackButtonPressed()
+    {
+        return true;
+    }
+
     private void initializeGame()
     {
         addLabel(m_Game.InitializeGame());

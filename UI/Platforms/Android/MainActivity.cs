@@ -1,7 +1,9 @@
 ﻿using Android.App;
 using Android.Content.PM;
 using Android.OS;
+using Android.Runtime;
 using Android.Views;
+using AndroidX.Activity;
 using AndroidX.Browser.Trusted;
 using ScreenOrientation = Android.Content.PM.ScreenOrientation;
 
@@ -23,6 +25,4 @@ namespace UI
             this.Window.AddFlags(WindowManagerFlags.Fullscreen);
         }
     }
-
-
 }

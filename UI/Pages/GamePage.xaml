@@ -7,7 +7,11 @@
              Shell.TabBarIsVisible="False"
              Shell.FlyoutItemIsVisible="False"
              Title="">
-    
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False">
+
+        </BackButtonBehavior>
+    </Shell.BackButtonBehavior>
     <AbsoluteLayout x:Name="gridLayout">
        
     </AbsoluteLayout>
