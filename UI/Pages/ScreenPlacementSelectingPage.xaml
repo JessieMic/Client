@@ -6,9 +6,9 @@
              Title="">
 
     <Grid x:Name="AbsolutLayout"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
-                    >
+          VerticalOptions="Center"
+          HorizontalOptions="Center"
+    >
         <Image
             x:Name="UIbackground"
             Aspect="Fill"

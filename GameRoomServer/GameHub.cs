@@ -8,9 +8,10 @@ public class GameHub : Hub
     public static string[] buttonsThatAreOccupied = new string[4];
     public static int[] screenSizeWidth = new int[4];
     public static int[] screenSizeHeight = new int[4];
+    public static double[] density = new double[4];
     private readonly int[] r_PlayersPressedButtons = new int[4];
 
-    public async Task TryPickAScreenSpot(string i_NameOfPlayer, String i_NumberOfButton,int i_ScreenWidth, int i_ScreenHeight)
+    public async Task TryPickAScreenSpot(string i_NameOfPlayer, String i_NumberOfButton,int i_ScreenWidth, int i_ScreenHeight,double i_Density)
     {
         int chosenButtonNumber;
 
@@ -25,6 +26,7 @@ public class GameHub : Hub
                 buttonsThatAreOccupied[chosenButtonNumber] = i_NameOfPlayer;
                 screenSizeWidth[chosenButtonNumber] = i_ScreenWidth;
                 screenSizeHeight[chosenButtonNumber] = i_ScreenHeight;
+                density[chosenButtonNumber] = i_Density;
                 await Clients.All.SendAsync("PlacementUpdateRecevied", i_NameOfPlayer,
                 chosenButtonNumber);
             }
@@ -56,7 +58,7 @@ public class GameHub : Hub
 
     public async Task GameIsAboutToStart()
     {
-        await Clients.All.SendAsync("StartGame", buttonsThatAreOccupied, screenSizeWidth, screenSizeHeight);
+        await Clients.All.SendAsync("StartGame", buttonsThatAreOccupied, screenSizeWidth, screenSizeHeight, density);
     }
 
     public void ResetHub()

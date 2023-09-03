@@ -10,35 +10,50 @@ namespace Objects
     public class Image
     {
         public Microsoft.Maui.Controls.Image m_Image = new Microsoft.Maui.Controls.Image();
+        protected double m_Density;
         protected string m_Source;
+        protected double m_MoveX;
 
+        public Image()
+        {
+             m_Density = GameInformation.Instance.ImageDensity;
+             if(m_Density == 0)
+             {
+                 m_Density = 1;
+             }
+
+             m_MoveX = GameInformation.Instance.ImageXValues;
+        }
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
-            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;// + ;
+            m_Image.WidthRequest = i_GameObject.Size.Width;
+            if (i_GameObject.ScreenObjectType != eScreenObjectType.Button && i_GameObject.ScreenObjectType != eScreenObjectType.Space)
+            {
+                m_Image.TranslationX = (int)(m_MoveX+m_Image.TranslationX / m_Density);
+                m_Image.WidthRequest = (int)(m_Image.WidthRequest / m_Density);
+            }
+
             m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
-            m_Image.Aspect = Aspect.AspectFill;
+            m_Image.Aspect = Aspect.Fill;
             m_Image.Source = i_GameObject.ImageSource;
             m_Image.ClassId = i_GameObject.ImageSource;
             m_Image.ZIndex = i_GameObject.ZIndex;
             m_Image.Rotation = i_GameObject.Rotatation;
             m_Image.IsVisible = i_GameObject.IsVisable;
-            if (i_GameObject.Size.Width != 0)
-            {
-                m_Image.WidthRequest = i_GameObject.Size.Width;
-                m_Image.HeightRequest = i_GameObject.Size.Height;
-                if (i_GameObject.ImageSource != "snakebackground.png")
-                {
-                    m_Image.Aspect = Aspect.Fill;
-                }
-            }
+            m_Image.HeightRequest = i_GameObject.Size.Height;
         }
 
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
-            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            if(i_GameObject.ScreenObjectType != eScreenObjectType.Button
+               && i_GameObject.ScreenObjectType != eScreenObjectType.Space)
+            {
+                m_Image.TranslationX = (int)(m_MoveX + (i_GameObject.PointOnScreen.Column / m_Density));
+            }
+            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row );
             m_Image.IsVisible = i_GameObject.IsVisable;
             m_Image.ScaleX = i_GameObject.ScaleX;
             m_Image.ScaleY = i_GameObject.ScaleY;
@@ -46,7 +61,6 @@ namespace Objects
             {
                 m_Image.Source = m_Image.ClassId = i_GameObject.ImageSource;
             }
-            //m_Image.ZIndex = -1;
             m_Image.Rotation = i_GameObject.Rotatation;
         }
 

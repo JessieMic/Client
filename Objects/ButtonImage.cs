@@ -35,7 +35,7 @@ namespace Objects
             //m_Button.ZIndex = 1;
             m_Image.ZIndex = 0;
             m_Button.TranslationX = i_GameObject.PointOnScreen.Column;
-            m_Button.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Button.TranslationY =i_GameObject.PointOnScreen.Row;
             m_Button.ClassId = i_GameObject.ButtonType.ToString();
             m_Button.ZIndex = 1;
             IsVisible = i_GameObject.IsVisable;
@@ -206,15 +206,23 @@ namespace Objects
 
         private void setButtonSize(SizeDTO i_Size)
         {
+            //m_Button.WidthRequest = (int)(i_Size.Width / m_Density);
+            //m_Button.HeightRequest = (int)(i_Size.Height / m_Density);
+            //if (i_Size.Width <= GameSettings.GameGridSize)
+            //{
+            //    m_Button.WidthRequest = (int)(m_Button.WidthRequest * 1.2);
+            //    m_Button.HeightRequest = (int)(m_Button.WidthRequest * 1.25);
+            //    m_Button.TranslationX = (int)(m_Button.TranslationX - 4 / m_Density);
+            //    m_Button.TranslationY = (int)(m_Button.TranslationY - 4 / m_Density);
+            //}
             m_Button.WidthRequest = i_Size.Width;
             m_Button.HeightRequest = i_Size.Height;
             if (i_Size.Width <= GameSettings.GameGridSize)
             {
-                m_Button.WidthRequest *= 1.2;
-                m_Button.HeightRequest *= 1.25;
-                m_Button.TranslationX -= 4;
-                m_Button.TranslationY -= 4;
-                m_Button.BorderColor = Colors.AliceBlue;
+                m_Button.WidthRequest = m_Button.WidthRequest * 1.2;
+                m_Button.HeightRequest =m_Button.WidthRequest * 1.25;
+                m_Button.TranslationX = m_Button.TranslationX - 4 / m_Density;
+                m_Button.TranslationY = m_Button.TranslationY - 4 / m_Density;
             }
         }
 

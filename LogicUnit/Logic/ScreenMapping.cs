@@ -113,6 +113,8 @@ namespace LogicUnit
         {
             int[] minScreenValue1 = new int[2];
             int[] minScreenValue2 = new int[2];
+            double[] density1 = new double[2]; ;
+            double[] density2= new double[2];
             
 
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
@@ -122,16 +124,18 @@ namespace LogicUnit
                     if (minScreenValue1[0] == 0)
                     {
                         minScreenValue1[0] = m_PlayerGameBoardScreenSize[i].Width;
-                        minScreenValue1[1] = i;
+                        density1[1] = minScreenValue1[1] = i;
+                        density1[0] = m_GameInformation.ScreenInfoOfAllPlayers[i].Density;
                     }
                     else
                     {
                         minScreenValue2[0]= m_PlayerGameBoardScreenSize[i].Width;
-                        minScreenValue2[1] = i;
+                        density2[1] = minScreenValue2[1] = i;
+                        density2[0] = m_GameInformation.ScreenInfoOfAllPlayers[i].Density;
                     }
                 }
             }
-
+            //m_Boundaries.Width = m_TotalScreenGridSize.Width;
             if (minScreenValue2[0] == 0)
             {
                 m_Boundaries.Width = m_TotalScreenGridSize.Width;
@@ -155,9 +159,45 @@ namespace LogicUnit
                         m_ValueToAdd.Column += (minScreenValue1[0] - minScreenValue2[0]) *m_GameBoardGridSize;
                     }
                 }
+
+                if(density1[0] < density2[0])
+                {
+                    setDensityAndValuesToAdd(density2[0], density1[0], density2[1], i_ColumnPosition);
+                }
+                else 
+                {
+                    setDensityAndValuesToAdd(density1[0], density2[0], density1[1], i_ColumnPosition);
+                }
             }
         }
 
+        void setDensityAndValuesToAdd(double i_Density1, double i_Density2,double i_Player,eColumnPosition i_ColumnPosition)
+        {
+            if((int)i_Player == m_Player.PlayerNumber - 1)
+            {
+                int boardLeftSizeInPixel;
+                m_GameInformation.ImageDensity = i_Density1/i_Density2;
+
+                if (i_ColumnPosition == eColumnPosition.LeftColumn)
+                {
+                    boardLeftSizeInPixel = m_TotalScreenGridSize.Width * m_GameBoardGridSize;
+                }
+                else
+                {
+                    boardLeftSizeInPixel = m_Boundaries.Width * m_GameBoardGridSize;
+                }
+
+                try
+                {
+                    //m_ValueToAdd.Column += boardLeftSizeInPixel -(boardLeftSizeInPixel / m_GameInformation.ImageDensity);
+                    m_GameInformation.ImageXValues = boardLeftSizeInPixel -(boardLeftSizeInPixel / m_GameInformation.ImageDensity);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+        }
         private void getMinHeightByRowPosition(eRowPosition i_RowPosition)
         {
             int[] minScreenValue1 = new int[2];

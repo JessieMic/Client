@@ -24,13 +24,14 @@ namespace Objects
         public SizeDTO GameBoardSizeByGrid { get; set; }
         private static readonly object s_InstanceLock = new object();
         public Rect BackgroundRect { get; set; }
-
+        public double ImageDensity { get; set; }
+        public double ImageXValues { get;  set; }
         public double ScreenDensity { get; set; } = 1;
         public bool ServerReset { get; set; } = false;
         public Stopwatch RealWorldStopwatch { get; set; }
         public int m_food = 0;
 
-        
+
         public static GameInformation Instance
         {
             get
@@ -85,13 +86,13 @@ namespace Objects
         }
 
 
-        public void SetScreenInfo(string[] i_NamesOfPlayers, int[] i_ScreenSizeWidth, int[] i_ScreenSizeHeight)
+        public void SetScreenInfo(string[] i_NamesOfPlayers, int[] i_ScreenSizeWidth, int[] i_ScreenSizeHeight, double[] i_Density)
         {
             m_NamesOfAllPlayers = i_NamesOfPlayers;
 
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
-                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(i_ScreenSizeWidth[i], i_ScreenSizeHeight[i], new Position(m_AmountOfPlayers, i + 1)));
+                m_ScreenInfoOfAllPlayers.Add(new ScreenDimension(i_ScreenSizeWidth[i], i_ScreenSizeHeight[i], new Position(m_AmountOfPlayers, i + 1), i_Density[i]));
             }
 
             m_ClientScreenDimension.m_Position = m_ScreenInfoOfAllPlayers[Player.PlayerNumber - 1].Position;
