@@ -31,7 +31,12 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         InitializeComponent();
         initializePage();
     }
-    
+
+    protected override bool OnBackButtonPressed()
+    {
+        return true;
+    }
+
     public static void visualButtonUpdate(object sender, VisualUpdateSelectButtons i_VisualUpdate)
     {
         m_PlacementButtons[i_VisualUpdate.spot].Text = i_VisualUpdate.textOnButton;

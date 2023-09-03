@@ -42,6 +42,11 @@ namespace UI
             //addComponents();
         }
 
+        protected override bool OnBackButtonPressed()
+        {
+            return true;
+        }
+
         protected override void OnSizeAllocated(double i_Width, double i_Height)
         {
             base.OnSizeAllocated(i_Width, i_Height);
