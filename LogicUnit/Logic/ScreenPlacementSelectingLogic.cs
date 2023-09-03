@@ -70,11 +70,17 @@ namespace LogicUnit
                 });
             });
 
-            r_ConnectionToServer.On("StartGame", (string[] i_NamesOfPlayers, int[] i_ScreenSizeWidth, int[] i_ScreenSizeHeight) =>
+            r_ConnectionToServer.On("StartGame", (string[] i_NamesOfPlayers, int[] i_ScreenSizeWidth, int[] i_ScreenSizeHeight,
+                                                     double[] i_Density) =>
             {
                 MainThread.BeginInvokeOnMainThread(() =>
-                {
-                    m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizeWidth, i_ScreenSizeHeight);
+                    {
+                        double[] dsa = i_Density;
+                        //dsa[1] = 3;
+                        //dsa[0] = 2.4;
+                        //dsa[2] = 3;
+                        //dsa[3] = 2.75;
+                        m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizeWidth, i_ScreenSizeHeight, i_Density);
                     OnEnterGameRoom();
                 });
             });
@@ -187,7 +193,7 @@ namespace LogicUnit
                 "TryPickAScreenSpot",
                 m_GameInformation.Player.Name,
                 i_TextOnButton,
-                m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height);
+                m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height, m_GameInformation.ScreenDensity);
         }
 
         public async Task TryToDeselectScreenSpot(string i_TextOnButton)

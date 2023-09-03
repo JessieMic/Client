@@ -1,4 +1,6 @@
-﻿namespace LogicUnit;
+﻿using static System.Net.WebRequestMethods;
+
+namespace LogicUnit;
 
 public class ServerAddressManager
 {
@@ -16,7 +18,7 @@ public class ServerAddressManager
     public void SetAddresses(string i_BaseAddress)
     {
         GameHubAddress = i_BaseAddress + "/GameHub";
-
+       // GameHubAddress = "http://localhost:5163" + "/GameHub";
         InGameHubAddress = i_BaseAddress + "/InGameHub";
     }
 

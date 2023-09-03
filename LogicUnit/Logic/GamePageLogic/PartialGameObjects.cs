@@ -58,7 +58,7 @@ namespace LogicUnit
         private void setGameBackground()
         {
             setBoarder();
-            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
+            SizeDTO actualOurSize = new SizeDTO((int)r_GameInformation.ImageXValues-3 + m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
                 m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             background.GameBoardGridSize = actualOurSize.Height;
@@ -74,7 +74,7 @@ namespace LogicUnit
 
         private void setBoarder()
         {
-            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
+            SizeDTO actualOurSize = new SizeDTO((int)r_GameInformation.ImageXValues + m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
                 m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             Point p = m_ScreenMapping.m_ValueToAdd;
@@ -91,7 +91,7 @@ namespace LogicUnit
 
         private void setb()
         {
-            SizeDTO actualOurSize = new SizeDTO(m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
+            SizeDTO actualOurSize = new SizeDTO((int)r_GameInformation.ImageXValues + m_ScreenMapping.m_TotalScreenGridSize.Width * m_ScreenMapping.m_GameBoardGridSize,
                 m_ScreenMapping.m_TotalScreenGridSize.Height * m_ScreenMapping.m_GameBoardGridSize);
             GameObject background = new GameObject();
             Point p = m_ScreenMapping.m_ValueToAdd;
@@ -115,9 +115,9 @@ namespace LogicUnit
                 point.SetAndGetPoint(0, 0);
                 UIBackground.SetImageDirection(Direction.Left);
             }
-            SizeDTO actualOurSize = new SizeDTO(r_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width+5,
+            SizeDTO actualOurSize = new SizeDTO((r_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width+5)*2,
                 GameSettings.m_UIBackgroundHeight);
-            UIBackground.Initialize(eScreenObjectType.Image, 0, "uibackground.png", point, true, new Point(0,0));
+            UIBackground.Initialize(eScreenObjectType.Space, 0, "uibackground.png", point, true, new Point(-r_GameInformation.ImageXValues-5, 0));
             UIBackground.Size = actualOurSize;
             m_GameObjectsToAdd.Add(UIBackground);
         }
