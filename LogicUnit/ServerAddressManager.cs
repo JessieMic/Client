@@ -16,6 +16,7 @@ public class ServerAddressManager
     public void SetAddresses(string i_BaseAddress)
     {
         GameHubAddress = i_BaseAddress + "/GameHub";
+
         InGameHubAddress = i_BaseAddress + "/InGameHub";
     }
 

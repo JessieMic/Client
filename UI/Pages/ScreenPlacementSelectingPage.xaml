@@ -5,10 +5,15 @@
              Shell.NavBarIsVisible="false"
              Title="">
 
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsEnabled="False">
+        </BackButtonBehavior>
+    </Shell.BackButtonBehavior>
+
     <Grid x:Name="AbsolutLayout"
-                    VerticalOptions="Center"
-                    HorizontalOptions="Center"
-                    >
+          VerticalOptions="Center"
+          HorizontalOptions="Center"
+    >
         <Image
             x:Name="UIbackground"
             Aspect="Fill"
@@ -20,8 +25,6 @@
               ColumnDefinitions="*,Auto,Auto,*"
         >
         </Grid>
-    </Grid>
 
-  
-    
+    </Grid>
 </ContentPage>
