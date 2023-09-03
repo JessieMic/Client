@@ -16,20 +16,19 @@ namespace Objects
 
         public Image()
         {
-            m_Density = GameInformation.Instance.ScreenDensity;
-            if(GameInformation.Instance.Player.PlayerNumber == 1)
-            {
-                m_Density = 3 / 2.625;
+             m_Density = GameInformation.Instance.ImageDensity;
+            //{
+            //    m_Density = 3 / 2.625;
 
-                m_MoveX = GameInformation.Instance.GameBoardSizeByPixel.Width;
-                m_MoveX = m_MoveX - m_MoveX / m_Density;
-                //m_Density = 2.625;
-            }
-            else
-            {
-                m_MoveX = 0;
-                m_Density = 1;
-            }
+            //    m_MoveX = GameInformation.Instance.GameBoardSizeByPixel.Width;
+            //    m_MoveX = m_MoveX - m_MoveX / m_Density;
+            //    //m_Density = 2.625;
+            //}
+            //else
+            //{
+            //    m_MoveX = 0;
+            //    m_Density = 1;
+            //}
 
             //if (m_Density != 1)
             //{
@@ -39,23 +38,22 @@ namespace Objects
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
-            m_Image.TranslationX = (int)(m_MoveX +(i_GameObject.PointOnScreen.Column/ m_Density));
-            m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row);
-            m_Image.Aspect = Aspect.AspectFill;
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
+            m_Image.WidthRequest = i_GameObject.Size.Width / m_Density;
+            if (i_GameObject.ScreenObjectType != eScreenObjectType.Button)
+            {
+                m_Image.TranslationX = (int)(m_Image.TranslationX / m_Density);
+                m_Image.WidthRequest = (int)(m_Image.WidthRequest / m_Density);
+            }
+
+            m_Image.TranslationY = i_GameObject.PointOnScreen.Row;
+            m_Image.Aspect = Aspect.Fill;
             m_Image.Source = i_GameObject.ImageSource;
             m_Image.ClassId = i_GameObject.ImageSource;
             m_Image.ZIndex = i_GameObject.ZIndex;
             m_Image.Rotation = i_GameObject.Rotatation;
             m_Image.IsVisible = i_GameObject.IsVisable;
-            if (i_GameObject.Size.Width != 0)
-            {
-                m_Image.WidthRequest = (i_GameObject.Size.Width / m_Density);
-                m_Image.HeightRequest = (int)(i_GameObject.Size.Height);
-                if (i_GameObject.ImageSource != "bombitbackground.png")
-                {
-                    m_Image.Aspect = Aspect.Fill;
-                }
-            }
+            m_Image.HeightRequest = i_GameObject.Size.Height;
         }
 
         public void Update(GameObject i_GameObject)

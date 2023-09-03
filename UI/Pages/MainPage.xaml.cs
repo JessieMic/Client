@@ -57,7 +57,7 @@ namespace UI
         {
             await Task.Delay(500);
             var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
-            m_GameInformation.ScreenDensity = mainDisplayInfo.Density;
+            m_GameInformation.ScreenDensity = 3.5;//mainDisplayInfo.Density;
             // do something
             // addComponents();
         }

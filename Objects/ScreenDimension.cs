@@ -13,11 +13,12 @@ namespace Objects
         public Position m_Position = new Position();
         public double Density { get; set; }
 
-        public ScreenDimension(int i_ScreenWidth,int i_ScreenHeight, Position i_Position)
+        public ScreenDimension(int i_ScreenWidth,int i_ScreenHeight, Position i_Position, double i_Density)
         {
             ScreenSizeInPixels.Width = i_ScreenWidth;
             ScreenSizeInPixels.Height = i_ScreenHeight;
             m_Position = i_Position;
+            Density = i_Density;
         }
 
         public Position Position

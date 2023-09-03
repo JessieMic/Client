@@ -18,7 +18,7 @@ public class ServerAddressManager
     public void SetAddresses(string i_BaseAddress)
     {
         GameHubAddress = i_BaseAddress + "/GameHub";
-        GameHubAddress = "http://localhost:5163" + "/GameHub";
+       // GameHubAddress = "http://localhost:5163" + "/GameHub";
         InGameHubAddress = i_BaseAddress + "/InGameHub";
     }
 

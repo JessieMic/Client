@@ -23,11 +23,6 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     public ScreenPlacementSelectingPage()
 	{
-        //if(m_GameInformation.Player.PlayerNumber == 1)
-        //{
-            System.Diagnostics.Debug.WriteLine("SELECTTTTTTTTTTTTTTT");
-        //}
-        
         InitializeComponent();
         initializePage();
     }
