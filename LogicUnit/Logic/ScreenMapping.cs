@@ -180,16 +180,17 @@ namespace LogicUnit
 
                 if (i_ColumnPosition == eColumnPosition.LeftColumn)
                 {
-                    boardLeftSizeInPixel = m_Boundaries.Width * m_GameBoardGridSize;
+                    boardLeftSizeInPixel = m_TotalScreenGridSize.Width * m_GameBoardGridSize;
                 }
                 else
                 {
-                    boardLeftSizeInPixel = m_TotalScreenGridSize.Width * m_GameBoardGridSize;
+                    boardLeftSizeInPixel = m_Boundaries.Width * m_GameBoardGridSize;
                 }
 
                 try
                 {
-                    m_ValueToAdd.Column += boardLeftSizeInPixel / m_GameInformation.ImageDensity;
+                    //m_ValueToAdd.Column += boardLeftSizeInPixel -(boardLeftSizeInPixel / m_GameInformation.ImageDensity);
+                    m_GameInformation.ImageXValues = boardLeftSizeInPixel -(boardLeftSizeInPixel / m_GameInformation.ImageDensity);
                 }
                 catch (Exception ex)
                 {

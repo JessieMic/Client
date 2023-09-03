@@ -75,8 +75,12 @@ namespace LogicUnit
             {
                 MainThread.BeginInvokeOnMainThread(() =>
                     {
-                        double[] dsa = i_Density; 
-                    m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizeWidth, i_ScreenSizeHeight, i_Density);
+                        double[] dsa = i_Density;
+                        dsa[1] = 3;
+                        dsa[0] = 2.4;
+                        dsa[2] = 3;
+                        dsa[3] = 2.75;
+                        m_GameInformation.SetScreenInfo(i_NamesOfPlayers, i_ScreenSizeWidth, i_ScreenSizeHeight, i_Density);
                     OnEnterGameRoom();
                 });
             });

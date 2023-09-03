@@ -17,32 +17,21 @@ namespace Objects
         public Image()
         {
              m_Density = GameInformation.Instance.ImageDensity;
-            //{
-            //    m_Density = 3 / 2.625;
+             if(m_Density == 0)
+             {
+                 m_Density = 1;
+             }
 
-            //    m_MoveX = GameInformation.Instance.GameBoardSizeByPixel.Width;
-            //    m_MoveX = m_MoveX - m_MoveX / m_Density;
-            //    //m_Density = 2.625;
-            //}
-            //else
-            //{
-            //    m_MoveX = 0;
-            //    m_Density = 1;
-            //}
-
-            //if (m_Density != 1)
-            //{
-            //    m_Density /= 2.615;
-            //}
+             m_MoveX = GameInformation.Instance.ImageXValues;
         }
         public void SetImage(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = false;
-            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;
-            m_Image.WidthRequest = i_GameObject.Size.Width / m_Density;
-            if (i_GameObject.ScreenObjectType != eScreenObjectType.Button)
+            m_Image.TranslationX = i_GameObject.PointOnScreen.Column;// + ;
+            m_Image.WidthRequest = i_GameObject.Size.Width;
+            if (i_GameObject.ScreenObjectType != eScreenObjectType.Button && i_GameObject.ScreenObjectType != eScreenObjectType.Space)
             {
-                m_Image.TranslationX = (int)(m_Image.TranslationX / m_Density);
+                m_Image.TranslationX = (int)(m_MoveX+m_Image.TranslationX / m_Density);
                 m_Image.WidthRequest = (int)(m_Image.WidthRequest / m_Density);
             }
 
@@ -59,7 +48,11 @@ namespace Objects
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            m_Image.TranslationX = (int)(m_MoveX + (i_GameObject.PointOnScreen.Column / m_Density));
+            if(i_GameObject.ScreenObjectType != eScreenObjectType.Button
+               && i_GameObject.ScreenObjectType != eScreenObjectType.Space)
+            {
+                m_Image.TranslationX = (int)(m_MoveX + (i_GameObject.PointOnScreen.Column / m_Density));
+            }
             m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row );
             m_Image.IsVisible = i_GameObject.IsVisable;
             m_Image.ScaleX = i_GameObject.ScaleX;
