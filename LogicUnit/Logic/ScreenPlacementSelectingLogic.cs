@@ -26,6 +26,7 @@ namespace LogicUnit
         private readonly HubConnection r_ConnectionToServer;
         private GameInformation m_GameInformation = GameInformation.Instance;
         private int m_AmountOfPlayerThatAreConnected;
+        public Action<string> ServerError;
 
         public ScreenPlacementSelectingLogic()
         {
@@ -103,7 +104,14 @@ namespace LogicUnit
 
                                 if (m_AmountOfPlayerThatAreConnected == m_GameInformation.AmountOfPlayers && m_GameInformation.Player.PlayerNumber == 1)
                                 {
-                                    r_ConnectionToServer.InvokeAsync("GameIsAboutToStart");
+                                    try
+                                    {
+                                        r_ConnectionToServer.InvokeAsync("GameIsAboutToStart");
+                                    }
+                                    catch(Exception e)
+                                    {
+                                        ServerError.Invoke($"{e.Message}{Environment.NewLine}error on InvokeAsync(\"GameIsAboutToStart\")");
+                                    }
                                 }
                             });
                     });
@@ -112,8 +120,15 @@ namespace LogicUnit
             {
                 Application.Current.Dispatcher.Dispatch(async () =>
                 {
-                    await r_ConnectionToServer.StartAsync();
-                    await r_ConnectionToServer.SendAsync("ResetHub");
+                    try
+                    {
+                        await r_ConnectionToServer.StartAsync();
+                        await r_ConnectionToServer.SendAsync("ResetHub");
+                    }
+                    catch (Exception e)
+                    {
+                        ServerError.Invoke($"{e.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
+                    }
                 });
             });
         }
@@ -130,7 +145,14 @@ namespace LogicUnit
 
         public void StopConnection()
         {
-            r_ConnectionToServer.StopAsync();
+            try
+            {
+                r_ConnectionToServer.StopAsync();
+            }
+            catch(Exception e)
+            {
+                ServerError.Invoke($"{e.Message}{Environment.NewLine}error on StopAsync in StopConnection method");
+            }
         }
 
         protected virtual void OnEnterGameRoom()
@@ -183,23 +205,47 @@ namespace LogicUnit
 
         public async Task GetScreenUpdate()
         {
-            await r_ConnectionToServer.InvokeCoreAsync("RequestScreenUpdate", args: new[]
-                {r_ConnectionToServer.ConnectionId});
+            //try
+            //{
+                await r_ConnectionToServer.InvokeCoreAsync("RequestScreenUpdate", args: new[]
+                    {r_ConnectionToServer.ConnectionId});
+            //}
+            //catch(Exception e)
+            //{
+            //    ServerError.Invoke($"{e.Message}{Environment.NewLine}error on InvokeCoreAsync(\"RequestScreenUpdate\")" +
+            //        $" in GetScreenUpdate method");
+            //}
         }
 
         public async Task TryPickAScreenSpot(string i_TextOnButton)
         {
-            await r_ConnectionToServer.SendAsync(
-                "TryPickAScreenSpot",
-                m_GameInformation.Player.Name,
-                i_TextOnButton,
-                m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height, m_GameInformation.ScreenDensity);
+            try
+            {
+                await r_ConnectionToServer.SendAsync(
+                    "TryPickAScreenSpot",
+                    m_GameInformation.Player.Name,
+                    i_TextOnButton,
+                    m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height, m_GameInformation.ScreenDensity);
+            }
+            catch (Exception e)
+            {
+                ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"TryPickAScreenSpot\")" +
+                    $" in TryPickAScreenSpot method");
+            }
         }
 
         public async Task TryToDeselectScreenSpot(string i_TextOnButton)
         {
-            await r_ConnectionToServer.InvokeCoreAsync("TryToDeselectScreenSpot", args: new[]
-                {m_GameInformation.Player.Name,m_GameInformation.Player.PlayerNumber.ToString(),i_TextOnButton});
+            try
+            {
+                await r_ConnectionToServer.InvokeCoreAsync("TryToDeselectScreenSpot", args: new[]
+                    {m_GameInformation.Player.Name,m_GameInformation.Player.PlayerNumber.ToString(),i_TextOnButton});
+            }
+            catch (Exception e)
+            {
+                ServerError.Invoke($"{e.Message}{Environment.NewLine}error on InvokeCoreAsync(\"TryToDeselectScreenSpot\")" +
+                    $" in TryToDeselectScreenSpot method");
+            }
         }
     }
 }

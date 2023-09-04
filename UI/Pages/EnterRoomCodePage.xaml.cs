@@ -36,6 +36,11 @@ public partial class EnterRoomCodePage : ContentPage
 
         if (logicResponse == eLoginErrors.Ok)
         {
+            logicResponse = await r_LogicManager.CheckIfHostLeftForLogin(code);
+        }
+
+        if (logicResponse == eLoginErrors.Ok)
+        {
             m_GameInformation.Player.RoomCode = code;
 
             await Shell.Current.GoToAsync(nameof(EnterNamePage));
@@ -43,7 +48,7 @@ public partial class EnterRoomCodePage : ContentPage
             //                              $"?{QueryIDs.k_PlayerType}={PlayerType}&" +
             //                              $"{QueryIDs.k_Code}={code}");
         }
-        else if (logicResponse == eLoginErrors.ServerError)
+        else if (logicResponse == eLoginErrors.ServerError || logicResponse == eLoginErrors.RoomClosed)
         {
             MessagePopUp messagePopUp = new MessagePopUp(goToMainPage, EnumHelper.GetDescription(logicResponse));
             Application.Current.Dispatcher.Dispatch(() =>
