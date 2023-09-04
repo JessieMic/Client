@@ -48,6 +48,11 @@ public partial class GamePage : ContentPage
        
     }
 
+    protected override void OnDisappearing()
+    {
+        base.OnDisappearing();
+    }
+
     protected override bool OnBackButtonPressed()
     {
         return true;
