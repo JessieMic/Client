@@ -89,12 +89,12 @@ namespace UI
         private void addComponents()
         {
             //ButtonImage skipBtn, createRoomBtn, joinRoomBtn;
-            createButtonImage("SKIP:)", OnSkipClicked, 1, 1);
-            createButtonImage("Create a Room", OnCreateRoomClicked, 1, 2);
-            createButtonImage("Join a Room", OnJoinRoomClicked, 1, 3);
+            createButtonImage("SKIP:)", OnSkipClicked, 0, 0);
+            createButtonImage("Create a Room", OnCreateRoomClicked, 1, 1);
+            createButtonImage("Join a Room", OnJoinRoomClicked, 1, 2);
         }
 
-        private void createButtonImage(string i_Text, EventHandler m_ClickEvent, int i_Row, int i_Col)
+        private void createButtonImage(string i_Text, EventHandler m_ClickEvent, int i_Col, int i_Row)
         {
             ButtonImage btn = new ButtonImage();
             double height = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
@@ -103,11 +103,18 @@ namespace UI
             btn.HeightRequest = 0.2 * height;
             btn.FontSize = 0.3 * 0.2 * height;
 
+            if (i_Text == "SKIP:)")
+            {
+                btn.WidthRequest = 0.2 * width;
+                btn.HeightRequest = 0.1 * height;
+                btn.FontSize = 0.3 * 0.1 * height;
+            }
+
             btn.Text = i_Text;
             btn.Source = "entrance_btn.PNG";
             btn.GetButton().Clicked += m_ClickEvent;
-            buttonComponent.Add(btn.GetImage(), i_Row, i_Col);
-            buttonComponent.Add(btn.GetButton(), i_Row, i_Col);
+            buttonComponent.Add(btn.GetImage(), i_Col, i_Row);
+            buttonComponent.Add(btn.GetButton(), i_Col, i_Row);
         }
     }
 }
