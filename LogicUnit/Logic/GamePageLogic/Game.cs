@@ -291,7 +291,7 @@ namespace LogicUnit
                 }
                 for (int i = x; i < m_BoardSizeByGrid.Width; i++)
                 {
-                    addBoarder(new Point(x, i));
+                    addBoarder(new Point(i, y));
                 }
             }
         }
