@@ -48,7 +48,11 @@ public partial class EnterNamePage : ContentPage
         }
         else
         {
-            logicResponse = await r_LogicManager.AddPlayerToRoom(username, m_GameInformation.Player.RoomCode);
+            logicResponse = await r_LogicManager.CheckIfHostLeftForLogin(m_GameInformation.Player.RoomCode);
+            if (logicResponse == eLoginErrors.Ok)
+            {
+                logicResponse = await r_LogicManager.AddPlayerToRoom(username, m_GameInformation.Player.RoomCode);
+            }
         }
 
         if (logicResponse == eLoginErrors.Ok)
@@ -61,7 +65,7 @@ public partial class EnterNamePage : ContentPage
             //    $"{QueryIDs.k_Code}={RoomCode}&" +
             //    $"{QueryIDs.k_Name}={username}");
         }
-        else if (logicResponse == eLoginErrors.ServerError)
+        else if (logicResponse == eLoginErrors.ServerError || logicResponse == eLoginErrors.RoomClosed)
         {
             MessagePopUp messagePopUp = new MessagePopUp(goToMainPage, EnumHelper.GetDescription(logicResponse));
             Application.Current.Dispatcher.Dispatch(() =>

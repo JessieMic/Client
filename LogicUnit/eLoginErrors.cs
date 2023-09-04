@@ -24,7 +24,10 @@ namespace LogicUnit
         ServerError,
 
         [Description("You can't join room, the room is full.")]
-        FullRoom
+        FullRoom,
+
+        [Description("The room you are trying to join is no longer exists.")]
+        RoomClosed
     }
 
     public static class EnumHelper

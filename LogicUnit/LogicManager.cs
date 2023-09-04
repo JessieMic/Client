@@ -332,6 +332,30 @@ namespace LogicUnit
             }
         }
 
+        public async Task<eLoginErrors> CheckIfHostLeftForLogin(string i_Code)
+        {
+            StringContent stringContent = new StringContent($"\"{i_Code}\"", Encoding.UTF8, "application/json");
+            m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_CheckHostLeft}");
+            try
+            {
+                HttpResponseMessage response = await m_HttpClient.PostAsync(m_Uri, stringContent);
+                string strResponse = await response.Content.ReadAsStringAsync();
+                bool hostLeft = JsonSerializer.Deserialize<bool>(strResponse);
+                if(hostLeft)
+                {
+                    return eLoginErrors.RoomClosed;
+                }
+                else
+                {
+                    return eLoginErrors.Ok;
+                }
+            }
+            catch(Exception e)
+            {
+                return eLoginErrors.ServerError;
+            }
+        }
+
         private async void getIfHostLeft()
         {
             StringContent stringContent = new StringContent($"\"{m_GameInformation.Player.RoomCode}\"", Encoding.UTF8, "application/json");
@@ -347,6 +371,11 @@ namespace LogicUnit
                 if (hostLeft)
                 {
                     m_HostLeftAction.Invoke();
+                }
+
+                if (response.StatusCode != System.Net.HttpStatusCode.OK)
+                {
+                    m_ServerErrorAction.Invoke();
                 }
             }
             catch(Exception e)

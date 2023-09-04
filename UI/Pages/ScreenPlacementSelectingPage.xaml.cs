@@ -12,7 +12,10 @@ using Point = Objects.Point;
 using Image = Microsoft.Maui.Controls.Image;
 namespace UI.Pages;
 
+using CommunityToolkit.Maui.Views;
 using System.Xml.Linq;
+using UI.Pages.LobbyPages;
+
 public partial class ScreenPlacementSelectingPage : ContentPage
 {
     private ScreenPlacementSelectingLogic m_pageLogic;
@@ -58,6 +61,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
         m_pageLogic.UpdateSelectButton += visualButtonUpdate;
         m_pageLogic.ReceivedPlayerAmount += initializeButtons;
         m_pageLogic.GameIsStarting += startGame;
+        m_pageLogic.ServerError += serverError;
         initializeButtons();
     }
 
@@ -97,5 +101,19 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                     getScreenUpdate();
                 });
         }
+    }
+
+    private void serverError(string i_Message)
+    {
+        this.Dispatcher.Dispatch(() =>
+        {
+            MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
+            this.ShowPopup(messagePopUp);
+        });
+    }
+
+    private void goToLobby()
+    {
+        Shell.Current.GoToAsync(nameof(Lobby));
     }
 }

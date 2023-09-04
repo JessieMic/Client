@@ -230,7 +230,7 @@ public partial class GamePage : ContentPage
     {
         this.Dispatcher.Dispatch(() =>
         {
-            MessagePopUp messagePopUp = new MessagePopUp(i_Message);
+            MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
             this.ShowPopup(messagePopUp);
         });
     }
