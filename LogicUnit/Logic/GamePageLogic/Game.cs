@@ -356,7 +356,7 @@ namespace LogicUnit
                 }
             }
 
-            if(m_GameStatus == eGameStatus.Exited)
+            if (m_GameStatus == eGameStatus.Exited)
             {
                 stopConnection();
                 r_GameInformation.Reset();

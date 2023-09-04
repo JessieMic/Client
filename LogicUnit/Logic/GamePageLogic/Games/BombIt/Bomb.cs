@@ -34,7 +34,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                         index++;
                         if (whatsInFront == 2)
                         {
-                            Board[(int)point.Column, (int)point.Row] = 0;
+                            Board[(int)nextPoint.Column, (int)nextPoint.Row] = 0;
                             break;
                         }
                     }
@@ -69,26 +69,34 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         {
             for(int i = 0; i < 9; i++)
             {
-                Explosions[i]= new Explosion();
+                Explosions[i]= new Explosion(ObjectNumber);
             }
         }
 
         public override void Update(double i_TimeElapsed)
         {
-            //if(IsVisable = false && !m_HasBombExploded)
-            //{
-            //    ChangeState(true);
-            //}
-
-            if (i_TimeElapsed > 3500)
+            if (i_TimeElapsed > 3000)
             {
+                updateExplosions(i_TimeElapsed);
                 StopExplosion();
             }
-            else if (!m_HasBombExploded && i_TimeElapsed > 2500)
+            else if (i_TimeElapsed > 2500)
             {
-                m_HasBombExploded = true;
-                //ChangeState(false);
-                SetExplosions();
+                if(!m_HasBombExploded)
+                {
+                    m_HasBombExploded = true;
+                    ChangeState(false);
+                    SetExplosions();
+                }
+                updateExplosions(i_TimeElapsed);
+            }
+        }
+
+        private void updateExplosions(double i_TimeElapsed)
+        {
+            foreach(Explosion explosion in Explosions)
+            {
+                explosion.Update(i_TimeElapsed);
             }
         }
 

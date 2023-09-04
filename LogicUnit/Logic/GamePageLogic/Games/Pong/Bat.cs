@@ -14,7 +14,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 {
     internal class Bat: GameObject
     {
-        public int AmountOfLives { get; set; } = 2;
+        public int AmountOfLives { get; set; } = 3;
         private bool m_IsDyingAnimationOn = false;
         public double m_DeathAnimationStart;
         private ClickReleaseMover m_ClickReleaseMover = new ClickReleaseMover();

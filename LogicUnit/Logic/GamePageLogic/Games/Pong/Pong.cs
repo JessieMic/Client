@@ -30,7 +30,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 m_GameName = "Pong";
                 m_MoveType = eMoveType.ClickAndRelease;
                 m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.RightAndLeft;
-                m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
+                m_Hearts.m_AmountOfLivesPlayersGetAtStart = 3;
                 m_Players = new Bat[r_GameInformation.AmountOfPlayers];
             }
 

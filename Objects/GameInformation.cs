@@ -29,7 +29,7 @@ namespace Objects
         public double ScreenDensity { get; set; } = 1;
         public bool ServerReset { get; set; } = false;
         public Stopwatch RealWorldStopwatch { get; set; }
-        public int m_food = 0;
+        public int Counter { get; set; } = 0;
 
 
         public static GameInformation Instance
@@ -51,7 +51,9 @@ namespace Objects
         {
             Player.isInitialized = false;
             Player.DidPlayerPickAPlacement = false;
-            m_food = 0;
+            Player.PlayerNumber = 0;
+            m_AmountOfPlayers = 0;
+            Counter = 0;
         }
 
         public void init()

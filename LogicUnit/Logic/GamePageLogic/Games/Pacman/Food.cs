@@ -29,7 +29,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
             if (m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
             {
-                m_GameInformation.m_food++;
+                m_GameInformation.Counter++;
                 //i_ScreenFoodCounter++;
                 m_IsFoodOnScreen = true;
             }
@@ -40,8 +40,8 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             if (m_IsFoodOnScreen)
             {
-                m_GameInformation.m_food--;
-                if (m_GameInformation.m_food == 0)
+                m_GameInformation.Counter--;
+                if (m_GameInformation.Counter == 0)
                 {
                     OnSpecialEvent((int)ePacmanSpecialEvents.ClearFoodOnPlayerScreen);
                 }

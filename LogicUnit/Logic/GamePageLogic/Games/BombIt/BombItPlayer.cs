@@ -13,7 +13,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 {
     internal class BombItPlayer : GameObject
     {
-        public int AmountOfLives { get; set; } = 2;
+        public int AmountOfLives { get; set; } = 3;
         public bool CanPlaceABomb { get; set; } = true;
         private bool m_PlacedBomb =false;
         private bool m_IsDyingAnimationOn = false;
@@ -103,6 +103,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                 sprite();
                 bombUpdate(i_TimeElapsed);
                 base.Update(i_TimeElapsed);
+                Velocity = 90;
             }
         }
 
@@ -111,7 +112,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             if (m_PlacedBomb)
             {
                 double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_BombStartTime;
-                if (timePassed > 3500)
+                if (timePassed > 3000)
                 {
                     m_PlacedBomb = false;
                     Bomb.Update(timePassed);
@@ -137,7 +138,18 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             }
             else if(i_Collidable is BreakableBoarder)
             {
-                collidedWithSolid(i_Collidable);
+                if(i_Collidable.ObjectNumber == 0)
+                {
+                    collidedWithSolid(i_Collidable);
+                }
+                else if(i_Collidable.ObjectNumber == ObjectNumber)
+                {
+                    Velocity = 140;
+                }
+                else
+                {
+                    Velocity = 70;
+                }
             }
         }
 
