@@ -74,7 +74,7 @@ namespace LogicUnit
 
         public async Task<eLoginErrors> CheckIfValidCode(string i_Code)
         {
-            if (i_Code.Length > 0)
+            if (i_Code != null && i_Code.Length > 0)
             {
                 StringContent stringContent = new StringContent($"\"{i_Code}\"", Encoding.UTF8, "application/json");
                 m_Uri = new Uri($"{ServerContext.k_BaseAddress}{ServerContext.k_JoinRoom}");
