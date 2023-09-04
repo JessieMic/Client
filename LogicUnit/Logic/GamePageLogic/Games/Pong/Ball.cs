@@ -116,11 +116,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         {
             if (m_GameInformation.ScreenInfoOfAllPlayers[i_Collidable.ObjectNumber - 1].Position.Row == eRowPosition.UpperRow)
             {
-                yDirectionBounceFactor = 120;
+                yDirectionBounceFactor = Velocity;
             }
             else
             {
-                yDirectionBounceFactor = -120;
+                yDirectionBounceFactor = -Velocity;
             }
         }
 

@@ -75,10 +75,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 
         public override void Update(double i_TimeElapsed)
         {
-            if(IsVisable = false && !m_HasBombExploded)
-            {
-                ChangeState(true);
-            }
+            //if(IsVisable = false && !m_HasBombExploded)
+            //{
+            //    ChangeState(true);
+            //}
 
             if (i_TimeElapsed > 3500)
             {
@@ -87,7 +87,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             else if (!m_HasBombExploded && i_TimeElapsed > 2500)
             {
                 m_HasBombExploded = true;
-                ChangeState(false);
+                //ChangeState(false);
                 SetExplosions();
             }
         }

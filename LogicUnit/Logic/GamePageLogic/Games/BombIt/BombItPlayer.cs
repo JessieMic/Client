@@ -76,31 +76,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         public void PlaceBomb(Point i_Point)
         {
             m_BombStartTime = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-            m_PlacedBomb = true;
             Bomb.Drop(i_Point);
+            m_PlacedBomb = true;
+            
         }
 
         public override void Update(double i_TimeElapsed)
         {
-            if (m_Pic == 0)
-            {
-                ImageSource = $"a{ObjectNumber}slime1.png";
-            }
-            else if (m_Pic == 2 || m_Pic == 6)
-            {
-                ImageSource = $"a{ObjectNumber}slime2.png";
-            }
-            else if (m_Pic == 4)
-            {
-                ImageSource = $"a{ObjectNumber}slime3.png";
-            }
-            else if (m_Pic > 7)
-            {
-                m_Pic = -1;
-            }
-
-            m_Pic++;
-
             if (AmountOfLives != 0)
             {
                 if (m_IsDyingAnimationOn)
@@ -118,19 +100,24 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
                         IsObjectMoving = true;
                     }
                 }
-
-                if (m_PlacedBomb)
-                {
-                    double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_BombStartTime;
-                    if (timePassed > 3500)
-                    {
-                        m_PlacedBomb = false;
-                        CanPlaceABomb = true;
-                    }
-                    Bomb.Update(timePassed);
-                }
-
+                sprite();
+                bombUpdate(i_TimeElapsed);
                 base.Update(i_TimeElapsed);
+            }
+        }
+
+        private void bombUpdate(double i_TimeElapsed)
+        {
+            if (m_PlacedBomb)
+            {
+                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_BombStartTime;
+                if (timePassed > 3500)
+                {
+                    m_PlacedBomb = false;
+                    Bomb.Update(timePassed);
+                    CanPlaceABomb = true;
+                }
+                Bomb.Update(timePassed);
             }
         }
 
@@ -176,6 +163,28 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         public Explosion[] GetExplosions()
         {
             return Bomb.Explosions;
+        }
+
+        private void sprite()
+        {
+            if (m_Pic == 0)
+            {
+                ImageSource = $"a{ObjectNumber}slime1.png";
+            }
+            else if (m_Pic == 2 || m_Pic == 6)
+            {
+                ImageSource = $"a{ObjectNumber}slime2.png";
+            }
+            else if (m_Pic == 4)
+            {
+                ImageSource = $"a{ObjectNumber}slime3.png";
+            }
+            else if (m_Pic > 7)
+            {
+                m_Pic = -1;
+            }
+
+            m_Pic++;
         }
     }
 }
