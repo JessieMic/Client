@@ -12,16 +12,23 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
 {
     internal class Explosion : GameObject
     {
-        private int m_Blink = 0;
-        public Explosion()
+        private Sprite m_Sprite;
+
+        public Explosion(int i_Number)
         {
             MonitorForCollision = true;
             IsVisable = false;
             IsCollisionEnabled = false;
-            this.Initialize(eScreenObjectType.Image, 2, "explosion.png",new Point(0,0), true,
+            this.Initialize(eScreenObjectType.Image, i_Number, "a1explosion.png", new Point(0,0), true,
                 m_GameInformation.PointValuesToAddToScreen);
+            m_Sprite = new Sprite("explosion", 500, 4,10);
         }
 
+        public override void Update(double i_TimeElapsed)
+        {
+            ImageSource = m_Sprite.GetImageSource(i_TimeElapsed-2500);
+            OnUpdate();
+        }
 
         public void Ignite(Point i_Point)
         {
@@ -33,6 +40,11 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
         {
             IsVisable = i_IsIgnited;
             IsCollisionEnabled = i_IsIgnited;
+            if(!i_IsIgnited)
+            {
+                m_Sprite.m_CurrentIndex = 1;
+            }
+
             OnUpdate();
         }
     }

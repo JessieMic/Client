@@ -9,7 +9,7 @@ namespace Objects
 {
     public static class GameSettings
     {
-        public const int GameGridSize = 45;
+        public const int GameGridSize = 50;
         public static SizeDTO m_MovementButtonOurSize = new SizeDTO(GameGridSize, GameGridSize);
         public const int m_SpacingAroundButtons = 10;
         public const int m_UIBackgroundHeight = GameGridSize * 3;

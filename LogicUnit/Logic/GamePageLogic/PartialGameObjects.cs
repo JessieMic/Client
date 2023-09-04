@@ -116,7 +116,7 @@ namespace LogicUnit
                 UIBackground.SetImageDirection(Direction.Left);
             }
             SizeDTO actualOurSize = new SizeDTO((r_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width+5)*2,
-                GameSettings.m_UIBackgroundHeight);
+                GameSettings.m_UIBackgroundHeight+10);
             UIBackground.Initialize(eScreenObjectType.Space, 0, "uibackground.png", point, true, new Point(-r_GameInformation.ImageXValues-5, 0));
             UIBackground.Size = actualOurSize;
             m_GameObjectsToAdd.Add(UIBackground);

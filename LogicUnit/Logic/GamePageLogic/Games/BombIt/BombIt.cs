@@ -23,7 +23,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.BombIt
             m_MoveType = eMoveType.ClickAndRelease;
             m_Buttons.m_AmountOfExtraButtons = 1;
             m_Buttons.m_TypeMovementButtons = eTypeOfGameMovementButtons.AllDirections;
-            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 2;
+            m_Hearts.m_AmountOfLivesPlayersGetAtStart = 3;
             m_BombItPlayers = new BombItPlayer[r_GameInformation.AmountOfPlayers];
         }
 
