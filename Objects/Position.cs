@@ -52,7 +52,7 @@ namespace Objects
         {
             eColumnPosition returnValue;
 
-            if (i_PlacementNumber == 1 || i_PlacementNumber == 3 || i_PlacementNumber == 2 && i_AmountOfPlayers == 2)
+            if (i_PlacementNumber == 1 || i_PlacementNumber == 3 || (i_PlacementNumber == 2 && i_AmountOfPlayers == 2))
             {
                 returnValue = eColumnPosition.LeftColumn;
             }
@@ -68,7 +68,7 @@ namespace Objects
         {
             eRowPosition returnValue;
 
-            if (i_PlacementNumber == 1 || i_PlacementNumber == 2 && i_AmountOfPlayers > 2)
+            if (i_PlacementNumber == 1 || (i_PlacementNumber == 2 && i_AmountOfPlayers > 2))
             {
                 returnValue = eRowPosition.UpperRow;
             }
