@@ -31,6 +31,16 @@ namespace Objects
         public Stopwatch RealWorldStopwatch { get; set; }
         public int Counter { get; set; } = 0;
 
+        public void Reset()
+        {
+            Player.isInitialized = false;
+            Player.DidPlayerPickAPlacement = false;
+            Player.PlayerNumber = 0;
+            m_AmountOfPlayers = 0;
+            PointValuesToAddToScreen = new Point();
+            Counter = 0;
+            m_ScreenInfoOfAllPlayers= new List<ScreenDimension>();
+        }
 
         public static GameInformation Instance
         {
@@ -47,14 +57,7 @@ namespace Objects
             }
         }
 
-        public void Reset()
-        {
-            Player.isInitialized = false;
-            Player.DidPlayerPickAPlacement = false;
-            Player.PlayerNumber = 0;
-            m_AmountOfPlayers = 0;
-            Counter = 0;
-        }
+       
 
         public void init()
         {
