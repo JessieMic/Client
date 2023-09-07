@@ -26,6 +26,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             DoWeCheckTheObjectForCollision = true;
             Board = i_Board;
+            Velocity = 125;
             MonitorForCollision = true;
             this.Initialize(eScreenObjectType.Player, 1, "pacman1.png", new Point(0, 0), true,
                 m_GameInformation.PointValuesToAddToScreen);

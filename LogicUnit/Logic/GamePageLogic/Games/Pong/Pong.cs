@@ -14,6 +14,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
     using LogicUnit.Logic.GamePageLogic.Games.Pong;
     using Microsoft.AspNetCore.SignalR.Client;
     using global::LogicUnit.Logic.GamePageLogic.Games.BombIt;
+    using DTOs;
 
     namespace LogicUnit.Logic.GamePageLogic.Games.Pong
     {
@@ -36,9 +37,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             protected override void SpecialUpdateReceived(SpecialUpdate i_SpecialUpdate)
             {
-                if (i_SpecialUpdate.Update == 2 )
+                if (i_SpecialUpdate.Update == 2)
                 {
                     m_Ball.Reset();
+                    resetPlayersSize();
                     SideGotHit(i_SpecialUpdate.Player_ID);
                 }
                 else
@@ -72,7 +74,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                         }
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
@@ -80,7 +82,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             protected override void specialEventInvoked(object i_Sender, int i_eventNumber)
             {
-                if(i_eventNumber == -1)
+                if (i_eventNumber == -1)
                 {
                     SendServerSpecialPointUpdate(m_Ball.GetCurrentPointOnScreen(), -1);
                 }
@@ -92,7 +94,24 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             protected override void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
             {
-                m_Ball.UpdatePointOnScreenByPixel(m_Ball.GetScreenPoint(new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y),false));
+                m_Ball.IncreaseVelocityAndUpdatePoistion(i_SpecialUpdate);
+                increasePlayerVelocity();
+            }
+
+            private void increasePlayerVelocity()
+            {
+                foreach (var player in m_Players)
+                {
+                    player.IncreaseVelocity();
+                }
+            }
+
+            private void resetPlayersSize()
+            {
+                foreach (var player in m_Players)
+                {
+                    player.Reset();
+                }
             }
 
             protected override void AddGameObjects()
@@ -136,22 +155,19 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
             protected override void gameLoop()
             {
-                //if(r_GameInformation.PlayerNumber == 1)
-                //{
-                //    m_Ball.Reset();
-                //}
+                m_Ball.Reset();
                 base.gameLoop();
             }
 
             protected override void checkForGameStatusUpdate()
             {
-                if ((m_Hearts.m_AmountOfPlayersThatAreAlive <= 1 && m_AmountOfPlayers== 2) ||
-                    (m_Hearts.m_AmountOfPlayersThatAreAlive <= 2 && m_AmountOfPlayers == 2 && m_AmountOfPlayers == 4))//Search for the player that is alive
+                if ((m_Hearts.m_AmountOfPlayersThatAreAlive <= 1 && m_AmountOfPlayers == 2) ||
+                    (m_Hearts.m_AmountOfPlayersThatAreAlive <= 2 && m_AmountOfPlayers == 4))//Search for the player that is alive
                 {
-                    if(m_AmountOfPlayers == 4)
+                    if (m_AmountOfPlayers == 4)
                     {
                         List<string> names = m_Hearts.GetNamesOfPlayersThatAreAlive();
-                        if(names.Count == 2)
+                        if (names.Count == 2)
                         {
                             m_EndGameText = $"{names[0]} and {names[1]} won !!";
                         }

@@ -45,7 +45,6 @@ public partial class GamePage : ContentPage
         {
             throw;
         }
-       
     }
 
     protected override void OnDisappearing()

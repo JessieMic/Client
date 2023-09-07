@@ -29,7 +29,8 @@ namespace Objects
             m_Image.IsAnimationPlaying = false;
             m_Image.TranslationX = i_GameObject.PointOnScreen.Column;// + ;
             m_Image.WidthRequest = i_GameObject.Size.Width;
-            if (i_GameObject.ScreenObjectType != eScreenObjectType.Button && i_GameObject.ScreenObjectType != eScreenObjectType.Space)
+            if (i_GameObject.ScreenObjectType != eScreenObjectType.Button &&
+                i_GameObject.ScreenObjectType != eScreenObjectType.Space)
             {
                 m_Image.TranslationX = (int)(m_MoveX+m_Image.TranslationX / m_Density);
                 m_Image.WidthRequest = (int)(m_Image.WidthRequest / m_Density);
@@ -48,9 +49,11 @@ namespace Objects
         public void Update(GameObject i_GameObject)
         {
             m_Image.IsAnimationPlaying = true;
-            if(i_GameObject.ScreenObjectType != eScreenObjectType.Button
+            m_Image.WidthRequest = i_GameObject.Size.Width;
+            if (i_GameObject.ScreenObjectType != eScreenObjectType.Button
                && i_GameObject.ScreenObjectType != eScreenObjectType.Space)
             {
+                m_Image.WidthRequest = (int)(m_Image.WidthRequest / m_Density);
                 m_Image.TranslationX = (int)(m_MoveX + (i_GameObject.PointOnScreen.Column / m_Density));
             }
             m_Image.TranslationY = (int)(i_GameObject.PointOnScreen.Row );

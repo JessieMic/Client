@@ -19,46 +19,54 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         private bool m_IsCoolDownTimeStarted = false;
         private int m_TimesGotHit = 0;
         private double m_TimeFromLastUpdate = 0;
+        private bool m_IncreaseVelocity = false;
+        private double m_TimeFromLastVelocity;
 
         public Ball()
-        {              
-                Point point = new Point(
-                m_GameInformation.GameBoardSizeByGrid.Width/2,
-                m_GameInformation.GameBoardSizeByGrid.Height/2);
+        {
+            Point point = new Point(
+            m_GameInformation.GameBoardSizeByGrid.Width / 2,
+            m_GameInformation.GameBoardSizeByGrid.Height / 2);
             MonitorForCollision = true;
-            IsObjectMoving = true;
             this.Initialize(eScreenObjectType.Image, m_GameInformation.Player.PlayerNumber, "pong_ball.png", point, true,
                 m_GameInformation.PointValuesToAddToScreen);
-            xDirectionBounceFactor= yDirectionBounceFactor=Velocity = 120;
+            xDirectionBounceFactor = yDirectionBounceFactor = Velocity = 200;
         }
 
         public override void Update(double i_TimeElapsed)
         {
-            if(IsObjectMoving)
+            if (IsObjectMoving)
             {
+                changeVelocity();
                 updatePoint(i_TimeElapsed);
                 bounceFromHittingSidesOfGameBoard();
                 checkIfOutOfBounds();
             }
             else if (m_IsCoolDownTimeStarted)
             {
-                coolDown();
+                ballCooldown();
             }
+            updatingOthersAboutPosition();
+        }
 
-            if (m_GameInformation.Player.PlayerNumber == 1)
+        private void changeVelocity()
+        {
+            if (m_IncreaseVelocity)
             {
-                if (m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeFromLastUpdate > 3500
-                   && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+                if(Velocity > 0)
                 {
-                    m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
-                    OnSpecialEvent(-1);
+                    m_IncreaseVelocity = false;
+                    if (Velocity < 275)
+                    {
+                        Velocity += 25;
+                    }
                 }
             }
         }
 
 
 
-        private void coolDown()
+        private void ballCooldown()
         {
             double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_StartTimeOfCoolDownTime;
             if (timePassed > 2500)
@@ -93,10 +101,10 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
         private void checkIfOutOfBounds()
         {
             bool isPointOnScreen = m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen);
-            
+
             if (PointOnScreen.Row <= m_ValuesToAdd.Row)
             {
-                ballOutOfBounds(isPointOnScreen, 1);
+               ballOutOfBounds(isPointOnScreen, 1);
             }
 
             if (PointOnScreen.Row >= m_GameInformation.GameBoardSizeByPixel.Height + m_ValuesToAdd.Row - 45)
@@ -105,7 +113,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             }
         }
 
-        private void ballOutOfBounds(bool i_IsPointOnScreen,int i_Direction)
+        public void IncreaseVelocityAndUpdatePoistion(SpecialUpdate i_SpecialUpdate)
+        {
+            UpdatePointOnScreenByPixel(GetScreenPoint(new Point(i_SpecialUpdate.X, i_SpecialUpdate.Y), false));
+            m_IncreaseVelocity = true;
+        }
+
+        private void ballOutOfBounds(bool i_IsPointOnScreen, int i_Direction)
         {
             if (i_IsPointOnScreen)
             {
@@ -133,6 +147,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
         public void Reset()
         {
+            Velocity = 200;
             m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
             m_TimesGotHit = 0;
             IsObjectMoving = false;
@@ -142,6 +157,19 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             xDirectionBounceFactor = Velocity * m_StartUpDirection;
             yDirectionBounceFactor = Velocity * m_StartUpDirection;
             resetToStartupPoint();
+        }
+
+        private void updatingOthersAboutPosition()
+        {
+            if (m_GameInformation.PlayerNumber == 1 || m_GameInformation.PlayerNumber == 4 && IsObjectMoving)
+            {
+                if (m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_TimeFromLastUpdate > 1200
+                    && m_GameInformation.IsPointIsOnBoardPixels(PointOnScreen))
+                {
+                    m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
+                    OnSpecialEvent(-1);
+                }
+            }
         }
     }
 }

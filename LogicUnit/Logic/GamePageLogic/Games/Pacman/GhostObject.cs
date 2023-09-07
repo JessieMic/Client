@@ -24,6 +24,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public GhostObject(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
+            Velocity = 125;
             DoWeCheckTheObjectForCollision = true;
             ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
