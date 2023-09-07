@@ -11,7 +11,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
-using DTOs;
 using Objects;
 using Point = Objects.Point;
 
@@ -187,7 +186,7 @@ namespace LogicUnit
 
         public void SetPlayerScreenSize(int i_Width, int i_Height)
         {
-            m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto = new SizeDTO(i_Width, i_Height);
+            m_GameInformation.m_ClientScreenDimension.SizeInPixelsD = new SizeD(i_Width, i_Height);
         }
 
         public async void OnButtonClicked(object sender, EventArgs e)
@@ -225,7 +224,7 @@ namespace LogicUnit
                     "TryPickAScreenSpot",
                     m_GameInformation.Player.Name,
                     i_TextOnButton,
-                    m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height, m_GameInformation.ScreenDensity);
+                    m_GameInformation.m_ClientScreenDimension.SizeInPixelsD.Width, m_GameInformation.m_ClientScreenDimension.SizeInPixelsD.Height, m_GameInformation.ScreenDensity);
             }
             catch (Exception e)
             {

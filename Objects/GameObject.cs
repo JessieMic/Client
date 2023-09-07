@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 using Microsoft.Maui.Controls.Shapes;
 using Objects;
 using Objects.Enums;
@@ -37,7 +36,7 @@ namespace Objects
         public Direction RequestedDirection { get; set; } = Direction.Stop;
         public eButton ButtonType { get; set; }
         public string Text { get; set; }
-        public SizeDTO Size { get; set; }= GameSettings.m_MovementButtonOurSize;
+        public SizeD Size { get; set; }= GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; }
         public int Velocity { get; set; } = 90;
         public bool Fade { get; set; } = false;
@@ -119,7 +118,7 @@ namespace Objects
             }
         }
 
-        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, bool i_IsGrided, SizeDTO i_Size, Point i_ValuesToAdd)
+        public void InitializeButton(eButton i_ButtonType, string i_Png, Point i_Point, bool i_IsGrided, SizeD i_Size, Point i_ValuesToAdd)
         {
             ButtonType = i_ButtonType;
             ScreenObjectType = eScreenObjectType.Button;
@@ -203,7 +202,7 @@ namespace Objects
             }
         }
 
-        protected  virtual void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsDto i_SizeOfSolid)
+        protected  virtual void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsD i_SizeOfSolid)
         {
             Point newPoint = PointOnScreen;
             if (Direction == Direction.Left)//solid on the left

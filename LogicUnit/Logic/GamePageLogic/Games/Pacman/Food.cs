@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 using Objects.Enums;
 using Point = Objects.Point;
 
@@ -17,7 +16,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public Food(Point i_Point, ref int i_ScreenFoodCounter)
         {
-            SizeDTO foodSize = new SizeDTO();
+            SizeD foodSize = new SizeD();
 
             MonitorForCollision = true;
             ObjectNumber = 1;

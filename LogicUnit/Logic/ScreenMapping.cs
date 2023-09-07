@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
+//using DTOs;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
@@ -14,14 +14,14 @@ namespace LogicUnit
     {
         private GameInformation m_GameInformation = GameInformation.Instance;
         public Player m_Player;
-        public SizeDTO m_TotalScreenGridSize = new SizeDTO();
-        public SizeDTO m_TotalScreenPixelSize = new SizeDTO();
+        public SizeD m_TotalScreenGridSize = new SizeD();
+        public SizeD m_TotalScreenPixelSize = new SizeD();
         public Point m_ValueToAdd; //Values that each Player adds to game objects so the would be in the right place
-        public SizeDTO m_Boundaries;//Boundaries in case of an uneven amount of players
+        public SizeD m_Boundaries;//Boundaries in case of an uneven amount of players
         private int m_MinimumLeftColumn;
         private int m_MinimumUpperRow;
-        public List<SizeDTO> m_PlayerGameBoardScreenSize = new List<SizeDTO>();
-        public SizeDTO m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
+        public List<SizeD> m_PlayerGameBoardScreenSize = new List<SizeD>();
+        public SizeD m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
         public int m_GameBoardGridSize = GameSettings.GameGridSize;
         public int m_SpacingAroundButtons = GameSettings.m_SpacingAroundButtons;
 
@@ -37,11 +37,11 @@ namespace LogicUnit
         {
             for (int i = 0; i < m_GameInformation.AmountOfPlayers; i++)
             {
-                SizeDTO maxScreenOurSize = new SizeDTO();
-                maxScreenOurSize.Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsDto.Height - GameSettings.ControllBoardTotalHeight) / m_GameBoardGridSize);
-                maxScreenOurSize.Width = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsDto.Width) / m_GameBoardGridSize);
+                SizeD maxScreenOurSize = new SizeD();
+                maxScreenOurSize.Height = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsD.Height - GameSettings.ControllBoardTotalHeight) / m_GameBoardGridSize);
+                maxScreenOurSize.Width = ((m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsD.Width) / m_GameBoardGridSize);
                 m_PlayerGameBoardScreenSize.Add(maxScreenOurSize);
-                System.Diagnostics.Debug.WriteLine($"player {m_GameInformation.Player.PlayerNumber} -{i+1} - {m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsDto.Width}");
+                System.Diagnostics.Debug.WriteLine($"player {m_GameInformation.Player.PlayerNumber} -{i+1} - {m_GameInformation.ScreenInfoOfAllPlayers[i].SizeInPixelsD.Width}");
             }
         }
 
@@ -62,7 +62,7 @@ namespace LogicUnit
             }
             else
             {
-                m_ValueToAdd.Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsDto.Width - (m_PlayerGameBoardScreenSize[playerIndex].Width * m_GameBoardGridSize));
+                m_ValueToAdd.Column += (m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsD.Width - (m_PlayerGameBoardScreenSize[playerIndex].Width * m_GameBoardGridSize));
             }
         }
 
@@ -78,7 +78,7 @@ namespace LogicUnit
             {
                 m_ValueToAdd.Row += GameSettings.ControllBoardTotalHeight;
                 m_ValueToAdd.Row +=
-                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsDto.Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].Height * m_GameBoardGridSize);
+                    m_GameInformation.ScreenInfoOfAllPlayers[playerIndex].SizeInPixelsD.Height - (GameSettings.ControllBoardTotalHeight + m_PlayerGameBoardScreenSize[playerIndex].Height * m_GameBoardGridSize);
             }
         }
 

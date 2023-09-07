@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
@@ -80,7 +79,7 @@ namespace LogicUnit.Logic.GamePageLogic
 
         public Point getPauseMenuBackgroundPoint()
         {
-            SizeDTO screenSize = m_gameInformation.m_ClientScreenDimension.ScreenSizeInPixels;
+            SizeD screenSize = m_gameInformation.m_ClientScreenDimension.ScreenSizeInPixels;
 
             return new Point(
                 (screenSize.Width / 2) - 3 * GameSettings.GameGridSize,

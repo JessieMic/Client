@@ -5,10 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 using LogicUnit.Logic.GamePageLogic.Games.Pacman;
 using Objects.Enums;
 using Point = Objects.Point;
+
 
 namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 {
@@ -30,7 +30,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             this.Initialize(eScreenObjectType.Player, i_PlayerNumber, "bat.png", getPointOnGrid(i_X, i_Y), true,
                 m_GameInformation.PointValuesToAddToScreen);
             m_ClickReleaseMover.Movable = this as IMovable;
-            Size = new SizeDTO(45 * 4, 20);
+            Size = new SizeD(45 * 4, 20);
         }
 
         Point getPointOnGrid(int i_X, int i_Y)
@@ -106,7 +106,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 }
                 if ( Size.Width > 45 )
                 {
-                    SizeDTO a = Size;
+                    SizeD a = Size;
                     a.Width -= 7;
                     Size = a;
                 }
@@ -129,7 +129,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
 
         public void Reset()
         {
-            Size = new SizeDTO(45 * 4, 20);
+            Size = new SizeD(45 * 4, 20);
         }
 
         public void IncreaseVelocity()
@@ -151,7 +151,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             PointOnScreen = newPoint;
         }
 
-        protected override void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsDto i_SizeOfSolid)
+        protected override void collidedWithSolid(ICollidable i_Solid)//(Point i_PointOfSolid,SizeInPixelsD i_SizeOfSolid)
         {
             Point newPoint = PointOnScreen;
             if (Direction == Direction.Left)//solid on the left

@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 using Objects.Enums;
 
 namespace Objects
 {
     public class Buttons
     {
-        public SizeDTO m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
+        public SizeD m_MovementButtonOurSize = GameSettings.m_MovementButtonOurSize;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         private List<eButton> m_Buttons = new List<eButton>();
-        public SizeDTO m_ClientScreenOurSize = new SizeDTO();
+        public SizeD m_ClientScreenOurSize = new SizeD();
         public eTypeOfGameMovementButtons m_TypeMovementButtons;
         public int m_AmountOfExtraButtons = 0;
         public GameObject GameObjectFitForLabel { get; set; }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 
 namespace Objects
 {
@@ -204,7 +203,7 @@ namespace Objects
             }
         }
 
-        private void setButtonSize(SizeDTO i_Size)
+        private void setButtonSize(SizeD i_Size)
         {
             //m_Button.WidthRequest = (int)(i_Size.Width / m_Density);
             //m_Button.HeightRequest = (int)(i_Size.Height / m_Density);

@@ -22,8 +22,4 @@
 	  <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.5" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\DTOs\DTOs.csproj" />
-	</ItemGroup>
-
 </Project>

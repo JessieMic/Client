@@ -84,7 +84,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                 {
                     for (int i = 0; i < m_pageLogic.AmountOfPlayers; i++)
                     {
-                        int a = ((m_GameInformation.m_ClientScreenDimension.SizeInPixelsDto.Height) / 12) / 3;
+                        int a = ((m_GameInformation.m_ClientScreenDimension.SizeInPixelsD.Height) / 12) / 3;
 
                         ButtonImage buttonImage = new ButtonImage();
                         Position position = new Position(m_pageLogic.AmountOfPlayers, i + 1);
