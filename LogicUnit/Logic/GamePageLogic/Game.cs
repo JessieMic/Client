@@ -7,7 +7,6 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 //using ABI.Windows.Security.EnterpriseData;
 using LogicUnit.Logic.GamePageLogic;
 using LogicUnit.Logic.GamePageLogic.Games.Pacman;
@@ -42,7 +41,7 @@ namespace LogicUnit
 
         //Screen info 
         protected ScreenMapping m_ScreenMapping = new ScreenMapping();
-        protected SizeDTO m_BoardSizeByGrid = new SizeDTO();
+        protected SizeD m_BoardSizeByGrid = new SizeD();
 
         //Need to initialize each different game
         protected string m_GameName;

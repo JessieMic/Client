@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 
 namespace Objects
 {
     public struct ScreenDimension
     {
-        public SizeDTO ScreenSizeInPixels = new SizeDTO();
+        public SizeD ScreenSizeInPixels = new SizeD();
         public Position m_Position = new Position();
         public double Density { get; set; }
 
@@ -29,7 +28,7 @@ namespace Objects
             }
         }
 
-        public SizeDTO SizeInPixelsDto
+        public SizeD SizeInPixelsD
         {
             get { return ScreenSizeInPixels; }
             set

@@ -14,7 +14,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
     using LogicUnit.Logic.GamePageLogic.Games.Pong;
     using Microsoft.AspNetCore.SignalR.Client;
     using global::LogicUnit.Logic.GamePageLogic.Games.BombIt;
-    using DTOs;
 
     namespace LogicUnit.Logic.GamePageLogic.Games.Pong
     {

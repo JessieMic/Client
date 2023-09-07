@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 using Objects;
 using Objects.Enums;
 using Point = Objects.Point;
@@ -19,7 +18,7 @@ namespace LogicUnit.Logic.GamePageLogic
         public int m_ClientNumber;
         public ScreenDimension m_ClientScreenDimension = new ScreenDimension();
         public eGameStatus m_GameStatus;
-        public SizeDTO m_ClientScreenOurSize = new SizeDTO();
+        public SizeD m_ClientScreenOurSize = new SizeD();
         public List<GameObject> m_HeartsOnScreen = new List<GameObject>();
         public GameObject m_HeartToRemove = null;
         private GameInformation m_GameInformation = GameInformation.Instance;

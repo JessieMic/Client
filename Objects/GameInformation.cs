@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using DTOs;
 using Objects.Enums;
 
 namespace Objects
@@ -20,8 +19,8 @@ namespace Objects
         private List<ScreenDimension> m_ScreenInfoOfAllPlayers = new List<ScreenDimension>();
         public Point PointValuesToAddToScreen { get; set; } = new Point();
         public string[] m_NamesOfAllPlayers;
-        public SizeDTO GameBoardSizeByPixel { get; set; }
-        public SizeDTO GameBoardSizeByGrid { get; set; }
+        public SizeD GameBoardSizeByPixel { get; set; }
+        public SizeD GameBoardSizeByGrid { get; set; }
         private static readonly object s_InstanceLock = new object();
         public Rect BackgroundRect { get; set; }
         public double ImageDensity { get; set; }
