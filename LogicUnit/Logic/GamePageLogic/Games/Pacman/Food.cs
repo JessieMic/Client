@@ -49,5 +49,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
             OnDisposed();
         }
+
+        private void centerObjectInGrid()
+        {
+            Point newPoint = PointOnScreen;
+            double valueToAdd = (GameSettings.GameGridSize / 2) - Size.Height / 2;
+
+            newPoint.Row += valueToAdd;
+            newPoint.Column += valueToAdd;
+            PointOnScreen = newPoint;
+        }
     }
 }

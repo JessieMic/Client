@@ -87,7 +87,6 @@ namespace LogicUnit
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
         protected string m_EndGameText = string.Empty;
-
         private readonly InGameConnectionManager r_InGameConnectionManager;
 
         //Server Error
@@ -96,6 +95,7 @@ namespace LogicUnit
 
         public Game(InGameConnectionManager i_InGameConnectionManager)
         {
+            r_GameInformation.RealWorldStopwatch = new Stopwatch();
             m_Player = r_GameInformation.Player;
             for (int i = 0; i < 4; i++)
             {
@@ -111,18 +111,16 @@ namespace LogicUnit
 
             try
             {
-                if (r_GameInformation.Player.PlayerNumber == 1)
-                {
-                    System.Diagnostics.Debug.WriteLine($"----  START ----  ");
-                }
-
-
                 if (r_InGameConnectionManager.r_ConnectionToServer.State != HubConnectionState.Connected)
                 {
                     r_InGameConnectionManager.r_ConnectionToServer.StartAsync();
                 }
 
-                r_InGameConnectionManager.r_ConnectionToServer.SendAsync("ResetHub");
+                if(r_GameInformation.PlayerNumber == 1)
+                {
+                    r_InGameConnectionManager.r_ConnectionToServer.SendAsync("ResetHub");
+                }
+
                 m_ConnectedToServer = true;
             }
             catch (Exception ex)
@@ -153,10 +151,6 @@ namespace LogicUnit
 
         public GameObject InitializeGame()
         {
-            //while(!m_ConnectedToServer)
-            //{
-
-            //}
             m_AmountOfPlayers = r_GameInformation.AmountOfPlayers;
             m_BoardSizeByGrid = m_ScreenMapping.m_TotalScreenGridSize;
             m_Board = new int[m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height];
@@ -173,9 +167,8 @@ namespace LogicUnit
             return m_ScoreBoard.Label;
         }
 
-        public void GameLoop()
+        protected virtual void gameLoop()
         {
-            r_GameInformation.RealWorldStopwatch = new Stopwatch();
             r_GameInformation.RealWorldStopwatch.Start();
             m_GameStopwatch.Start();
             while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Exited)
@@ -189,12 +182,6 @@ namespace LogicUnit
                 Thread.Sleep((int)((k_DesiredFrameTime - m_LoopStopwatch.Elapsed.Seconds) * 1000));
                 m_LastElapsedTime = (int)m_GameStopwatch.Elapsed.TotalMilliseconds;
             }
-
-            if (r_GameInformation.Player.PlayerNumber == 1)
-            {
-                System.Diagnostics.Debug.WriteLine($"----  stop ----  ");
-            }
-
 
             m_ConnectedToServer = false;
         }
@@ -227,23 +214,6 @@ namespace LogicUnit
         }
         void getUpdatedPosition()
         {
-            //Queue<SpecialUpdate> temp = new Queue<SpecialUpdate>();
-            //if(m_XYUPDATE.Count != 0)
-            //{
-            //    lock(m_lockxy)
-            //    {
-            //        while(m_XYUPDATE.Count != 0)
-            //        {
-            //            temp.Enqueue( m_XYUPDATE.Dequeue());
-            //        }
-            //    }
-
-            //    foreach(var u in temp)
-            //    {
-
-            //    }
-            //}
-
             for (int i = 0; i < m_AmountOfPlayers; i++)
             {
                 Point pointRecived = new Point(m_ServerUpdates[i + 4], m_ServerUpdates[i + 8]);
@@ -584,7 +554,7 @@ namespace LogicUnit
         public void RunGame()
         {
             Thread serverUpdateThread = new(GetServerUpdate);//(serverUpdateLoop);
-            Thread newThread = new(GameLoop);
+            Thread newThread = new(gameLoop);
             serverUpdateThread.Start();
             newThread.Start();
         }

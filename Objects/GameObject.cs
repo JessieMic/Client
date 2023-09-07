@@ -244,15 +244,7 @@ namespace Objects
         public virtual void Collided(ICollidable i_Collidable)
         { }
 
-        protected void centerObjectInGrid()
-        {
-            Point newPoint = PointOnScreen;
-            double valueToAdd = (GameSettings.GameGridSize / 2) - Size.Height / 2;
-
-            newPoint.Row += valueToAdd;
-            newPoint.Column += valueToAdd;
-            PointOnScreen = newPoint;
-        }
+      
 
         protected virtual void updatePosition(double i_TimeElapsed)
         {
@@ -286,7 +278,7 @@ namespace Objects
             UpdatePointOnScreenByPixel(GetScreenPoint(i_Point, true));
         }
 
-        public void UpdatePointOnScreenByPixel(Point i_Point)
+        public virtual void UpdatePointOnScreenByPixel(Point i_Point)
         {
             Updated = 0;
             if (!m_GameInformation.IsPointIsOnBoardPixels(i_Point))
