@@ -78,6 +78,10 @@ namespace Objects
                 }
                 else if (i_Direction == Direction.Down)
                 {
+                    if (m_GameInformation.PlayerNumber == 3)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Player num- {m_GameInformation.Player.PlayerNumber}- 5");
+                    }
                     Rotatation = 90;
                     ScaleX = 1;
                 }
@@ -85,19 +89,31 @@ namespace Objects
 
             if (i_Direction == Direction.Left)
             {
-                if (m_FlipsWhenMoved)
+                if (m_FlipsWhenMoved)//1
                 {
+                    if(m_GameInformation.PlayerNumber == 3)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Player num- {m_GameInformation.Player.PlayerNumber} - 1");
+                    }
                     ScaleX = -1;
                     Rotatation = 0;
                 }
-                else
+                else//2
                 {
+                    if (m_GameInformation.PlayerNumber == 3)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Player num- {m_GameInformation.Player.PlayerNumber}- 2");
+                    }
                     Rotatation = 180;
                     ScaleX = 1;
                 }
             }
-            else if (i_Direction == Direction.Right)
+            else if (i_Direction == Direction.Right)//3
             {
+                if (m_GameInformation.PlayerNumber == 3)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Player num- {m_GameInformation.Player.PlayerNumber}- 3");
+                }
                 ScaleX = 1;
                 Rotatation = 0;
             }

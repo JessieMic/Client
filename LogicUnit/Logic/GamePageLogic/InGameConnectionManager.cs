@@ -33,10 +33,6 @@ public class InGameConnectionManager
         {
             lock (r_Lock)
             {
-                if (GameInfo.Player.PlayerNumber == 1)
-                {
-                    System.Diagnostics.Debug.WriteLine($"----  Player = {i_Player}---- what {i_WhatHappened} ----  ");
-                }
                 SpecialEventQueue.Enqueue(new SpecialUpdate(i_WhatHappened, i_Player));
             }
         });
