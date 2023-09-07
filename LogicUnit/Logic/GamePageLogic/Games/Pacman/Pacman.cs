@@ -71,7 +71,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             else
             {
                 m_FoodCounterForPlayerScreen++;
-                System.Diagnostics.Debug.WriteLine($"(FOOD) - Player num- {r_GameInformation.Player.PlayerNumber} CURR NUM {m_FoodCounterForPlayerScreen}");
                 if (m_FoodCounterForPlayerScreen == r_GameInformation.AmountOfPlayers)
                 {
                     m_EndGameText = "Pacman won!!";

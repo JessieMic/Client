@@ -70,7 +70,6 @@ namespace LogicUnit.Logic.GamePageLogic
                 Movable.PointOnScreen = Movable.GetScreenPoint(PointUpdate, true);
                 if(isOnScreen)
                 {
-                    System.Diagnostics.Debug.WriteLine($"__________{PointUpdate.Column} __________");
                     Movable.OnUpdatePosition(PointUpdate);
                 }
             }

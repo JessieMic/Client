@@ -341,20 +341,6 @@ namespace LogicUnit
 
         protected async void SendSpecialServerUpdate(object? sender, int i_eventNumber)
         {
-            //System.Diagnostics.Debug.WriteLine("s" + Player.PlayerNumber);
-            //GameObject gameObject = sender as GameObject;
-            //try
-            //{
-            //r_ConnectionToServer.SendAsync(
-            //"SpecialUpdate",
-            //i_eventNumber, gameObject.ObjectNumber
-            //);
-            //}
-            //catch(Exception e)
-            //{
-            //ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"SpecialUpdate\") in function SendSpecialServerUpdate");
-            //}
-
             int number = r_GameInformation.Player.PlayerNumber;
             if (sender != null)
             {
@@ -363,7 +349,6 @@ namespace LogicUnit
             }
             try
             {
-                System.Diagnostics.Debug.WriteLine($"####{i_eventNumber}    {number}####");
                 r_InGameConnectionManager.r_ConnectionToServer.SendAsync(
                     "SpecialUpdate",
                     i_eventNumber, number
@@ -411,19 +396,6 @@ namespace LogicUnit
 
         private async void SendServerPositionUpdate(int i_Player, Point i_Point)
         {
-            //             System.Diagnostics.Debug.WriteLine("MOVEE"  + " " + i_Point.Row);
-            //             try
-            //             {
-            //                 await r_ConnectionToServer.SendAsync(
-            //                     "UpdatePlayerSelection", i_Player - 1
-            //                     ,
-            //                     -1,
-            //                     (int)i_Point.Column, (int)i_Point.Row);
-            //             }
-            //             catch(Exception e)
-            //             {
-            //                 ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"UpdatePlayerSelection\") in function SendServerPositionUpdate");
-            //             }
             try
             {
                 if (i_Point.Row == 0)

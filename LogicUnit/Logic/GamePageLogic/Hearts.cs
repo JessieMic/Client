@@ -185,7 +185,6 @@ namespace LogicUnit.Logic.GamePageLogic
             }
             catch
             {
-                System.Diagnostics.Debug.WriteLine("HeartBug");
             }
         }
     }
