@@ -87,7 +87,6 @@ namespace LogicUnit
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
         protected string m_EndGameText = string.Empty;
-
         private readonly InGameConnectionManager r_InGameConnectionManager;
 
         //Server Error
@@ -173,7 +172,7 @@ namespace LogicUnit
             return m_ScoreBoard.Label;
         }
 
-        public void GameLoop()
+        protected virtual void gameLoop()
         {
             r_GameInformation.RealWorldStopwatch = new Stopwatch();
             r_GameInformation.RealWorldStopwatch.Start();
@@ -194,7 +193,6 @@ namespace LogicUnit
             {
                 System.Diagnostics.Debug.WriteLine($"----  stop ----  ");
             }
-
 
             m_ConnectedToServer = false;
         }
@@ -584,7 +582,7 @@ namespace LogicUnit
         public void RunGame()
         {
             Thread serverUpdateThread = new(GetServerUpdate);//(serverUpdateLoop);
-            Thread newThread = new(GameLoop);
+            Thread newThread = new(gameLoop);
             serverUpdateThread.Start();
             newThread.Start();
         }

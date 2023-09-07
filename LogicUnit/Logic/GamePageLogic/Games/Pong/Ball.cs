@@ -42,12 +42,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
             }
             else if (m_IsCoolDownTimeStarted)
             {
-                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_StartTimeOfCoolDownTime;
-                if(timePassed > 2500)
-                {
-                    m_IsCoolDownTimeStarted = false;
-                    IsObjectMoving = true;
-                }
+                coolDown();
             }
 
             if (m_GameInformation.Player.PlayerNumber == 1)
@@ -58,6 +53,18 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                     m_TimeFromLastUpdate = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds;
                     OnSpecialEvent(-1);
                 }
+            }
+        }
+
+
+
+        private void coolDown()
+        {
+            double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_StartTimeOfCoolDownTime;
+            if (timePassed > 2500)
+            {
+                m_IsCoolDownTimeStarted = false;
+                IsObjectMoving = true;
             }
         }
 

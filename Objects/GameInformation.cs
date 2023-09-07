@@ -108,6 +108,10 @@ namespace Objects
             get { return m_ScreenInfoOfAllPlayers; }
         }
 
+        public int PlayerNumber
+        {
+            get { return Player.PlayerNumber; }
+        }
 
         public int AmountOfPlayers
         {

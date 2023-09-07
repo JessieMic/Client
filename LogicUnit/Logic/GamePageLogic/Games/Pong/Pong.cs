@@ -134,6 +134,15 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pong
                 base.Draw();
             }
 
+            protected override void gameLoop()
+            {
+                //if(r_GameInformation.PlayerNumber == 1)
+                //{
+                //    m_Ball.Reset();
+                //}
+                base.gameLoop();
+            }
+
             protected override void checkForGameStatusUpdate()
             {
                 if ((m_Hearts.m_AmountOfPlayersThatAreAlive <= 1 && m_AmountOfPlayers== 2) ||
