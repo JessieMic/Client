@@ -213,11 +213,13 @@ public partial class GamePage : ContentPage
 
     void serverError(string i_Message)
     {
-        this.Dispatcher.Dispatch(() =>
+        this.Dispatcher.Dispatch(async () =>
         {
+            await Shell.Current.GoToAsync("///MainPage");
             //MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
             //this.ShowPopup(messagePopUp);
-            Shell.Current.GoToAsync($"{nameof(Lobby)}?Error=True");
+            //Shell.Current.GoToAsync($"{nameof(Lobby)}?Error=True");
+            //Shell.Current.GoToAsync("///MainPage");
         });
     }
 

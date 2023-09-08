@@ -119,8 +119,8 @@ namespace LogicUnit
             }
             catch (Exception ex)
             {
-                throw;
-                //ServerError.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
+                //throw;
+                ServerError?.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
             }
         }
 
@@ -270,11 +270,12 @@ namespace LogicUnit
                 }
                 catch (TaskCanceledException ex) //TODO : Continue only when we restarted
                 {
+                    m_ConnectedToServer = false;
                     continue;
                 }
                 catch (Exception e)
                 {
-
+                    m_ConnectedToServer = false;
                     ServerError.Invoke($"{e.Message}{Environment.NewLine}error on InvokeAsync(\"GetPlayersData\") in function GetServerUpdate");
                 }
 
