@@ -119,8 +119,8 @@ namespace LogicUnit
             }
             catch (Exception ex)
             {
-                throw;
-                //ServerError.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
+                //throw;
+                ServerError?.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
             }
         }
 
