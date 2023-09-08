@@ -11,7 +11,7 @@ namespace LogicUnit
     {
         private const int k_MinNameLength = 2;
         private const int k_MaxNameLength = 10;
-        private const int k_UpdateTimerInterval = 500;
+        private const int k_UpdateTimerInterval = 200;
 
         private readonly ServerAddressManager r_ServerAddressManager = ServerAddressManager.Instance;
         private readonly Connection r_Connection;
