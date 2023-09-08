@@ -89,7 +89,7 @@ namespace UI
         private void addComponents()
         {
             //ButtonImage skipBtn, createRoomBtn, joinRoomBtn;
-            createButtonImage("SKIP:)", OnSkipClicked, 0, 0);
+            //createButtonImage("SKIP:)", OnSkipClicked, 0, 0);
             createButtonImage("Create a Room", OnCreateRoomClicked, 1, 1);
             createButtonImage("Join a Room", OnJoinRoomClicked, 1, 2);
         }

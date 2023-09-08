@@ -12,19 +12,26 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 {
     public class GhostObject : GameObject, IPacmanGamePlayer
     {
-        public int AmountOfLives { get; set; } = 2;
+        public int AmountOfLives { get; set; } = 3;
         private bool m_IsDyingAnimationOn = false;
         private bool m_IsCherryTime = false;
         public double m_CherryTimeStart;
         public double m_DeathAnimationStart;
         private int m_Blink;
         private ClickMover m_ClickMover = new ClickMover();
-        //private ClickReleaseMover m_ClickMover = new ClickReleaseMover();
         public bool IsHunting { get; set; } = true;
 
         public GhostObject(int i_playerNumber, int i_X, int i_Y, int[,] i_Board)
         {
-            Velocity = 125;
+            if(m_GameInformation.AmountOfPlayers == 2)
+            {
+                Velocity = 130;
+            }
+            else
+            {
+                Velocity = 100;
+            }
+            
             DoWeCheckTheObjectForCollision = true;
             ObjectNumber = i_playerNumber;
             m_CanRotateToAllDirections = false;
@@ -68,50 +75,60 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             {
                 if (m_IsDyingAnimationOn)
                 {
-                    double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
-
-                    if (timePassed < 1600)
-                    {
-                        IsVisable = !IsVisable;
-                    }
-                    else
-                    {
-                        IsVisable = true;
-                        m_IsDyingAnimationOn = false;
-                        IsObjectMoving = true;
-                    }
+                    dyingAnimation();
                 }
 
                 if (m_IsCherryTime)
                 {
-                    double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
-
-                    if (timePassed > 4500 && timePassed < 7000)
-                    {
-                        if (m_Blink % 5 == 0)
-                        {
-                            if (ImageSource == $"pacman_ghost_{ObjectNumber}_berry.png")
-                            {
-                                ImageSource = $"pacman_ghost_{ObjectNumber}.png";
-                            }
-                            else
-                            {
-                                ImageSource = $"pacman_ghost_{ObjectNumber}_berry.png";
-                            }
-                        }
-                        m_Blink++;
-                    }
-                    else if (timePassed > 7000)
-                    {
-                        ImageSource = $"pacman_ghost_{ObjectNumber}.png";
-                        m_IsCherryTime = false;
-                        IsHunting = true;
-                    }
+                    cherryTime();
                 }
 
                 base.Update(i_TimeElapsed);
             }
         }
+
+        private void cherryTime()
+        {
+            double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
+
+            if (timePassed > 4500 && timePassed < 7000)
+            {
+                if (m_Blink % 5 == 0)
+                {
+                    if (ImageSource == $"pacman_ghost_{ObjectNumber}_berry.png")
+                    {
+                        ImageSource = $"pacman_ghost_{ObjectNumber}.png";
+                    }
+                    else
+                    {
+                        ImageSource = $"pacman_ghost_{ObjectNumber}_berry.png";
+                    }
+                }
+                m_Blink++;
+            }
+            else if (timePassed > 7000)
+            {
+                ImageSource = $"pacman_ghost_{ObjectNumber}.png";
+                m_IsCherryTime = false;
+                IsHunting = true;
+            }
+        }
+        private void dyingAnimation()
+        {
+            double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
+
+            if (timePassed < 1600)
+            {
+                IsVisable = !IsVisable;
+            }
+            else
+            {
+                IsVisable = true;
+                m_IsDyingAnimationOn = false;
+                IsObjectMoving = true;
+            }
+        }
+
 
         public override void Collided(ICollidable i_Collidable)
         {

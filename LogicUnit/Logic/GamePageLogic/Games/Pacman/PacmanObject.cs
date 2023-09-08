@@ -13,14 +13,13 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
     public class PacmanObject : GameObject, IPacmanGamePlayer
     {
         public double m_CherryTimeStart;
-        public int AmountOfLives { get; set; } = 2;
+        public int AmountOfLives { get; set; } = 3;
         public bool IsHunting { get; set; } = false;
         public double m_DeathAnimationStart;
         private bool m_IsDyingAnimationOn = false;
         private bool m_IsCherryTime = false;
         private short m_Pic = 0;
         private ClickMover m_ClickMover = new ClickMover();
-        //private ClickReleaseMover m_ClickMover = new ClickReleaseMover();
 
         public PacmanObject(int[,] i_Board)
         {
@@ -35,50 +34,17 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
 
         public override void Update(double i_TimeElapsed)
         {
-            if (m_Pic == 0)
-            {
-                ImageSource = "pacman1.png";
-            }
-            else if (m_Pic == 2 || m_Pic == 6)
-            {
-                ImageSource = "pacman2.png";
-            }
-            else if (m_Pic == 4)
-            {
-                ImageSource = "pacman3.png";
-            }
-            else if (m_Pic > 7)
-            {
-                m_Pic = -1;
-            }
-
-            m_Pic++;
+            gif();
             if (m_IsDyingAnimationOn)
             {
-                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
-
-                if (timePassed < 1600)
-                {
-                    IsVisable = !IsVisable;
-                }
-                else
-                {
-                    IsVisable = true;
-                    m_IsDyingAnimationOn = false;
-                    IsObjectMoving = true;
-                }
+                dyingAnimation();
             }
 
             if (m_IsCherryTime)
             {
-                double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
-
-                if (timePassed > 7000)
-                {
-                    m_IsCherryTime = false;
-                    IsHunting = false;
-                }
+                cherryTime();
             }
+
             base.Update(i_TimeElapsed);
         }
 
@@ -102,7 +68,6 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
             else if (i_Collidable is Food)
             {
                 i_Collidable.Collided(this);
-                //points up
             }
             else if (i_Collidable is Boarder)
             {
@@ -133,6 +98,55 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         public override void RequestDirection(Direction i_Direction)
         {
             m_ClickMover.RequestDirection( i_Direction);
+        }
+
+
+        private void cherryTime()
+        {
+            double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_CherryTimeStart;
+
+            if (timePassed > 7000)
+            {
+                m_IsCherryTime = false;
+                IsHunting = false;
+            }
+        }
+        private void dyingAnimation()
+        {
+            double timePassed = m_GameInformation.RealWorldStopwatch.Elapsed.TotalMilliseconds - m_DeathAnimationStart;
+
+            if (timePassed < 1600)
+            {
+                IsVisable = !IsVisable;
+            }
+            else
+            {
+                IsVisable = true;
+                m_IsDyingAnimationOn = false;
+                IsObjectMoving = true;
+            }
+        }
+
+        void gif()
+        {
+            if (m_Pic == 0)
+            {
+                ImageSource = "pacman1.png";
+            }
+            else if (m_Pic == 2 || m_Pic == 6)
+            {
+                ImageSource = "pacman2.png";
+            }
+            else if (m_Pic == 4)
+            {
+                ImageSource = "pacman3.png";
+            }
+            else if (m_Pic > 7)
+            {
+                m_Pic = -1;
+            }
+
+            m_Pic++;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace UI.Pages.LobbyPages.Utils
 
         public string GetInstructions()
         {
-            return m_Instructions;
+            return m_Instructions + Instructions.k_GeneralInstructions;
         }
 
         public void SetInstructions(string i_Instructions)
