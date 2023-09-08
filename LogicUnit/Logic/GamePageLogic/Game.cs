@@ -270,11 +270,16 @@ namespace LogicUnit
                 }
                 catch (TaskCanceledException ex) //TODO : Continue only when we restarted
                 {
+                    stopConnection();
+                    r_GameInformation.Reset();
+                    m_ConnectedToServer = false;
                     continue;
                 }
                 catch (Exception e)
                 {
-
+                    stopConnection();
+                    r_GameInformation.Reset();
+                    m_ConnectedToServer = false;
                     ServerError.Invoke($"{e.Message}{Environment.NewLine}error on InvokeAsync(\"GetPlayersData\") in function GetServerUpdate");
                 }
 
