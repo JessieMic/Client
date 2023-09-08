@@ -43,7 +43,7 @@ public partial class GamePage : ContentPage
         }
         catch
         {
-            throw;
+            serverError("sd");
         }
     }
 
@@ -215,8 +215,9 @@ public partial class GamePage : ContentPage
     {
         this.Dispatcher.Dispatch(() =>
         {
-            MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
-            this.ShowPopup(messagePopUp);
+            //MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
+            //this.ShowPopup(messagePopUp);
+            Shell.Current.GoToAsync($"{nameof(Lobby)}?Error=True");
         });
     }
 

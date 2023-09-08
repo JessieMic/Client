@@ -88,22 +88,23 @@ namespace LogicUnit
 
         public Game(InGameConnectionManager i_InGameConnectionManager)
         {
-            r_GameInformation.RealWorldStopwatch = new Stopwatch();
-            m_Player = r_GameInformation.Player;
-            for (int i = 0; i < 4; i++)
-            {
-                m_PlayersDataArray[i] = new(i);
-            }
-
-            m_PlayerObjects = new GameObject[r_GameInformation.AmountOfPlayers];// new GameObject[2];//
-
-            r_InGameConnectionManager = i_InGameConnectionManager;
-            m_SpecialEventQueue = r_InGameConnectionManager.SpecialEventQueue;
-            m_SpecialEventWithPointQueue = r_InGameConnectionManager.SpecialEventWithPointQueue;
-            m_GameStatus = r_InGameConnectionManager.GameStatus;
-
             try
             {
+                r_GameInformation.RealWorldStopwatch = new Stopwatch();
+                m_Player = r_GameInformation.Player;
+                for (int i = 0; i < 4; i++)
+                {
+                    m_PlayersDataArray[i] = new(i);
+                }
+
+                m_PlayerObjects = new GameObject[r_GameInformation.AmountOfPlayers];// new GameObject[2];//
+
+                r_InGameConnectionManager = i_InGameConnectionManager;
+                m_SpecialEventQueue = r_InGameConnectionManager.SpecialEventQueue;
+                m_SpecialEventWithPointQueue = r_InGameConnectionManager.SpecialEventWithPointQueue;
+                m_GameStatus = r_InGameConnectionManager.GameStatus;
+
+            
                 if (r_InGameConnectionManager.r_ConnectionToServer.State != HubConnectionState.Connected)
                 {
                     r_InGameConnectionManager.r_ConnectionToServer.StartAsync();
@@ -118,7 +119,8 @@ namespace LogicUnit
             }
             catch (Exception ex)
             {
-                ServerError.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
+                throw;
+                //ServerError.Invoke($"{ex.Message}{Environment.NewLine}error on StartAsync or SendAsync(\"ResetHub\")");
             }
         }
 
