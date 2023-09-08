@@ -6,6 +6,7 @@ using Game = UI.Pages.LobbyPages.Utils.Game;
 
 namespace UI.Pages.LobbyPages;
 
+[QueryProperty(nameof(Error), nameof(Error))]
 public partial class Lobby : ContentPage
 {
     private string m_Code;
@@ -23,8 +24,14 @@ public partial class Lobby : ContentPage
     private ButtonImage m_InstructionsBtn = new ButtonImage();
     private GameInformation m_GameInformation = GameInformation.Instance;
 
+    public bool Error
+    {
+        get;set;
+    }
+
     public Lobby()
     {
+        Error = false;
         InitializeComponent();
         //m_LogicManager.ResetRoomData();
         m_GameInformation.Reset();
@@ -71,6 +78,14 @@ public partial class Lobby : ContentPage
     {
         base.OnAppearing();
         //m_LogicManager.ResetRoomData();
+
+        if (Error)
+        {
+            m_LogicManager.StopUpdatesRefresher();
+            m_LogicManager.ResetRoomData();
+            MessagePopUp messagePopUp = new MessagePopUp("Something went wrong");
+            this.ShowPopup(messagePopUp);
+        }
 
         m_PlayersNamesLabels = new List<Label>()
         {

@@ -15,7 +15,7 @@ namespace UI
            //m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pong;
     //        m_GameInformation.m_NameOfGame = Objects.Enums.eGames.BombIt;
             m_GameInformation.m_NameOfGame = Objects.Enums.eGames.Pacman;
-            m_GameInformation.AmountOfPlayers =4;
+            m_GameInformation.AmountOfPlayers =2;
             m_GameInformation.Player.Name = DateTime.Now.Millisecond.ToString();
             //var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
             //m_GameInformation.Player.Name = mainDisplayInfo.Density.ToString();
@@ -89,7 +89,7 @@ namespace UI
         private void addComponents()
         {
             //ButtonImage skipBtn, createRoomBtn, joinRoomBtn;
-            //createButtonImage("SKIP:)", OnSkipClicked, 0, 0);
+            createButtonImage("SKIP:)", OnSkipClicked, 0, 0);
             createButtonImage("Create a Room", OnCreateRoomClicked, 1, 1);
             createButtonImage("Join a Room", OnJoinRoomClicked, 1, 2);
         }

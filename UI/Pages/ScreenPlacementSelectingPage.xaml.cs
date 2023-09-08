@@ -52,17 +52,24 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     async Task initializePage()
     {
-        m_pageLogic = new ScreenPlacementSelectingLogic();
-        m_PlacementButton = new List<Button>();
-        m_Images = new List<Image>();
-        m_PlacementButtons = new List<ButtonImage>();
-        UIbackground.TranslationY = UIbackground.HeightRequest = GameSettings.UIBackgroundSize.Height;
-        UIbackground.WidthRequest = m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width;
-        m_pageLogic.UpdateSelectButton += visualButtonUpdate;
-        m_pageLogic.ReceivedPlayerAmount += initializeButtons;
-        m_pageLogic.GameIsStarting += startGame;
-        m_pageLogic.ServerError += serverError;
-        initializeButtons();
+        try
+        {
+            m_pageLogic = new ScreenPlacementSelectingLogic();
+            m_PlacementButton = new List<Button>();
+            m_Images = new List<Image>();
+            m_PlacementButtons = new List<ButtonImage>();
+            UIbackground.TranslationY = UIbackground.HeightRequest = GameSettings.UIBackgroundSize.Height;
+            UIbackground.WidthRequest = m_GameInformation.m_ClientScreenDimension.ScreenSizeInPixels.Width;
+            m_pageLogic.UpdateSelectButton += visualButtonUpdate;
+            m_pageLogic.ReceivedPlayerAmount += initializeButtons;
+            m_pageLogic.GameIsStarting += startGame;
+            m_pageLogic.ServerError += serverError;
+            initializeButtons();
+        }
+        catch(Exception e)
+        {
+            serverError("An error has occurred.");
+        }
     }
 
     async Task getScreenUpdate()
@@ -107,8 +114,9 @@ public partial class ScreenPlacementSelectingPage : ContentPage
     {
         this.Dispatcher.Dispatch(() =>
         {
-            MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
-            this.ShowPopup(messagePopUp);
+            //MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
+            //this.ShowPopup(messagePopUp);
+            Shell.Current.GoToAsync($"{nameof(Lobby)}?Error=True");
         });
     }
 

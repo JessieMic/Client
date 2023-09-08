@@ -500,7 +500,8 @@ namespace LogicUnit
 
         public void StopUpdatesRefresher()
         {
-            m_TimerForPlayersUpdate.Dispose();
+            if(m_TimerForPlayersUpdate!=null)
+                m_TimerForPlayersUpdate.Dispose();
         }
 
         private async Task<string> getServerAddress()
