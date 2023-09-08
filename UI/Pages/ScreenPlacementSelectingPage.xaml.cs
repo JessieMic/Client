@@ -112,11 +112,12 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     private void serverError(string i_Message)
     {
-        this.Dispatcher.Dispatch(() =>
+        this.Dispatcher.Dispatch(async () =>
         {
             //MessagePopUp messagePopUp = new MessagePopUp(goToLobby, i_Message);
             //this.ShowPopup(messagePopUp);
-            Shell.Current.GoToAsync($"{nameof(Lobby)}?Error=True");
+            //Shell.Current.GoToAsync($"{nameof(Lobby)}?Error=True");
+            await Shell.Current.GoToAsync("///MainPage");
         });
     }
 
