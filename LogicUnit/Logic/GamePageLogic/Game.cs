@@ -22,12 +22,10 @@ namespace LogicUnit
     public abstract partial class Game
     {
         private List<string> m_PlayerMovementsLogs = new List<string>();
-        //protected  HubConnection r_ConnectionToServer;
 
         //Events
         public event EventHandler<List<GameObject>> AddGameObjectList;
         public event EventHandler<GameObject> GameObjectUpdate;
-        public event EventHandler<GameObject> GameObjectToDelete;
         public Notify GameStart;
         public Notify GameRestart;
         public Notify GameExit;
@@ -57,20 +55,17 @@ namespace LogicUnit
         //Don't mind this
         protected Buttons m_Buttons = new Buttons();
         protected Random m_randomPosition = new Random();
-        protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
+       // protected List<List<Direction>> m_DirectionsBuffer = new List<List<Direction>>();
         protected Dictionary<int, Direction> m_PlayersDirectionsFromServer = new Dictionary<int, Direction>();
 
         //List for Ui changes
         protected List<GameObject> m_GameObjectsToAdd = new List<GameObject>();
-        protected List<GameObject> m_gameObjectsToUpdate = new List<GameObject>();
-
         protected int m_AmountOfPlayers;
 
         //Game loop variables
         private Stopwatch m_LoopStopwatch = new Stopwatch();
         protected Stopwatch m_GameStopwatch = new Stopwatch();
         private int m_LastElapsedTime;
-
         protected eButton m_LastClickedButton = 0;
         public bool m_NewButtonPressed = false;
         public int m_LoopNumber = 0;
@@ -82,7 +77,6 @@ namespace LogicUnit
         static readonly object m_lockxy = new object();
         protected Queue<SpecialUpdate> m_SpecialEventQueue;
         protected Queue<SpecialUpdate> m_SpecialEventWithPointQueue;
-        protected Queue<SpecialUpdate> m_XYUPDATE = new Queue<SpecialUpdate>();
         private int[] m_ServerUpdates = new int[12];
         protected eMoveType m_MoveType;
         protected string m_EndGameText = string.Empty;
@@ -155,11 +149,6 @@ namespace LogicUnit
             m_Board = new int[m_BoardSizeByGrid.Width, m_BoardSizeByGrid.Height];
             m_CurrentPlayerData = new PlayerData(m_Player.PlayerNumber);
             m_CurrentPlayerData.Button = -1;
-
-            for (int i = 0; i < m_AmountOfPlayers; i++)
-            {
-                m_DirectionsBuffer.Add(new List<Direction>());
-            }
             SetGameScreen();
             m_ScoreBoard.Label.UpdateGameObject += OnUpdateScreenObject;
 
@@ -173,8 +162,6 @@ namespace LogicUnit
             while (m_GameStatus != eGameStatus.Restarted && m_GameStatus != eGameStatus.Exited)
             {
                 m_GameStopwatch.Restart();
-                m_gameObjectsToUpdate.Clear();
-                //m_GameObjectsToAdd.Clear();
                 updateGame();
                 Draw();
 
@@ -209,36 +196,6 @@ namespace LogicUnit
             {
                 m_NewButtonPressed = true;
                 m_CurrentPlayerData.Button = 0;
-            }
-        }
-        void getUpdatedPosition()
-        {
-            for (int i = 0; i < m_AmountOfPlayers; i++)
-            {
-                Point pointRecived = new Point(m_ServerUpdates[i + 4], m_ServerUpdates[i + 8]);
-                Point p = new Point(
-                    pointRecived.Column,
-                    pointRecived.Row);
-
-                if (p.Row == -100)
-                {
-                    p.Row = 0;
-                }
-                if (p.Column == -100)
-                {
-                    p.Column = 0;
-                }
-
-                if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
-                {
-                    if (p.Row < 0)
-                    {
-                        p.Row = -pointRecived.Row;
-                    }
-                    m_PlayerObjects[i].UpdatePointOnScreenByGrid(p);
-                    m_PlayersDataArray[i].PlayerPointData = pointRecived;
-                }
-                m_PlayersDataArray[i].Button = m_ServerUpdates[i];
             }
         }
 
@@ -357,17 +314,6 @@ namespace LogicUnit
             {
                 ServerError.Invoke($"{e.Message}{Environment.NewLine}error on SendAsync(\"SpecialUpdate\") in function SendSpecialServerUpdate");
             }
-        }
-
-
-        protected virtual void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
-        {
-
-        }
-
-        protected virtual void checkForGameStatusUpdate()
-        {
-
         }
 
         protected virtual void PlayerLostALife(object sender, int i_Player)
@@ -554,11 +500,6 @@ namespace LogicUnit
             AddGameObjectList.Invoke(this, m_GameObjectsToAdd); //..Invoke(this, i_ScreenObject));
         }
 
-        protected void OnDeleteGameObject(GameObject i_GameObject)
-        {
-            GameObjectToDelete.Invoke(this, i_GameObject);
-        }
-
         protected virtual void OnGameStart()
         {
             GameStart.Invoke();
@@ -574,6 +515,47 @@ namespace LogicUnit
             }
 
             return result;
+        }
+
+        void getUpdatedPosition()
+        {
+            for (int i = 0; i < m_AmountOfPlayers; i++)
+            {
+                Point pointRecived = new Point(m_ServerUpdates[i + 4], m_ServerUpdates[i + 8]);
+                Point point = new Point(
+                    pointRecived.Column,
+                    pointRecived.Row);
+
+                if (point.Row == -100)
+                {
+                    point.Row = 0;
+                }
+                if (point.Column == -100)
+                {
+                    point.Column = 0;
+                }
+
+                if (pointRecived.Row != 0 && pointRecived.Column != 0 && m_PlayersDataArray[i].PlayerPointData != pointRecived)
+                {
+                    if (point.Row < 0)
+                    {
+                        point.Row = -pointRecived.Row;
+                    }
+                    m_PlayerObjects[i].UpdatePointOnScreenByGrid(point);
+                    m_PlayersDataArray[i].PlayerPointData = pointRecived;
+                }
+                m_PlayersDataArray[i].Button = m_ServerUpdates[i];
+            }
+        }
+
+        protected virtual void SpecialUpdateWithPointReceived(SpecialUpdate i_SpecialUpdate)
+        {
+
+        }
+
+        protected virtual void checkForGameStatusUpdate()
+        {
+
         }
     }
 }

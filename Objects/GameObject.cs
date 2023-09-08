@@ -39,7 +39,6 @@ namespace Objects
         public SizeD Size { get; set; }= GameSettings.m_MovementButtonOurSize;
         public int ID { get; set; }
         public int Velocity { get; set; } = 90;
-        public bool Fade { get; set; } = false;
         public bool DoWeCheckTheObjectForCollision { get; set; } = false;
         public int[,] Board { get; set; }
         public bool WantToTurn { get; set; } = false;

@@ -68,7 +68,6 @@ public partial class GamePage : ContentPage
         {
             Application.Current.Dispatcher.Dispatch(async () =>
             {
-                //TODO
                 foreach (var gameObject in i_GameObjectsToAdd)
                 {
                     if (gameObject.ScreenObjectType == eScreenObjectType.Button)
@@ -87,19 +86,19 @@ public partial class GamePage : ContentPage
     private void addLabel(GameObject i_Label)
     {
         Application.Current.Dispatcher.Dispatch(async () =>
-            {
-                m_GameLabel.IsVisible = false;
-                m_GameLabel.Rotation = i_Label.Rotatation;
-                m_GameLabel.WidthRequest = i_Label.Size.Width;
-                m_GameLabel.HeightRequest = i_Label.Size.Height;
-                m_GameLabel.ZIndex = 1;
-                m_GameLabel.TranslationX = i_Label.PointOnScreen.Column;
-                m_GameLabel.TranslationY = i_Label.PointOnScreen.Row;
-                m_GameLabel.FontAutoScalingEnabled = true;
-                m_GameLabel.VerticalTextAlignment = TextAlignment.Center;
-                m_GameLabel.HorizontalTextAlignment = TextAlignment.Center;
-                gridLayout.Add(m_GameLabel);
-            });
+        {
+            m_GameLabel.IsVisible = false;
+            m_GameLabel.Rotation = i_Label.Rotatation;
+            m_GameLabel.WidthRequest = i_Label.Size.Width;
+            m_GameLabel.HeightRequest = i_Label.Size.Height;
+            m_GameLabel.ZIndex = 1;
+            m_GameLabel.TranslationX = i_Label.PointOnScreen.Column;
+            m_GameLabel.TranslationY = i_Label.PointOnScreen.Row;
+            m_GameLabel.FontAutoScalingEnabled = true;
+            m_GameLabel.VerticalTextAlignment = TextAlignment.Center;
+            m_GameLabel.HorizontalTextAlignment = TextAlignment.Center;
+            gridLayout.Add(m_GameLabel);
+        });
     }
 
     private void addImage(GameObject i_GameObjectToAdd)
@@ -109,7 +108,6 @@ public partial class GamePage : ContentPage
         gridLayout.Add(image.GetImage());
         m_GameImages.Add(i_GameObjectToAdd.ID, image);
     }
-
 
     private void addButton(GameObject i_ButtonToAdd)
     {
@@ -151,18 +149,6 @@ public partial class GamePage : ContentPage
                 m_GameLabel.Text = i_ObjectUpdate.Text;
             }
         });
-    }
-
-    public void deleteObject(object sender, GameObject? i_ObjectToDelete)
-    {
-        if (i_ObjectToDelete.Fade)
-        {
-            m_GameImages[i_ObjectToDelete.ID].FadeTo(0, 700);
-        }
-        else
-        {
-            m_GameImages[i_ObjectToDelete.ID].FadeTo(0, 100);
-        }
     }
 
     private eScreenObjectType getObjectTypeFromID(int ID)
@@ -245,7 +231,6 @@ public partial class GamePage : ContentPage
         {
             m_Game.AddGameObjectList += addGameObjects;
             m_Game.GameObjectUpdate += gameObjectUpdate;
-            m_Game.GameObjectToDelete += deleteObject;
             m_Game.GameStart += runGame;
             m_Game.GameExit += exitGame;
             m_Game.GameRestart += restartGame;
@@ -263,7 +248,6 @@ public partial class GamePage : ContentPage
     {
         //m_Game.AddGameObjectList -= addGameObjects;
         //m_Game.GameObjectUpdate -= gameObjectUpdate;
-        //m_Game.GameObjectToDelete -= deleteObject;
         //m_Game.GameStart -= runGame;
         //m_Game.GameExit -= exitGame;
         //m_Game.GameRestart -= restartGame;
