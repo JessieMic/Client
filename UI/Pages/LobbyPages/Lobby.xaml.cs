@@ -346,6 +346,7 @@ public partial class Lobby : ContentPage
     {
         if (m_PlayerType == PlayerType.Guest)
         {
+            m_LogicManager.PlayerLeft();
             m_LogicManager.StopUpdatesRefresher();
             MessagePopUp hostLeftPopUp = new MessagePopUp(goToMainPage, Utils.Messages.k_HostLeft);
             Application.Current.Dispatcher.Dispatch(() =>
