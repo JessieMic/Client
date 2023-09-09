@@ -3,6 +3,7 @@ using Objects.Enums;
 using System.Reflection.Emit;
 using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace LogicUnit
 {
@@ -451,12 +452,16 @@ namespace LogicUnit
                 return false;
             }
 
-            foreach (char c in i_UserName)
+            //foreach (char c in i_UserName)
+            //{
+            //    if (!Char.IsLetterOrDigit(c))
+            //    {
+            //        return false;
+            //    }
+            //}
+            if (!Regex.IsMatch(i_UserName, "^[a-zA-Z0-9]*$"))
             {
-                if (!Char.IsLetterOrDigit(c))
-                {
-                    return false;
-                }
+                return false;
             }
 
             return true;
