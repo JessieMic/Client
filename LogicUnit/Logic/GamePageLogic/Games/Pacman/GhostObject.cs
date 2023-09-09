@@ -25,7 +25,7 @@ namespace LogicUnit.Logic.GamePageLogic.Games.Pacman
         {
             if(m_GameInformation.AmountOfPlayers == 2)
             {
-                Velocity = 130;
+                Velocity = 135;
             }
             else
             {
