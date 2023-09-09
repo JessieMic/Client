@@ -23,6 +23,9 @@ public partial class Lobby : ContentPage
     private Microsoft.Maui.Controls.Image m_ChosenGameImg;
     private ButtonImage m_InstructionsBtn = new ButtonImage();
     private GameInformation m_GameInformation = GameInformation.Instance;
+    
+    private static readonly object sr_Lock = new();
+    private bool m_WentToNextPage = false;
 
     public bool Error
     {
@@ -193,9 +196,16 @@ public partial class Lobby : ContentPage
 
     private void goToNextPage()
     {
-        m_LogicManager.StopUpdatesRefresher();
-
-        Application.Current.Dispatcher.Dispatch(() => Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage)));
+        lock(sr_Lock)
+        {
+            m_LogicManager.StopUpdatesRefresher();
+            if(!m_WentToNextPage)
+            {
+                Application.Current.Dispatcher.Dispatch(
+                    () => Shell.Current.GoToAsync(nameof(ScreenPlacementSelectingPage)));
+            }
+            m_WentToNextPage = true;
+        }
     }
 
     private void OnLeaveClicked(object sender, EventArgs e)
