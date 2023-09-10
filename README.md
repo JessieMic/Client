@@ -1,4 +1,4 @@
-# Client
+# Palooza Arcade
 
 Palooza Arcade is a mobile app that brings multiplayer gaming to a whole new level.
 This app requires users to be physically present in the same room for in-person social gatherings. By placing their mobile devices next to each other as instructed, players unlock the full potential of a game. Each screen displays a portion of the map, and as devices merge, a complete game map emerges, granting players a comprehensive view and enabling them to engage in one gameplay.
