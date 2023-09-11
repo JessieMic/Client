@@ -21,3 +21,6 @@ https://drive.google.com/file/d/17C_cgC4Qo3L7JHKhr9JhehWlodBrB_xE/view?usp=shari
 
 Project site - 
 https://www.projects.mta.ac.il/projects/palooza-arcade
+
+Video - 
+https://drive.google.com/file/d/1NKBWojaRzfJHHgNWjMs_qAaZBvGhKO1Q/view?usp=drive_link
