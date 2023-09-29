@@ -32,7 +32,7 @@ namespace Objects
 
         public void Reset()
         {
-            Player.isInitialized = false;
+            Player.IsInitialized = false;
             Player.DidPlayerPickAPlacement = false;
             Player.PlayerNumber = 0;
             m_AmountOfPlayers = 0;
