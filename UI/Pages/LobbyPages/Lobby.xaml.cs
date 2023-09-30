@@ -137,7 +137,7 @@ public partial class Lobby : ContentPage
     [Obsolete]
     private void OnChooseGameClicked(object sender, EventArgs e)
     {
-        QRCodePopUp qrCodePopUp = new QRCodePopUp(UpdateChosenGame);
+        GamesPopUp qrCodePopUp = new GamesPopUp(UpdateChosenGame);
         Game pacmanGame = Utils.GameLibrary.GetPacmanGame();
         Game bombItGame = Utils.GameLibrary.GetBombItGame();
         Game pongGame = Utils.GameLibrary.GetPongGame();
