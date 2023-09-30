@@ -42,6 +42,7 @@ public partial class Lobby : ContentPage
         m_PlayerName = m_GameInformation.Player.Name;
         m_Code = m_GameInformation.Player.RoomCode;
         m_PlayerType = m_GameInformation.Player.PlayerType;
+        barcodeImage.Barcode = m_Code;
 
 
         //m_LogicManager.SetAddPlayersAction(AddPlayers);
@@ -136,7 +137,7 @@ public partial class Lobby : ContentPage
     [Obsolete]
     private void OnChooseGameClicked(object sender, EventArgs e)
     {
-        GamesPopUp gamesPopUp = new GamesPopUp(UpdateChosenGame);
+        QRCodePopUp qrCodePopUp = new QRCodePopUp(UpdateChosenGame);
         Game pacmanGame = Utils.GameLibrary.GetPacmanGame();
         Game bombItGame = Utils.GameLibrary.GetBombItGame();
         Game pongGame = Utils.GameLibrary.GetPongGame();
@@ -144,11 +145,11 @@ public partial class Lobby : ContentPage
         GameCard bombItCard = new GameCard(bombItGame);
         GameCard pongCard = new GameCard(pongGame);
 
-        gamesPopUp.AddGameToComponent(pacmanCard);
-        gamesPopUp.AddGameToComponent(bombItCard);
-        gamesPopUp.AddGameToComponent(pongCard);
+        qrCodePopUp.AddGameToComponent(pacmanCard);
+        qrCodePopUp.AddGameToComponent(bombItCard);
+        qrCodePopUp.AddGameToComponent(pongCard);
 
-        this.ShowPopup(gamesPopUp);
+        this.ShowPopup(qrCodePopUp);
     }
 
     public void UpdateChosenGame(Game i_ChosenGame)

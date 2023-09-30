@@ -120,14 +120,8 @@ namespace Objects
 
         public eGames NameOfGame
         {
-            get
-            {
-                return m_NameOfGame;
-            }
-            set
-            {
-                m_NameOfGame = value;
-            }
+            get => m_NameOfGame;
+            set => m_NameOfGame = value;
         }
     }
 }

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:UI.Pages.LobbyPages"
+             xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
              x:Class="UI.Pages.LobbyPages.Lobby"
              NavigationPage.HasNavigationBar="False"
              Shell.NavBarIsVisible="false">
@@ -20,7 +21,7 @@
             <ColumnDefinition Width="35*"/>
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="8*"/>
+            <ColumnDefinition Width="20*"/>
             <ColumnDefinition Width="20*"/>
         </Grid.ColumnDefinitions>
         
@@ -155,6 +156,17 @@
             VerticalOptions="CenterAndExpand"
             HorizontalOptions="CenterAndExpand"
             ZIndex="1"/>
+        
+        <cv:BarcodeImage Grid.Row="1"
+                         Grid.Column="4"
+                         Grid.RowSpan="2"
+                         x:Name="barcodeImage"
+                         Aspect="AspectFit"
+                         BarcodeMargin="1"
+                         BarcodeBackground="White"
+                         BarcodeForeground="DarkSlateBlue"
+                         BarcodeFormat="QR_CODE"
+                         />
 
         <!--<Image
             Source="lobby_ready_btn.PNG"
