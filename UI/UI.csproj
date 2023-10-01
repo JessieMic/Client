@@ -33,8 +33,9 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-android|AnyCPU'">
 	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
 	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-	  <DebugSymbols>False</DebugSymbols>
+	  <DebugSymbols>True</DebugSymbols>
 	  <RunAOTCompilation>False</RunAOTCompilation>
+	  <Optimize>True</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-android|AnyCPU'">
@@ -42,10 +43,12 @@
 	  <AndroidPackageFormat>apk</AndroidPackageFormat>
 	  <DebugSymbols>True</DebugSymbols>
 	  <RunAOTCompilation>False</RunAOTCompilation>
+	  <PublishTrimmed>True</PublishTrimmed>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-ios|AnyCPU'">
 	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	  <Optimize>True</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-ios|AnyCPU'">
@@ -54,6 +57,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-maccatalyst|AnyCPU'">
 	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	  <Optimize>True</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-maccatalyst|AnyCPU'">
@@ -62,6 +66,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net7.0-windows10.0.19041.0|AnyCPU'">
 	  <ApplicationTitle>Palooza Arcade</ApplicationTitle>
+	  <Optimize>True</Optimize>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net7.0-windows10.0.19041.0|AnyCPU'">
@@ -247,11 +252,20 @@
 	  <MauiXaml Update="NewContent1.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\ScanQrPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <Folder Include="Platforms\Android\Resources\drawable\" />
 	  <Folder Include="Resources\Splash\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="Pages\ScanQrPage.xaml.cs">
+	    <DependentUpon>ScanQrPage.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

@@ -82,6 +82,7 @@ namespace UI
             m_GameInformation.Player.Name = string.Empty;
             m_GameInformation.Player.PlayerType = PlayerType.Guest;
             await Shell.Current.GoToAsync(nameof(EnterRoomCodePage));
+            //await Shell.Current.GoToAsync(nameof(ScanQrPage));
             //await Shell.Current.GoToAsync(nameof(EnterRoomCodePage) +
             //                              $"?{QueryIDs.k_PlayerType}={PlayerType.k_Guest}");
         }
