@@ -19,7 +19,7 @@ public partial class EnterRoomCodePage : ContentPage
     {
         InitializeComponent();
         placeContinueButton();
-        placeQRCamerButton();
+        placeQRCameraButton();
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -79,14 +79,26 @@ public partial class EnterRoomCodePage : ContentPage
         objectsComponent.Add(continueBtn.GetButton(), 1, 3);
     }
 
-    private void placeQRCamerButton()
+    private void placeQRCameraButton()
     {
-        ButtonImage qrcamerBtn = new ButtonImage();
+        ButtonImage qrcameraBtn = new ButtonImage();
         double height = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
-        double width = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+        //double width = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
 
-        qrcamerBtn.Source = "leave_btn.PNG";
 
+        qrcameraBtn.GetButton().Clicked += goToQrScan;
+        qrcameraBtn.WidthRequest = 0.2 * height;
+        qrcameraBtn.HeightRequest = 0.2 * height;
+        //qrcameraBtn.FontSize = 0.3 * 0.2 * height;
+        objectsComponent.Add(qrcameraBtn.GetImage(), 3, 3);
+        objectsComponent.Add(qrcameraBtn.GetButton(), 3, 3);
+        qrcameraBtn.Source = "leave_btn.PNG";
+
+    }
+
+    private async void goToQrScan(object i_Sender, EventArgs i_E)
+    {
+        await Shell.Current.GoToAsync(nameof(ScanQrPage));
     }
 
     private void goToMainPage()

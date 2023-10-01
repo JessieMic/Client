@@ -47,7 +47,6 @@ public partial class ScanQrPage : ContentPage
 
     private async void codeEntered(string i_Code)
     {
-
         eLoginErrors logicResponse = await r_LogicManager.CheckIfValidCode(i_Code);
 
         if (logicResponse == eLoginErrors.Ok)
