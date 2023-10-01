@@ -163,8 +163,8 @@
                          x:Name="barcodeImage"
                          Aspect="AspectFit"
                          BarcodeMargin="1"
-                         BarcodeBackground="White"
-                         BarcodeForeground="DarkSlateBlue"
+                         BarcodeBackground="#C095C2"
+                         BarcodeForeground="#4e0066"
                          BarcodeFormat="QR_CODE"
                          />
 
