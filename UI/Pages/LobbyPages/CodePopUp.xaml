@@ -2,6 +2,7 @@
 <mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
            xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+           xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
            x:Class="UI.Pages.LobbyPages.CodePopUp"
            CanBeDismissedByTappingOutsideOfPopup="False"
            Color="Transparent">
@@ -34,6 +35,16 @@
                 x:Name="roomCodeLabel"
                 Grid.Column="3" Grid.Row="2">
             </Label>
+
+            <cv:BarcodeImage Grid.Row="1"
+                             Grid.Column="2"
+                             x:Name="barcodeImage"
+                             Aspect="AspectFit"
+                             BarcodeMargin="1"
+                             BarcodeBackground="#b07ebf"
+                             BarcodeForeground="#4e0066"
+                             BarcodeFormat="QR_CODE"
+            />
         </Grid>
     </Border>
 </mct:Popup>

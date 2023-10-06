@@ -30,6 +30,7 @@ public partial class CodePopUp : Popup
 
         //gridLayout.Add(i_BarcodeImage, 2, 1);
         roomCodeLabel.Text = i_RoomCode;
+        barcodeImage.Barcode = i_RoomCode;
         addOKButton();
     }
 
