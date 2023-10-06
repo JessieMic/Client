@@ -35,6 +35,7 @@ public partial class EnterNamePage : ContentPage
     {
         string username = Entry.Text;
         eLoginErrors logicResponse;// = eLoginErrors.Ok;
+        bool showCodePopup = false;
         //eLoginErrors logicResponse =0;
 
         if (m_GameInformation.Player.PlayerType == PlayerType.Host)
@@ -44,6 +45,7 @@ public partial class EnterNamePage : ContentPage
             if (logicResponse == eLoginErrors.Ok)
             {
                 m_GameInformation.Player.RoomCode = r_LogicManager.GetRoomCode();
+                showCodePopup = true;
             }
         }
         else
@@ -52,6 +54,7 @@ public partial class EnterNamePage : ContentPage
             if (logicResponse == eLoginErrors.Ok)
             {
                 logicResponse = await r_LogicManager.AddPlayerToRoom(username, m_GameInformation.Player.RoomCode);
+                showCodePopup = false;
             }
         }
 
@@ -59,7 +62,7 @@ public partial class EnterNamePage : ContentPage
         {
             m_GameInformation.Player.Name = username;
 
-            await Shell.Current.GoToAsync(nameof(Lobby));
+            await Shell.Current.GoToAsync($"{nameof(Lobby)}?ShowCodePopup={showCodePopup}");
             //await Shell.Current.GoToAsync(nameof(Lobby) +
             //    $"?{QueryIDs.k_PlayerType}={PlayerType}&" +
             //    $"{QueryIDs.k_Code}={RoomCode}&" +

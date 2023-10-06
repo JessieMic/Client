@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+           x:Class="UI.Pages.LobbyPages.CodePopUp"
+           CanBeDismissedByTappingOutsideOfPopup="False"
+           Color="Transparent">
+    <Border Stroke="#4e0066" StrokeThickness="5" BackgroundColor="#b07ebf">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="30"/>
+        </Border.StrokeShape>
+        <Grid RowSpacing="5" ColumnSpacing="15" Padding="10" x:Name="gridLayout">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="20*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="15*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Text="Other players can join the room by scanning the QR, or by entering the room code manually."
+                Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
+                VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
+            </Label>
+
+            <Label
+                x:Name="roomCodeLabel"
+                Grid.Column="3" Grid.Row="2">
+            </Label>
+        </Grid>
+    </Border>
+</mct:Popup>

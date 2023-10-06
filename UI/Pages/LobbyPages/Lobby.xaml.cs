@@ -7,6 +7,7 @@ using Game = UI.Pages.LobbyPages.Utils.Game;
 namespace UI.Pages.LobbyPages;
 
 [QueryProperty(nameof(Error), nameof(Error))]
+[QueryProperty(nameof(ShowCodePopup), nameof(ShowCodePopup))]
 public partial class Lobby : ContentPage
 {
     private string m_Code;
@@ -32,6 +33,11 @@ public partial class Lobby : ContentPage
         get;set;
     }
 
+    public bool ShowCodePopup
+    {
+        get; set;
+    }
+
     public Lobby()
     {
         Error = false;
@@ -43,7 +49,6 @@ public partial class Lobby : ContentPage
         m_Code = m_GameInformation.Player.RoomCode;
         m_PlayerType = m_GameInformation.Player.PlayerType;
         barcodeImage.Barcode = m_Code;
-
 
         //m_LogicManager.SetAddPlayersAction(AddPlayers);
         //m_LogicManager.SetPlayersToRemoveAction(RemovedByHost);
@@ -109,11 +114,14 @@ public partial class Lobby : ContentPage
 
         m_IsPageinitialized = true;
 
-        //Player2NameLabel.Text = "Paul";
-        //Player3NameLabel.Text = "George";
-        //Player4NameLabel.Text = "Ringo";
-        //AddPlayers(new List<string>() { "Paul", "George", "Ringo" });
-        //ShowChosenGame("Snake");
+        showCodePopUp();
+    }
+
+    private void showCodePopUp()
+    {
+        CodePopUp codePopUp = new CodePopUp(m_Code);
+        //codePopUp.AddQRImage(barcodeImage);
+        this.ShowPopup(codePopUp);
     }
 
     private ButtonImage addImageButton(string i_Text, EventHandler i_Event, int i_Row, int i_Col, string i_Source,
