@@ -48,11 +48,6 @@ public partial class CodePopUp : Popup
         gridLayout.Add(okBtn.GetButton(), 4, 3);
     }
 
-    public void AddQRImage(Camera.MAUI.BarcodeImage i_BarcodeImage)
-    {
-        gridLayout.Add(i_BarcodeImage, 2, 1);
-    }
-
     public void ClosePopUp(object sender, EventArgs e)
     {
         Close();

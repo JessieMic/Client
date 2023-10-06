@@ -14,33 +14,34 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="10*"/>
                 <RowDefinition Height="30*"/>
-                <RowDefinition Height="30*"/>
+                <RowDefinition Height="75*"/>
                 <RowDefinition Height="20*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="35*"/>
-                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="75*"/>
                 <ColumnDefinition Width="35*"/>
                 <ColumnDefinition Width="15*"/>
             </Grid.ColumnDefinitions>
 
             <Label
-                Text="Other players can join the room by scanning the QR, or by entering the room code manually."
-                Grid.Column="1" Grid.Row="1" Grid.RowSpan="2"
-                VerticalOptions="CenterAndExpand" HorizontalOptions="Center">
+                Text="To The Game, Scan The QR Or Enter The Code Below."
+                Grid.Column="1" Grid.Row="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
+                VerticalOptions="CenterAndExpand" HorizontalOptions="Center" HorizontalTextAlignment="Center">
             </Label>
 
             <Label
                 x:Name="roomCodeLabel"
-                Grid.Column="3" Grid.Row="2">
+                Grid.Column="2" Grid.Row="3"
+                HorizontalTextAlignment="Center">
             </Label>
 
-            <cv:BarcodeImage Grid.Row="1"
+            <cv:BarcodeImage Grid.Row="2"
                              Grid.Column="2"
                              x:Name="barcodeImage"
                              Aspect="AspectFit"
-                             BarcodeMargin="1"
+                             BarcodeMargin="0"
                              BarcodeBackground="#b07ebf"
                              BarcodeForeground="#4e0066"
                              BarcodeFormat="QR_CODE"
