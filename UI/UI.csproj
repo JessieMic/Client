@@ -158,6 +158,7 @@
 	  <None Remove="Resources\Images\pong_ball.png" />
 	  <None Remove="Resources\Images\pong_img.png" />
 	  <None Remove="Resources\Images\pressedplacementbutton.png" />
+	  <None Remove="Resources\Images\qr_icon.png" />
 	  <None Remove="Resources\Images\snakeobject10body.png" />
 	  <None Remove="Resources\Images\snake_img_new.png" />
 	  <None Remove="Resources\Images\uibackground.png" />

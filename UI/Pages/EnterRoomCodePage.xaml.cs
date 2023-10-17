@@ -92,7 +92,7 @@ public partial class EnterRoomCodePage : ContentPage
         //qrcameraBtn.FontSize = 0.3 * 0.2 * height;
         objectsComponent.Add(qrcameraBtn.GetImage(), 3, 3);
         objectsComponent.Add(qrcameraBtn.GetButton(), 3, 3);
-        qrcameraBtn.Source = "leave_btn.PNG";
+        qrcameraBtn.Source = "qr_icon.png";
 
     }
 
