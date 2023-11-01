@@ -23,4 +23,4 @@ Project site -
 https://www.projects.mta.ac.il/projects/palooza-arcade
 
 Video - 
-https://drive.google.com/file/d/1NKBWojaRzfJHHgNWjMs_qAaZBvGhKO1Q/view?usp=drive_link
+https://drive.google.com/file/d/1lKzJdwIK75CxF1McrpiM-gCwR0TdaCGe/view?usp=sharing
