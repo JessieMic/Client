@@ -6,6 +6,7 @@ using CommunityToolkit.Maui.Core.Extensions;
 //using System.Xml.Linq;
 //using static ObjCRuntime.Dlfcn;
 using UI.Pages.LobbyPages;
+using CommunityToolkit.Maui.Storage;
 
 namespace UI.Pages;
 
@@ -15,14 +16,21 @@ public partial class EnterNamePage : ContentPage
 {
     private readonly LogicManager r_LogicManager;
     private GameInformation m_GameInformation = GameInformation.Instance;
+    private string m_Path = FileSystem.Current.AppDataDirectory;
+    private string m_FullPath;
     //public string PlayerType { get; set; }
     //public string RoomCode { get; set; }
 
     public EnterNamePage()
     {
+        m_FullPath = Path.Combine(m_Path, "PlayerName.txt");
         InitializeComponent();
         r_LogicManager = new LogicManager();
         placeContinueButton();
+        if (File.Exists(m_FullPath))
+        {
+            Entry.Text = File.ReadAllText(m_FullPath); 
+        }
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -35,6 +43,7 @@ public partial class EnterNamePage : ContentPage
     {
         string username = Entry.Text;
         eLoginErrors logicResponse;// = eLoginErrors.Ok;
+        bool showCodePopup = false;
         //eLoginErrors logicResponse =0;
 
         if (m_GameInformation.Player.PlayerType == PlayerType.Host)
@@ -43,7 +52,9 @@ public partial class EnterNamePage : ContentPage
 
             if (logicResponse == eLoginErrors.Ok)
             {
+                File.WriteAllText(m_FullPath, username);
                 m_GameInformation.Player.RoomCode = r_LogicManager.GetRoomCode();
+                showCodePopup = true;
             }
         }
         else
@@ -52,6 +63,7 @@ public partial class EnterNamePage : ContentPage
             if (logicResponse == eLoginErrors.Ok)
             {
                 logicResponse = await r_LogicManager.AddPlayerToRoom(username, m_GameInformation.Player.RoomCode);
+                showCodePopup = false;
             }
         }
 
@@ -59,7 +71,7 @@ public partial class EnterNamePage : ContentPage
         {
             m_GameInformation.Player.Name = username;
 
-            await Shell.Current.GoToAsync(nameof(Lobby));
+            await Shell.Current.GoToAsync($"{nameof(Lobby)}?ShowCodePopup={showCodePopup}");
             //await Shell.Current.GoToAsync(nameof(Lobby) +
             //    $"?{QueryIDs.k_PlayerType}={PlayerType}&" +
             //    $"{QueryIDs.k_Code}={RoomCode}&" +

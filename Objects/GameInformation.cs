@@ -32,7 +32,7 @@ namespace Objects
 
         public void Reset()
         {
-            Player.isInitialized = false;
+            Player.IsInitialized = false;
             Player.DidPlayerPickAPlacement = false;
             Player.PlayerNumber = 0;
             m_AmountOfPlayers = 0;
@@ -120,14 +120,8 @@ namespace Objects
 
         public eGames NameOfGame
         {
-            get
-            {
-                return m_NameOfGame;
-            }
-            set
-            {
-                m_NameOfGame = value;
-            }
+            get => m_NameOfGame;
+            set => m_NameOfGame = value;
         }
     }
 }

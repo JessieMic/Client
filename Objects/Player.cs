@@ -10,67 +10,24 @@ namespace Objects
 {
     public class Player
     {
-        public bool isInitialized = false;
+        public bool IsInitialized = false;
         //private static Player m_Instance = null;
-        private bool m_DidPlayerPickAPlacement = false;
-        private string m_Name;
+
         public int PlayerNumber { get; set; }
-        private PlayerType m_PlayerType;
-        private string m_RoomCade;
 
 
-       // private static readonly object s_InstanceLock = new object();
+        // private static readonly object s_InstanceLock = new object();
         public Player()
         {
-            m_DidPlayerPickAPlacement = false;
+            DidPlayerPickAPlacement = false;
         }
 
-        public bool DidPlayerPickAPlacement
-        {
-            get
-            {
-                return m_DidPlayerPickAPlacement;
-            }
-            set
-            {
-                m_DidPlayerPickAPlacement = value;
-            }
-        }
+        public bool DidPlayerPickAPlacement { get; set; } = false;
 
-        public string Name
-        {
-            get
-            {
-                return m_Name;
-            }
-            set
-            {
-                m_Name = value;
-            }
-        }
+        public string Name { get; set; }
 
-        public PlayerType PlayerType
-        {
-            get
-            {
-                return m_PlayerType;
-            }
-            set
-            {
-                m_PlayerType = value;
-            }
-        }
+        public PlayerType PlayerType { get; set; }
 
-        public string RoomCode
-        {
-            get
-            {
-                return m_RoomCade;
-            }
-            set
-            {
-                m_RoomCade = value;
-            }
-        }
+        public string RoomCode { get; set; }
     }
 }

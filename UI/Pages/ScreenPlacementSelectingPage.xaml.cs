@@ -85,7 +85,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
 
     private void initializeButtons()
     {
-        if (!m_GameInformation.Player.isInitialized)
+        if (!m_GameInformation.Player.IsInitialized)
         {
             Application.Current.Dispatcher.Dispatch(async () =>
                 {
@@ -104,7 +104,7 @@ public partial class ScreenPlacementSelectingPage : ContentPage
                         gridLayout.Add(buttonImage.GetButton(), (int)position.Column, (int)position.Row);
                         buttonImage.GetButton().Clicked += m_pageLogic.OnButtonClicked;
                     }
-                    m_GameInformation.Player.isInitialized = true;
+                    m_GameInformation.Player.IsInitialized = true;
                     getScreenUpdate();
                 });
         }

@@ -12,14 +12,14 @@ public partial class EnterRoomCodePage : ContentPage
 {
     //public string PlayerType { get; set; }
 
-    private readonly LogicManager r_LogicManager;
+    private LogicManager m_LogicManager;
     private GameInformation m_GameInformation = GameInformation.Instance;
 
     public EnterRoomCodePage()
     {
         InitializeComponent();
-        r_LogicManager = new LogicManager();
         placeContinueButton();
+        placeQRCameraButton();
     }
 
     protected override void OnNavigatedTo(NavigatedToEventArgs args)
@@ -31,12 +31,13 @@ public partial class EnterRoomCodePage : ContentPage
 
     private async void OnContinueClicked(object sender, EventArgs e)
     {
+        m_LogicManager = new LogicManager();
         string code = Entry.Text;
-        eLoginErrors logicResponse = await r_LogicManager.CheckIfValidCode(code);
+        eLoginErrors logicResponse = await m_LogicManager.CheckIfValidCode(code);
 
         if (logicResponse == eLoginErrors.Ok)
         {
-            logicResponse = await r_LogicManager.CheckIfHostLeftForLogin(code);
+            logicResponse = await m_LogicManager.CheckIfHostLeftForLogin(code);
         }
 
         if (logicResponse == eLoginErrors.Ok)
@@ -76,6 +77,28 @@ public partial class EnterRoomCodePage : ContentPage
         continueBtn.Source = "entrance_btn.PNG";
         objectsComponent.Add(continueBtn.GetImage(), 1, 3);
         objectsComponent.Add(continueBtn.GetButton(), 1, 3);
+    }
+
+    private void placeQRCameraButton()
+    {
+        ButtonImage qrcameraBtn = new ButtonImage();
+        double height = DeviceDisplay.MainDisplayInfo.Height / DeviceDisplay.MainDisplayInfo.Density;
+        //double width = DeviceDisplay.MainDisplayInfo.Width / DeviceDisplay.MainDisplayInfo.Density;
+
+
+        qrcameraBtn.GetButton().Clicked += goToQrScan;
+        qrcameraBtn.WidthRequest = 0.2 * height;
+        qrcameraBtn.HeightRequest = 0.2 * height;
+        //qrcameraBtn.FontSize = 0.3 * 0.2 * height;
+        objectsComponent.Add(qrcameraBtn.GetImage(), 3, 3);
+        objectsComponent.Add(qrcameraBtn.GetButton(), 3, 3);
+        qrcameraBtn.Source = "qr_icon.png";
+
+    }
+
+    private async void goToQrScan(object i_Sender, EventArgs i_E)
+    {
+        await Shell.Current.GoToAsync(nameof(ScanQrPage));
     }
 
     private void goToMainPage()

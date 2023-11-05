@@ -15,6 +15,7 @@ namespace UI
             Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
             Routing.RegisterRoute(nameof(GamePage), typeof(GamePage));
             Routing.RegisterRoute(nameof(ScreenPlacementSelectingPage), typeof(ScreenPlacementSelectingPage));
+            Routing.RegisterRoute(nameof(ScanQrPage), typeof(ScanQrPage));
         }
     }
 }

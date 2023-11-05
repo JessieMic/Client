@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mct:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+           xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+           xmlns:mct="clr-namespace:CommunityToolkit.Maui.Views;assembly=CommunityToolkit.Maui"
+           xmlns:cv="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+           x:Class="UI.Pages.LobbyPages.CodePopUp"
+           CanBeDismissedByTappingOutsideOfPopup="False"
+           Color="Transparent">
+    <Border Stroke="#4e0066" StrokeThickness="5" BackgroundColor="#b07ebf">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="30"/>
+        </Border.StrokeShape>
+        <Grid RowSpacing="15" ColumnSpacing="15" Padding="20" x:Name="gridLayout">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="65*"/>
+                <RowDefinition Height="10*"/>
+                <RowDefinition Height="25*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45*"/>
+                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+
+            <Label
+                Text="Other players can join by scanning the QR or entering the code bellow."
+                Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
+                VerticalOptions="CenterAndExpand"
+                HorizontalOptions="Center"
+                FontAutoScalingEnabled="True"
+                FontSize="Medium"
+                LineHeight="1.4"
+                Padding="5">
+            </Label>
+
+            <Label
+                x:Name="roomCodeLabel"
+                Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
+                HorizontalTextAlignment="Center"
+                HorizontalOptions="CenterAndExpand"
+                VerticalOptions="CenterAndExpand">
+            </Label>
+
+            <cv:BarcodeImage Grid.Row="0"
+                             Grid.Column="1"
+                             Grid.ColumnSpan="2"
+                             x:Name="barcodeImage"
+                             Aspect="AspectFit"
+                             BarcodeMargin="0"
+                             BarcodeBackground="#b07ebf"
+                             BarcodeForeground="#4e0066"
+                             BarcodeFormat="QR_CODE"
+                             VerticalOptions="CenterAndExpand"
+                             HorizontalOptions="CenterAndExpand"
+            />
+        </Grid>
+    </Border>
+</mct:Popup>
